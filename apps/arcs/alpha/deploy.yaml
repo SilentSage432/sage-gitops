@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: arc-alpha
+  namespace: arc-alpha
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: arc-alpha }
+  template:
+    metadata:
+      labels: { app: arc-alpha }
+    spec:
+      containers:
+        - name: arc-alpha
+          image: hashicorp/http-echo:1.0.0
+          args: ["-text=arc alpha online"]
+          ports:
+            - containerPort: 5678
+          readinessProbe:
+            httpGet: { path: /, port: 5678 }
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          livenessProbe:
+            httpGet: { path: /, port: 5678 }
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests: { cpu: "25m", memory: "32Mi" }
+            limits:   { cpu: "250m", memory: "256Mi" }
