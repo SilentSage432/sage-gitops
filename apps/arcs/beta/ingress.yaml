@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: arc-beta
+  namespace: arc-beta
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - path: /arc/beta
+        pathType: Prefix
+        backend:
+          service:
+            name: arc-beta
+            port:
+              number: 80
