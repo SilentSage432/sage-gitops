@@ -16,12 +16,17 @@ spec:
       securityContext:
         runAsNonRoot: true
         runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
         seccompProfile:
           type: RuntimeDefault
       containers:
       - name: nats
         image: nats:2.10
-        args: ["-js","-p","4222","-m","8222","--auth","${NATS_TOKEN}"]
+        # Use a shell so $NATS_TOKEN is expanded (args do NOT expand env by default)
+        command: ["/bin/sh","-lc"]
+        args:
+          - exec nats-server -js -p 4222 -m 8222 --auth "$NATS_TOKEN"
         env:
         - name: NATS_TOKEN
           valueFrom:
@@ -36,6 +41,7 @@ spec:
         securityContext:
           runAsNonRoot: true
           allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
           capabilities:
             drop: ["ALL"]
         resources:
