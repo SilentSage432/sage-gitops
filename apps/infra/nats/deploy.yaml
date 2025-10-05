@@ -42,11 +42,11 @@ spec:
           requests: { cpu: "50m", memory: "64Mi" }
           limits:   { cpu: "500m", memory: "256Mi" }
         readinessProbe:
-          httpGet: { path: /, port: monitor }
+          httpGet: { path: /varz, port: monitor }
           initialDelaySeconds: 5
           periodSeconds: 5
         livenessProbe:
-          httpGet: { path: /, port: monitor }
+          httpGet: { path: /varz, port: monitor }
           initialDelaySeconds: 10
           periodSeconds: 10
       nodeSelector:
