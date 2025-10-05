@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: observer-api
+  namespace: arc-zeta
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: observer-api }
+  template:
+    metadata:
+      labels: { app: observer-api }
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        seccompProfile: { type: RuntimeDefault }
+      containers:
+      - name: api
+        # lightweight python+uvicorn+deps
+        image: ghcr.io/tiangolo/uvicorn-gunicorn-fastapi:python3.11
+        args: ["python","/app/app.py"]
+        env:
+        - name: NATS_URL
+          value: "nats://nats.infra.svc.cluster.local:4222"
+        - name: SUBJECTS
+          value: "arc.>"
+        ports:
+        - name: http
+          containerPort: 8080
+        volumeMounts:
+        - name: app
+          mountPath: /app
+          readOnly: true
+        resources:
+          requests: { cpu: "30m", memory: "128Mi" }
+          limits:   { cpu: "300m", memory: "256Mi" }
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities: { drop: ["ALL"] }
+      volumes:
+      - name: app
+        configMap:
+          name: observer-api-code
+          items:
+          - key: app.py
+            path: app.py
+      nodeSelector: { kubernetes.io/os: linux }
+      tolerations:
+      - { key: "node-role.kubernetes.io/control-plane", operator: "Exists", effect: "NoSchedule" }

@@ -1,0 +1,64 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: epsilon-ui
+  namespace: arc-epsilon
+data:
+  index.html: |
+    <!doctype html>
+    <html>
+    <head>
+      <meta charset="utf-8"/>
+      <meta name="viewport" content="width=device-width,initial-scale=1"/>
+      <title>SAGE • Pulse</title>
+      <style>
+        :root {
+          --bg:#0b0e12; --card:#12161d; --ink:#e6ebf2; --muted:#9fb0c2;
+          --good:#30d158; --warn:#ffd60a; --bad:#ff453a; --accent:#5ac8fa;
+        }
+        html,body{height:100%;margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui;}
+        .wrap{max-width:1100px;margin:0 auto;padding:24px;}
+        .row{display:flex;gap:16px;flex-wrap:wrap}
+        .card{background:var(--card);border-radius:14px;padding:16px;flex:1;min-width:320px;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+        .pulse{display:flex;align-items:center;gap:10px;margin:8px 0}
+        .dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent)}
+        .subj{font-weight:600}
+        .muted{color:var(--muted);font-size:12px}
+      </style>
+    </head>
+    <body>
+      <div class="wrap">
+        <h1>Pulse</h1>
+        <div id="status" class="muted">connecting…</div>
+        <div id="feed" class="row"></div>
+      </div>
+      <script>
+        const wsURL = (window.PULSE_WS || "ws://localhost:3001/ws");
+        const status = document.getElementById('status');
+        const feed = document.getElementById('feed');
+        let sock;
+        function connect(){
+          status.textContent = "connecting…";
+          sock = new WebSocket(wsURL);
+          sock.onopen = ()=> status.textContent = "live";
+          sock.onclose = ()=> { status.textContent = "disconnected — retrying"; setTimeout(connect,1500); };
+          sock.onmessage = (ev)=>{
+            try{
+              const {subject,data} = JSON.parse(ev.data);
+              const el = document.createElement('div');
+              el.className = 'card';
+              el.innerHTML = `
+                <div class='pulse'><span class='dot'></span>
+                  <span class='subj'>${subject}</span>
+                </div>
+                <div class='muted'>${new Date().toLocaleTimeString()}</div>
+                <pre style="white-space:pre-wrap">${data}</pre>`;
+              feed.prepend(el);
+              if (feed.children.length>40) feed.removeChild(feed.lastChild);
+            }catch(e){}
+          };
+        }
+        connect();
+      </script>
+    </body>
+    </html>
