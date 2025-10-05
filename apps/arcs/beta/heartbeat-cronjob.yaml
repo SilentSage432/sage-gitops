@@ -8,27 +8,42 @@ spec:
   jobTemplate:
     spec:
       template:
+        metadata:
+          labels:
+            app: arc-beta-heartbeat
         spec:
+          serviceAccountName: default
           restartPolicy: OnFailure
           securityContext:
-            seccompProfile: { type: RuntimeDefault }
+            runAsNonRoot: true
+            runAsUser: 10001
+            runAsGroup: 10001
+            seccompProfile:
+              type: RuntimeDefault
           containers:
           - name: publisher
             image: natsio/nats-box:latest
+            imagePullPolicy: IfNotPresent
+            securityContext:
+              runAsNonRoot: true
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
             command: ["/bin/sh","-lc"]
             args:
               - |
                 MSG="$(printf '{"arc":"beta","kind":"heartbeat","ts":"%s"}' "$(date -Iseconds)")"
                 nats pub arc.beta.heartbeat "$MSG" -s nats://nats.infra.svc.cluster.local:4222
                 echo "PUBLISHED: $MSG"
-            securityContext:
-              runAsNonRoot: true
-              allowPrivilegeEscalation: false
-              capabilities: { drop: ["ALL"] }
             resources:
               requests: { cpu: "10m", memory: "32Mi" }
               limits:   { cpu: "200m", memory: "128Mi" }
-          nodeSelector: { kubernetes.io/os: linux }
+          nodeSelector:
+            kubernetes.io/os: linux
           tolerations:
-            - { key: "node-role.kubernetes.io/control-plane", operator: "Exists", effect: "NoSchedule" }
-            - { key: "node-role.kubernetes.io/master",        operator: "Exists", effect: "NoSchedule" }
+            - key: "node-role.kubernetes.io/control-plane"
+              operator: "Exists"
+              effect: "NoSchedule"
+            - key: "node-role.kubernetes.io/master"
+              operator: "Exists"
+              effect: "NoSchedule"
