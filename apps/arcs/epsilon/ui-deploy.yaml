@@ -18,8 +18,8 @@ spec:
         seccompProfile: { type: RuntimeDefault }
       containers:
       - name: nginx
-        image: nginx:1.27-alpine
-        ports: [ { containerPort: 80, name: http } ]
+        image: nginxinc/nginx-unprivileged:1.27-alpine   # listens on 8080
+        ports: [ { containerPort: 8080, name: http } ]
         securityContext:
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true

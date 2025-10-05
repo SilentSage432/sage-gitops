@@ -20,12 +20,21 @@ spec:
       - name: api
         image: python:3.12-slim
         ports: [ { containerPort: 8000, name: http } ]
+        # Install to user site inside /tmp (writable), then run uvicorn
         command: ["/bin/sh","-lc"]
         args:
           - |
-            pip install --no-cache-dir fastapi uvicorn[standard] nats-py && \
+            pip install --no-cache-dir --user fastapi uvicorn[standard] nats-py && \
             uvicorn app:app --host 0.0.0.0 --port 8000
         env:
+        - name: HOME
+          value: /tmp
+        - name: PIP_USER
+          value: "1"
+        - name: PYTHONUSERBASE
+          value: /tmp/.local
+        - name: PYTHONPATH
+          value: /tmp/.local/lib/python3.12/site-packages
         - name: PYTHONUNBUFFERED
           value: "1"
         volumeMounts:

@@ -4,7 +4,5 @@ resources:
   - ./sage
   - ./arcs
 
-  - infra
-  - infra
 
   - arcs
