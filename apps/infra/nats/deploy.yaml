@@ -5,13 +5,9 @@ metadata:
   namespace: infra
 spec:
   replicas: 1
-  selector:
-    matchLabels:
-      app: nats
+  selector: { matchLabels: { app: nats } }
   template:
-    metadata:
-      labels:
-        app: nats
+    metadata: { labels: { app: nats } }
     spec:
       securityContext:
         runAsNonRoot: true
@@ -22,26 +18,30 @@ spec:
       containers:
       - name: nats
         image: nats:2.10
-        # Call the server directly (image has no /bin/sh)
+        # Run server directly (image has no /bin/sh)
         args:
           - "-js"
-          - "-p"
+          - "-p"   ; "-p" flag expects a value right after in args
           - "4222"
           - "-m"
           - "8222"
-          # If you want simple token auth, uncomment the 3 lines below
+          # If you later enable auth:
           # - "--auth"
           # - "$(NATS_TOKEN)"
         env:
-          # If using token auth above, keep this env; otherwise it's harmless
-          - name: NATS_TOKEN
-            valueFrom:
-              secretKeyRef:
-                name: nats-auth
-                key: token
+        - name: NATS_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: nats-auth
+              key: token
         ports:
           - { name: client,  containerPort: 4222 }
           - { name: monitor, containerPort: 8222 }
+        volumeMounts:
+          - name: tmp
+            mountPath: /tmp
+          - name: data
+            mountPath: /data
         securityContext:
           runAsNonRoot: true
           allowPrivilegeEscalation: false
@@ -62,3 +62,8 @@ spec:
       tolerations:
         - { key: "node-role.kubernetes.io/control-plane", operator: "Exists", effect: "NoSchedule" }
         - { key: "node-role.kubernetes.io/master",        operator: "Exists", effect: "NoSchedule" }
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        - name: data
+          emptyDir: {}
