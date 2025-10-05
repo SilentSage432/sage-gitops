@@ -5,29 +5,33 @@ metadata:
   namespace: infra
 spec:
   replicas: 1
-  selector: { matchLabels: { app: nats } }
+  selector:
+    matchLabels:
+      app: nats
   template:
-    metadata: { labels: { app: nats } }
+    metadata:
+      labels:
+        app: nats
     spec:
       securityContext:
         runAsNonRoot: true
         runAsUser: 10001
         runAsGroup: 10001
         fsGroup: 10001
-        seccompProfile: { type: RuntimeDefault }
+        seccompProfile:
+          type: RuntimeDefault
       containers:
       - name: nats
         image: nats:2.10
-        # Run server directly (image has no /bin/sh)
+        # run server directly (image has no /bin/sh)
         args:
           - "-js"
-          - "-p"   ; "-p" flag expects a value right after in args
+          - "-p"
           - "4222"
           - "-m"
           - "8222"
-          # If you later enable auth:
-          # - "--auth"
-          # - "$(NATS_TOKEN)"
+          - "-sd"
+          - "/data"
         env:
         - name: NATS_TOKEN
           valueFrom:
@@ -35,35 +39,51 @@ spec:
               name: nats-auth
               key: token
         ports:
-          - { name: client,  containerPort: 4222 }
-          - { name: monitor, containerPort: 8222 }
+        - name: client
+          containerPort: 4222
+        - name: monitor
+          containerPort: 8222
         volumeMounts:
-          - name: tmp
-            mountPath: /tmp
-          - name: data
-            mountPath: /data
+        - name: tmp
+          mountPath: /tmp
+        - name: data
+          mountPath: /data
         securityContext:
           runAsNonRoot: true
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true
-          capabilities: { drop: ["ALL"] }
+          capabilities:
+            drop: ["ALL"]
         resources:
-          requests: { cpu: "50m", memory: "64Mi" }
-          limits:   { cpu: "500m", memory: "256Mi" }
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "500m"
+            memory: "256Mi"
         readinessProbe:
-          httpGet: { path: /varz, port: monitor }
+          httpGet:
+            path: /varz
+            port: monitor
           initialDelaySeconds: 5
           periodSeconds: 5
         livenessProbe:
-          httpGet: { path: /varz, port: monitor }
+          httpGet:
+            path: /varz
+            port: monitor
           initialDelaySeconds: 10
           periodSeconds: 10
-      nodeSelector: { kubernetes.io/os: linux }
+      nodeSelector:
+        kubernetes.io/os: linux
       tolerations:
-        - { key: "node-role.kubernetes.io/control-plane", operator: "Exists", effect: "NoSchedule" }
-        - { key: "node-role.kubernetes.io/master",        operator: "Exists", effect: "NoSchedule" }
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
+      - key: "node-role.kubernetes.io/master"
+        operator: "Exists"
+        effect: "NoSchedule"
       volumes:
-        - name: tmp
-          emptyDir: {}
-        - name: data
-          emptyDir: {}
+      - name: tmp
+        emptyDir: {}
+      - name: data
+        emptyDir: {}
