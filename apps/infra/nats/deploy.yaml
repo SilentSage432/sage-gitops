@@ -5,9 +5,13 @@ metadata:
   namespace: infra
 spec:
   replicas: 1
-  selector: { matchLabels: { app: nats } }
+  selector:
+    matchLabels:
+      app: nats
   template:
-    metadata: { labels: { app: nats } }
+    metadata:
+      labels:
+        app: nats
     spec:
       securityContext:
         runAsNonRoot: true
@@ -18,8 +22,23 @@ spec:
       containers:
       - name: nats
         image: nats:2.10
-        command: ["/bin/sh","-lc"]
-        args: [ "exec nats-server -js -p 4222 -m 8222" ]
+        # Call the server directly (image has no /bin/sh)
+        args:
+          - "-js"
+          - "-p"
+          - "4222"
+          - "-m"
+          - "8222"
+          # If you want simple token auth, uncomment the 3 lines below
+          # - "--auth"
+          # - "$(NATS_TOKEN)"
+        env:
+          # If using token auth above, keep this env; otherwise it's harmless
+          - name: NATS_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: nats-auth
+                key: token
         ports:
           - { name: client,  containerPort: 4222 }
           - { name: monitor, containerPort: 8222 }
@@ -31,8 +50,14 @@ spec:
         resources:
           requests: { cpu: "50m", memory: "64Mi" }
           limits:   { cpu: "500m", memory: "256Mi" }
-        readinessProbe: { httpGet: { path: /varz, port: monitor }, initialDelaySeconds: 5, periodSeconds: 5 }
-        livenessProbe:  { httpGet: { path: /varz, port: monitor }, initialDelaySeconds: 10, periodSeconds: 10 }
+        readinessProbe:
+          httpGet: { path: /varz, port: monitor }
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        livenessProbe:
+          httpGet: { path: /varz, port: monitor }
+          initialDelaySeconds: 10
+          periodSeconds: 10
       nodeSelector: { kubernetes.io/os: linux }
       tolerations:
         - { key: "node-role.kubernetes.io/control-plane", operator: "Exists", effect: "NoSchedule" }
