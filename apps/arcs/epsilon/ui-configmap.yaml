@@ -1,0 +1,128 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: epsilon-ui
+  namespace: arc-epsilon
+data:
+  index.html: |
+    <!doctype html>
+    <html>
+    <head>
+      <meta charset="utf-8"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1"/>
+      <title>SAGE Federation • Pulse</title>
+      <link rel="stylesheet" href="/theme/theme.css">
+      <style>
+        html,body{height:100%} body{margin:0;font-family:ui-sans-serif,system-ui,Segoe UI,Roboto}
+        .wrap{min-height:100%;display:grid;place-items:center;padding:40px}
+        .row{display:flex;gap:16px;align-items:center}
+        .grid{display:grid;gap:18px;grid-template-columns: 1fr 1fr;align-items:start}
+        .card{padding:22px 24px}
+        .pill{padding:4px 10px;border-radius:999px;background:rgba(255,255,255,0.06)}
+        .list{margin:0;padding:0;list-style:none}
+        .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-size: 12.5px; }
+        .log{height:300px; overflow:auto; background: rgba(255,255,255,0.03); padding:12px; border-radius:10px; border:1px solid var(--border)}
+        .green{color: var(--success)} .red{color: var(--danger)} .yellow{color: var(--warn)}
+      </style>
+    </head>
+    <body>
+      <div class="wrap">
+        <div class="grid" style="max-width:1000px;width:100%">
+          <div class="card">
+            <div class="row" style="justify-content:space-between">
+              <h2 style="margin:0">SAGE Federation — Pulse Monitor</h2>
+              <span class="badge"><span class="dot"></span> live</span>
+            </div>
+            <p class="muted" style="margin-top:6px">Theme synced with SAGE Enterprise palette. Live feed via WebSocket.</p>
+            <div class="row" style="gap:10px;margin-top:8px">
+              <span class="pill mono">beta</span>
+              <span class="pill mono">gamma</span>
+              <span class="pill mono">delta</span>
+              <span class="pill mono">epsilon</span>
+              <span class="pill mono">zeta</span>
+            </div>
+            <div style="margin-top:14px">
+              <div id="status" class="muted mono">connecting…</div>
+            </div>
+            <div class="log mono" id="log" style="margin-top:12px"></div>
+          </div>
+          <div class="card">
+            <h3 style="margin:0 0 8px 0">Arcs</h3>
+            <ul class="list" id="arcs"></ul>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        // --- Config: set API host here if using Ingress/Split DNS later ---
+        const WS_HOSTS = [
+          // Ingress host (uncomment once you enable Ingress + Split DNS)
+          // 'wss://pulse-api.sagecraftalchemy.com/ws',
+          // In-cluster service via port-forward:
+          'ws://localhost:8082/ws'
+        ];
+
+        const statusEl = document.getElementById('status');
+        const logEl = document.getElementById('log');
+        const arcsEl = document.getElementById('arcs');
+
+        let arcState = {}; // arc -> last ts
+
+        function setStatus(txt, cls='') {
+          statusEl.textContent = txt;
+          statusEl.className = 'mono ' + cls;
+        }
+        function line(txt) {
+          const div = document.createElement('div');
+          div.textContent = txt;
+          logEl.appendChild(div);
+          logEl.scrollTop = logEl.scrollHeight;
+        }
+        function renderArcs() {
+          arcsEl.innerHTML = '';
+          const entries = Object.entries(arcState).sort((a,b)=>a[0].localeCompare(b[0]));
+          entries.forEach(([arc, ts])=>{
+            const li = document.createElement('li');
+            const dt = new Date(ts);
+            const age = ((Date.now()-dt.getTime())/1000).toFixed(0);
+            const cls = age < 90 ? 'green' : (age < 180 ? 'yellow' : 'red');
+            li.innerHTML = \`
+              <div class="row" style="justify-content:space-between">
+                <div><strong>\${arc}</strong></div>
+                <div class="mono \${cls}">\${dt.toISOString()}  (+\${age}s)</div>
+              </div>\`;
+            arcsEl.appendChild(li);
+          });
+        }
+
+        async function connect() {
+          for (const url of WS_HOSTS) {
+            try {
+              setStatus('connecting to ' + url + ' …');
+              const ws = new WebSocket(url);
+              ws.onopen = () => setStatus('connected to ' + url, 'green');
+              ws.onclose = () => setStatus('connection closed', 'yellow');
+              ws.onerror = () => setStatus('error on websocket', 'red');
+              ws.onmessage = (e) => {
+                try {
+                  const msg = JSON.parse(e.data);
+                  if (msg.topic && msg.data) {
+                    line(\`[\${msg.topic}] \${JSON.stringify(msg.data)}\`);
+                    if (msg.data.arc && msg.data.ts) {
+                      arcState[msg.data.arc] = msg.data.ts;
+                      renderArcs();
+                    }
+                  } else {
+                    line(e.data);
+                  }
+                } catch { line(e.data); }
+              };
+              return; // stop after first successful attempt
+            } catch {}
+          }
+          setStatus('no websocket hosts reachable', 'red');
+        }
+        connect();
+      </script>
+    </body>
+    </html>

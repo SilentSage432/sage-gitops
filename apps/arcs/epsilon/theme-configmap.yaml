@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: epsilon-theme
+  namespace: arc-epsilon
+data:
+  theme.css: |
+    :root{
+      --bg: linear-gradient(135deg, #0B1020 0%, #0A0F1F 100%);
+      --surface: #121833;
+      --text: #E7F1F2;
+
+      --accent:  #00FFFF;
+      --evolve:  #9D7BFF;
+      --success: #15C47E;
+      --warn:    #F6C146;
+      --danger:  #EE5D6C;
+
+      --border: rgba(255,255,255,0.10);
+      --glow-accent: 0 0 24px rgba(0,255,255,0.25);
+      --text-muted: rgba(231,241,242,0.75);
+
+      --ring:        0 0 18px rgba(0,255,255,0.18);
+      --ring-strong: 0 0 26px rgba(157,123,255,0.25);
+
+      --dot-ok: var(--success);
+      --dot-warn: var(--warn);
+      --dot-danger: var(--danger);
+    }
+    body{ background: var(--bg); color: var(--text); }
+    .card{ background: var(--surface); border:1px solid var(--border); box-shadow: var(--ring); border-radius:16px; }
+    .muted{ color: var(--text-muted); }
+    .badge{ background: rgba(0,255,255,0.10); border: 1px solid var(--border); padding:4px 10px; border-radius:999px }
+    .dot{ height:10px; width:10px; border-radius:999px; display:inline-block; margin-right:6px; background:var(--dot-ok); box-shadow:0 0 12px var(--dot-ok) }
+    a{ color: var(--accent); text-decoration: none; }
