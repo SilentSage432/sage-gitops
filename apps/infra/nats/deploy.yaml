@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nats
+  namespace: infra
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: nats } }
+  template:
+    metadata: { labels: { app: nats } }
+    spec:
+      securityContext:
+        seccompProfile: { type: RuntimeDefault }
+      containers:
+      - name: nats
+        image: nats:2.10
+        args: ["-js","-p","4222","-m","8222","--auth","${NATS_TOKEN}"]
+        env:
+          - name: NATS_TOKEN
+            valueFrom: { secretKeyRef: { name: nats-auth, key: token } }
+        ports:
+          - { name: client, containerPort: 4222 }
+          - { name: monitor, containerPort: 8222 }
+        securityContext:
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          capabilities: { drop: ["ALL"] }
+      nodeSelector: { kubernetes.io/os: linux }
+      tolerations:
+        - { key: "node-role.kubernetes.io/control-plane", operator: "Exists", effect: "NoSchedule" }
+        - { key: "node-role.kubernetes.io/master", operator: "Exists", effect: "NoSchedule" }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nats
+  namespace: infra
+spec:
+  selector: { app: nats }
+  clusterIP: None
+  ports:
+    - { name: client, port: 4222, targetPort: 4222 }
