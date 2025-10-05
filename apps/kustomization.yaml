@@ -3,3 +3,6 @@ kind: Kustomization
 resources:
   - ./sage
   - ./arcs
+
+  - infra
+  - infra
