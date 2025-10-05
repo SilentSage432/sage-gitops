@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: arc-delta-observer
+  namespace: arc-delta
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: arc-delta-observer }
+  template:
+    metadata:
+      labels: { app: arc-delta-observer }
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        seccompProfile: { type: RuntimeDefault }
+      containers:
+      - name: subscriber
+        image: natsio/nats-box:latest
+        imagePullPolicy: IfNotPresent
+        command: ["/bin/sh","-lc"]
+        args:
+          - |
+            echo "Arc Delta starting; subscribing to arc.> ..."
+            # Print timestamps with each line; reconnect automatically
+            while true; do
+              nats sub "arc.>" -s nats://nats.infra.svc.cluster.local:4222 \
+                | awk '{ cmd="date -Iseconds"; cmd | getline ts; close(cmd); print ts, $0; fflush(); }'
+              sleep 2
+            done
+        securityContext:
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities: { drop: ["ALL"] }
+        resources:
+          requests: { cpu: "20m", memory: "64Mi" }
+          limits:   { cpu: "300m", memory: "256Mi" }
+      nodeSelector: { kubernetes.io/os: linux }
+      tolerations:
+        - { key: "node-role.kubernetes.io/control-plane", operator: "Exists", effect: "NoSchedule" }
+        - { key: "node-role.kubernetes.io/master",        operator: "Exists", effect: "NoSchedule" }
