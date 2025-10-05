@@ -10,6 +10,7 @@ spec:
   policyTypes:
     - Egress
   egress:
+    # Allow NATS in infra ns
     - to:
         - namespaceSelector:
             matchLabels:
@@ -20,6 +21,7 @@ spec:
       ports:
         - protocol: TCP
           port: 4222
+    # Allow DNS for name resolution
     - to:
         - namespaceSelector: {}
       ports:
@@ -27,3 +29,11 @@ spec:
           port: 53
         - protocol: TCP
           port: 53
+    # TEMP: allow PyPI bootstrap (pip) so pod can start
+    - to:
+        - ipBlock: { cidr: 0.0.0.0/0 }
+      ports:
+        - protocol: TCP
+          port: 443
+        - protocol: TCP
+          port: 80
