@@ -23,8 +23,9 @@ spec:
         args:
           - |
             set -e
-            python -m pip install --no-cache-dir fastapi uvicorn[standard] nats-py
-            exec uvicorn app:app --host 0.0.0.0 --port 8080
+            export PATH="$PATH:/tmp/.local/bin"
+            python -m pip install --no-cache-dir --user fastapi 'uvicorn[standard]' nats-py
+            exec python -m uvicorn app:app --host 0.0.0.0 --port 8080
         env:
         - name: NATS_URL
           value: "nats://nats.infra.svc.cluster.local:4222"
@@ -50,7 +51,7 @@ spec:
           limits:   { cpu: "500m", memory: "512Mi" }
         securityContext:
           allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: false   # allow pip install
+          readOnlyRootFilesystem: false
           capabilities: { drop: ["ALL"] }
       volumes:
       - name: app
