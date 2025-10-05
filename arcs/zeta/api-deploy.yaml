@@ -18,9 +18,13 @@ spec:
         seccompProfile: { type: RuntimeDefault }
       containers:
       - name: api
-        # lightweight python+uvicorn+deps
-        image: ghcr.io/tiangolo/uvicorn-gunicorn-fastapi:python3.11
-        args: ["python","/app/app.py"]
+        image: python:3.11-slim
+        command: ["/bin/sh","-lc"]
+        args:
+          - |
+            set -e
+            python -m pip install --no-cache-dir fastapi uvicorn[standard] nats-py
+            exec uvicorn app:app --host 0.0.0.0 --port 8080
         env:
         - name: NATS_URL
           value: "nats://nats.infra.svc.cluster.local:4222"
@@ -33,12 +37,20 @@ spec:
         - name: app
           mountPath: /app
           readOnly: true
+        readinessProbe:
+          httpGet: { path: /health, port: http }
+          initialDelaySeconds: 3
+          periodSeconds: 5
+        livenessProbe:
+          httpGet: { path: /health, port: http }
+          initialDelaySeconds: 10
+          periodSeconds: 10
         resources:
-          requests: { cpu: "30m", memory: "128Mi" }
-          limits:   { cpu: "300m", memory: "256Mi" }
+          requests: { cpu: "60m", memory: "192Mi" }
+          limits:   { cpu: "500m", memory: "512Mi" }
         securityContext:
           allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: true
+          readOnlyRootFilesystem: false   # allow pip install
           capabilities: { drop: ["ALL"] }
       volumes:
       - name: app
