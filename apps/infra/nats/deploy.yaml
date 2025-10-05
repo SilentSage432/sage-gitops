@@ -5,62 +5,35 @@ metadata:
   namespace: infra
 spec:
   replicas: 1
-  selector:
-    matchLabels:
-      app: nats
+  selector: { matchLabels: { app: nats } }
   template:
-    metadata:
-      labels:
-        app: nats
+    metadata: { labels: { app: nats } }
     spec:
       securityContext:
         runAsNonRoot: true
         runAsUser: 10001
         runAsGroup: 10001
         fsGroup: 10001
-        seccompProfile:
-          type: RuntimeDefault
+        seccompProfile: { type: RuntimeDefault }
       containers:
       - name: nats
         image: nats:2.10
-        # Use a shell so $NATS_TOKEN is expanded (args do NOT expand env by default)
         command: ["/bin/sh","-lc"]
-        args:
-          - exec nats-server -js -p 4222 -m 8222 --auth "$NATS_TOKEN"
-        env:
-        - name: NATS_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: nats-auth
-              key: token
+        args: [ "exec nats-server -js -p 4222 -m 8222" ]
         ports:
-        - name: client
-          containerPort: 4222
-        - name: monitor
-          containerPort: 8222
+          - { name: client,  containerPort: 4222 }
+          - { name: monitor, containerPort: 8222 }
         securityContext:
           runAsNonRoot: true
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true
-          capabilities:
-            drop: ["ALL"]
+          capabilities: { drop: ["ALL"] }
         resources:
           requests: { cpu: "50m", memory: "64Mi" }
           limits:   { cpu: "500m", memory: "256Mi" }
-        readinessProbe:
-          httpGet: { path: /varz, port: monitor }
-          initialDelaySeconds: 5
-          periodSeconds: 5
-        livenessProbe:
-          httpGet: { path: /varz, port: monitor }
-          initialDelaySeconds: 10
-          periodSeconds: 10
-      nodeSelector:
-        kubernetes.io/os: linux
+        readinessProbe: { httpGet: { path: /varz, port: monitor }, initialDelaySeconds: 5, periodSeconds: 5 }
+        livenessProbe:  { httpGet: { path: /varz, port: monitor }, initialDelaySeconds: 10, periodSeconds: 10 }
+      nodeSelector: { kubernetes.io/os: linux }
       tolerations:
-      - key: "node-role.kubernetes.io/control-plane"
-        operator: "Exists"
-        effect: "NoSchedule"
-      - key: "node-role.kubernetes.io/master"
-        operator: "Exists"
-        effect: "NoSchedule"
+        - { key: "node-role.kubernetes.io/control-plane", operator: "Exists", effect: "NoSchedule" }
+        - { key: "node-role.kubernetes.io/master",        operator: "Exists", effect: "NoSchedule" }
