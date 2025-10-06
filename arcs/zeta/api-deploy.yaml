@@ -16,6 +16,7 @@ spec:
         runAsUser: 10001
         runAsGroup: 10001
         seccompProfile: { type: RuntimeDefault }
+      workingDir: /app
       containers:
       - name: api
         image: python:3.11-slim
@@ -24,7 +25,7 @@ spec:
           - |
             set -e
             pip install --no-cache-dir --upgrade fastapi "uvicorn[standard]" nats-py
-            exec uvicorn app:app --host 0.0.0.0 --port 8080
+            exec uvicorn app:app --host 0.0.0.0 --port 8080 --app-dir /app
         env:
           - { name: PYTHONUNBUFFERED, value: "1" }
           - { name: NATS_URL, value: "nats://nats.infra.svc.cluster.local:4222" }
