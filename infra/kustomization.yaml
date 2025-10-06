@@ -3,5 +3,4 @@ kind: Kustomization
 namespace: infra
 resources:
   - namespace.yaml
-  - nats.yaml
   - nats-secret.yaml
