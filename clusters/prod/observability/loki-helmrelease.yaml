@@ -22,7 +22,7 @@ spec:
     # Keep validators happy but DO NOT spin up extra agents/DS
     monitoring:
       selfMonitoring:
-        enabled: false
+        enabled: true
       lokiCanary:
         enabled: false
       grafanaAgent:
@@ -78,4 +78,6 @@ spec:
       allowPrivilegeEscalation: false
       capabilities: {drop: ["ALL"]}
     lokiCanary:
+      enabled: false
+    test:
       enabled: false
