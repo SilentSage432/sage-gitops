@@ -9,7 +9,6 @@ spec:
   chart:
     spec:
       chart: gatus
-      version: 2.x.x
       sourceRef:
         kind: HelmRepository
         name: twinproduction
