@@ -48,6 +48,7 @@ spec:
             index: {prefix: index_, period: 24h}
       commonConfig:
         replication_factor: 1
+        path_prefix: /tmp/loki
       analytics:
         reporting_enabled: false
       server:
