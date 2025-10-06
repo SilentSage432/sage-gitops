@@ -6,36 +6,36 @@ metadata:
 spec:
   interval: 10m
   timeout: 10m0s
-  install: { remediation: { retries: 3 } }
-  upgrade: { remediation: { retries: 3 } }
+  install:
+    remediation: { retries: 3 }
+    disableWait: true         # <-- do not wait for hooks
+  upgrade:
+    remediation: { retries: 3 }
+    disableWait: true         # <-- do not wait for hooks
   chart:
     spec:
       chart: kube-prometheus-stack
+      version: 65.8.1
       sourceRef:
         kind: HelmRepository
         name: prometheus-community
         namespace: flux-system
   values:
-    # Disable admission webhooks (they're failing pre-upgrade on single node)
-    admissionWebhooks:
-      enabled: false
+    # Kill the webhook path entirely (single-node friendly)
+    admissionWebhooks: { enabled: false }
     prometheusOperator:
+      enabled: true
+      admissionWebhooks:
+        enabled: false
+        patch: { enabled: false }
       tolerations:
         - key: node-role.kubernetes.io/control-plane
           operator: Exists
           effect: NoSchedule
-      admissionWebhooks:
-        enabled: false
-        patch:
-          enabled: false
 
-    kube-state-metrics:
-      enabled: true
-    nodeExporter:
-      enabled: true
-
-    grafana:
-      enabled: false
+    kube-state-metrics: { enabled: true }
+    nodeExporter: { enabled: true }
+    grafana: { enabled: false }
 
     alertmanager:
       alertmanagerSpec:
@@ -53,7 +53,7 @@ spec:
 
     prometheus:
       prometheusSpec:
-        retention: 15d
+        retention: 7d
         scrapeInterval: 30s
         evaluationInterval: 30s
         ruleSelectorNilUsesHelmValues: false
