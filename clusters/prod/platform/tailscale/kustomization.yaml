@@ -1,13 +1,7 @@
-# clusters/prod/platform/tailscale/kustomization.yaml
-apiVersion: kustomize.toolkit.fluxcd.io/v1
+apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-metadata:
-  name: platform-tailscale
-  namespace: flux-system
-spec:
-  interval: 10m
-  path: ./clusters/prod/platform/tailscale
-  prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
+resources:
+  - namespace.yaml
+  - helmrepository.yaml
+  - operator-helmrelease.yaml
+  - auth-secret.yaml
