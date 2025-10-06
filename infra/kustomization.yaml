@@ -5,3 +5,4 @@ resources:
   - namespace.yaml
   - nats-secret.yaml     # single source of the Secret
   - nats.yaml            # deploy/service/etc. (no Secret inside)
+  - kustomization-prod.yaml
