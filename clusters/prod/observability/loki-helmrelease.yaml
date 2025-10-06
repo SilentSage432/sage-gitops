@@ -19,9 +19,28 @@ spec:
         name: grafana
         namespace: flux-system
   values:
+    # *** SINGLE BINARY ONLY ***
     deploymentMode: SingleBinary
+
+    # Make absolutely sure distributed bits do NOT render
+    read:
+      replicas: 0
+    write:
+      replicas: 0
+    backend:
+      replicas: 0
+    chunksCache:
+      enabled: false
+    monitoring:
+      selfMonitoring:
+        enabled: false
+      lokiCanary:
+        enabled: false
+      grafanaAgent:
+        enabled: false
     canary:
       enabled: false
+
     loki:
       auth_enabled: false
       storageConfig:
@@ -38,11 +57,14 @@ spec:
             object_store: filesystem
             schema: v13
             index: { prefix: index_, period: 24h }
+
     singleBinary:
+      replicas: 1
       persistence:
         enabled: true
         size: 20Gi
         accessModes: ["ReadWriteOnce"]
+
     gateway:
       enabled: true
       service:
@@ -51,6 +73,8 @@ spec:
         tailscale.com/expose: "true"
         tailscale.com/hostname: "loki"
         tailscale.com/tags: "tag:k8s"
+
+    # PSS hardening (quiet "restricted" warnings even if ns label changes later)
     podSecurityContext:
       runAsNonRoot: true
       seccompProfile: { type: RuntimeDefault }
