@@ -15,6 +15,15 @@ spec:
         name: grafana
         namespace: flux-system
   values:
+  podSecurityContext:
+    runAsNonRoot: true
+    seccompProfile:
+      type: RuntimeDefault
+  securityContext:
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
     config:
       clients:
         - url: http://loki-gateway.observability.svc.cluster.local/loki/api/v1/push

@@ -1,4 +1,3 @@
-# clusters/prod/observability/loki-helmrelease.yaml
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -9,12 +8,13 @@ spec:
   chart:
     spec:
       chart: loki
-      version: 6.x.x
+      # leave version unset to get the chart's default/latest compatible
       sourceRef:
         kind: HelmRepository
         name: grafana
         namespace: flux-system
   values:
+    # *** SINGLE BINARY ONLY ***
     deploymentMode: SingleBinary
     loki:
       auth_enabled: false
