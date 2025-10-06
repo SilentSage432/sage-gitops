@@ -1,0 +1,51 @@
+# clusters/prod/observability/gatus-config-cm.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gatus-config
+  namespace: observability
+data:
+  config.yaml: |
+    endpoints:
+      - name: grafana
+        group: observability
+        url: http://grafana.observability.svc.cluster.local:3000/login
+        interval: 30s
+        conditions: ["[STATUS] == 200", "[RESPONSE_TIME] < 1500"]
+        ui: { hide-url: true }
+
+      - name: loki
+        group: observability
+        url: http://loki-gateway.observability.svc.cluster.local/ready
+        interval: 30s
+        conditions: ["[STATUS] == 200"]
+
+      - name: prometheus
+        group: observability
+        url: http://kube-prom-prometheus.observability.svc.cluster.local/-/ready
+        interval: 30s
+        conditions: ["[STATUS] == 200"]
+
+      - name: alertmanager
+        group: observability
+        url: http://kube-prom-alertmanager.observability.svc.cluster.local/-/ready
+        interval: 30s
+        conditions: ["[STATUS] == 200"]
+
+      - name: flux-kustomize-controller
+        group: flux
+        url: http://kustomize-controller.flux-system.svc.cluster.local:9440/metrics
+        interval: 30s
+        conditions: ["[STATUS] == 200"]
+
+      - name: flux-helm-controller
+        group: flux
+        url: http://helm-controller.flux-system.svc.cluster.local:9440/metrics
+        interval: 30s
+        conditions: ["[STATUS] == 200"]
+
+      - name: flux-source-controller
+        group: flux
+        url: http://source-controller.flux-system.svc.cluster.local:9440/metrics
+        interval: 30s
+        conditions: ["[STATUS] == 200"]

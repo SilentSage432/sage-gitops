@@ -1,0 +1,27 @@
+# clusters/prod/observability/helmrepositories.yaml
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: grafana
+  namespace: flux-system
+spec:
+  url: https://grafana.github.io/helm-charts
+  interval: 10m
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: prometheus-community
+  namespace: flux-system
+spec:
+  url: https://prometheus-community.github.io/helm-charts
+  interval: 10m
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: twinproduction
+  namespace: flux-system
+spec:
+  url: https://twin.github.io/helm-charts/
+  interval: 10m

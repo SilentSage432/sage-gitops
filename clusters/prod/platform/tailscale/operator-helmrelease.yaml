@@ -1,0 +1,25 @@
+# clusters/prod/platform/tailscale/operator-helmrelease.yaml
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: tailscale-operator
+  namespace: tailscale
+spec:
+  interval: 10m
+  chart:
+    spec:
+      chart: tailscale-operator
+      version: 1.x.x
+      sourceRef:
+        kind: HelmRepository
+        name: tailscale
+        namespace: flux-system
+  values:
+    operatorConfig:
+      logging: info
+    proxyConfig:
+      defaultTags: [ "tag:k8s" ]
+      defaultProxyClass: "default"
+    authKey:
+      secretName: tailscale-auth
+      secretKey: tskey-auth-kXiRTX84FZ11CNTRL-qHMqp4NJ1kZqVGDL1NNHjZw5tzXAenQj6

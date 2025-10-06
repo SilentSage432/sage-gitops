@@ -1,0 +1,23 @@
+# clusters/prod/observability/grafana-dashboards-flux.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dashboards-flux
+  namespace: observability
+  labels:
+    grafana_dashboard: "1"
+data:
+  flux-errors.json: |
+    {
+      "title": "Flux Reconciliation — Errors & Retries",
+      "schemaVersion": 39,
+      "version": 1,
+      "panels": [
+        { "type": "logs", "title": "kustomize-controller errors",
+          "targets": [ { "expr": "{namespace=\"flux-system\", app=\"kustomize-controller\"} |= \"error\"" } ] },
+        { "type": "logs", "title": "helm-controller failures",
+          "targets": [ { "expr": "{namespace=\"flux-system\", app=\"helm-controller\"} |~ \"(fail|error|retry)\"" } ] },
+        { "type": "logs", "title": "source-controller fetch issues",
+          "targets": [ { "expr": "{namespace=\"flux-system\", app=\"source-controller\"} |~ \"(auth|timeout|rate|not found|denied)\"" } ] }
+      ]
+    }

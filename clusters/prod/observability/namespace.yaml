@@ -1,0 +1,5 @@
+# clusters/prod/observability/namespace.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: observability

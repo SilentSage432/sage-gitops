@@ -1,0 +1,25 @@
+# clusters/prod/observability/gatus-helmrelease.yaml
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: gatus
+  namespace: observability
+spec:
+  interval: 10m
+  chart:
+    spec:
+      chart: gatus
+      version: 2.x.x
+      sourceRef:
+        kind: HelmRepository
+        name: twinproduction
+        namespace: flux-system
+  values:
+    config:
+      existingConfigMap: gatus-config
+    service:
+      type: ClusterIP
+      annotations:
+        tailscale.com/expose: "true"
+        tailscale.com/hostname: "gatus"
+        tailscale.com/tags: "tag:k8s"

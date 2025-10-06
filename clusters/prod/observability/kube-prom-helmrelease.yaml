@@ -1,0 +1,46 @@
+# clusters/prod/observability/kube-prom-helmrelease.yaml
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: kube-prom
+  namespace: observability
+spec:
+  interval: 10m
+  chart:
+    spec:
+      chart: kube-prometheus-stack
+      version: 65.x.x
+      sourceRef:
+        kind: HelmRepository
+        name: prometheus-community
+        namespace: flux-system
+  values:
+    grafana:
+      enabled: false
+    alertmanager:
+      alertmanagerSpec:
+        retention: 120h
+      service:
+        type: ClusterIP
+        annotations:
+          tailscale.com/expose: "true"
+          tailscale.com/hostname: "alertmanager"
+          tailscale.com/tags: "tag:k8s"
+    prometheus:
+      service:
+        type: ClusterIP
+        annotations:
+          tailscale.com/expose: "true"
+          tailscale.com/hostname: "prometheus"
+          tailscale.com/tags: "tag:k8s"
+      prometheusSpec:
+        retention: 15d
+        scrapeInterval: 30s
+        evaluationInterval: 30s
+        ruleSelectorNilUsesHelmValues: false
+        podMonitorSelectorNilUsesHelmValues: false
+        serviceMonitorSelectorNilUsesHelmValues: false
+    kube-state-metrics:
+      enabled: true
+    nodeExporter:
+      enabled: true
