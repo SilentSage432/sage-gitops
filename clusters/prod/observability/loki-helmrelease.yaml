@@ -7,9 +7,9 @@ spec:
   interval: 10m
   timeout: 10m0s
   install:
-    remediation: { retries: 3 }
+    remediation: {retries: 3}
   upgrade:
-    remediation: { retries: 3 }
+    remediation: {retries: 3}
   # ⬇️ Do NOT run helm tests for this chart
   test:
     enable: false
@@ -24,16 +24,14 @@ spec:
   values:
     # *** SINGLE BINARY ONLY ***
     deploymentMode: SingleBinary
-
     # Belt & suspenders: make sure chart-level tests are off too
     test:
       enabled: false
-
     # Make absolutely sure distributed bits do NOT render
-    read:     { replicas: 0 }
-    write:    { replicas: 0 }
-    backend:  { replicas: 0 }
-    chunksCache: { enabled: false }
+    read: {replicas: 0}
+    write: {replicas: 0}
+    backend: {replicas: 0}
+    chunksCache: {enabled: false}
     monitoring:
       selfMonitoring:
         enabled: false
@@ -43,7 +41,6 @@ spec:
         enabled: false
     canary:
       enabled: false
-
     loki:
       auth_enabled: false
       storageConfig:
@@ -59,28 +56,25 @@ spec:
             store: boltdb-shipper
             object_store: filesystem
             schema: v13
-            index: { prefix: index_, period: 24h }
-
+            index: {prefix: index_, period: 24h}
     singleBinary:
       replicas: 1
       persistence:
         enabled: true
         size: 20Gi
         accessModes: ["ReadWriteOnce"]
-
     gateway:
       enabled: true
-      service: { type: ClusterIP }
+      service: {type: ClusterIP}
       annotations:
         tailscale.com/expose: "true"
         tailscale.com/hostname: "loki"
         tailscale.com/tags: "tag:k8s"
-
     # PSS hardening
     podSecurityContext:
       runAsNonRoot: true
-      seccompProfile: { type: RuntimeDefault }
+      seccompProfile: {type: RuntimeDefault}
     containerSecurityContext:
       runAsNonRoot: true
       allowPrivilegeEscalation: false
-      capabilities: { drop: ["ALL"] }
+      capabilities: {drop: ["ALL"]}
