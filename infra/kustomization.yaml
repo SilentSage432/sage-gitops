@@ -1,13 +1,17 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: infra
+
+# Only list the resources we actually need Infra to manage
 resources:
   - namespace.yaml
-  - nats-secret.yaml     # single source of the Secret
-  - nats.yaml            # deploy/service/etc. (no Secret inside)
+  - nats.yaml
   - kustomization-prod.yaml
-Patches:
-  -target:
-     kind: Kustomization
-     name: prod
-   path: patches/prod-ks-namespace.yaml
+
+# Force ONLY the 'prod' Flux Kustomization to live in flux-system
+patches:
+  - target:
+      group: kustomize.toolkit.fluxcd.io
+      version: v1
+      kind: Kustomization
+      name: prod
+    path: patches/prod-ks-namespace.yaml
