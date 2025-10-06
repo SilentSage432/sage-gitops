@@ -16,14 +16,14 @@ spec:
         runAsGroup: 10001
         seccompProfile: { type: RuntimeDefault }
       containers:
-      - name: web
-        image: nginx:1.27-alpine
-        command: ["nginx","-g","daemon off;","-c","/etc/nginx/nginx.conf"]
+      - name: nginx
+        image: nginxinc/nginx-unprivileged:1.27-alpine
+        # Unprivileged image listens on 8080 by default
         ports: [{ name: http, containerPort: 8080 }]
         volumeMounts:
         - { name: site,  mountPath: /usr/share/nginx/html, readOnly: true }
-        - { name: conf,  mountPath: /etc/nginx,           readOnly: true }
-        - { name: tmp,   mountPath: /tmp }   # <-- writable temp
+        - { name: theme, mountPath: /usr/share/nginx/html/theme, readOnly: true }
+        - { name: tmp,   mountPath: /tmp }  # writable temp for proxy cache etc
         resources:
           requests: { cpu: "20m", memory: "64Mi" }
           limits:   { cpu: "200m", memory: "128Mi" }
@@ -31,15 +31,18 @@ spec:
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true
           capabilities: { drop: ["ALL"] }
+        readinessProbe:
+          httpGet: { path: /, port: http }
+          initialDelaySeconds: 2
+          periodSeconds: 5
       volumes:
       - name: site
         configMap:
           name: epsilon-ui
           items: [{ key: index.html, path: index.html }]
-      - name: conf
+      - name: theme
         configMap:
-          name: epsilon-nginx
-          items: [{ key: nginx.conf, path: nginx.conf }]
+          name: epsilon-theme
       - name: tmp
         emptyDir: {}
       nodeSelector: { kubernetes.io/os: linux }
