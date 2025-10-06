@@ -3,5 +3,5 @@ kind: Kustomization
 namespace: infra
 resources:
   - namespace.yaml
-  - nats.yaml          # deployment/service/etc. (must NOT contain the secret)
-  - nats-secret.yaml   # the single source of Secret/nats-auth
+  - nats.yaml
+  - nats-secret.yaml
