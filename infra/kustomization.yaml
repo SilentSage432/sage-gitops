@@ -1,12 +1,14 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+namespace: infra
 resources:
-  # include your existing infra manifests here
-  - ./nats.yaml
-# Generate nats-auth here instead of committing raw Secret
+  - namespace.yaml
+  # include your infra resources here, e.g. nats.yaml, services, etc.
+  # if you have 'nats.yaml' in this folder, leave the next line; otherwise comment it out.
+  - nats.yaml
 secretGenerator:
   - name: nats-auth
     literals:
-      - token=SAGE_SUPER_TOKEN
+      - token=0a8aed691ba7998c9fb46a0aedd1c22d49b35a28ecc46a0b
 generatorOptions:
   disableNameSuffixHash: true
