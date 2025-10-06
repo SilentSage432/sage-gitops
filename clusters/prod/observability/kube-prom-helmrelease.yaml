@@ -5,13 +5,18 @@ metadata:
   namespace: observability
 spec:
   interval: 10m
-  timeout: 10m0s
+  timeout: 15m0s
+
+  # Critical for charts with CRDs:
   install:
+    crds: Create
     remediation: { retries: 3 }
-    disableWait: true         # <-- do not wait for hooks
+    disableWait: true
   upgrade:
+    crds: CreateReplace
     remediation: { retries: 3 }
-    disableWait: true         # <-- do not wait for hooks
+    disableWait: true
+
   chart:
     spec:
       chart: kube-prometheus-stack
@@ -20,8 +25,9 @@ spec:
         kind: HelmRepository
         name: prometheus-community
         namespace: flux-system
+
   values:
-    # Kill the webhook path entirely (single-node friendly)
+    # Kill buggy/unschedulable webhooks on single-node
     admissionWebhooks: { enabled: false }
     prometheusOperator:
       enabled: true
