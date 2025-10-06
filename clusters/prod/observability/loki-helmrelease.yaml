@@ -10,6 +10,9 @@ spec:
     remediation: { retries: 3 }
   upgrade:
     remediation: { retries: 3 }
+  # ⬇️ Do NOT run helm tests for this chart
+  test:
+    enable: false
   chart:
     spec:
       chart: loki
@@ -22,15 +25,15 @@ spec:
     # *** SINGLE BINARY ONLY ***
     deploymentMode: SingleBinary
 
-    # Make absolutely sure distributed bits do NOT render
-    read:
-      replicas: 0
-    write:
-      replicas: 0
-    backend:
-      replicas: 0
-    chunksCache:
+    # Belt & suspenders: make sure chart-level tests are off too
+    test:
       enabled: false
+
+    # Make absolutely sure distributed bits do NOT render
+    read:     { replicas: 0 }
+    write:    { replicas: 0 }
+    backend:  { replicas: 0 }
+    chunksCache: { enabled: false }
     monitoring:
       selfMonitoring:
         enabled: false
@@ -67,14 +70,13 @@ spec:
 
     gateway:
       enabled: true
-      service:
-        type: ClusterIP
+      service: { type: ClusterIP }
       annotations:
         tailscale.com/expose: "true"
         tailscale.com/hostname: "loki"
         tailscale.com/tags: "tag:k8s"
 
-    # PSS hardening (quiet "restricted" warnings even if ns label changes later)
+    # PSS hardening
     podSecurityContext:
       runAsNonRoot: true
       seccompProfile: { type: RuntimeDefault }
