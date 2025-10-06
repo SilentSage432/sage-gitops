@@ -19,6 +19,7 @@ spec:
         kind: HelmRepository
         name: grafana
         namespace: flux-system
+      version: 8.5.12
   values:
     adminUser: admin
     adminPassword: "change-me"
@@ -49,8 +50,8 @@ spec:
         folder: /var/lib/grafana/dashboards/auto
     podSecurityContext:
       runAsNonRoot: true
-      seccompProfile: { type: RuntimeDefault }
+      seccompProfile: {type: RuntimeDefault}
     containerSecurityContext:
       runAsNonRoot: true
       allowPrivilegeEscalation: false
-      capabilities: { drop: ["ALL"] }
+      capabilities: {drop: ["ALL"]}
