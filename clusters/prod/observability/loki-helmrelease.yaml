@@ -6,9 +6,9 @@ metadata:
 spec:
   interval: 10m
   timeout: 10m0s
-  install: { remediation: { retries: 3 } }
-  upgrade: { remediation: { retries: 3 } }
-  test: { enable: false }
+  install: {remediation: {retries: 3}, disableWait: true}
+  upgrade: {remediation: {retries: 3}, disableWait: true, force: true}
+  test: {enable: false}
   chart:
     spec:
       chart: loki
@@ -19,7 +19,6 @@ spec:
         namespace: flux-system
   values:
     deploymentMode: SingleBinary
-
     # Keep validators happy but DO NOT spin up extra agents/DS
     monitoring:
       selfMonitoring:
@@ -30,7 +29,6 @@ spec:
         enabled: false
     canary:
       enabled: false
-
     loki:
       auth_enabled: false
       storageConfig:
@@ -46,20 +44,18 @@ spec:
             store: boltdb-shipper
             object_store: filesystem
             schema: v13
-            index: { prefix: index_, period: 24h }
-
+            index: {prefix: index_, period: 24h}
     singleBinary:
       replicas: 1
       persistence:
-        enabled: false    # <-- ephemeral to avoid PVC/PSS drama
+        enabled: false # <-- ephemeral to avoid PVC/PSS drama
       tolerations:
         - key: node-role.kubernetes.io/control-plane
           operator: Exists
           effect: NoSchedule
-
     gateway:
       enabled: true
-      service: { type: ClusterIP }
+      service: {type: ClusterIP}
       tolerations:
         - key: node-role.kubernetes.io/control-plane
           operator: Exists
@@ -68,18 +64,18 @@ spec:
         tailscale.com/expose: "true"
         tailscale.com/hostname: "loki"
         tailscale.com/tags: "tag:k8s"
-
     # Ensure distributed bits NEVER render
-    read:     { replicas: 0 }
-    write:    { replicas: 0 }
-    backend:  { replicas: 0 }
-    chunksCache: { enabled: false }
-
+    read: {replicas: 0}
+    write: {replicas: 0}
+    backend: {replicas: 0}
+    chunksCache: {enabled: false}
     # Security hardening so PSS won’t complain if labels change later
     podSecurityContext:
       runAsNonRoot: true
-      seccompProfile: { type: RuntimeDefault }
+      seccompProfile: {type: RuntimeDefault}
     containerSecurityContext:
       runAsNonRoot: true
       allowPrivilegeEscalation: false
-      capabilities: { drop: ["ALL"] }
+      capabilities: {drop: ["ALL"]}
+    lokiCanary:
+      enabled: false

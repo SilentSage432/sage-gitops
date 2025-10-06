@@ -30,6 +30,7 @@ spec:
       admissionWebhooks:
         enabled: false
         patch: {enabled: false}
+        failurePolicy: Ignore
       tolerations:
         - key: node-role.kubernetes.io/control-plane
           operator: Exists
