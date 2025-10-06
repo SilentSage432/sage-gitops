@@ -6,9 +6,9 @@ metadata:
 spec:
   interval: 10m
   timeout: 10m0s
-  install: {remediation: {retries: 3}}
-  upgrade: {remediation: {retries: 3}}
-  test: {enable: false}
+  install: { remediation: { retries: 3 } }
+  upgrade: { remediation: { retries: 3 } }
+  test: { enable: false }
   chart:
     spec:
       chart: loki
@@ -18,11 +18,19 @@ spec:
         name: grafana
         namespace: flux-system
   values:
-    # Single process + NO PVCs (quick success path)
     deploymentMode: SingleBinary
+
+    # Keep validators happy but DO NOT spin up extra agents/DS
     monitoring:
-      selfMonitoring: {enabled: false} # satisfies validator
-    test: {enabled: false} # disable helm tests
+      selfMonitoring:
+        enabled: false
+      lokiCanary:
+        enabled: false
+      grafanaAgent:
+        enabled: false
+    canary:
+      enabled: false
+
     loki:
       auth_enabled: false
       storageConfig:
@@ -38,18 +46,20 @@ spec:
             store: boltdb-shipper
             object_store: filesystem
             schema: v13
-            index: {prefix: index_, period: 24h}
+            index: { prefix: index_, period: 24h }
+
     singleBinary:
       replicas: 1
       persistence:
-        enabled: false # <— no PVC for now
+        enabled: false    # <-- ephemeral to avoid PVC/PSS drama
       tolerations:
         - key: node-role.kubernetes.io/control-plane
           operator: Exists
           effect: NoSchedule
+
     gateway:
       enabled: true
-      service: {type: ClusterIP}
+      service: { type: ClusterIP }
       tolerations:
         - key: node-role.kubernetes.io/control-plane
           operator: Exists
@@ -58,9 +68,18 @@ spec:
         tailscale.com/expose: "true"
         tailscale.com/hostname: "loki"
         tailscale.com/tags: "tag:k8s"
-    # Belt & suspenders: ensure nothing distributed sneaks in
-    read: {replicas: 0}
-    write: {replicas: 0}
-    backend: {replicas: 0}
-    chunksCache: {enabled: false}
-    canary: {enabled: false}
+
+    # Ensure distributed bits NEVER render
+    read:     { replicas: 0 }
+    write:    { replicas: 0 }
+    backend:  { replicas: 0 }
+    chunksCache: { enabled: false }
+
+    # Security hardening so PSS won’t complain if labels change later
+    podSecurityContext:
+      runAsNonRoot: true
+      seccompProfile: { type: RuntimeDefault }
+    containerSecurityContext:
+      runAsNonRoot: true
+      allowPrivilegeEscalation: false
+      capabilities: { drop: ["ALL"] }
