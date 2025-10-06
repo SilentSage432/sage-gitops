@@ -9,7 +9,6 @@ spec:
   chart:
     spec:
       chart: grafana
-      version: 8.x.x
       sourceRef:
         kind: HelmRepository
         name: grafana
