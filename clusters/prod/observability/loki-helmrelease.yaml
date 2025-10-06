@@ -22,11 +22,12 @@ spec:
     # Keep validators happy but DO NOT spin up extra agents/DS
     monitoring:
       selfMonitoring:
-        enabled: true
+        enabled: false
       lokiCanary:
         enabled: false
       grafanaAgent:
         enabled: false
+        installOperator: false
     canary:
       enabled: false
     loki:
