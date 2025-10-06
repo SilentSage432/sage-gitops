@@ -3,5 +3,5 @@ kind: Kustomization
 namespace: infra
 resources:
   - namespace.yaml
-  - nats.yaml            # keep this if you actually have it; otherwise comment it out
-  - nats-secret.yaml     # <-- the ONLY source of the Secret now
+  - nats.yaml          # keep this only if it DOESN'T contain a nats-auth Secret
+  - nats-secret.yaml   # <- the ONLY source of the Secret
