@@ -8,20 +8,24 @@ spec:
   chart:
     spec:
       chart: loki
-      # leave version unset to get the chart's default/latest compatible
+      # Pin to a widely used stable to avoid validator drift; you can bump later
+      version: 5.43.3
       sourceRef:
         kind: HelmRepository
         name: grafana
         namespace: flux-system
   values:
-    # *** SINGLE BINARY ONLY ***
     deploymentMode: SingleBinary
     loki:
       auth_enabled: false
-      commonConfig:
-        replication_factor: 1
-      storage:
-        type: filesystem
+      # The chart's validator expects storageConfig in many versions
+      storageConfig:
+        boltdb_shipper:
+          active_index_directory: /var/loki/index
+          cache_location: /var/loki/boltdb-cache
+          shared_store: filesystem
+        filesystem:
+          directory: /var/loki/chunks
       schemaConfig:
         configs:
           - from: "2024-01-01"
@@ -35,6 +39,8 @@ spec:
       persistence:
         enabled: true
         size: 20Gi
+        accessModes: ["ReadWriteOnce"]
+        # storageClass: ""  # set if you have a named SC; else default
     gateway:
       enabled: true
       service:
