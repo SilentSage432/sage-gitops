@@ -6,17 +6,14 @@ metadata:
 spec:
   interval: 10m
   timeout: 15m0s
-
-  # Critical for charts with CRDs:
   install:
     crds: Create
-    remediation: { retries: 3 }
     disableWait: true
+    remediation: { retries: 3 }
   upgrade:
     crds: CreateReplace
-    remediation: { retries: 3 }
     disableWait: true
-
+    remediation: { retries: 3 }
   chart:
     spec:
       chart: kube-prometheus-stack
@@ -25,9 +22,8 @@ spec:
         kind: HelmRepository
         name: prometheus-community
         namespace: flux-system
-
   values:
-    # Kill buggy/unschedulable webhooks on single-node
+    # 🚫 Admission webhooks + patch jobs (single-node friendly)
     admissionWebhooks: { enabled: false }
     prometheusOperator:
       enabled: true
@@ -39,9 +35,21 @@ spec:
           operator: Exists
           effect: NoSchedule
 
+    # ✅ Keep these node-wide collectors
     kube-state-metrics: { enabled: true }
     nodeExporter: { enabled: true }
     grafana: { enabled: false }
+
+    # 🚫 Disable control-plane targets that don’t exist in your setup
+    kubeEtcd: { enabled: false }
+    kubeScheduler:
+      enabled: false
+    kubeControllerManager:
+      enabled: false
+    kubeProxy:
+      enabled: false
+    # If CoreDNS ServiceMonitors cause noise, you can also:
+    # coreDns: { enabled: false }
 
     alertmanager:
       alertmanagerSpec:
