@@ -1,9 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: arc-zeta
-
 resources:
   - namespace.yaml
-  - app-configmap.yaml
+  - observer-code.yaml
   - api-deploy.yaml
   - api-service.yaml

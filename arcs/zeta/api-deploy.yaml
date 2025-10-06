@@ -3,10 +3,10 @@ kind: Deployment
 metadata:
   name: observer-api
   namespace: arc-zeta
+  labels: { app: observer-api }
 spec:
   replicas: 1
-  selector:
-    matchLabels: { app: observer-api }
+  selector: { matchLabels: { app: observer-api } }
   template:
     metadata:
       labels: { app: observer-api }
@@ -19,46 +19,38 @@ spec:
       containers:
       - name: api
         image: python:3.11-slim
-        command: ["/bin/sh","-lc"]
+        command: ["sh","-lc"]
         args:
           - |
             set -e
-            python -m pip install --no-cache-dir fastapi 'uvicorn[standard]' nats-py
+            python -m pip install --no-cache-dir --upgrade --target=/opt/site fastapi 'uvicorn[standard]' nats-py
             exec python -m uvicorn app:app --host 0.0.0.0 --port 8080
         env:
-        - name: NATS_URL
-          value: "nats://nats.infra.svc.cluster.local:4222"
-        - name: SUBJECTS
-          value: "arc.>"
+          - { name: PYTHONPATH, value: /opt/site }
+          - { name: PYTHONUNBUFFERED, value: "1" }
+          - { name: NATS_URL, value: nats://nats.infra.svc.cluster.local:4222 }
         ports:
-        - name: http
-          containerPort: 8080
-        volumeMounts:
-        - name: app
-          mountPath: /app
-          readOnly: true
+          - { name: http, containerPort: 8080 }
         readinessProbe:
           httpGet: { path: /health, port: http }
-          initialDelaySeconds: 3
+          initialDelaySeconds: 6
           periodSeconds: 5
         livenessProbe:
           httpGet: { path: /health, port: http }
-          initialDelaySeconds: 10
+          initialDelaySeconds: 12
           periodSeconds: 10
-        resources:
-          requests: { cpu: "60m", memory: "192Mi" }
-          limits:   { cpu: "500m", memory: "512Mi" }
         securityContext:
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: false
           capabilities: { drop: ["ALL"] }
+        volumeMounts:
+          - { name: site, mountPath: /opt/site }
+          - { name: code, mountPath: /app }
       volumes:
-      - name: app
-        configMap:
-          name: observer-api-code
-          items:
-          - key: app.py
-            path: app.py
+        - { name: site, emptyDir: {} }
+        - { name: code, configMap: { name: observer-api-code, items: [{ key: app.py, path: app.py }] } }
       nodeSelector: { kubernetes.io/os: linux }
       tolerations:
-      - { key: "node-role.kubernetes.io/control-plane", operator: "Exists", effect: "NoSchedule" }
+        - key: "node-role.kubernetes.io/control-plane"
+          operator: "Exists"
+          effect: "NoSchedule"

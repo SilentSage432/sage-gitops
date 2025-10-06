@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: observer-api-code
+  namespace: arc-zeta
+data:
+  app.py: |
+    from fastapi import FastAPI
+    from fastapi.responses import JSONResponse
+    app = FastAPI()
+    @app.get("/health")
+    def health():
+      return JSONResponse({"ok": True})
