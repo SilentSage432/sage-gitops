@@ -34,11 +34,11 @@ spec:
       auth_enabled: false
       storageConfig:
         boltdb_shipper:
-          active_index_directory: /var/loki/index
-          cache_location: /var/loki/boltdb-cache
+          active_index_directory: /tmp/loki/index
+          cache_location: /tmp/loki/boltdb-cache
           shared_store: filesystem
         filesystem:
-          directory: /var/loki/chunks
+          directory: /tmp/loki/chunks
       schemaConfig:
         configs:
           - from: "2024-01-01"
