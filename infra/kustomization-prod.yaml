@@ -10,5 +10,4 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  dependsOn:
-    - name: infra     # ensures infra finishes first (you already have this Kustomization)
+    namespace: flux-system
