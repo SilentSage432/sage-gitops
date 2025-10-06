@@ -5,9 +5,67 @@ metadata:
   namespace: arc-zeta
 data:
   app.py: |
-    from fastapi import FastAPI
+    import asyncio, json, os
+    from fastapi import FastAPI, WebSocket, WebSocketDisconnect
     from fastapi.responses import JSONResponse
+    import nats
+
+    NATS_URL = os.getenv("NATS_URL","nats://nats.infra.svc.cluster.local:4222")
+    SUBJECT  = os.getenv("NATS_SUBJECT","arc.>")
+
     app = FastAPI()
+    nc = None
+    subscribers = set()
+    sub = None
+
+    @app.on_event("startup")
+    async def on_startup():
+        global nc, sub
+        nc = await nats.connect(servers=[NATS_URL])
+        # pre-warm a JetStream context if present (won't fail if not)
+        try:
+            await nc.jetstream()
+        except Exception:
+            pass
+
+    @app.on_event("shutdown")
+    async def on_shutdown():
+        try:
+            await nc.drain()
+        except Exception:
+            pass
+
     @app.get("/health")
-    def health():
-      return JSONResponse({"ok": True})
+    async def health():
+        return JSONResponse({"ok": True})
+
+    @app.websocket("/ws")
+    async def ws_endpoint(ws: WebSocket):
+        await ws.accept()
+        subscribers.add(ws)
+        # lazily create a subject subscription per-connection
+        sub = await nc.subscribe(SUBJECT)
+        try:
+            while True:
+                try:
+                    msg = await asyncio.wait_for(sub.next_msg(), timeout=30)
+                    payload = None
+                    try:
+                        payload = json.loads(msg.data.decode())
+                    except Exception:
+                        payload = {"raw": msg.data.decode(errors="ignore")}
+                    await ws.send_text(json.dumps({
+                        "subject": msg.subject,
+                        "data": payload
+                    }))
+                except asyncio.TimeoutError:
+                    # keep connection alive
+                    await ws.send_text(json.dumps({"ping":"ok"}))
+        except WebSocketDisconnect:
+            pass
+        finally:
+            subscribers.discard(ws)
+            try:
+                await sub.unsubscribe()
+            except Exception:
+                pass

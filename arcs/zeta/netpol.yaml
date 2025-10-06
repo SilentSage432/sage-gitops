@@ -1,10 +1,35 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: default-deny
+  name: observer-egress
   namespace: arc-zeta
 spec:
-  podSelector: {}
-  policyTypes:
-    - Ingress
-    - Egress
+  podSelector:
+    matchLabels:
+      app: observer-api
+  policyTypes: ["Egress"]
+  egress:
+    # allow DNS to kube-dns
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+    # allow NATS to infra
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: infra
+          podSelector:
+            matchLabels:
+              app: nats
+      ports:
+        - protocol: TCP
+          port: 4222

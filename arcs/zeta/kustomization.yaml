@@ -5,3 +5,4 @@ resources:
   - observer-code.yaml
   - api-deploy.yaml
   - api-service.yaml
+  - netpol.yaml

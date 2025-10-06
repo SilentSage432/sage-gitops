@@ -23,12 +23,12 @@ spec:
         args:
           - |
             set -e
-            python -m pip install --no-cache-dir --upgrade --target=/opt/site fastapi 'uvicorn[standard]' nats-py
-            exec python -m uvicorn app:app --host 0.0.0.0 --port 8080
+            pip install --no-cache-dir --upgrade fastapi "uvicorn[standard]" nats-py
+            exec uvicorn app:app --host 0.0.0.0 --port 8080
         env:
-          - { name: PYTHONPATH, value: /opt/site }
           - { name: PYTHONUNBUFFERED, value: "1" }
-          - { name: NATS_URL, value: nats://nats.infra.svc.cluster.local:4222 }
+          - { name: NATS_URL, value: "nats://nats.infra.svc.cluster.local:4222" }
+          - { name: NATS_SUBJECT, value: "arc.>" }
         ports:
           - { name: http, containerPort: 8080 }
         readinessProbe:
