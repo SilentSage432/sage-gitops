@@ -6,10 +6,8 @@ metadata:
 spec:
   interval: 10m
   timeout: 10m0s
-  install:
-    remediation: { retries: 3 }
-  upgrade:
-    remediation: { retries: 3 }
+  install: {remediation: {retries: 3}}
+  upgrade: {remediation: {retries: 3}}
   chart:
     spec:
       chart: promtail
@@ -30,8 +28,9 @@ spec:
         effect: NoSchedule
     podSecurityContext:
       runAsNonRoot: true
-      seccompProfile: { type: RuntimeDefault }
+      seccompProfile: {type: RuntimeDefault}
     securityContext:
       runAsNonRoot: true
       allowPrivilegeEscalation: false
-      capabilities: { drop: ["ALL"] }
+      capabilities: {drop: ["ALL"]}
+  suspend: true

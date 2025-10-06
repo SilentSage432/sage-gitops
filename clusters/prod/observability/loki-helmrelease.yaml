@@ -6,13 +6,9 @@ metadata:
 spec:
   interval: 10m
   timeout: 10m0s
-  install:
-    remediation: {retries: 3}
-  upgrade:
-    remediation: {retries: 3}
-  # ⬇️ Do NOT run helm tests for this chart
-  test:
-    enable: false
+  install: {remediation: {retries: 3}}
+  upgrade: {remediation: {retries: 3}}
+  test: {enable: false}
   chart:
     spec:
       chart: loki
@@ -22,25 +18,11 @@ spec:
         name: grafana
         namespace: flux-system
   values:
-    # *** SINGLE BINARY ONLY ***
+    # Single process + NO PVCs (quick success path)
     deploymentMode: SingleBinary
-    # Belt & suspenders: make sure chart-level tests are off too
-    test:
-      enabled: false
-    # Make absolutely sure distributed bits do NOT render
-    read: {replicas: 0}
-    write: {replicas: 0}
-    backend: {replicas: 0}
-    chunksCache: {enabled: false}
     monitoring:
-      selfMonitoring:
-        enabled: true
-      lokiCanary:
-        enabled: false
-      grafanaAgent:
-        enabled: false
-    canary:
-      enabled: false
+      selfMonitoring: {enabled: false} # satisfies validator
+    test: {enabled: false} # disable helm tests
     loki:
       auth_enabled: false
       storageConfig:
@@ -60,21 +42,25 @@ spec:
     singleBinary:
       replicas: 1
       persistence:
-        enabled: true
-        size: 20Gi
-        accessModes: ["ReadWriteOnce"]
+        enabled: false # <— no PVC for now
+      tolerations:
+        - key: node-role.kubernetes.io/control-plane
+          operator: Exists
+          effect: NoSchedule
     gateway:
       enabled: true
       service: {type: ClusterIP}
+      tolerations:
+        - key: node-role.kubernetes.io/control-plane
+          operator: Exists
+          effect: NoSchedule
       annotations:
         tailscale.com/expose: "true"
         tailscale.com/hostname: "loki"
         tailscale.com/tags: "tag:k8s"
-    # PSS hardening
-    podSecurityContext:
-      runAsNonRoot: true
-      seccompProfile: {type: RuntimeDefault}
-    containerSecurityContext:
-      runAsNonRoot: true
-      allowPrivilegeEscalation: false
-      capabilities: {drop: ["ALL"]}
+    # Belt & suspenders: ensure nothing distributed sneaks in
+    read: {replicas: 0}
+    write: {replicas: 0}
+    backend: {replicas: 0}
+    chunksCache: {enabled: false}
+    canary: {enabled: false}

@@ -9,11 +9,11 @@ spec:
   install:
     crds: Create
     disableWait: true
-    remediation: { retries: 3 }
+    remediation: {retries: 3}
   upgrade:
     crds: CreateReplace
     disableWait: true
-    remediation: { retries: 3 }
+    remediation: {retries: 3}
   chart:
     spec:
       chart: kube-prometheus-stack
@@ -24,24 +24,24 @@ spec:
         namespace: flux-system
   values:
     # 🚫 Admission webhooks + patch jobs (single-node friendly)
-    admissionWebhooks: { enabled: false }
+    admissionWebhooks: {enabled: false}
     prometheusOperator:
       enabled: true
       admissionWebhooks:
         enabled: false
-        patch: { enabled: false }
+        patch: {enabled: false}
       tolerations:
         - key: node-role.kubernetes.io/control-plane
           operator: Exists
           effect: NoSchedule
-
+      tls:
+        enabled: false
     # ✅ Keep these node-wide collectors
-    kube-state-metrics: { enabled: true }
-    nodeExporter: { enabled: true }
-    grafana: { enabled: false }
-
+    kube-state-metrics: {enabled: true}
+    nodeExporter: {enabled: false}
+    grafana: {enabled: false}
     # 🚫 Disable control-plane targets that don’t exist in your setup
-    kubeEtcd: { enabled: false }
+    kubeEtcd: {enabled: false}
     kubeScheduler:
       enabled: false
     kubeControllerManager:
@@ -64,7 +64,6 @@ spec:
           tailscale.com/expose: "true"
           tailscale.com/hostname: "alertmanager"
           tailscale.com/tags: "tag:k8s"
-
     prometheus:
       prometheusSpec:
         retention: 7d
