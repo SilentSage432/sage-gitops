@@ -34,7 +34,7 @@ spec:
     chunksCache: {enabled: false}
     monitoring:
       selfMonitoring:
-        enabled: false
+        enabled: true
       lokiCanary:
         enabled: false
       grafanaAgent:
