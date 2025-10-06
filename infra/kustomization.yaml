@@ -6,3 +6,8 @@ resources:
   - nats-secret.yaml     # single source of the Secret
   - nats.yaml            # deploy/service/etc. (no Secret inside)
   - kustomization-prod.yaml
+Patches:
+  -target:
+     kind: Kustomization
+     name: prod
+   path: patches/prod-ks-namespace.yaml
