@@ -3,12 +3,5 @@ kind: Kustomization
 namespace: infra
 resources:
   - namespace.yaml
-  # include your infra resources here, e.g. nats.yaml, services, etc.
-  # if you have 'nats.yaml' in this folder, leave the next line; otherwise comment it out.
-  - nats.yaml
-secretGenerator:
-  - name: nats-auth
-    literals:
-      - token=0a8aed691ba7998c9fb46a0aedd1c22d49b35a28ecc46a0b
-generatorOptions:
-  disableNameSuffixHash: true
+  - nats.yaml            # keep this if you actually have it; otherwise comment it out
+  - nats-secret.yaml     # <-- the ONLY source of the Secret now
