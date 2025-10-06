@@ -32,5 +32,6 @@ spec:
     securityContext:
       runAsNonRoot: true
       allowPrivilegeEscalation: false
-      capabilities: {drop: ["ALL"]}
+      capabilities: {drop: [ALL]}
+      runAsUser: 0
   suspend: true
