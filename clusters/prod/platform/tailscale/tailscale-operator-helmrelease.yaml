@@ -14,10 +14,17 @@ spec:
         namespace: flux-system
       version: 1.x.x
   values:
-    # Use an AUTH KEY (tskey-auth-...), not a client secret.
+    # ✅ Use a real Tailscale AUTH KEY (tskey-auth-…)
     authKey:
       secretName: tailscale-auth
       secretKey: TS_AUTHKEY
+
+    # ✅ Hard-disable OAuth so the chart does NOT mount /oauth or require operator-oauth
+    oauth:
+      enabled: false
+      existingSecret: ""
+      clientId: ""
+      clientSecret: ""
 
     operatorConfig:
       logging: info
