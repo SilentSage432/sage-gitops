@@ -23,7 +23,7 @@ spec:
     # Existing auth key for the operator to join
     authKey:
       secretName: tailscale-auth
-      secretKey: TS_AUTHKEY
+      secretKey: tskey-auth-kXiRTX84FZ11CNTRL-qHMqp4NJ1kZqVGDL1NNHjZw5tzXAenQj6
 
     operatorConfig:
       logging: info
