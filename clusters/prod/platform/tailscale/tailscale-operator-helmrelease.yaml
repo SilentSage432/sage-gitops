@@ -17,8 +17,8 @@ spec:
     # Let the chart create the Secret for OAuth
     oauth:
       # Use the exact values from Tailscale admin
-      clientId: "<PUT_YOUR_TAILSCALE_OAUTH_CLIENT_ID_HERE>"
-      clientSecret: "<PUT_YOUR_TAILSCALE_OAUTH_CLIENT_SECRET_HERE>"
+      clientId: PFBVVF9ZT1VSX1RBSUxTQ0FMRV9PQVVUSF9DTElFTlRfSURfSEVSRT4=
+      clientSecret: PFBVVF9ZT1VSX1RBSUxTQ0FMRV9PQVVUSF9DTElFTlRfU0VDUkVUX0hFUkU+
 
     # Existing auth key for the operator to join
     authKey:
