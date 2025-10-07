@@ -4,4 +4,3 @@ resources:
   - ns.yaml
   - tailscale-helmrepo.yaml
   - tailscale-operator-helmrelease.yaml
-  - proxyclass-default.yaml
