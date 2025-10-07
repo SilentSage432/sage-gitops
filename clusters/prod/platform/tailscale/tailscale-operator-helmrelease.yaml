@@ -31,4 +31,3 @@ spec:
     proxyConfig:
       defaultProxyClass: default
       # Must be a STRING for 1.88.x
-      defaultTags: "tag:k8s"
