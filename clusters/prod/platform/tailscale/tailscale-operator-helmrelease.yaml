@@ -14,12 +14,12 @@ spec:
         namespace: flux-system
       version: 1.x.x
   values:
-    # <-- put the fresh OAuth client from the Tailscale admin here -->
-    oauth:
-      clientId: kE28RkVJpX11CNTRL      # e.g. 3C3C8D3B... (not tskey-…)
-      clientSecret: tskey-client-kE28RkVJpX11CNTRL-eMkU3ipTZGY2megicTn4GYKWM4rMfJkCB
+    # ✅ Auth-key mode only
+    authKey:
+      secretName: tailscale-auth
+      secretKey: TS_AUTHKEY
 
-    # keep tags simple; operator earns k8s-operator and can assign 'k8s'
+    # operator + proxy tags
     operatorConfig:
       defaultTags: "tag:k8s-operator"
     proxyConfig:
