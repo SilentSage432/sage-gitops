@@ -13,29 +13,15 @@ spec:
         name: tailscale
         namespace: flux-system
       version: 1.x.x
-  install:
-    crds: Create
-    disableWait: true
-    remediation:
-      retries: 3
-  upgrade:
-    crds: CreateReplace
-    disableWait: true
-    remediation:
-      retries: 3
   values:
+    # ✅ Auth-key mode ONLY
     authKey:
-       secretName: tailscale-auth
-       secretKey: tskey-auth-kVa523Capy11CNTRL-9VGnPyMZTgBhPr85Rp5pfBjUeAsZ73Ne
-    # REQUIRED: OAuth (operator requires this)
-    oauth:
-      clientId: kE28RkVJpX11CNTRL       # looks like 'client:xxxxxxxx...'
-      clientSecret: tskey-client-kE28RkVJpX11CNTRL-eMkU3ipTZGY2megicTn4GYKWM4rMfJkCB # the long secret you copied
+      secretName: tailscale-auth
+      secretKey: TS_AUTHKEY
 
-    # Operator & proxy default tags
     operatorConfig:
-      defaultTags: "tag:k8s-operator"
       logging: info
+      defaultTags: "tag:k8s-operator"
     proxyConfig:
       defaultProxyClass: default
       defaultTags: "tag:k8s"
