@@ -16,8 +16,8 @@ spec:
   values:
     # <-- put the fresh OAuth client from the Tailscale admin here -->
     oauth:
-      clientId: "<YOUR_CLIENT_ID>"        # e.g. 3C3C8D3B... (not tskey-…)
-      clientSecret: "<YOUR_CLIENT_SECRET>"# the long mixed-case secret
+      clientId: ktTRTrPcFH11CNTRL       # e.g. 3C3C8D3B... (not tskey-…)
+      clientSecret: tskey-client-ktTRTrPcFH11CNTRL-pkRcdtyCEPLS939ieTRoPLJv4iDT55Jx # the long mixed-case secret
 
     # keep tags simple; operator earns k8s-operator and can assign 'k8s'
     operatorConfig:
