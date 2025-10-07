@@ -26,7 +26,7 @@ spec:
   values:
     authKey:
        secretName: tailscale-auth
-       secretKey: tskey-auth
+       secretKey: tskey-auth-kVa523Capy11CNTRL-9VGnPyMZTgBhPr85Rp5pfBjUeAsZ73Ne
     # REQUIRED: OAuth (operator requires this)
     oauth:
       clientId: kE28RkVJpX11CNTRL       # looks like 'client:xxxxxxxx...'
