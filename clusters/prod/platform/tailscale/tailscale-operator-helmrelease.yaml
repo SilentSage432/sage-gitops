@@ -14,20 +14,15 @@ spec:
         namespace: flux-system
       version: 1.x.x
   values:
-    # Let the chart create the Secret for OAuth
-    oauth:
-      # Use the exact values from Tailscale admin
-      clientId: kLYf7pGQEc11CNTRL
-      clientSecret: tskey-client-kLYf7pGQEc11CNTRL-H2fr4cA8MBUBb9PUWcBnAU2JMSE4BNKEj
-
-    # Existing auth key for the operator to join
+    # Use an AUTH KEY (tskey-auth-...), not a client secret.
     authKey:
       secretName: tailscale-auth
-      secretKey: tskey-auth-kXiRTX84FZ11CNTRL-qHMqp4NJ1kZqVGDL1NNHjZw5tzXAenQj6
+      secretKey: TS_AUTHKEY
 
     operatorConfig:
       logging: info
 
     proxyConfig:
       defaultProxyClass: default
-      # Must be a STRING for 1.88.x
+      # MUST be a string on 1.88.x charts
+      defaultTags: "tag:k8s"
