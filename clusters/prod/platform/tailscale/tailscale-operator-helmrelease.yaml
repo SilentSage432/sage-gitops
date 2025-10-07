@@ -21,5 +21,5 @@ spec:
       logging: info
     proxyConfig:
       defaultProxyClass: default
-      defaultTags:
-        - tag:k8s
+      # NOTE: must be a string for chart 1.88.x
+      defaultTags: "tag:k8s"
