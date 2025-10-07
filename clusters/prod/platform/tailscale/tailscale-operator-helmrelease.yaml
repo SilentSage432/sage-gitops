@@ -14,22 +14,11 @@ spec:
         namespace: flux-system
       version: 1.x.x
   values:
-    # ✅ Use a real Tailscale AUTH KEY (tskey-auth-…)
     authKey:
       secretName: tailscale-auth
       secretKey: TS_AUTHKEY
-
-    # ✅ Hard-disable OAuth so the chart does NOT mount /oauth or require operator-oauth
-    oauth:
-      enabled: false
-      existingSecret: ""
-      clientId: ""
-      clientSecret: ""
-
     operatorConfig:
       logging: info
-
     proxyConfig:
       defaultProxyClass: default
-      # MUST be a string on 1.88.x charts
       defaultTags: "tag:k8s"
