@@ -14,11 +14,14 @@ spec:
         namespace: flux-system
       version: 1.x.x
   values:
-    authKey:
-      secretName: tailscale-auth
-      secretKey: TS_AUTHKEY
+    oauth:
+      existingSecret: operator-oauth
+      clientIdKey: client_id
+      clientSecretKey: client_secret
+
     operatorConfig:
       logging: info
+
     proxyConfig:
       defaultProxyClass: default
       defaultTags: "tag:k8s"
