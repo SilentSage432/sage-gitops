@@ -1,7 +1,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+namespace: tailscale
 resources:
-  - namespace.yaml
-  - helmrepository.yaml
-  - operator-helmrelease.yaml
-  - auth-secret.yaml
+  - ns.yaml
+  - tailscale-helmrepo.yaml
+  - tailscale-operator-helmrelease.yaml
+  - proxyclass-default.yaml
