@@ -8,7 +8,7 @@ spec:
   chart:
     spec:
       chart: prometheus-node-exporter
-      version: 4.x.x
+      version: 4.33.0
       sourceRef:
         kind: HelmRepository
         name: prometheus-community
@@ -20,7 +20,6 @@ spec:
       port: 9100
     serviceMonitor:
       enabled: true
-      # Make kube-prometheus-stack pick it up
       additionalLabels:
         release: kube-prom
       interval: 30s
