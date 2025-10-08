@@ -15,7 +15,9 @@ spec:
   values:
     adminUser: admin
     adminPassword: change-me
-
+    deploymentStrategy:
+      type: Recreate
+    terminationGracePeriodSeconds: 10	
     service:
       type: ClusterIP
       annotations:
