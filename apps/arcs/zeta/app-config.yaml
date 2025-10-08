@@ -1,0 +1,85 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: observer-api
+  namespace: arc-zeta
+data:
+  app.py: |
+    import asyncio, json, os
+    from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+    from fastapi.responses import JSONResponse
+    import uvicorn
+
+    NATS_URL = os.getenv("NATS_URL", "nats://nats.infra.svc.cluster.local:4222")
+    SUBJECTS = os.getenv("SUBJECTS", "arc.*")
+
+    app = FastAPI()
+    clients = set()
+    last_ok = {"nats": False, "subs": []}
+
+    @app.get("/health")
+    async def health():
+      status = "ok" if last_ok["nats"] else "degraded"
+      return JSONResponse({"status": status, **last_ok})
+
+    @app.websocket("/ws")
+    async def ws(ws: WebSocket):
+      await ws.accept()
+      clients.add(ws)
+      try:
+        while True:
+          # keepalive pings from client are fine; we don’t expect input
+          await ws.receive_text()
+      except WebSocketDisconnect:
+        clients.discard(ws)
+
+    async def nats_worker():
+      # lazy import so container starts even before pip finishes (probes allow time)
+      import nats
+      from nats.errors import ConnectionClosedError
+
+      while True:
+        try:
+          nc = await nats.connect(servers=[NATS_URL])
+          last_ok["nats"] = True
+          async def handler(msg):
+            data = {
+              "subject": msg.subject,
+              "reply": msg.reply,
+              "data": msg.data.decode(errors="replace"),
+            }
+            dead = []
+            for ws in list(clients):
+              try:
+                await ws.send_text(json.dumps(data))
+              except Exception:
+                dead.append(ws)
+            for d in dead:
+              clients.discard(d)
+
+          last_ok["subs"] = []
+          subs = []
+          for subj in SUBJECTS.split(","):
+            s = await nc.subscribe(subj.strip(), cb=handler)
+            subs.append(s)
+            last_ok["subs"].append(subj.strip())
+
+          # park here until the connection drops
+          try:
+            while True:
+              await asyncio.sleep(1)
+          finally:
+            for s in subs:
+              try: await s.drain()
+              except: pass
+            await nc.drain()
+        except Exception:
+          last_ok["nats"] = False
+          await asyncio.sleep(2)  # backoff and retry
+
+    @app.on_event("startup")
+    async def on_start():
+      asyncio.create_task(nats_worker())
+
+    if __name__ == "__main__":
+      uvicorn.run(app, host="0.0.0.0", port=8000)

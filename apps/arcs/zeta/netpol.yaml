@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: observer-api
+  namespace: arc-zeta
+spec:
+  podSelector: { matchLabels: { app: observer-api } }
+  policyTypes: ["Ingress","Egress"]
+  ingress:
+    - from:
+        - podSelector: {}   # same-namespace access
+  egress:
+    - to:
+        - namespaceSelector: { matchLabels: { name: infra } }
+          # Adjust this selector to your NATS labels if needed
+      ports:
+        - protocol: TCP
+          port: 4222
+    - to:
+        - namespaceSelector: { matchLabels: { kube-system: "true" } }
+      ports:
+        - protocol: UDP
+          port: 53
