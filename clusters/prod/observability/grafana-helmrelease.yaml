@@ -31,7 +31,7 @@ spec:
             type: prometheus
             access: proxy
             # kube-prometheus-stack's Prometheus service name:
-            url: http://kube-prom-kube-prometheus-prometheus.observability.svc.cluster.local
+            url: http://kube-prom-kube-prometheus-prometheus.observability.svc.cluster.local:9090
           - name: Loki
             type: loki
             access: proxy
