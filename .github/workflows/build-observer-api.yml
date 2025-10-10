@@ -3,7 +3,7 @@ on:
   push:
     branches: [ main ]
     paths:
-      - observer-api/**     # adjust to your app path
+      - kubectl-runner/**     # adjust to your app path
       - .github/workflows/build-observer-api.yml
   workflow_dispatch:
 
@@ -32,9 +32,9 @@ jobs:
       - name: Build & push multi-arch
         uses: docker/build-push-action@v6
         with:
-          context: ./observer-api                  # adjust if different
+          context: ./kubectl-runner                  # adjust if different
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ghcr.io/${{ secrets.GHCR_USERNAME }}/observer-api:latest
-            ghcr.io/${{ secrets.GHCR_USERNAME }}/observer-api:${{ github.sha }}
+            ghcr.io/${{ secrets.GHCR_USERNAME }}/kubectl-runner:latest
+            ghcr.io/${{ secrets.GHCR_USERNAME }}/kubectl-runner:${{ github.sha }}
