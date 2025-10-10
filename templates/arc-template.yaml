@@ -1,0 +1,103 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ${ARC_NS}
+  labels:
+    pod-security.kubernetes.io/enforce: "restricted"
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: ${ARC_NAME}
+  namespace: ${ARC_NS}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny
+  namespace: ${ARC_NS}
+spec:
+  podSelector: {}
+  policyTypes: ["Ingress","Egress"]
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-http-ingress
+  namespace: ${ARC_NS}
+spec:
+  podSelector: { matchLabels: { app: ${ARC_NAME} } }
+  policyTypes: ["Ingress"]
+  ingress:
+    - ports:
+        - { protocol: TCP, port: 80 }
+        - { protocol: TCP, port: ${CONTAINER_PORT} }
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-egress-dns-nats
+  namespace: ${ARC_NS}
+spec:
+  podSelector: { matchLabels: { app: ${ARC_NAME} } }
+  policyTypes: ["Egress"]
+  egress:
+    - to:
+        - namespaceSelector: { matchLabels: { kubernetes.io/metadata.name: kube-system } }
+      ports:
+        - { protocol: UDP, port: 53 }
+        - { protocol: TCP, port: 53 }
+    - to:
+        - namespaceSelector: { matchLabels: { kubernetes.io/metadata.name: infra } }
+      ports:
+        - { protocol: TCP, port: 4222 }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ${ARC_NAME}
+  namespace: ${ARC_NS}
+spec:
+  replicas: 1
+  strategy: { type: Recreate }
+  selector: { matchLabels: { app: ${ARC_NAME} } }
+  template:
+    metadata: { labels: { app: ${ARC_NAME} } }
+    spec:
+      serviceAccountName: ${ARC_NAME}
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        seccompProfile: { type: RuntimeDefault }
+      containers:
+        - name: app
+          image: ${IMAGE}
+          ports: [{ name: http, containerPort: ${CONTAINER_PORT} }]
+          env:
+            - { name: PORT, value: "${CONTAINER_PORT}" }
+          readinessProbe:
+            httpGet: { path: ${HEALTH_PATH}, port: http }
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            httpGet: { path: ${HEALTH_PATH}, port: http }
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: { drop: ["ALL"] }
+          volumeMounts:
+            - { name: tmp, mountPath: /tmp }
+      volumes:
+        - { name: tmp, emptyDir: {} }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ${ARC_NAME}
+  namespace: ${ARC_NS}
+spec:
+  selector: { app: ${ARC_NAME} }
+  ports:
+    - { name: http, port: 80, targetPort: ${CONTAINER_PORT} }
