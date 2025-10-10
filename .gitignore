@@ -1,6 +1,37 @@
+# Security: Never commit sensitive files
+*.yaml.bak
+*.backup.*
+mc.yaml
+mc.backup.*
+mc.*.yaml
 
-# local helpers
-kubectl-runner/
+# Cloudflare tokens and secrets
+**/cloudflared*.yaml
+**/cloudflare*.yaml
 
-# local helpers
-kubectl-runner/
+# Talos machine configurations with secrets
+**/machineconfig*.yaml
+**/talos*.yaml
+
+# Certificates and private keys
+*.crt
+*.key
+*.pem
+*.p12
+*.pfx
+
+# Environment files with secrets
+.env
+.env.local
+.env.production
+
+# Configuration files that may contain secrets
+config/*.yaml
+secrets/*.yaml
+**/secrets/**
+**/config/**
+
+# Temporary files
+*.tmp
+*.temp
+*~
