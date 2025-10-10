@@ -16,6 +16,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Debug - List directory contents
+        run: |
+          echo "=== Root directory contents ==="
+          ls -la
+          echo "=== kubectl-runner directory contents ==="
+          ls -la kubectl-runner/ || echo "kubectl-runner directory not found"
+          echo "=== Current working directory ==="
+          pwd
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
