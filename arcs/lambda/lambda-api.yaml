@@ -36,6 +36,31 @@ spec:
           ports:
             - name: http
               containerPort: 8000
+          env:
+            - name: KAPPA_URL
+              value: "http://kappa-api.arc-kappa.svc.cluster.local"
+            - name: SERVICE_NAME
+              value: "lambda-api"
+            - name: HEARTBEAT_INTERVAL_SEC
+              value: "15"
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: SERVICE_VERSION
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels["pod-template-hash"]
+            - name: KAPPA_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: kappa-api-auth
+                  key: token
+                  optional: true
           readinessProbe:
             httpGet:
               path: /health

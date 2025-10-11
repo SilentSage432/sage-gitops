@@ -1,0 +1,610 @@
+NAMESPACE            NAME                                               READY   STATUS                   RESTARTS        AGE
+core-ops             pod/core-lite-29335700-qvgvv                       0/1     Pending                  0               70m
+core-ops             pod/core-lite-29335702-hjcxc                       0/1     Pending                  0               70m
+core-ops             pod/core-lite-29335704-wthr9                       0/1     Pending                  0               75m
+core-ops             pod/core-lite-29335706-62v6g                       0/1     Pending                  0               75m
+core-ops             pod/core-lite-29335708-jj2g9                       0/1     Pending                  0               75m
+core-ops             pod/core-lite-29335710-pwmh9                       0/1     Pending                  0               75m
+core-ops             pod/core-lite-29335712-5ddhd                       0/1     Pending                  0               75m
+core-ops             pod/core-lite-29335714-xb86k                       0/1     Pending                  0               75m
+core-ops             pod/core-lite-29335716-798zp                       0/1     Pending                  0               75m
+core-ops             pod/core-lite-29335718-29g4w                       0/1     Pending                  0               75m
+core-ops             pod/core-lite-29335720-fr4vn                       0/1     Pending                  0               75m
+core-ops             pod/core-lite-29335722-zhrnt                       0/1     Pending                  0               75m
+core-ops             pod/core-lite-29335724-rzk48                       0/1     Pending                  0               87m
+core-ops             pod/core-lite-29335726-5fzjb                       0/1     Pending                  0               87m
+core-ops             pod/core-lite-29335728-8kmv9                       0/1     Pending                  0               75m
+core-ops             pod/core-lite-29335730-vkh85                       0/1     Pending                  0               87m
+core-ops             pod/core-lite-29335732-tjrmx                       0/1     Pending                  0               87m
+core-ops             pod/core-lite-29335734-t7rbw                       0/1     Pending                  0               87m
+core-ops             pod/core-lite-29335736-zqscc                       0/1     Pending                  0               75m
+core-ops             pod/core-lite-29335738-fw9gt                       0/1     Pending                  0               150m
+core-ops             pod/core-lite-29335740-c6zh2                       0/1     Pending                  0               163m
+core-ops             pod/core-lite-29335742-hppd4                       0/1     Pending                  0               3h26m
+core-ops             pod/core-lite-29335744-m7s62                       0/1     Pending                  0               4h52m
+core-ops             pod/core-lite-29335746-kdv9b                       0/1     Pending                  0               4h50m
+core-ops             pod/core-lite-29335748-2zvmd                       0/1     Pending                  0               4h48m
+core-ops             pod/core-lite-29335750-hzzwv                       0/1     Pending                  0               4h46m
+core-ops             pod/core-lite-29335752-l2wx2                       0/1     Pending                  0               3h26m
+core-ops             pod/core-lite-29335754-29lk2                       0/1     Pending                  0               4h42m
+core-ops             pod/core-lite-29335756-6czqs                       0/1     Pending                  0               4h40m
+core-ops             pod/core-lite-29335758-tf2hx                       0/1     Pending                  0               4h9m
+core-ops             pod/core-lite-29335760-pkd4x                       0/1     Pending                  0               3h26m
+core-ops             pod/core-lite-29335762-hcr68                       0/1     Pending                  0               3h26m
+core-ops             pod/core-lite-29335764-ftmjl                       0/1     Pending                  0               3h26m
+core-ops             pod/core-lite-29335766-g655f                       0/1     Pending                  0               3h26m
+core-ops             pod/core-lite-29335768-5z68f                       0/1     Pending                  0               3h26m
+core-ops             pod/core-lite-29335770-97gct                       0/1     Pending                  0               3h26m
+core-ops             pod/core-lite-29335772-ps7rl                       0/1     Pending                  0               4h24m
+core-ops             pod/core-lite-29335774-5zr62                       0/1     Pending                  0               3h26m
+core-ops             pod/core-lite-29335776-zlp8j                       0/1     Pending                  0               3h26m
+core-ops             pod/core-lite-29335778-bv7rk                       0/1     Pending                  0               3h26m
+core-ops             pod/core-lite-29335780-v7l69                       0/1     Pending                  0               3h26m
+core-ops             pod/core-lite-29335784-5kxr5                       0/1     Pending                  0               4h11m
+core-ops             pod/core-lite-29335786-chdj8                       0/1     Pending                  0               4h10m
+core-ops             pod/core-lite-29335788-zrm5n                       0/1     Pending                  0               4h8m
+core-ops             pod/core-lite-29335790-ks2nb                       0/1     Pending                  0               4h6m
+core-ops             pod/core-lite-29335792-tdpf9                       0/1     Pending                  0               4h4m
+core-ops             pod/core-lite-29335794-h5q9t                       0/1     Pending                  0               4h2m
+core-ops             pod/core-lite-29335796-bz7x9                       0/1     Pending                  0               4h
+core-ops             pod/core-lite-29335798-6v527                       0/1     Pending                  0               3h58m
+core-ops             pod/core-lite-29335800-9mwtj                       0/1     Pending                  0               3h56m
+core-ops             pod/core-lite-29335802-pj2t9                       0/1     Pending                  0               3h54m
+core-ops             pod/core-lite-29335804-2qlcj                       0/1     Pending                  0               3h52m
+core-ops             pod/core-lite-29335806-5d67k                       0/1     Pending                  0               3h50m
+core-ops             pod/core-lite-29335808-vvcnq                       0/1     Pending                  0               3h48m
+core-ops             pod/core-lite-29335810-x58bg                       0/1     Pending                  0               3h46m
+core-ops             pod/core-lite-29335812-vl6lt                       0/1     Pending                  0               3h44m
+core-ops             pod/core-lite-29335814-kg4ss                       0/1     Pending                  0               3h42m
+core-ops             pod/core-lite-29335816-57zrt                       0/1     Pending                  0               3h40m
+core-ops             pod/core-lite-29335818-xnc49                       0/1     Pending                  0               3h38m
+core-ops             pod/core-lite-29335820-slh9x                       0/1     Pending                  0               3h36m
+core-ops             pod/core-lite-29335822-qkdpw                       0/1     Pending                  0               3h34m
+core-ops             pod/core-lite-29335824-wkzpt                       0/1     Pending                  0               3h32m
+core-ops             pod/core-lite-29335826-lqfwc                       0/1     Pending                  0               3h30m
+core-ops             pod/core-lite-29335828-8kr6l                       0/1     Pending                  0               3h28m
+core-ops             pod/core-lite-29335830-xvp74                       0/1     Pending                  0               3h26m
+core-ops             pod/core-lite-29335832-n47cl                       0/1     Pending                  0               3h24m
+core-ops             pod/core-lite-29335834-rddzk                       0/1     Pending                  0               3h22m
+core-ops             pod/core-lite-29335836-5v46d                       0/1     Pending                  0               3h18m
+core-ops             pod/core-lite-29335838-x6262                       0/1     Pending                  0               3h18m
+core-ops             pod/core-lite-29335840-fjx4t                       0/1     Pending                  0               3h16m
+core-ops             pod/core-lite-29335842-qc8rx                       0/1     Pending                  0               75m
+core-ops             pod/core-lite-29335844-h9l7m                       0/1     Pending                  0               87m
+core-ops             pod/core-lite-29335846-jsqx8                       0/1     Pending                  0               75m
+core-ops             pod/core-lite-29335848-fc46n                       0/1     Pending                  0               87m
+core-ops             pod/core-lite-29335850-gxmxl                       0/1     Pending                  0               87m
+core-ops             pod/core-lite-29335852-jc58x                       0/1     Pending                  0               87m
+core-ops             pod/core-lite-29335854-dvcr7                       0/1     Pending                  0               87m
+core-ops             pod/core-lite-29335856-w9hzx                       0/1     Pending                  0               87m
+core-ops             pod/core-lite-29335858-xfwvj                       0/1     Pending                  0               75m
+default              pod/busybox                                        0/1     Pending                  0               49s
+kube-flannel         pod/kube-flannel-ds-8c6wv                          0/1     Init:0/2                 0               94s
+kube-system          pod/cilium-7p782                                   1/1     Running                  0               118s
+kube-system          pod/cilium-envoy-xgkrm                             1/1     Running                  0               40m
+kube-system          pod/cilium-operator-7f6b4767fd-t5zhg               0/1     Pending                  0               40m
+kube-system          pod/cilium-operator-7f6b4767fd-tp27c               1/1     Running                  0               40m
+kube-system          pod/coredns-5b7c6bf567-hq2mj                       0/1     Terminating              0               54m
+kube-system          pod/coredns-66bcb998f6-8v6gr                       0/1     ContainerCreating        0               10s
+kube-system          pod/hostnet                                        0/1     Error                    0               34h
+kube-system          pod/kube-apiserver-sage                            1/1     Running                  0               44m
+kube-system          pod/kube-controller-manager-sage                   1/1     Running                  2 (46m ago)     44m
+kube-system          pod/kube-flannel-n5974                             0/1     CrashLoopBackOff         70 (107s ago)   34h
+kube-system          pod/kube-proxy-9zcl6                               1/1     Running                  19 (48m ago)    32h
+kube-system          pod/kube-scheduler-sage                            1/1     Running                  3 (45m ago)     44m
+local-path-storage   pod/local-path-provisioner-746ccdf664-4hkrq        0/1     Error                    1               75m
+logs                 pod/promtail-vrp7c                                 0/1     Error                    3               34h
+metallb-system       pod/metallb-speaker-lvjqr                          0/1     ContainerCreating        0               94s
+observability        pod/node-exporter-prometheus-node-exporter-fbvw7   0/1     ContainerCreating        0               94s
+observability        pod/ns-debug                                       0/1     Pending                  0               39h
+observability        pod/promtail-tr4qz                                 0/1     Pending                  0               58m
+sage                 pod/arc-registry-now-zj78b                         0/1     ContainerStatusUnknown   0               71m
+sage                 pod/arc-registry-refresh-29335859-5hv7j            0/1     Error                    0               71m
+sage                 pod/arc-registry-refresh-29335859-8pqt4            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335859-znm7q            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335860-5ssr7            0/1     Error                    0               71m
+sage                 pod/arc-registry-refresh-29335860-dcnzw            1/1     Running                  0               44m
+sage                 pod/arc-registry-refresh-29335860-tg45l            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335861-gz5zd            0/1     Pending                  0               58m
+sage                 pod/arc-registry-refresh-29335861-nm5nh            0/1     Error                    0               71m
+sage                 pod/arc-registry-refresh-29335862-7bj9l            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335862-dxv2w            0/1     Error                    0               71m
+sage                 pod/arc-registry-refresh-29335862-sbkgc            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335863-bvqf7            0/1     Error                    0               71m
+sage                 pod/arc-registry-refresh-29335863-ffhlt            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335863-nzjvz            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335864-58fp2            0/1     Error                    0               71m
+sage                 pod/arc-registry-refresh-29335864-6rw9c            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335864-82s8c            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335865-l6pfs            0/1     Error                    0               71m
+sage                 pod/arc-registry-refresh-29335865-sghkp            0/1     Pending                  0               58m
+sage                 pod/arc-registry-refresh-29335866-7sclv            0/1     Error                    0               71m
+sage                 pod/arc-registry-refresh-29335866-jp6b8            0/1     Pending                  0               58m
+sage                 pod/arc-registry-refresh-29335867-79hd6            0/1     Error                    0               71m
+sage                 pod/arc-registry-refresh-29335867-g7q2j            0/1     Pending                  0               58m
+sage                 pod/arc-registry-refresh-29335868-2226f            0/1     Error                    0               71m
+sage                 pod/arc-registry-refresh-29335868-8kdmb            0/1     ContainerCreating        0               43m
+sage                 pod/arc-registry-refresh-29335868-kz9rt            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335869-2qcq9            0/1     Error                    0               71m
+sage                 pod/arc-registry-refresh-29335869-gpsj2            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335869-k2xs5            0/1     ContainerCreating        0               43m
+sage                 pod/arc-registry-refresh-29335870-8vtn8            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335870-d4zj4            0/1     Error                    0               71m
+sage                 pod/arc-registry-refresh-29335870-qwbf8            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335871-5ptqp            0/1     Error                    0               70m
+sage                 pod/arc-registry-refresh-29335871-9gmwn            0/1     ContainerCreating        0               43m
+sage                 pod/arc-registry-refresh-29335871-z4z2f            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335872-d74pd            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335872-n7tw9            0/1     Error                    0               71m
+sage                 pod/arc-registry-refresh-29335872-pvnkq            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335873-8dd7v            0/1     Error                    0               71m
+sage                 pod/arc-registry-refresh-29335873-j8cjm            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335873-lql7b            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335874-5vgpt            0/1     Error                    0               71m
+sage                 pod/arc-registry-refresh-29335874-bfzcj            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335874-kfndp            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335875-6pl87            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335875-chsf2            0/1     Error                    0               71m
+sage                 pod/arc-registry-refresh-29335875-cvkxj            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335876-22tn2            0/1     Error                    0               71m
+sage                 pod/arc-registry-refresh-29335876-74g77            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335876-prd4r            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335877-klh5l            0/1     Error                    0               71m
+sage                 pod/arc-registry-refresh-29335877-q8tvq            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335877-qgqkj            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335878-87gcc            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335878-rk8zz            0/1     Error                    0               71m
+sage                 pod/arc-registry-refresh-29335878-vbs9v            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335879-dqbtb            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335879-f82v4            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335879-tfmc7            0/1     Error                    0               71m
+sage                 pod/arc-registry-refresh-29335880-4pzmq            0/1     Error                    0               70m
+sage                 pod/arc-registry-refresh-29335880-6jbm7            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335880-hpt4c            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335881-59psf            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335881-fvv48            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335881-lc4j2            0/1     Error                    0               70m
+sage                 pod/arc-registry-refresh-29335882-ftjrz            0/1     Error                    0               70m
+sage                 pod/arc-registry-refresh-29335882-hdskj            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335882-qlxlq            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335883-2px8r            0/1     Error                    0               70m
+sage                 pod/arc-registry-refresh-29335883-b9pzm            0/1     Pending                  0               58m
+sage                 pod/arc-registry-refresh-29335884-7qgfl            0/1     Error                    0               70m
+sage                 pod/arc-registry-refresh-29335884-bhd9t            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335884-dggzf            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335885-bwh57            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335885-p9ggj            0/1     ContainerCreating        0               43m
+sage                 pod/arc-registry-refresh-29335885-vwjb2            0/1     Error                    0               70m
+sage                 pod/arc-registry-refresh-29335886-87sgm            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335886-gt488            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335886-vltgs            0/1     Error                    0               70m
+sage                 pod/arc-registry-refresh-29335887-9vht2            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335887-d95dm            0/1     Error                    0               70m
+sage                 pod/arc-registry-refresh-29335887-jmfmm            0/1     ContainerCreating        0               43m
+sage                 pod/arc-registry-refresh-29335888-2mv84            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335888-7gqm9            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335888-l7r4m            0/1     Error                    0               70m
+sage                 pod/arc-registry-refresh-29335889-g2dgx            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335889-nbtmd            0/1     Error                    0               57m
+sage                 pod/arc-registry-refresh-29335889-vhml5            0/1     Error                    0               70m
+sage                 pod/arc-registry-refresh-29335890-8sr4z            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335890-94wzh            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335890-zrz92            0/1     Error                    0               70m
+sage                 pod/arc-registry-refresh-29335891-4bcjf            0/1     Error                    0               70m
+sage                 pod/arc-registry-refresh-29335891-4slf6            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335891-l89st            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335892-7fngn            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335892-kfrg5            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335892-shbpw            0/1     Error                    0               70m
+sage                 pod/arc-registry-refresh-29335893-4p588            0/1     Error                    0               70m
+sage                 pod/arc-registry-refresh-29335893-sp7k2            0/1     Pending                  0               58m
+sage                 pod/arc-registry-refresh-29335894-5xtdl            0/1     Pending                  0               58m
+sage                 pod/arc-registry-refresh-29335894-n5gm7            0/1     Error                    0               70m
+sage                 pod/arc-registry-refresh-29335895-2ghgn            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335895-58vd7            0/1     Error                    0               70m
+sage                 pod/arc-registry-refresh-29335895-7fhj8            0/1     StartError               0               58m
+sage                 pod/arc-registry-refresh-29335896-dj2zz            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335896-rxp82            0/1     ContainerCreating        0               43m
+sage                 pod/arc-registry-refresh-29335896-tl77r            0/1     Error                    0               70m
+sage                 pod/arc-registry-refresh-29335897-nhg5r            0/1     Error                    0               57m
+sage                 pod/arc-registry-refresh-29335897-nqnsp            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335897-vdgtl            0/1     Error                    0               70m
+sage                 pod/arc-registry-refresh-29335910-457rk            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335910-b95p6            0/1     ContainerCreating        0               43m
+sage                 pod/arc-registry-refresh-29335910-dskxl            0/1     Error                    0               70m
+sage                 pod/arc-registry-refresh-29335911-4cxk4            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335911-5m627            0/1     Error                    0               70m
+sage                 pod/arc-registry-refresh-29335911-n5pzj            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335912-2t5nj            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335912-7bcts            0/1     Error                    0               70m
+sage                 pod/arc-registry-refresh-29335912-8g78x            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335913-dnwbt            0/1     Error                    0               70m
+sage                 pod/arc-registry-refresh-29335913-nqgtp            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335913-rbxl5            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335914-4b7x4            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335914-jtccm            0/1     Error                    0               70m
+sage                 pod/arc-registry-refresh-29335914-k88jf            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335915-9cdvt            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335915-d4hv7            0/1     Error                    0               70m
+sage                 pod/arc-registry-refresh-29335915-f9jhn            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335916-d4dzd            0/1     Error                    0               70m
+sage                 pod/arc-registry-refresh-29335916-sd2pj            0/1     Pending                  0               58m
+sage                 pod/arc-registry-refresh-29335917-2br7c            0/1     Error                    0               70m
+sage                 pod/arc-registry-refresh-29335917-6x7wt            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335917-l6snw            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335918-6b9rl            0/1     Error                    0               70m
+sage                 pod/arc-registry-refresh-29335918-96t9d            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335918-9w7t8            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335919-dlfhw            0/1     Error                    0               70m
+sage                 pod/arc-registry-refresh-29335919-tvbn9            0/1     Pending                  0               58m
+sage                 pod/arc-registry-refresh-29335920-5hx6s            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335920-rvqfw            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335920-x9flc            0/1     Error                    0               70m
+sage                 pod/arc-registry-refresh-29335921-ctvht            0/1     Pending                  0               58m
+sage                 pod/arc-registry-refresh-29335921-jls82            0/1     Error                    0               70m
+sage                 pod/arc-registry-refresh-29335922-5rl44            0/1     Error                    0               57m
+sage                 pod/arc-registry-refresh-29335922-5wd24            0/1     Error                    0               70m
+sage                 pod/arc-registry-refresh-29335922-jzhkg            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335923-bxsk2            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335923-r26rb            0/1     ContainerCreating        0               43m
+sage                 pod/arc-registry-refresh-29335923-s5xx2            0/1     Error                    0               70m
+sage                 pod/arc-registry-refresh-29335924-dz97b            0/1     Pending                  0               58m
+sage                 pod/arc-registry-refresh-29335924-ghnc5            0/1     Error                    0               70m
+sage                 pod/arc-registry-refresh-29335925-tlfcp            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335925-tm9sf            0/1     Error                    0               70m
+sage                 pod/arc-registry-refresh-29335925-vpb6h            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335926-6hsqp            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335926-cdnlq            0/1     Error                    0               70m
+sage                 pod/arc-registry-refresh-29335926-pzmsx            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335927-8fd5x            0/1     Error                    0               70m
+sage                 pod/arc-registry-refresh-29335927-9gvhz            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335927-pnm47            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335928-2wq69            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335928-nl9zf            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335928-v7rxn            0/1     Error                    0               70m
+sage                 pod/arc-registry-refresh-29335929-bzfps            0/1     Error                    0               70m
+sage                 pod/arc-registry-refresh-29335929-jvlkn            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335929-vhspv            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335930-bbrg8            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335930-m4sgf            0/1     ContainerCreating        0               43m
+sage                 pod/arc-registry-refresh-29335930-mls5l            0/1     Error                    0               75m
+sage                 pod/arc-registry-refresh-29335931-r2f84            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335931-spfz6            1/1     Running                  0               44m
+sage                 pod/arc-registry-refresh-29335931-wjr4j            0/1     Error                    0               75m
+sage                 pod/arc-registry-refresh-29335932-9hltc            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335932-ql5w5            0/1     Error                    0               75m
+sage                 pod/arc-registry-refresh-29335932-xtxzw            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335933-djpn9            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335933-hsw26            0/1     Error                    0               75m
+sage                 pod/arc-registry-refresh-29335933-m4rn4            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335934-qv6x8            0/1     Error                    0               75m
+sage                 pod/arc-registry-refresh-29335934-xltvx            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335934-z7rcv            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335935-7l7fr            0/1     Error                    0               75m
+sage                 pod/arc-registry-refresh-29335935-v2p9f            0/1     Pending                  0               58m
+sage                 pod/arc-registry-refresh-29335936-527tc            0/1     Error                    0               75m
+sage                 pod/arc-registry-refresh-29335936-nmxwz            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335936-rd8d8            0/1     StartError               0               58m
+sage                 pod/arc-registry-refresh-29335937-cw67z            0/1     Pending                  0               58m
+sage                 pod/arc-registry-refresh-29335937-md92r            0/1     Error                    0               75m
+sage                 pod/arc-registry-refresh-29335938-67n67            0/1     Error                    0               58m
+sage                 pod/arc-registry-refresh-29335938-8b5p5            0/1     ContainerCreating        0               44m
+sage                 pod/arc-registry-refresh-29335938-d8bqx            0/1     Error                    0               75m
+tailscale            pod/tailscale-5k5jd                                1/1     Running                  50 (48m ago)    7d9h
+
+NAMESPACE         NAME                                             TYPE           CLUSTER-IP       EXTERNAL-IP     PORT(S)                        AGE
+arc-epsilon       service/epsilon-ui                               ClusterIP      10.103.94.98     <none>          80/TCP                         5d4h
+arc-iota          service/iota-api                                 ClusterIP      10.100.9.163     <none>          80/TCP                         23h
+arc-kappa         service/kappa-api                                ClusterIP      10.107.140.95    <none>          80/TCP                         16h
+arc-kappa         service/kappa-postgres                           ClusterIP      None             <none>          5432/TCP                       16h
+arc-theta         service/theta-api                                ClusterIP      10.100.7.204     <none>          80/TCP                         26h
+arc-zeta          service/observer-api                             ClusterIP      10.111.86.234    <none>          80/TCP                         5d5h
+default           service/kubelet                                  ClusterIP      None             <none>          10250/TCP,10255/TCP,4194/TCP   4d8h
+default           service/kubernetes                               ClusterIP      10.96.0.1        <none>          443/TCP                        8d
+flux-system       service/notification-controller                  ClusterIP      10.108.165.37    <none>          80/TCP                         6d10h
+flux-system       service/source-controller                        ClusterIP      10.98.62.37      <none>          80/TCP                         6d10h
+flux-system       service/webhook-receiver                         ClusterIP      10.100.28.33     <none>          80/TCP                         6d10h
+infra             service/nats                                     ClusterIP      10.104.55.153    <none>          4222/TCP,8222/TCP              5d2h
+ingress-nginx     service/ingress-nginx-controller                 LoadBalancer   10.103.200.216   192.168.1.200   80:30843/TCP,443:32611/TCP     8d
+kube-system       service/cilium-envoy                             ClusterIP      None             <none>          9964/TCP                       40m
+kube-system       service/kube-dns                                 ClusterIP      10.96.0.10       <none>          53/UDP,53/TCP,9153/TCP         8d
+kube-system       service/kube-prom-kube-prometheus-coredns        ClusterIP      None             <none>          9153/TCP                       4d7h
+kube-system       service/kube-prom-kube-prometheus-kubelet        ClusterIP      None             <none>          10250/TCP,10255/TCP,4194/TCP   4d6h
+longhorn-system   service/longhorn-admission-webhook               ClusterIP      10.102.7.155     <none>          9502/TCP                       5h8m
+longhorn-system   service/longhorn-backend                         ClusterIP      10.111.170.167   <none>          9500/TCP                       5h8m
+longhorn-system   service/longhorn-frontend                        ClusterIP      10.104.33.92     <none>          80/TCP                         5h8m
+longhorn-system   service/longhorn-recovery-backend                ClusterIP      10.98.193.24     <none>          9503/TCP                       5h8m
+metallb-system    service/metallb-webhook-service                  ClusterIP      10.104.209.29    <none>          443/TCP                        8d
+observability     service/alertmanager-operated                    ClusterIP      None             <none>          9093/TCP,9094/TCP,9094/UDP     4d6h
+observability     service/grafana                                  ClusterIP      10.101.85.229    <none>          80/TCP                         4d8h
+observability     service/kube-prom-kube-prometheus-alertmanager   ClusterIP      10.110.177.95    <none>          9093/TCP,8080/TCP              4d7h
+observability     service/kube-prom-kube-prometheus-operator       ClusterIP      10.100.176.215   <none>          8080/TCP                       4d7h
+observability     service/kube-prom-kube-prometheus-prometheus     ClusterIP      10.99.245.241    <none>          9090/TCP,8080/TCP              4d7h
+observability     service/kube-prom-kube-state-metrics             ClusterIP      10.106.209.133   <none>          8080/TCP                       4d7h
+observability     service/loki                                     ClusterIP      10.100.164.48    <none>          3100/TCP,9095/TCP              4d6h
+observability     service/loki-gateway                             ClusterIP      10.106.74.102    <none>          80/TCP                         4d6h
+observability     service/loki-headless                            ClusterIP      None             <none>          3100/TCP                       4d6h
+observability     service/loki-memberlist                          ClusterIP      None             <none>          7946/TCP                       4d6h
+observability     service/node-exporter                            ClusterIP      10.100.144.255   <none>          9100/TCP                       2d17h
+observability     service/node-exporter-prometheus-node-exporter   ClusterIP      10.111.134.213   <none>          9100/TCP                       2d17h
+observability     service/prometheus-operated                      ClusterIP      None             <none>          9090/TCP                       4d6h
+sage              service/sage                                     NodePort       10.103.249.241   <none>          80:30080/TCP                   8d
+
+NAMESPACE         NAME                                                    DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR            AGE
+kube-flannel      daemonset.apps/kube-flannel-ds                          1         1         0       1            0           <none>                   33h
+kube-system       daemonset.apps/cilium                                   1         1         1       1            1           <none>                   40m
+kube-system       daemonset.apps/cilium-envoy                             1         1         1       1            1           kubernetes.io/os=linux   40m
+kube-system       daemonset.apps/kube-flannel                             1         1         0       1            0           <none>                   8d
+kube-system       daemonset.apps/kube-proxy                               1         1         1       1            1           <none>                   8d
+logs              daemonset.apps/promtail                                 0         0         0       0            0           <none>                   3d2h
+longhorn-system   daemonset.apps/longhorn-manager                         0         0         0       0            0           <none>                   4h26m
+metallb-system    daemonset.apps/metallb-speaker                          1         1         0       1            0           kubernetes.io/os=linux   8d
+observability     daemonset.apps/node-exporter-prometheus-node-exporter   1         1         0       1            0           kubernetes.io/os=linux   2d17h
+observability     daemonset.apps/promtail                                 0         0         0       0            0           <none>                   3d2h
+tailscale         daemonset.apps/tailscale                                0         0         0       0            0           <none>                   7d10h
+
+NAMESPACE            NAME                                                 READY   UP-TO-DATE   AVAILABLE   AGE
+arc-epsilon          deployment.apps/epsilon-ui                           0/0     0            0           5d4h
+arc-iota             deployment.apps/iota-api                             0/0     0            0           23h
+arc-kappa            deployment.apps/kappa-api                            0/0     0            0           16h
+arc-kappa            deployment.apps/kappa-postgres                       0/0     0            0           9h
+arc-theta            deployment.apps/theta-api                            0/0     0            0           26h
+arc-zeta             deployment.apps/observer-api                         0/0     0            0           29h
+cloudflare           deployment.apps/cloudflared                          0/0     0            0           3d
+cloudflared          deployment.apps/cloudflared                          0/0     0            0           3d7h
+edge                 deployment.apps/edge-nginx                           0/0     0            0           7d10h
+flux-system          deployment.apps/helm-controller                      0/0     0            0           6d10h
+flux-system          deployment.apps/image-automation-controller          0/0     0            0           6d10h
+flux-system          deployment.apps/image-reflector-controller           0/0     0            0           6d10h
+flux-system          deployment.apps/kustomize-controller                 0/0     0            0           6d10h
+flux-system          deployment.apps/notification-controller              0/0     0            0           6d10h
+flux-system          deployment.apps/source-controller                    0/0     0            0           6d10h
+infra                deployment.apps/nats                                 0/0     0            0           5d2h
+ingress-nginx        deployment.apps/ingress-nginx-controller             0/0     0            0           8d
+kube-system          deployment.apps/cilium-operator                      1/2     2            1           40m
+kube-system          deployment.apps/coredns                              0/1     1            0           8d
+local-path-storage   deployment.apps/local-path-provisioner               0/1     1            0           9h
+longhorn-system      deployment.apps/longhorn-driver-deployer             0/0     0            0           4h26m
+longhorn-system      deployment.apps/longhorn-ui                          0/0     0            0           4h26m
+metallb-system       deployment.apps/metallb-controller                   0/0     0            0           8d
+observability        deployment.apps/grafana                              0/0     0            0           4d8h
+observability        deployment.apps/kube-prom-kube-prometheus-operator   0/0     0            0           4d7h
+observability        deployment.apps/kube-prom-kube-state-metrics         0/0     0            0           4d7h
+observability        deployment.apps/loki-gateway                         0/0     0            0           4d6h
+observability        deployment.apps/loki-grafana-agent-operator          0/0     0            0           4d6h
+sage                 deployment.apps/sage                                 0/0     0            0           8d
+tailscale            deployment.apps/operator                             0/0     0            0           3d12h
+
+NAMESPACE            NAME                                                            DESIRED   CURRENT   READY   AGE
+arc-epsilon          replicaset.apps/epsilon-ui-6df54d6656                           0         0         0       38h
+arc-iota             replicaset.apps/iota-api-5b5d895bf8                             0         0         0       23h
+arc-iota             replicaset.apps/iota-api-b7b54dc64                              0         0         0       23h
+arc-iota             replicaset.apps/iota-api-c86689689                              0         0         0       23h
+arc-kappa            replicaset.apps/kappa-api-58c5449db9                            0         0         0       15h
+arc-kappa            replicaset.apps/kappa-api-5cfcd4d554                            0         0         0       16h
+arc-kappa            replicaset.apps/kappa-api-68fd97fc7                             0         0         0       16h
+arc-kappa            replicaset.apps/kappa-api-75667dc79d                            0         0         0       16h
+arc-kappa            replicaset.apps/kappa-api-b4b78c694                             0         0         0       16h
+arc-kappa            replicaset.apps/kappa-api-c8d4fd8d                              0         0         0       16h
+arc-kappa            replicaset.apps/kappa-postgres-99fdbfdb5                        0         0         0       9h
+arc-theta            replicaset.apps/theta-api-f84f7d48b                             0         0         0       23h
+arc-zeta             replicaset.apps/observer-api-978b489f9                          0         0         0       23h
+cloudflare           replicaset.apps/cloudflared-5d4fc44d98                          0         0         0       32h
+cloudflare           replicaset.apps/cloudflared-65f8b574d8                          0         0         0       38h
+cloudflare           replicaset.apps/cloudflared-678ff58c89                          0         0         0       33h
+cloudflare           replicaset.apps/cloudflared-67c9df949c                          0         0         0       33h
+cloudflare           replicaset.apps/cloudflared-6d789d8487                          0         0         0       32h
+cloudflare           replicaset.apps/cloudflared-7f7dd448df                          0         0         0       33h
+cloudflared          replicaset.apps/cloudflared-5745b4dc97                          0         0         0       38h
+edge                 replicaset.apps/edge-nginx-76f696f89f                           0         0         0       38h
+flux-system          replicaset.apps/helm-controller-69c744b6fd                      0         0         0       6d10h
+flux-system          replicaset.apps/image-automation-controller-748f7564bb          0         0         0       6d10h
+flux-system          replicaset.apps/image-reflector-controller-7d97465fbb           0         0         0       6d10h
+flux-system          replicaset.apps/kustomize-controller-d8dd96cb4                  0         0         0       6d10h
+flux-system          replicaset.apps/notification-controller-757547dff               0         0         0       6d10h
+flux-system          replicaset.apps/source-controller-5975bfb54                     0         0         0       6d10h
+infra                replicaset.apps/nats-67fb984bdf                                 0         0         0       38h
+ingress-nginx        replicaset.apps/ingress-nginx-controller-768579885c             0         0         0       38h
+kube-system          replicaset.apps/cilium-operator-7f6b4767fd                      2         2         1       40m
+kube-system          replicaset.apps/coredns-5b7c6bf567                              0         0         0       34h
+kube-system          replicaset.apps/coredns-5fcbdb547b                              0         0         0       34h
+kube-system          replicaset.apps/coredns-65c4bf9bc9                              0         0         0       35h
+kube-system          replicaset.apps/coredns-66bcb998f6                              1         1         0       10s
+kube-system          replicaset.apps/coredns-78684f6557                              0         0         0       2d4h
+kube-system          replicaset.apps/coredns-7bb8d67d5d                              0         0         0       38h
+local-path-storage   replicaset.apps/local-path-provisioner-746ccdf664               1         1         0       9h
+local-path-storage   replicaset.apps/local-path-provisioner-764c96744d               0         0         0       9h
+local-path-storage   replicaset.apps/local-path-provisioner-7c7cc96bdb               0         0         0       9h
+local-path-storage   replicaset.apps/local-path-provisioner-7d74f49545               0         0         0       9h
+local-path-storage   replicaset.apps/local-path-provisioner-7df744d967               0         0         0       9h
+local-path-storage   replicaset.apps/local-path-provisioner-866d54d4c8               0         0         0       9h
+local-path-storage   replicaset.apps/local-path-provisioner-869dfd78bd               0         0         0       9h
+longhorn-system      replicaset.apps/longhorn-driver-deployer-576df5f8f9             0         0         0       167m
+longhorn-system      replicaset.apps/longhorn-driver-deployer-6588b8c4fb             0         0         0       4h11m
+longhorn-system      replicaset.apps/longhorn-driver-deployer-76794f9dc7             0         0         0       3h9m
+longhorn-system      replicaset.apps/longhorn-driver-deployer-7fb5447b5d             0         0         0       163m
+longhorn-system      replicaset.apps/longhorn-driver-deployer-84dff9fcc4             0         0         0       161m
+longhorn-system      replicaset.apps/longhorn-driver-deployer-8599fc6c6c             0         0         0       3h14m
+longhorn-system      replicaset.apps/longhorn-driver-deployer-9c4fbd7c               0         0         0       4h26m
+longhorn-system      replicaset.apps/longhorn-driver-deployer-c7d7f96c7              0         0         0       3h1m
+longhorn-system      replicaset.apps/longhorn-driver-deployer-cf8495c9               0         0         0       171m
+longhorn-system      replicaset.apps/longhorn-driver-deployer-f648c6b78              0         0         0       3h17m
+longhorn-system      replicaset.apps/longhorn-ui-57cc548df5                          0         0         0       163m
+longhorn-system      replicaset.apps/longhorn-ui-57cd78449d                          0         0         0       167m
+longhorn-system      replicaset.apps/longhorn-ui-696774d658                          0         0         0       9s
+longhorn-system      replicaset.apps/longhorn-ui-6c99946bb4                          0         0         0       171m
+longhorn-system      replicaset.apps/longhorn-ui-75c6648545                          0         0         0       161m
+longhorn-system      replicaset.apps/longhorn-ui-7687789b7c                          0         0         0       3h1m
+longhorn-system      replicaset.apps/longhorn-ui-7796656975                          0         0         0       3h14m
+longhorn-system      replicaset.apps/longhorn-ui-7dd7bbfcd                           0         0         0       3h17m
+longhorn-system      replicaset.apps/longhorn-ui-869d8d7596                          0         0         0       3h9m
+longhorn-system      replicaset.apps/longhorn-ui-dc49fd59f                           0         0         0       4h26m
+metallb-system       replicaset.apps/metallb-controller-c87dc764d                    0         0         0       7d14h
+observability        replicaset.apps/grafana-7f959f7bc7                              0         0         0       38h
+observability        replicaset.apps/kube-prom-kube-prometheus-operator-6f5b4dd5b5   0         0         0       38h
+observability        replicaset.apps/kube-prom-kube-state-metrics-66ddc4755b         0         0         0       38h
+observability        replicaset.apps/loki-gateway-f768b465                           0         0         0       38h
+observability        replicaset.apps/loki-grafana-agent-operator-56455f8fb7          0         0         0       38h
+sage                 replicaset.apps/sage-6b4d9cbbcc                                 0         0         0       8d
+tailscale            replicaset.apps/operator-5f69947f59                             0         0         0       3d12h
+
+NAMESPACE       NAME                                                                   READY   AGE
+observability   statefulset.apps/alertmanager-kube-prom-kube-prometheus-alertmanager   0/0     4d6h
+observability   statefulset.apps/loki                                                  0/0     4d6h
+observability   statefulset.apps/prometheus-kube-prom-kube-prometheus-prometheus       0/0     4d6h
+
+NAMESPACE   NAME                                 SCHEDULE      TIMEZONE   SUSPEND   ACTIVE   LAST SCHEDULE   AGE
+core-ops    cronjob.batch/core-guardian          */2 * * * *   <none>     True      0        2d1h            2d5h
+core-ops    cronjob.batch/core-lite              */2 * * * *   <none>     True      79       178m            2d1h
+sage        cronjob.batch/arc-registry-refresh   */1 * * * *   <none>     True      68       98m             6d15h
+
+NAMESPACE        NAME                                      STATUS    COMPLETIONS   DURATION   AGE
+core-ops         job.batch/core-lite-29335700              Running   0/1           5h36m      5h36m
+core-ops         job.batch/core-lite-29335702              Running   0/1           5h34m      5h34m
+core-ops         job.batch/core-lite-29335704              Running   0/1           5h32m      5h32m
+core-ops         job.batch/core-lite-29335706              Running   0/1           5h30m      5h30m
+core-ops         job.batch/core-lite-29335708              Running   0/1           5h28m      5h28m
+core-ops         job.batch/core-lite-29335710              Running   0/1           5h26m      5h26m
+core-ops         job.batch/core-lite-29335712              Running   0/1           5h24m      5h24m
+core-ops         job.batch/core-lite-29335714              Running   0/1           5h22m      5h22m
+core-ops         job.batch/core-lite-29335716              Running   0/1           5h20m      5h20m
+core-ops         job.batch/core-lite-29335718              Running   0/1           5h18m      5h18m
+core-ops         job.batch/core-lite-29335720              Running   0/1           5h16m      5h16m
+core-ops         job.batch/core-lite-29335722              Running   0/1           5h14m      5h14m
+core-ops         job.batch/core-lite-29335724              Running   0/1           5h12m      5h12m
+core-ops         job.batch/core-lite-29335726              Running   0/1           5h10m      5h10m
+core-ops         job.batch/core-lite-29335728              Running   0/1           5h8m       5h8m
+core-ops         job.batch/core-lite-29335730              Running   0/1           5h6m       5h6m
+core-ops         job.batch/core-lite-29335732              Running   0/1           5h4m       5h4m
+core-ops         job.batch/core-lite-29335734              Running   0/1           5h2m       5h2m
+core-ops         job.batch/core-lite-29335736              Running   0/1           5h         5h
+core-ops         job.batch/core-lite-29335738              Running   0/1           4h58m      4h58m
+core-ops         job.batch/core-lite-29335740              Running   0/1           4h56m      4h56m
+core-ops         job.batch/core-lite-29335742              Running   0/1           4h54m      4h54m
+core-ops         job.batch/core-lite-29335744              Running   0/1           4h52m      4h52m
+core-ops         job.batch/core-lite-29335746              Running   0/1           4h50m      4h50m
+core-ops         job.batch/core-lite-29335748              Running   0/1           4h48m      4h48m
+core-ops         job.batch/core-lite-29335750              Running   0/1           4h46m      4h46m
+core-ops         job.batch/core-lite-29335752              Running   0/1           4h44m      4h44m
+core-ops         job.batch/core-lite-29335754              Running   0/1           4h42m      4h42m
+core-ops         job.batch/core-lite-29335756              Running   0/1           4h40m      4h40m
+core-ops         job.batch/core-lite-29335758              Running   0/1           4h38m      4h38m
+core-ops         job.batch/core-lite-29335760              Running   0/1           4h36m      4h36m
+core-ops         job.batch/core-lite-29335762              Running   0/1           4h34m      4h34m
+core-ops         job.batch/core-lite-29335764              Running   0/1           4h32m      4h32m
+core-ops         job.batch/core-lite-29335766              Running   0/1           4h30m      4h30m
+core-ops         job.batch/core-lite-29335768              Running   0/1           4h28m      4h28m
+core-ops         job.batch/core-lite-29335770              Running   0/1           4h26m      4h26m
+core-ops         job.batch/core-lite-29335772              Running   0/1           4h24m      4h24m
+core-ops         job.batch/core-lite-29335774              Running   0/1           4h22m      4h22m
+core-ops         job.batch/core-lite-29335776              Running   0/1           4h20m      4h20m
+core-ops         job.batch/core-lite-29335778              Running   0/1           4h18m      4h18m
+core-ops         job.batch/core-lite-29335780              Running   0/1           4h16m      4h16m
+core-ops         job.batch/core-lite-29335784              Running   0/1           4h11m      4h11m
+core-ops         job.batch/core-lite-29335786              Running   0/1           4h10m      4h10m
+core-ops         job.batch/core-lite-29335788              Running   0/1           4h8m       4h8m
+core-ops         job.batch/core-lite-29335790              Running   0/1           4h6m       4h6m
+core-ops         job.batch/core-lite-29335792              Running   0/1           4h4m       4h4m
+core-ops         job.batch/core-lite-29335794              Running   0/1           4h2m       4h2m
+core-ops         job.batch/core-lite-29335796              Running   0/1           4h         4h
+core-ops         job.batch/core-lite-29335798              Running   0/1           3h58m      3h58m
+core-ops         job.batch/core-lite-29335800              Running   0/1           3h56m      3h56m
+core-ops         job.batch/core-lite-29335802              Running   0/1           3h54m      3h54m
+core-ops         job.batch/core-lite-29335804              Running   0/1           3h52m      3h52m
+core-ops         job.batch/core-lite-29335806              Running   0/1           3h50m      3h50m
+core-ops         job.batch/core-lite-29335808              Running   0/1           3h48m      3h48m
+core-ops         job.batch/core-lite-29335810              Running   0/1           3h46m      3h46m
+core-ops         job.batch/core-lite-29335812              Running   0/1           3h44m      3h44m
+core-ops         job.batch/core-lite-29335814              Running   0/1           3h42m      3h42m
+core-ops         job.batch/core-lite-29335816              Running   0/1           3h40m      3h40m
+core-ops         job.batch/core-lite-29335818              Running   0/1           3h38m      3h38m
+core-ops         job.batch/core-lite-29335820              Running   0/1           3h36m      3h36m
+core-ops         job.batch/core-lite-29335822              Running   0/1           3h34m      3h34m
+core-ops         job.batch/core-lite-29335824              Running   0/1           3h32m      3h32m
+core-ops         job.batch/core-lite-29335826              Running   0/1           3h30m      3h30m
+core-ops         job.batch/core-lite-29335828              Running   0/1           3h28m      3h28m
+core-ops         job.batch/core-lite-29335830              Running   0/1           3h26m      3h26m
+core-ops         job.batch/core-lite-29335832              Running   0/1           3h24m      3h24m
+core-ops         job.batch/core-lite-29335834              Running   0/1           3h22m      3h22m
+core-ops         job.batch/core-lite-29335836              Running   0/1           3h18m      3h18m
+core-ops         job.batch/core-lite-29335838              Running   0/1           3h18m      3h18m
+core-ops         job.batch/core-lite-29335840              Running   0/1           3h16m      3h16m
+core-ops         job.batch/core-lite-29335842              Running   0/1           3h14m      3h14m
+core-ops         job.batch/core-lite-29335844              Running   0/1           3h12m      3h12m
+core-ops         job.batch/core-lite-29335846              Running   0/1           3h10m      3h10m
+core-ops         job.batch/core-lite-29335848              Running   0/1           3h8m       3h8m
+core-ops         job.batch/core-lite-29335850              Running   0/1           3h6m       3h6m
+core-ops         job.batch/core-lite-29335852              Running   0/1           3h4m       3h4m
+core-ops         job.batch/core-lite-29335854              Running   0/1           3h2m       3h2m
+core-ops         job.batch/core-lite-29335856              Running   0/1           3h         3h
+core-ops         job.batch/core-lite-29335858              Running   0/1           178m       178m
+metallb-system   job.batch/metallb-webhook-certgen         Failed    0/1           7d14h      7d14h
+sage             job.batch/arc-registry-now                Failed    0/1           6d14h      6d14h
+sage             job.batch/arc-registry-refresh-29335859   Running   0/1           177m       177m
+sage             job.batch/arc-registry-refresh-29335860   Running   0/1           176m       176m
+sage             job.batch/arc-registry-refresh-29335861   Running   0/1           175m       175m
+sage             job.batch/arc-registry-refresh-29335862   Running   0/1           174m       174m
+sage             job.batch/arc-registry-refresh-29335863   Running   0/1           173m       173m
+sage             job.batch/arc-registry-refresh-29335864   Running   0/1           172m       172m
+sage             job.batch/arc-registry-refresh-29335865   Running   0/1           171m       171m
+sage             job.batch/arc-registry-refresh-29335866   Running   0/1           170m       170m
+sage             job.batch/arc-registry-refresh-29335867   Running   0/1           169m       169m
+sage             job.batch/arc-registry-refresh-29335868   Running   0/1           168m       168m
+sage             job.batch/arc-registry-refresh-29335869   Running   0/1           167m       167m
+sage             job.batch/arc-registry-refresh-29335870   Running   0/1           166m       166m
+sage             job.batch/arc-registry-refresh-29335871   Running   0/1           165m       165m
+sage             job.batch/arc-registry-refresh-29335872   Running   0/1           164m       164m
+sage             job.batch/arc-registry-refresh-29335873   Running   0/1           163m       163m
+sage             job.batch/arc-registry-refresh-29335874   Running   0/1           162m       162m
+sage             job.batch/arc-registry-refresh-29335875   Running   0/1           161m       161m
+sage             job.batch/arc-registry-refresh-29335876   Running   0/1           160m       160m
+sage             job.batch/arc-registry-refresh-29335877   Running   0/1           159m       159m
+sage             job.batch/arc-registry-refresh-29335878   Running   0/1           158m       158m
+sage             job.batch/arc-registry-refresh-29335879   Running   0/1           157m       157m
+sage             job.batch/arc-registry-refresh-29335880   Running   0/1           156m       156m
+sage             job.batch/arc-registry-refresh-29335881   Running   0/1           155m       155m
+sage             job.batch/arc-registry-refresh-29335882   Running   0/1           154m       154m
+sage             job.batch/arc-registry-refresh-29335883   Running   0/1           153m       153m
+sage             job.batch/arc-registry-refresh-29335884   Running   0/1           152m       152m
+sage             job.batch/arc-registry-refresh-29335885   Running   0/1           151m       151m
+sage             job.batch/arc-registry-refresh-29335886   Running   0/1           150m       150m
+sage             job.batch/arc-registry-refresh-29335887   Running   0/1           149m       149m
+sage             job.batch/arc-registry-refresh-29335888   Running   0/1           148m       148m
+sage             job.batch/arc-registry-refresh-29335889   Running   0/1           147m       147m
+sage             job.batch/arc-registry-refresh-29335890   Running   0/1           146m       146m
+sage             job.batch/arc-registry-refresh-29335891   Running   0/1           145m       145m
+sage             job.batch/arc-registry-refresh-29335892   Running   0/1           144m       144m
+sage             job.batch/arc-registry-refresh-29335893   Running   0/1           143m       143m
+sage             job.batch/arc-registry-refresh-29335894   Running   0/1           142m       142m
+sage             job.batch/arc-registry-refresh-29335895   Running   0/1           141m       141m
+sage             job.batch/arc-registry-refresh-29335896   Running   0/1           140m       140m
+sage             job.batch/arc-registry-refresh-29335897   Running   0/1           139m       139m
+sage             job.batch/arc-registry-refresh-29335910   Running   0/1           126m       126m
+sage             job.batch/arc-registry-refresh-29335911   Running   0/1           125m       125m
+sage             job.batch/arc-registry-refresh-29335912   Running   0/1           124m       124m
+sage             job.batch/arc-registry-refresh-29335913   Running   0/1           123m       123m
+sage             job.batch/arc-registry-refresh-29335914   Running   0/1           122m       122m
+sage             job.batch/arc-registry-refresh-29335915   Running   0/1           121m       121m
+sage             job.batch/arc-registry-refresh-29335916   Running   0/1           120m       120m
+sage             job.batch/arc-registry-refresh-29335917   Running   0/1           119m       119m
+sage             job.batch/arc-registry-refresh-29335918   Running   0/1           118m       118m
+sage             job.batch/arc-registry-refresh-29335919   Running   0/1           117m       117m
+sage             job.batch/arc-registry-refresh-29335920   Running   0/1           116m       116m
+sage             job.batch/arc-registry-refresh-29335921   Running   0/1           115m       115m
+sage             job.batch/arc-registry-refresh-29335922   Running   0/1           114m       114m
+sage             job.batch/arc-registry-refresh-29335923   Running   0/1           113m       113m
+sage             job.batch/arc-registry-refresh-29335924   Running   0/1           112m       112m
+sage             job.batch/arc-registry-refresh-29335925   Running   0/1           111m       111m
+sage             job.batch/arc-registry-refresh-29335926   Running   0/1           110m       110m
+sage             job.batch/arc-registry-refresh-29335927   Running   0/1           109m       109m
+sage             job.batch/arc-registry-refresh-29335928   Running   0/1           108m       108m
+sage             job.batch/arc-registry-refresh-29335929   Running   0/1           107m       107m
+sage             job.batch/arc-registry-refresh-29335930   Running   0/1           106m       106m
+sage             job.batch/arc-registry-refresh-29335931   Running   0/1           105m       105m
+sage             job.batch/arc-registry-refresh-29335932   Running   0/1           104m       104m
+sage             job.batch/arc-registry-refresh-29335933   Running   0/1           103m       103m
+sage             job.batch/arc-registry-refresh-29335934   Running   0/1           102m       102m
+sage             job.batch/arc-registry-refresh-29335935   Running   0/1           101m       101m
+sage             job.batch/arc-registry-refresh-29335936   Running   0/1           100m       100m
+sage             job.batch/arc-registry-refresh-29335937   Running   0/1           99m        99m
+sage             job.batch/arc-registry-refresh-29335938   Running   0/1           98m        98m
