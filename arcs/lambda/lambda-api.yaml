@@ -1,0 +1,77 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: arc-lambda
+  labels:
+    sage.arc: "true"
+    arc.name: "lambda"
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: lambda-api
+  namespace: arc-lambda
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lambda-api
+  namespace: arc-lambda
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lambda-api
+  template:
+    metadata:
+      labels:
+        app: lambda-api
+    spec:
+      serviceAccountName: lambda-api
+      imagePullSecrets:
+        - name: ghcr-creds
+      containers:
+        - name: app
+          image: ghcr.io/silentsage432/lambda-api:latest
+          ports:
+            - name: http
+              containerPort: 8000
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            runAsUser: 10001
+            capabilities:
+              drop: ["ALL"]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lambda-api
+  namespace: arc-lambda
+spec:
+  type: ClusterIP
+  selector:
+    app: lambda-api
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8000
