@@ -14,16 +14,16 @@ jobs:
           curl -sL https://github.com/kubernetes-sigs/kustomize/releases/latest/download/kustomize_linux_amd64 -o kustomize
           chmod +x kustomize && sudo mv kustomize /usr/local/bin/kustomize
 
-      - name: kustomize build: infra
+      - name: kustomize build infra
         run: kustomize build ./infra >/dev/null
 
-      - name: kustomize build: arc-epsilon (if present)
+      - name: kustomize build arc-epsilon
         run: test -d ./arcs/epsilon && kustomize build ./arcs/epsilon >/dev/null || true
 
-      - name: kustomize build: arc-zeta (if present)
+      - name: kustomize build arc-zeta
         run: test -d ./arcs/zeta && kustomize build ./arcs/zeta >/dev/null || true
 
-      - name: Lint: forbid server-managed fields
+      - name: Lint forbid server-managed fields
         run: |
           if grep -R --line-number -E '(^|\s)(uid:|resourceVersion:|managedFields:|creationTimestamp:)' -- '*.yaml' '*.yml' 2>/dev/null; then
             echo "::error::Server-managed fields found (uid/resourceVersion/managedFields/creationTimestamp). Remove them."
