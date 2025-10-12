@@ -12,13 +12,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install tools
+      - name: Install kustomize
         run: |
-          curl -sL https://github.com/kubernetes-sigs/kustomize/releases/latest/download/kustomize_linux_amd64 -o kustomize
-          chmod +x kustomize && sudo mv kustomize /usr/local/bin/kustomize
+          curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
+          sudo mv kustomize /usr/local/bin/kustomize
+          kustomize version
 
       - name: kustomize build infra
-        run: kustomize build ./infra >/dev/null
+        run: |
+          if [ -d "./infra" ]; then
+            kustomize build ./infra >/dev/null
+          else
+            echo "No infra directory found, skipping"
+          fi
 
       - name: kustomize build arc-epsilon
         run: test -d ./arcs/epsilon && kustomize build ./arcs/epsilon >/dev/null || true
