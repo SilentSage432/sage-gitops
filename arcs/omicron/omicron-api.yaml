@@ -1,0 +1,222 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: arc-omicron
+  labels:
+    sage.arc: "true"
+    arc.name: "omicron"
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: omicron-api
+  namespace: arc-omicron
+  labels:
+    app: omicron-api
+imagePullSecrets:
+  - name: ghcr-creds
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: omicron-db
+  namespace: arc-omicron
+  labels:
+    app: omicron-api
+type: Opaque
+stringData:
+  OMICRON_PGHOST: "kappa-postgres.arc-kappa.svc.cluster.local"
+  OMICRON_PGPORT: "5432"
+  OMICRON_PGDATABASE: "sage_os"
+  OMICRON_PGUSER: "sage_user"
+  # Fill this before apply or patch afterward:
+  OMICRON_PGPASSWORD: ""
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: omicron-api
+  namespace: arc-omicron
+  labels:
+    app: omicron-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: omicron-api
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: omicron-api
+    spec:
+      serviceAccountName: omicron-api
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      tolerations:
+        - key: "node-role.kubernetes.io/control-plane"
+          operator: "Exists"
+          effect: "NoSchedule"
+        - key: "node-role.kubernetes.io/master"
+          operator: "Exists"
+          effect: "NoSchedule"
+      containers:
+        - name: app
+          image: ghcr.io/silentsage432/omicron-api:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8000
+          envFrom:
+            - secretRef:
+                name: omicron-db
+          readinessProbe:
+            exec:
+              command: ["python","-c","import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health').read()"]
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 24
+          livenessProbe:
+            exec:
+              command: ["python","-c","import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health').read()"]
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 6
+          startupProbe:
+            exec:
+              command: ["sh","-lc","nc -z 127.0.0.1 8000"]
+            initialDelaySeconds: 0
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 120
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            runAsUser: 65532
+            runAsGroup: 65532
+            capabilities:
+              drop: ["ALL"]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: omicron-api
+  namespace: arc-omicron
+  labels:
+    app: omicron-api
+spec:
+  type: ClusterIP
+  selector:
+    app: omicron-api
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8000
+      protocol: TCP
+---
+# DNS egress
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-dns-egress
+  namespace: arc-omicron
+spec:
+  podSelector: {}
+  policyTypes: ["Egress"]
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+---
+# Egress to Postgres (Kappa) on 5432
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-kappa-pg-egress
+  namespace: arc-omicron
+spec:
+  podSelector:
+    matchLabels:
+      app: omicron-api
+  policyTypes: ["Egress"]
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: arc-kappa
+          podSelector:
+            matchLabels:
+              app: kappa-postgres
+      ports:
+        - protocol: TCP
+          port: 5432
+---
+# Ingress from Xi/Zeta/Lambda/Mu/Nu to /archive/* (via Service)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-arc-ingress
+  namespace: arc-omicron
+spec:
+  podSelector:
+    matchLabels:
+      app: omicron-api
+  policyTypes: ["Ingress"]
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: arc-xi
+          podSelector:
+            matchLabels:
+              app: xi-api
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: arc-zeta
+          podSelector:
+            matchLabels:
+              app: observer-api
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: arc-lambda
+          podSelector:
+            matchLabels:
+              app: lambda-api
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: arc-mu
+          podSelector:
+            matchLabels:
+              app: mu-api
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: arc-nu
+          podSelector:
+            matchLabels:
+              app: nu-api
+      ports:
+        - protocol: TCP
+          port: 8000
