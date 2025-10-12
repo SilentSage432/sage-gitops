@@ -1,0 +1,204 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: arc-xi
+  labels:
+    sage.arc: "true"
+    arc.name: "xi"
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: xi-api
+  namespace: arc-xi
+  labels:
+    app: xi-api
+imagePullSecrets:
+  - name: ghcr-creds
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xi-api
+  namespace: arc-xi
+  labels:
+    app: xi-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: xi-api
+  template:
+    metadata:
+      labels:
+        app: xi-api
+    spec:
+      serviceAccountName: xi-api
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: app
+          image: ghcr.io/silentsage432/xi-api:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8000
+          env:
+            - name: SERVICE_NAME
+              value: xi-api
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: KAPPA_URL
+              value: http://kappa-api.arc-kappa.svc.cluster.local:8000
+            - name: LAMBDA_URL
+              value: http://lambda-api.arc-lambda.svc.cluster.local:8000
+            - name: NU_URL
+              value: http://nu-api.arc-nu.svc.cluster.local:8000
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+          startupProbe:
+            exec:
+              command: ["sh", "-lc", "nc -z 127.0.0.1 8000"]
+            periodSeconds: 5
+            failureThreshold: 120
+          readinessProbe:
+            exec:
+              command: ["python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health').read()"]
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 24
+          livenessProbe:
+            exec:
+              command: ["python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health').read()"]
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            failureThreshold: 6
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            runAsUser: 65532
+            runAsGroup: 65532
+            capabilities:
+              drop: ["ALL"]
+      tolerations:
+        - key: "node-role.kubernetes.io/control-plane"
+          operator: "Exists"
+          effect: "NoSchedule"
+        - key: "node-role.kubernetes.io/master"
+          operator: "Exists"
+          effect: "NoSchedule"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: xi-api
+  namespace: arc-xi
+  labels:
+    app: xi-api
+spec:
+  type: ClusterIP
+  selector:
+    app: xi-api
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8000
+      protocol: TCP
+---
+# NetworkPolicy: allow DNS egress
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-dns-egress
+  namespace: arc-xi
+spec:
+  podSelector: {}
+  policyTypes: ["Egress"]
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+---
+# NetworkPolicy: allow egress to other Arcs
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-arc-egress
+  namespace: arc-xi
+spec:
+  podSelector:
+    matchLabels:
+      app: xi-api
+  policyTypes: ["Egress"]
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: arc-kappa
+          podSelector:
+            matchLabels:
+              app: kappa-api
+      ports:
+        - protocol: TCP
+          port: 8000
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: arc-lambda
+          podSelector:
+            matchLabels:
+              app: lambda-api
+      ports:
+        - protocol: TCP
+          port: 8000
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: arc-nu
+          podSelector:
+            matchLabels:
+              app: nu-api
+      ports:
+        - protocol: TCP
+          port: 8000
+---
+# NetworkPolicy: allow same-NS ingress
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-same-ns-ingress
+  namespace: arc-xi
+spec:
+  podSelector:
+    matchLabels:
+      app: xi-api
+  policyTypes: ["Ingress"]
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: arc-xi
+      ports:
+        - protocol: TCP
+          port: 8000
