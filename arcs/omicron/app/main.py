@@ -33,49 +33,49 @@ CREATE INDEX IF NOT EXISTS omicron_events_source_idx ON omicron_events (source);
 """
 
 app = FastAPI(title="Arc Omicron API", version=APP_VERSION)
-_pool: AsyncConnectionPool | None = None
 
-async def init_db():
-    global _pool
+_pool: Optional[AsyncConnectionPool] = None
+_db_ready: bool = False
+
+async def _init_schema_with_retries():
+    global _db_ready
     dsn = pg_dsn_from_env()
-    # Create pool; open=True pre-creates min_size connections
-    _pool = AsyncConnectionPool(dsn, min_size=1, max_size=5, open=True)
-
-    # Ensure schema; tolerate transient failures
-    async with _pool.connection() as conn:
-        async with conn.cursor() as cur:
-            await cur.execute(CREATE_TABLE_SQL)
-        await conn.commit()
+    for attempt in range(30):  # ~30 * 2s = 60s
+        try:
+            async with _pool.connection() as conn:
+                async with conn.cursor() as cur:
+                    await cur.execute(CREATE_TABLE_SQL)
+                await conn.commit()
+            _db_ready = True
+            print("[omicron] DB schema ready")
+            return
+        except Exception as e:
+            print(f"[omicron] DB init retry {attempt+1}/30: {e}")
+            await asyncio.sleep(2)
+    print("[omicron] DB still not ready after retries")
 
 @app.on_event("startup")
 async def on_startup():
-    # Don't crash the app if DB is not yet reachable; report degraded via /health
-    try:
-        await init_db()
-    except Exception as e:
-        # lazy-init later; health will report degraded until pool works
-        print(f"[omicron] startup: DB init deferred: {e}")
+    # Create pool WITHOUT opening connections; don't block server startup
+    global _pool
+    _pool = AsyncConnectionPool(pg_dsn_from_env(), min_size=0, max_size=5, open=False)
+    # Kick off schema init in background
+    asyncio.create_task(_init_schema_with_retries())
 
 @app.on_event("shutdown")
 async def on_shutdown():
     if _pool:
         await _pool.close()
-        # psycopg_pool close() is sync-compatible under await
 
 @app.get("/health")
 async def health():
-    try:
-        async with _pool.connection() as conn:
-            async with conn.cursor() as cur:
-                await cur.execute("SELECT 1")
-        return {"status":"ok","arc":"omicron","role":"archive"}
-    except Exception as e:
-        return {"status":"degraded","error":str(e)}
+    status = "ok" if _db_ready else "degraded"
+    return {"status": status, "arc": "omicron", "role": "archive"}
 
 class ArchiveIn(BaseModel):
-    arc: str = Field(..., description="Arc sending the event (e.g., xi, zeta, lambda, mu, nu)")
-    source: str = Field(..., description="Logical source or channel")
-    payload: dict = Field(..., description="Arbitrary JSON payload")
+    arc: str
+    source: str
+    payload: dict
 
 @app.post("/archive/write")
 async def archive_write(ev: ArchiveIn = Body(...)):
@@ -93,24 +93,19 @@ async def archive_write(ev: ArchiveIn = Body(...)):
 
 @app.get("/archive/query")
 async def archive_query(
-    since: Optional[str] = Query(None, description="ISO8601, e.g., 2025-10-10T00:00:00Z"),
-    until: Optional[str] = Query(None, description="ISO8601"),
+    since: Optional[str] = Query(None),
+    until: Optional[str] = Query(None),
     arc: Optional[str]   = Query(None),
     source: Optional[str]= Query(None),
     limit: int = Query(100, ge=1, le=1000),
 ):
     where, params = [], []
-    if since:
-        where.append("ts >= %s"); params.append(since)
-    if until:
-        where.append("ts <= %s"); params.append(until)
-    if arc:
-        where.append("arc = %s"); params.append(arc)
-    if source:
-        where.append("source = %s"); params.append(source)
+    if since: where.append("ts >= %s"); params.append(since)
+    if until: where.append("ts <= %s"); params.append(until)
+    if arc:   where.append("arc = %s"); params.append(arc)
+    if source:where.append("source = %s"); params.append(source)
     sql = "SELECT id, ts, arc, source, payload FROM omicron_events"
-    if where:
-        sql += " WHERE " + " AND ".join(where)
+    if where: sql += " WHERE " + " AND ".join(where)
     sql += " ORDER BY ts DESC LIMIT %s"; params.append(limit)
     try:
         async with _pool.connection() as conn:
