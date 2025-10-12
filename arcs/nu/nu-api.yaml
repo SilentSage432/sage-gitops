@@ -1,0 +1,115 @@
+apiVersion: v1
+kind: Namespace
+metadata: { name: arc-nu }
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata: { name: nu-api, namespace: arc-nu }
+imagePullSecrets: [ { name: ghcr-creds } ]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nu-api
+  namespace: arc-nu
+  labels: { app: nu-api }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: nu-api } }
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: { maxSurge: 1, maxUnavailable: 0 }
+  template:
+    metadata: { labels: { app: nu-api } }
+    spec:
+      serviceAccountName: nu-api
+      securityContext: { seccompProfile: { type: RuntimeDefault } }
+      containers:
+        - name: app
+          image: ghcr.io/silentsage432/nu-api:latest
+          imagePullPolicy: IfNotPresent
+          ports: [ { name: http, containerPort: 8000 } ]
+          env:
+            - { name: SERVICE_NAME, value: "nu-api" }
+            - { name: NAMESPACE, valueFrom: { fieldRef: { fieldPath: metadata.namespace } } }
+            - { name: POD_NAME,  valueFrom: { fieldRef: { fieldPath: metadata.name } } }
+            - { name: LAMBDA_URL, value: "http://lambda-api.arc-lambda.svc.cluster.local:8000" }
+            - { name: MU_URL,     value: "http://mu-api.arc-mu.svc.cluster.local" }
+          startupProbe:
+            exec: { command: ["sh","-lc","nc -z 127.0.0.1 8000"] }
+            initialDelaySeconds: 0
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 120
+          readinessProbe:
+            exec: { command: ["python","-c","import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health').read()"] }
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 24
+          livenessProbe:
+            exec: { command: ["python","-c","import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health').read()"] }
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 6
+          resources:
+            requests: { cpu: 50m, memory: 64Mi }
+            limits:   { cpu: 500m, memory: 256Mi }
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            runAsUser: 65532
+            runAsGroup: 65532
+            capabilities: { drop: ["ALL"] }
+---
+apiVersion: v1
+kind: Service
+metadata: { name: nu-api, namespace: arc-nu, labels: { app: nu-api } }
+spec:
+  type: ClusterIP
+  selector: { app: nu-api }
+  ports:
+    - { name: http, port: 80, targetPort: 8000 }
+---
+# DNS egress
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata: { name: allow-dns-egress, namespace: arc-nu }
+spec:
+  podSelector: {}
+  policyTypes: ["Egress"]
+  egress:
+    - to:
+        - namespaceSelector: { matchLabels: { kubernetes.io/metadata.name: kube-system } }
+          podSelector: { matchLabels: { k8s-app: kube-dns } }
+      ports: [ { protocol: UDP, port: 53 }, { protocol: TCP, port: 53 } ]
+---
+# Egress to Lambda and Mu
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata: { name: allow-arc-egress, namespace: arc-nu }
+spec:
+  podSelector: { matchLabels: { app: nu-api } }
+  policyTypes: ["Egress"]
+  egress:
+    - to:
+        - namespaceSelector: { matchLabels: { kubernetes.io/metadata.name: arc-lambda } }
+          podSelector: { matchLabels: { app: lambda-api } }
+      ports: [ { protocol: TCP, port: 8000 } ]
+    - to:
+        - namespaceSelector: { matchLabels: { kubernetes.io/metadata.name: arc-mu } }
+          podSelector: { matchLabels: { app: mu-api } }
+      ports: [ { protocol: TCP, port: 80 } ]
+---
+# Same-NS ingress for Service access
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata: { name: allow-same-ns-ingress, namespace: arc-nu }
+spec:
+  podSelector: { matchLabels: { app: nu-api } }
+  policyTypes: ["Ingress"]
+  ingress:
+    - from:
+        - namespaceSelector: { matchLabels: { kubernetes.io/metadata.name: arc-nu } }
+      ports: [ { protocol: TCP, port: 8000 } ]
