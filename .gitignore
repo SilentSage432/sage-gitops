@@ -20,6 +20,12 @@ mc.*.yaml
 *.p12
 *.pfx
 
+# Age encryption keys (SOPS)
+age.key
+.sops.pubkey
+**/age.key
+**/.sops.pubkey
+
 # Environment files with secrets
 .env
 .env.local
@@ -27,8 +33,11 @@ mc.*.yaml
 
 # Configuration files that may contain secrets
 config/*.yaml
+# Allow encrypted secrets but not plaintext ones
 secrets/*.yaml
+!secrets/*.enc.yaml
 **/secrets/**
+!**/secrets/*.enc.yaml
 **/config/**
 
 # Temporary files

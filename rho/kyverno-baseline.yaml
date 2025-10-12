@@ -1,0 +1,78 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: sage-baseline-hardening
+spec:
+  validationFailureAction: Audit
+  background: true
+  rules:
+    - name: require-probes
+      match:
+        resources:
+          kinds: ["Deployment","StatefulSet"]
+      validate:
+        message: "Containers must define startup/readiness/liveness probes."
+        pattern:
+          spec:
+            template:
+              spec:
+                containers:
+                  - livenessProbe: {}
+                    readinessProbe: {}
+    - name: require-limits
+      match:
+        resources:
+          kinds: ["Deployment","StatefulSet"]
+      validate:
+        message: "Containers must define CPU/memory requests and limits."
+        pattern:
+          spec:
+            template:
+              spec:
+                containers:
+                  - resources:
+                      requests:
+                        memory: "?*"
+                        cpu: "?*"
+                      limits:
+                        memory: "?*"
+                        cpu: "?*"
+    - name: non-root-seccomp
+      match:
+        resources:
+          kinds: ["Deployment","StatefulSet"]
+      validate:
+        message: "Must run as non-root with seccomp=RuntimeDefault."
+        pattern:
+          spec:
+            template:
+              spec:
+                securityContext:
+                  runAsNonRoot: true
+                  seccompProfile:
+                    type: "RuntimeDefault"
+    - name: require-security-context
+      match:
+        resources:
+          kinds: ["Deployment","StatefulSet"]
+      validate:
+        message: "Containers must define security context with dropped capabilities."
+        pattern:
+          spec:
+            template:
+              spec:
+                containers:
+                  - securityContext:
+                      allowPrivilegeEscalation: false
+                      capabilities:
+                        drop: ["ALL"]
+    - name: require-network-policies
+      match:
+        resources:
+          kinds: ["Namespace"]
+      validate:
+        message: "Arc namespaces should have NetworkPolicies for defense in depth."
+        pattern:
+          metadata:
+            labels:
+              sage.arc: "true"
