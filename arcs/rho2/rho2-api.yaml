@@ -1,0 +1,119 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: arc-rho2
+  labels:
+    sage.arc: "true"
+    arc.name: "rho2"
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: rho2-api
+  namespace: arc-rho2
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: rho2-controller
+rules:
+  - apiGroups: ["crypto.sage.dev"]
+    resources: ["rotationpolicies"]
+    verbs: ["get","list","watch"]
+  - apiGroups: ["apps"]
+    resources: ["deployments","statefulsets"]
+    verbs: ["get","list","patch"]
+  - apiGroups: ["batch"]
+    resources: ["jobs"]
+    verbs: ["create","get","list","delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: rho2-controller
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: rho2-controller
+subjects:
+  - kind: ServiceAccount
+    name: rho2-api
+    namespace: arc-rho2
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rho2-api
+  namespace: arc-rho2
+  labels:
+    app: rho2-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rho2-api
+  template:
+    metadata:
+      labels:
+        app: rho2-api
+    spec:
+      serviceAccountName: rho2-api
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: app
+          image: ghcr.io/silentsage432/rho2-api:latest
+          ports:
+            - name: http
+              containerPort: 8000
+          env:
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: REPO_URL
+              value: "https://github.com/silentsage432/sage-gitops.git"
+            - name: REPO_BRANCH
+              value: "main"
+            - name: AGE_RECIPIENT
+              valueFrom:
+                secretKeyRef:
+                  name: rho2-config
+                  key: AGE_RECIPIENT
+            - name: GH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: rho2-config
+                  key: GH_TOKEN
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 300m
+              memory: 256Mi
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rho2-api
+  namespace: arc-rho2
+spec:
+  selector:
+    app: rho2-api
+  ports:
+    - name: http
+      port: 8000
+      targetPort: http
