@@ -4,6 +4,7 @@ from fastapi import FastAPI, Body, Query, HTTPException
 from pydantic import BaseModel, Field
 import psycopg
 from psycopg.rows import dict_row
+from psycopg_pool import AsyncConnectionPool
 
 APP_VERSION = os.getenv("SERVICE_VERSION", "dev")
 
@@ -32,12 +33,15 @@ CREATE INDEX IF NOT EXISTS omicron_events_source_idx ON omicron_events (source);
 """
 
 app = FastAPI(title="Arc Omicron API", version=APP_VERSION)
-_pool = None
+_pool: AsyncConnectionPool | None = None
 
 async def init_db():
     global _pool
-    # psycopg3 async pool
-    _pool = await psycopg.AsyncConnectionPool.open(pg_dsn_from_env(), min_size=1, max_size=5)
+    dsn = pg_dsn_from_env()
+    # Create pool; open=True pre-creates min_size connections
+    _pool = AsyncConnectionPool(dsn, min_size=1, max_size=5, open=True)
+
+    # Ensure schema; tolerate transient failures
     async with _pool.connection() as conn:
         async with conn.cursor() as cur:
             await cur.execute(CREATE_TABLE_SQL)
@@ -45,12 +49,18 @@ async def init_db():
 
 @app.on_event("startup")
 async def on_startup():
-    await init_db()
+    # Don't crash the app if DB is not yet reachable; report degraded via /health
+    try:
+        await init_db()
+    except Exception as e:
+        # lazy-init later; health will report degraded until pool works
+        print(f"[omicron] startup: DB init deferred: {e}")
 
 @app.on_event("shutdown")
 async def on_shutdown():
     if _pool:
         await _pool.close()
+        # psycopg_pool close() is sync-compatible under await
 
 @app.get("/health")
 async def health():
