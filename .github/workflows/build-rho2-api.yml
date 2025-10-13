@@ -19,7 +19,8 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: docker/build-push-action@v6
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: arcs/rho2/Dockerfile
@@ -27,3 +28,16 @@ jobs:
           tags: |
             ghcr.io/silentsage432/rho2-api:latest
             ghcr.io/silentsage432/rho2-api:${{ github.sha }}
+          labels: |
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.created=${{ github.event.head_commit.timestamp }}
+      
+      - name: Display image tags
+        run: |
+          echo "✅ Successfully built and pushed:"
+          echo "  📦 ghcr.io/silentsage432/rho2-api:latest"
+          echo "  📦 ghcr.io/silentsage432/rho2-api:${{ github.sha }}"
+          echo ""
+          echo "🔗 View in GitHub Container Registry:"
+          echo "  https://github.com/users/silentsage432/packages/container/package/rho2-api"
