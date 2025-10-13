@@ -1,43 +1,48 @@
 name: build-rho2-api
-# Force lowercase repository name for Docker tags
 on:
   push:
     paths:
       - 'arcs/rho2/**'
   workflow_dispatch: {}
+
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
       packages: write
       contents: read
+
     steps:
       - uses: actions/checkout@v4
+
+      - name: Lowercase owner for GHCR
+        id: lc
+        run: |
+          echo "owner=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
+
       - uses: docker/setup-buildx-action@v3
+
       - uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build and push Docker image
+
+      # (Optional but nice) auto-labels & consistent tags
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ steps.lc.outputs.owner }}/rho2-api
+          tags: |
+            type=raw,value=latest
+            type=sha
+
+      - name: Build & Push
         uses: docker/build-push-action@v6
         with:
           context: .
           file: arcs/rho2/Dockerfile
           push: true
-          tags: |
-            ghcr.io/silentsage432/rho2-api:latest
-            ghcr.io/silentsage432/rho2-api:${{ github.sha }}
-          labels: |
-            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
-            org.opencontainers.image.revision=${{ github.sha }}
-            org.opencontainers.image.created=${{ github.event.head_commit.timestamp }}
-      
-      - name: Display image tags
-        run: |
-          echo "✅ Successfully built and pushed:"
-          echo "  📦 ghcr.io/silentsage432/rho2-api:latest"
-          echo "  📦 ghcr.io/silentsage432/rho2-api:${{ github.sha }}"
-          echo ""
-          echo "🔗 View in GitHub Container Registry:"
-          echo "  https://github.com/users/silentsage432/packages/container/package/rho2-api"
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
