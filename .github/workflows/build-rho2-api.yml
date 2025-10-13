@@ -1,4 +1,5 @@
 name: build-rho2-api
+# Force lowercase repository name for Docker tags
 on:
   push:
     paths:
