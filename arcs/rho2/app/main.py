@@ -1,120 +1,154 @@
-import os, time, tempfile, subprocess, threading
-from typing import Dict, List
-from fastapi import FastAPI, Response
-from prometheus_client import CollectorRegistry, Gauge, generate_latest, CONTENT_TYPE_LATEST
-from kubernetes import config, client
+from fastapi import FastAPI, HTTPException, Body
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel, Field
+import os, time, json, base64, hmac, hashlib
+from typing import List, Optional, Dict
 
-NAMESPACE = os.getenv("POD_NAMESPACE", "arc-rho2")
-REPO_URL  = os.getenv("REPO_URL")  # e.g. https://github.com/silentsage432/sage-gitops.git
-REPO_BRANCH = os.getenv("REPO_BRANCH", "main")
-GH_TOKEN  = os.getenv("GH_TOKEN")
-AGE_RECIPIENT = os.getenv("AGE_RECIPIENT")  # age1...
+# crypto: HKDF + Ed25519
+from cryptography.hazmat.primitives.kdf.hkdf import HKDF
+from cryptography.hazmat.primitives import hashes
+from nacl.signing import SigningKey
+from nacl.exceptions import BadSignatureError
 
-app = FastAPI(title="Rho2 Cipher-Keeper", version="0.1.0")
-reg = CollectorRegistry()
-g_ok  = Gauge("rho2_rotation_last_success_epoch", "last success", ["policy"], registry=reg)
-g_err = Gauge("rho2_rotation_last_error_epoch",   "last error",   ["policy"], registry=reg)
+app = FastAPI(title="Rho² Keeper", version="0.1.0")
 
-def sh(cmd: List[str], cwd: str | None = None, env: Dict[str,str] | None = None) -> str:
-    e = os.environ.copy()
-    if env: e.update(env)
-    p = subprocess.run(cmd, cwd=cwd, env=e, text=True, capture_output=True)
-    if p.returncode != 0:
-        raise RuntimeError(f"{' '.join(cmd)}\n{p.stdout}\n{p.stderr}")
-    return p.stdout.strip()
+# --------- Config (env) ----------
+KEEPER_ID = os.getenv("KEEPER_ID", "rho2a")
+WINDOW_SECONDS = int(os.getenv("WINDOW_SECONDS", "300"))      # 5 minutes
+ALLOWED_AUDIENCES = set(a.strip() for a in os.getenv("ALLOWED_AUDIENCES", "sage-federation").split(",") if a.strip())
+ALLOWED_CALLER_NS = set(x.strip() for x in os.getenv("ALLOWED_CALLER_NS", "").split(",") if x.strip())  # optional
+ROOT_SECRET = os.getenv("ROOT_SECRET")  # REQUIRED
+HKDF_SALT = (os.getenv("HKDF_SALT") or f"{KEEPER_ID}-salt").encode()
 
-def k8s():
-    try: config.load_incluster_config()
-    except: config.load_kube_config()
-    return client.CustomObjectsApi()
+if not ROOT_SECRET:
+    raise RuntimeError("ROOT_SECRET must be set")
 
-def clone(td: str) -> str:
-    url = REPO_URL.replace("https://", f"https://{GH_TOKEN}@", 1)
-    sh(["git","config","--global","user.name","rho2-bot"])
-    sh(["git","config","--global","user.email","rho2-bot@local"])
-    sh(["git","clone","--branch",REPO_BRANCH,"--depth","1",url,"repo"], cwd=td)
-    return os.path.join(td,"repo")
+ROOT_SECRET_BYTES = ROOT_SECRET.encode() if isinstance(ROOT_SECRET, str) else ROOT_SECRET
 
-def sops_set(repo_dir: str, path: str, key: str, value: str):
-    jq = f'["stringData"]["{key}"]="{value}"'
-    sh(["sops", f"--set={jq}", "--encrypted-regex","^(data|stringData)$",
-        "--age", AGE_RECIPIENT, "--in-place", path], cwd=repo_dir)
+# --------- Helpers ----------
+def b64u(b: bytes) -> str:
+    return base64.urlsafe_b64encode(b).rstrip(b"=").decode()
 
-def commit_push(repo_dir: str, msg: str):
-    sh(["git","add","-A"], cwd=repo_dir)
-    try:
-        sh(["git","commit","-m",msg], cwd=repo_dir)
-        sh(["git","push","origin",REPO_BRANCH], cwd=repo_dir)
-    except RuntimeError as e:
-        if "nothing to commit" not in str(e): raise
+def b64u_json(obj: dict) -> str:
+    return b64u(json.dumps(obj, separators=(",", ":"), sort_keys=True).encode())
 
-def run_job(ns: str, job_yaml: str, repo_dir: str):
-    sh(["kubectl","-n",ns,"apply","-f",job_yaml], cwd=repo_dir)
-    name = sh(["bash","-lc", f"yq -r .metadata.name < {job_yaml}"], cwd=repo_dir)
-    sh(["kubectl","-n",ns,"wait","--for=condition=complete",f"job/{name}","--timeout=180s"])
-    sh(["kubectl","-n",ns,"delete",f"job/{name}"])
+def hkdf_derive_seed(window: int) -> bytes:
+    info = f"rho2/ed25519/{KEEPER_ID}/t={window}".encode()
+    hk = HKDF(algorithm=hashes.SHA256(), length=32, salt=HKDF_SALT, info=info)
+    return hk.derive(ROOT_SECRET_BYTES)
 
-def rollout(resources: List[Dict[str,str]]):
-    for r in resources:
-        kind = r["kind"].lower()
-        ns   = r["namespace"]
-        name = r["name"]
-        sh(["kubectl","-n",ns,"rollout","restart",f"{kind}/{name}"])
-        sh(["kubectl","-n",ns,"rollout","status",f"{kind}/{name}","--timeout=180s"])
+def keypair_for_window(window: int) -> SigningKey:
+    seed32 = hkdf_derive_seed(window)  # 32-byte Ed25519 seed
+    return SigningKey(seed32)
 
-def reconcile_once():
-    co = k8s()
-    items = co.list_namespaced_custom_object(
-        group="crypto.sage.dev", version="v1", namespace=NAMESPACE,
-        plural="rotationpolicies").get("items", [])
-    now = int(time.time())
+def now_window() -> int:
+    return int(time.time() // WINDOW_SECONDS)
 
-    for rp in items:
-        name = rp["metadata"]["name"]
-        spec = rp.get("spec", {})
-        try:
-            target = spec["targetRef"]                # { backend, name, key }
-            if target.get("backend") != "sops":
-                continue
-            gen = spec["generator"]                   # { type, length }
-            if gen["type"] != "randomBase64":
-                continue
+def kid_for(window: int) -> str:
+    start = window * WINDOW_SECONDS
+    return f"{KEEPER_ID}:t={window};start={start};dur={WINDOW_SECONDS}"
 
-            with tempfile.TemporaryDirectory() as td:
-                repo_dir = clone(td)
+def jwk_for_pubkey(pk_bytes: bytes, kid: str) -> dict:
+    # Ed25519 JWKS (OKP)
+    return {
+        "kty": "OKP",
+        "crv": "Ed25519",
+        "x": b64u(pk_bytes),
+        "kid": kid,
+        "alg": "EdDSA",
+        "use": "sig",
+    }
 
-                # Stage 1: optional DB job
-                for st in spec.get("rollout",{}).get("stages",[]):
-                    if st.get("type") == "k8sJob":
-                        run_job(st.get("namespace","arc-kappa"), st["jobRef"], repo_dir)
+# --------- Schemas ----------
+class SignRequest(BaseModel):
+    sub: str
+    aud: str
+    scopes: List[str] = Field(default_factory=list)
+    nbf: Optional[int] = None
+    exp: Optional[int] = None
+    win: Optional[int] = None
+    nonce: Optional[str] = None
+    extra: Optional[Dict[str, str]] = None  # allow future fields
 
-                # Generate & patch
-                length = int(gen.get("length",44))
-                newval = sh(["bash","-lc", f"openssl rand -base64 {length} | tr -d '\\n'"])
-                sops_set(repo_dir, os.path.join(repo_dir, target["name"]), target["key"], newval)
-                commit_push(repo_dir, f"rho2: rotate {name}")
+class SignResponse(BaseModel):
+    payload: str         # base64url(JSON payload)
+    signature: str       # base64url(raw signature)
+    protected: str       # base64url(header with alg,kid,typ)
+    kid: str
+    keeper: str
+    window: int
 
-                # Stage 2: rollouts
-                rollout(spec.get("rollout",{}).get("resources",[]))
-
-                g_ok.labels(name).set(now)
-        except Exception as e:
-            g_err.labels(name).set(now)
-            print(f"[rho2] {name} failed: {e}")
-
-def loop():
-    while True:
-        try: reconcile_once()
-        except Exception as e: print("[rho2] loop error:", e)
-        time.sleep(30)
-
-@app.on_event("startup")
-def _startup(): threading.Thread(target=loop, daemon=True).start()
-
+# --------- Endpoints ----------
 @app.get("/health")
-def health(): return {"status":"ok","arc":"rho2"}
+def health():
+    return {"ok": True, "keeper": KEEPER_ID}
 
-@app.get("/metrics")
-def metrics():
-    payload = generate_latest(reg)
-    return Response(content=payload, media_type=CONTENT_TYPE_LATEST)
+@app.get("/.well-known/jwks.json")
+def jwks():
+    t = now_window()
+    keys = []
+    for w in (t-1, t, t+1):  # prev, current, next
+        sk = keypair_for_window(w)
+        kid = kid_for(w)
+        keys.append(jwk_for_pubkey(sk.verify_key.encode(), kid))
+    return {"keys": keys}
+
+@app.get("/time")
+def time_info():
+    t = now_window()
+    return {
+        "keeper": KEEPER_ID,
+        "now": int(time.time()),
+        "window": t,
+        "window_start": t * WINDOW_SECONDS,
+        "window_seconds": WINDOW_SECONDS
+    }
+
+@app.post("/sign", response_model=SignResponse)
+def sign(req: SignRequest = Body(...)):
+    # Simple audience check (optional hardening)
+    if req.aud not in ALLOWED_AUDIENCES:
+        raise HTTPException(status_code=403, detail="aud not allowed")
+
+    # Compute window if not provided
+    window = req.win if req.win is not None else now_window()
+
+    # Default times if omitted: valid for 2 windows
+    now_i = int(time.time())
+    if req.nbf is None: req.nbf = now_i
+    if req.exp is None: req.exp = (window + 2) * WINDOW_SECONDS
+
+    payload_obj = {
+        "sub": req.sub,
+        "aud": req.aud,
+        "scopes": req.scopes,
+        "nbf": req.nbf,
+        "exp": req.exp,
+        "win": window,
+        "nonce": req.nonce or b64u(hashlib.sha256(os.urandom(16)).digest()[:12]),
+        "iss": f"{KEEPER_ID}",
+    }
+    if req.extra:
+        payload_obj.update(req.extra)
+
+    # JWS header
+    kid = kid_for(window)
+    protected = {"alg": "EdDSA", "kid": kid, "typ": "JWS"}
+    protected_b64 = b64u_json(protected)
+    payload_b64 = b64u_json(payload_obj)
+
+    signing_input = f"{protected_b64}.{payload_b64}".encode()
+    sk = keypair_for_window(window)
+    sig = sk.sign(signing_input).signature  # raw 64 bytes
+
+    # Zeroize best-effort
+    del sk
+
+    return SignResponse(
+        payload=payload_b64,
+        signature=b64u(sig),
+        protected=protected_b64,
+        kid=kid,
+        keeper=KEEPER_ID,
+        window=window,
+    )

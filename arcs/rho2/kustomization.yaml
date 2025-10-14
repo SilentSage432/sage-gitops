@@ -7,3 +7,4 @@ resources:
   - 02-deployment.yaml
   - 03-service.yaml
   - 04-cilium-allow-probes-l4.yaml
+  - 05-config.yaml
