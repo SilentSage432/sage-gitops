@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: <arc>-api
+  namespace: <ns>
+  labels: { app: <arc>-api }
+spec:
+  strategy:
+    type: Recreate            # avoids "old replica pending" churn on single node
+  replicas: 1
+  selector: { matchLabels: { app: <arc>-api } }
+  template:
+    metadata:
+      labels: { app: <arc>-api }
+    spec:
+      serviceAccountName: <arc>-api
+      # tolerations allow scheduling on your control-plane node (single-node cluster)
+      tolerations:
+        - key: "node-role.kubernetes.io/control-plane"
+          operator: "Exists"
+          effect: "NoSchedule"
+        - key: "node-role.kubernetes.io/master"
+          operator: "Exists"
+          effect: "NoSchedule"
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        seccompProfile: { type: RuntimeDefault }
+      containers:
+        - name: app
+          image: <image>       # e.g., ghcr.io/<owner>/<repo>:<tag-or-sha>
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8000
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: { drop: ["ALL"] }
+          # no-drama probes: both exec, bypass CNI/L7
+          startupProbe:
+            exec:
+              command: ["sh","-lc","wget -qO- http://127.0.0.1:8000/health >/dev/null"]
+            initialDelaySeconds: 5
+            timeoutSeconds: 10
+            periodSeconds: 5
+            failureThreshold: 24
+          readinessProbe:
+            exec:
+              command: ["sh","-lc","wget -qO- http://127.0.0.1:8000/health >/dev/null"]
+            initialDelaySeconds: 3
+            timeoutSeconds: 10
+            periodSeconds: 5
+            failureThreshold: 12
+          resources:
+            requests: { cpu: 50m, memory: 64Mi }
+            limits:   { cpu: 300m, memory: 256Mi }

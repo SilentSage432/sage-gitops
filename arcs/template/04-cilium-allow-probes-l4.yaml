@@ -1,0 +1,15 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: <arc>-allow-node-probes-l4
+  namespace: <ns>
+spec:
+  endpointSelector:
+    matchLabels:
+      app: <arc>-api
+  ingress:
+    - fromEntities: ["host","remote-node","kube-apiserver","cluster"]
+      toPorts:
+        - ports:
+            - port: "8000"
+              protocol: TCP
