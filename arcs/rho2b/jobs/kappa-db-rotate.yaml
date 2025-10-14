@@ -1,0 +1,29 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kappa-db-rotate
+  namespace: arc-kappa
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: rotator
+          image: postgres:16-alpine
+          env:
+            - { name: PGHOST,     value: "kappa-postgres.arc-kappa.svc.cluster.local" }
+            - { name: PGPORT,     value: "5432" }
+            - { name: PGDATABASE, value: "sage_os" }
+            - { name: PGUSER,     value: "sage_user" }
+            - name: NEWPWD
+              valueFrom: { secretKeyRef: { name: pending-rotation, key: NEW_PG_PASSWORD } }
+            - name: PGPASSWORD
+              valueFrom: { secretKeyRef: { name: kappa-db, key: PGPASSWORD } }
+          command: ["sh","-lc"]
+          args:
+            - |
+              set -euo pipefail
+              psql "sslmode=disable" -v ON_ERROR_STOP=1 <<'SQL'
+              ALTER ROLE "sage_user" WITH PASSWORD :'NEWPWD';
+              SQL

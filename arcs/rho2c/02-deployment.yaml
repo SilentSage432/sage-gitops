@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rho2c-api
+  namespace: arc-rho2c
+  labels: { app: rho2c-api }
+spec:
+  strategy:
+    type: Recreate
+  replicas: 1
+  selector: { matchLabels: { app: rho2c-api } }
+  template:
+    metadata:
+      labels: { app: rho2c-api }
+    spec:
+      serviceAccountName: rho2c-api
+      tolerations:
+        - key: "node-role.kubernetes.io/control-plane"
+          operator: "Exists"
+          effect: "NoSchedule"
+        - key: "node-role.kubernetes.io/master"
+          operator: "Exists"
+          effect: "NoSchedule"
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        seccompProfile: { type: RuntimeDefault }
+      containers:
+        - name: app
+          image: ghcr.io/silentsage432/rho2-api:sha-b424758
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8000
+          envFrom:
+            - configMapRef: { name: keeper-config }
+            - secretRef:    { name: keeper-secrets }
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: { drop: ["ALL"] }
+          startupProbe:
+            exec:
+              command: ["sh","-lc","wget -qO- http://127.0.0.1:8000/health >/dev/null"]
+            initialDelaySeconds: 5
+            timeoutSeconds: 10
+            periodSeconds: 5
+            failureThreshold: 24
+          readinessProbe:
+            exec:
+              command: ["sh","-lc","wget -qO- http://127.0.0.1:8000/health >/dev/null"]
+            initialDelaySeconds: 3
+            timeoutSeconds: 10
+            periodSeconds: 5
+            failureThreshold: 12
+          resources:
+            requests: { cpu: 50m, memory: 64Mi }
+            limits:   { cpu: 300m, memory: 256Mi }

@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: keeper-config
+  namespace: arc-rho2c
+data:
+  KEEPER_ID: "rho2c"
+  WINDOW_SECONDS: "300"
+  ALLOWED_AUDIENCES: "sage-federation"
+  # Optional: whitelist namespaces that may call /sign (empty means "allow internal by policy")
+  ALLOWED_CALLER_NS: "arc-lambda,arc-kappa,arc-omicron"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: keeper-secrets
+  namespace: arc-rho2c
+type: Opaque
+stringData:
+  ROOT_SECRET: "rho2c-root-secret-32-bytes-minimum-unique-per-keeper-def456789012"
+  HKDF_SALT:  "rho2c-static-salt"

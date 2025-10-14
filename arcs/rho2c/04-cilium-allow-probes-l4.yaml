@@ -1,0 +1,15 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: rho2c-allow-node-probes-l4
+  namespace: arc-rho2c
+spec:
+  endpointSelector:
+    matchLabels:
+      app: rho2c-api
+  ingress:
+    - fromEntities: ["host","remote-node","kube-apiserver","cluster"]
+      toPorts:
+        - ports:
+            - port: "8000"
+              protocol: TCP
