@@ -1,0 +1,18 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: lambda-allow-keepers
+  namespace: arc-lambda
+spec:
+  endpointSelector:
+    matchLabels:
+      app: lambda-api
+  egress:
+    - toEndpoints:
+        - matchLabels: { app: rho2-api,  "kubernetes.io/metadata.name": "arc-rho2" }
+        - matchLabels: { app: rho2b-api, "kubernetes.io/metadata.name": "arc-rho2b" }
+        - matchLabels: { app: rho2c-api, "kubernetes.io/metadata.name": "arc-rho2c" }
+      toPorts:
+        - ports:
+            - port: "8000"
+              protocol: TCP

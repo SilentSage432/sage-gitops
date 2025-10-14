@@ -61,6 +61,8 @@ spec:
                   name: kappa-api-auth
                   key: token
                   optional: true
+          envFrom:
+            - configMapRef: { name: lambda-keepers }
           readinessProbe:
             httpGet:
               path: /health

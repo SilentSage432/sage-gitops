@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: lambda-keepers
+  namespace: arc-lambda
+data:
+  REQUIRED_SIGS: "2"
+  WINDOW_SKEW: "1"
+  JWKS_TTL_SECONDS: "120"
+  KEEPERS_JSON: |
+    [
+      {"id":"rho2a","url":"http://rho2-api.arc-rho2.svc.cluster.local:8000"},
+      {"id":"rho2b","url":"http://rho2b-api.arc-rho2b.svc.cluster.local:8000"},
+      {"id":"rho2c","url":"http://rho2c-api.arc-rho2c.svc.cluster.local:8000"}
+    ]

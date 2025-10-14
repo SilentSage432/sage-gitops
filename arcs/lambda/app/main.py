@@ -1,8 +1,11 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from contextlib import asynccontextmanager
 import asyncio
 import logging
 from registry_client import RegistryClient
+from pydantic import BaseModel
+from typing import List, Optional
+from .federation import issue_multisig_token, refresh_jwks, verify_multisig_jws, REQUIRED_SIGS
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -11,6 +14,13 @@ logger = logging.getLogger(__name__)
 # Global registry client
 registry_client: RegistryClient = None
 heartbeat_task: asyncio.Task = None
+
+class IssueReq(BaseModel):
+    sub: str
+    aud: str = "sage-federation"
+    scopes: List[str] = []
+    ttl_seconds: int = 600
+    extra: Optional[dict] = None
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -31,6 +41,13 @@ async def lifespan(app: FastAPI):
         logger.info("Started heartbeat loop")
     else:
         logger.warning("Failed to register with Kappa registry")
+    
+    # Warm JWKS cache
+    try:
+        await refresh_jwks()
+        logger.info("JWKS cache warmed")
+    except Exception as e:
+        logger.warning(f"Failed to warm JWKS cache: {e}")
     
     yield
     
@@ -57,7 +74,7 @@ app = FastAPI(lifespan=lifespan)
 @app.get("/health")
 def health():
     """Health check endpoint"""
-    return {"status": "ok"}
+    return {"ok": True, "service": "lambda", "required_sigs": REQUIRED_SIGS}
 
 @app.get("/registry/status")
 def registry_status():
@@ -70,3 +87,17 @@ def registry_status():
             "heartbeat_interval": registry_client.heartbeat_interval
         }
     return {"registered": False}
+
+@app.post("/federation/issue")
+async def federation_issue(req: IssueReq):
+    """Issue a multi-signature federation token"""
+    try:
+        token = await issue_multisig_token(req.sub, req.aud, req.scopes, req.ttl_seconds, req.extra)
+        # (optional) verify locally before handing out
+        await refresh_jwks()
+        payload_obj, valid = verify_multisig_jws(token, min_sigs=REQUIRED_SIGS)
+        if valid < REQUIRED_SIGS:
+            raise HTTPException(status_code=502, detail=f"keeper signatures insufficient: {valid}/{REQUIRED_SIGS}")
+        return {"token": token, "claims": payload_obj, "signatures": valid}
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=str(e))
