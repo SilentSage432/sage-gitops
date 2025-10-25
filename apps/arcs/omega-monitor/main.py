@@ -17,11 +17,7 @@ def reason():
     code = data.get("code", "UNKNOWN")
     ts = data.get("ts", datetime.datetime.utcnow().isoformat() + "Z")
     note = data.get("note", "")
-    payload = {
-        "received_at": ts,
-        "reason_code": code,
-        "note": note
-    }
+    payload = {"received_at": ts, "reason_code": code, "note": note}
     print(json.dumps(payload), file=sys.stdout, flush=True)
     return jsonify({"ack": True, "received": payload}), 200
 
