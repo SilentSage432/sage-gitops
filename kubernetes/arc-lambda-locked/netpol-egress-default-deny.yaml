@@ -1,0 +1,9 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: lambda-egress-default-deny
+  namespace: arc-lambda-locked
+spec:
+  podSelector: {}
+  policyTypes: [Egress]
+  egress: []
