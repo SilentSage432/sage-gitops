@@ -1,0 +1,15 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: lambda-allow-chi-bus
+  namespace: arc-lambda-locked
+spec:
+  podSelector: {}
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels: { kubernetes.io/metadata.name: arc-chi }
+          podSelector: { matchLabels: { app: chi-bus } }
+      ports:
+        - { protocol: TCP, port: 4222 }

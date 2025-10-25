@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: lambda-agent
+  namespace: arc-lambda-locked
+spec:
+  selector: { matchLabels: { app: lambda-agent } }
+  template:
+    metadata: { labels: { app: lambda-agent } }
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        seccompProfile: { type: RuntimeDefault }
+      containers:
+        - name: lambda
+          image: ghcr.io/silentsage432/lambda-api:ab233032232a3b31f3c8f5a4212120a4f534b93d
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: NATS_URL
+              value: nats://chi-bus.arc-chi.svc.cluster.local:4222
+          ports: [ { name: http, containerPort: 8000 } ]
+          readinessProbe: { httpGet: { path: /health, port: 8000 }, initialDelaySeconds: 5, periodSeconds: 10 }
+          livenessProbe:  { httpGet: { path: /health, port: 8000 }, initialDelaySeconds: 10, periodSeconds: 15 }
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: { drop: ["ALL"] }
+          resources:
+            requests: { cpu: "20m", memory: "64Mi" }
+            limits:   { cpu: "200m", memory: "256Mi" }

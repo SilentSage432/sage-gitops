@@ -1,0 +1,55 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: omega-reason-codes
+  namespace: arc-omega
+  labels:
+    app: omega-monitor
+data:
+  reason-codes.json: |
+    {
+      "version": "2025-10-25T00:00:00Z",
+      "codes": [
+        { "code": "OK",                "severity": "info",  "summary": "All systems nominal.",
+          "desc": "No action required.", "remediation": [] },
+
+        { "code": "WARN",              "severity": "warn",  "summary": "Degradation detected.",
+          "desc": "Investigate component metrics.", "remediation": ["Check Sigma telemetry", "Inspect recent Chi events"] },
+
+        { "code": "FAIL",              "severity": "error", "summary": "Component failure.",
+          "desc": "One or more health checks failed.", "remediation": ["Escalate to Rho²", "Quarantine if necessary"] },
+
+        { "code": "RHO2_ENFORCING",    "severity": "info",  "summary": "Rho² guardrails active.",
+          "desc": "Network/behavior boundaries are enforced.", "remediation": [] },
+
+        { "code": "SIGMA_BASELINE_OK", "severity": "info",  "summary": "Sigma baseline stable.",
+          "desc": "Cadence and medians within thresholds.", "remediation": [] },
+
+        { "code": "CHI_BUS_CONNECTED", "severity": "info",  "summary": "Chi bus reachable.",
+          "desc": "NATS connectivity healthy.", "remediation": [] },
+
+        { "code": "LAMBDA_SEALED",     "severity": "info",  "summary": "Lambda locked domain.",
+          "desc": "Lambda can talk only to Chi and DNS.", "remediation": [] },
+
+        { "code": "THETA_PAUSED",      "severity": "info",  "summary": "Theta awaiting NAT/DoH.",
+          "desc": "Network sovereignty disabled pending platform limits.", "remediation": ["Enable NAT", "Enable DoH"] },
+
+        { "code": "OMEGA_REASON_INIT", "severity": "info",  "summary": "Omega map initialized.",
+          "desc": "Meaning layer is online.", "remediation": [] },
+
+        { "code": "DATA_FRESHNESS_STALE", "severity": "warn", "summary": "Telemetry stale.",
+          "desc": "Sigma heartbeat or payload age exceeded threshold.",
+          "remediation": ["Verify Sigma intervals", "Check clock skew", "Confirm Chi subscription"] },
+
+        { "code": "HEALTH_DEGRADED", "severity": "warn", "summary": "Composite health degraded.",
+          "desc": "Multiple WARNs across arcs.", "remediation": ["Rank by severity", "Check Omega summary"] }
+      ],
+      "rationaleTemplates": {
+        "ok":        "Component {{name}} healthy ({{metric}}={{value}}).",
+        "warn":      "Component {{name}} degraded: {{metric}}={{value}} (limit={{limit}}).",
+        "fail":      "Component {{name}} failed: {{reason}}.",
+        "connected": "Chi reachable at {{url}}.",
+        "sealed":    "Lambda domain sealed by Rho².",
+        "paused":    "Theta paused awaiting NAT/DoH."
+      }
+    }

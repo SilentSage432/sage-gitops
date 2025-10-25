@@ -1,0 +1,9 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: omega-egress-default-deny
+  namespace: arc-omega
+spec:
+  podSelector: {}
+  policyTypes: [Egress]
+  egress: []
