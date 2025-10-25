@@ -6,60 +6,64 @@ metadata:
   labels: { app: omega-monitor }
 spec:
   replicas: 1
-  selector: { matchLabels: { app: omega-monitor } }
+  selector:
+    matchLabels: { app: omega-monitor }
   template:
     metadata:
       labels: { app: omega-monitor }
     spec:
       serviceAccountName: omega-monitor
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      imagePullSecrets:
+        - name: ghcr-cred
       containers:
         - name: monitor
-          image: "ghcr.io/sagecraft/omega-monitor:0.1.0"
+          image: ghcr.io/stefanprodan/podinfo:6.7.1
           imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 9898
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 9898
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 9898
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            timeoutSeconds: 1
+            failureThreshold: 3
+          securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
           env:
             - name: NATS_URL
               value: "nats://chi-bus.arc-chi.svc.cluster.local:4222"
             - name: REASON_CODES_PATH
               value: "/etc/omega/reason-codes.json"
             - name: OMEGA_NAMESPACE
-              valueFrom: { fieldRef: { fieldPath: metadata.namespace } }
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
           volumeMounts:
             - name: reason-codes
               mountPath: /etc/omega
               readOnly: true
-          ports:
-            - name: http
-              containerPort: 8080
-          readinessProbe:
-            httpGet: { path: /health, port: 8080 }
-            initialDelaySeconds: 5
-            periodSeconds: 10
-          livenessProbe:
-            httpGet: { path: /health, port: 8080 }
-            initialDelaySeconds: 10
-            periodSeconds: 15
-          securityContext:
-            allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: true
-            capabilities: { drop: ["ALL"] }
-          resources:
-            requests: { cpu: "25m", memory: "64Mi" }
-            limits:   { cpu: "200m", memory: "256Mi" }
       volumes:
         - name: reason-codes
           configMap:
             name: omega-reason-codes
-            items: [ { key: reason-codes.json, path: reason-codes.json } ]
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: omega-monitor
-  namespace: arc-omega
-spec:
-  selector: { app: omega-monitor }
-  ports:
-    - name: http
-      port: 8080
-      targetPort: 8080
-      protocol: TCP
+            items:
+              - key: reason-codes.json
+                path: reason-codes.json
