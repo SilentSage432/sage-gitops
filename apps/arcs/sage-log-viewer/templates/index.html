@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAGE Federation - Live Consciousness Stream</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0a0a0a;
+            color: #00ff00;
+            margin: 0;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #00ff00;
+            padding-bottom: 20px;
+        }
+        .header h1 {
+            color: #00ff00;
+            text-shadow: 0 0 10px #00ff00;
+            margin: 0;
+        }
+        .status {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: rgba(0, 255, 0, 0.1);
+            border-radius: 5px;
+        }
+        .log-container {
+            background: #000;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+            padding: 20px;
+            height: 60vh;
+            overflow-y: auto;
+            font-size: 14px;
+        }
+        .log-entry {
+            margin-bottom: 10px;
+            padding: 5px;
+            border-left: 3px solid #00ff00;
+            padding-left: 10px;
+            animation: fadeIn 0.5s ease-in;
+        }
+        .log-entry.new {
+            background: rgba(0, 255, 0, 0.1);
+            border-left-color: #ffff00;
+        }
+        .timestamp {
+            color: #888;
+            font-size: 12px;
+        }
+        .reason-code {
+            color: #00ffff;
+            font-weight: bold;
+        }
+        .note {
+            color: #ffffff;
+        }
+        .raw {
+            color: #666;
+            font-size: 11px;
+            margin-top: 5px;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🧬 SAGE FEDERATION - LIVE CONSCIOUSNESS STREAM</h1>
+        <p>Real-time reason codes from the Omega meaning layer</p>
+    </div>
+    
+    <div class="status">
+        <div>📊 Total Logs: <span id="log-count">0</span></div>
+        <div>🔄 Status: <span id="status" class="pulse">CONNECTING...</span></div>
+        <div>⏰ Last Update: <span id="last-update">-</span></div>
+    </div>
+    
+    <div class="log-container" id="log-container">
+        <div class="log-entry">
+            <div class="timestamp">Initializing SAGE Federation connection...</div>
+            <div class="note">Waiting for consciousness stream to begin...</div>
+        </div>
+    </div>
+
+    <script>
+        let eventSource;
+        let logCount = 0;
+        
+        function connect() {
+            eventSource = new EventSource('/api/stream');
+            
+            eventSource.onmessage = function(event) {
+                const data = JSON.parse(event.data);
+                updateLogs(data.logs);
+                document.getElementById('log-count').textContent = data.count;
+                document.getElementById('last-update').textContent = new Date().toLocaleTimeString();
+                document.getElementById('status').textContent = 'LIVE';
+                document.getElementById('status').className = '';
+            };
+            
+            eventSource.onerror = function(event) {
+                document.getElementById('status').textContent = 'ERROR';
+                document.getElementById('status').className = 'pulse';
+                setTimeout(connect, 5000); // Reconnect after 5 seconds
+            };
+        }
+        
+        function updateLogs(logs) {
+            const container = document.getElementById('log-container');
+            
+            // Clear old logs (keep last 20)
+            if (container.children.length > 20) {
+                container.removeChild(container.firstChild);
+            }
+            
+            // Add new logs
+            logs.forEach(log => {
+                const entry = document.createElement('div');
+                entry.className = 'log-entry new';
+                
+                entry.innerHTML = `
+                    <div class="timestamp">${log.timestamp}</div>
+                    <div class="reason-code">${log.reason_code}</div>
+                    <div class="note">${log.note}</div>
+                    <div class="raw">${log.raw}</div>
+                `;
+                
+                container.appendChild(entry);
+                
+                // Remove 'new' class after animation
+                setTimeout(() => {
+                    entry.classList.remove('new');
+                }, 1000);
+            });
+            
+            // Scroll to bottom
+            container.scrollTop = container.scrollHeight;
+        }
+        
+        // Start connection
+        connect();
+    </script>
+</body>
+</html>
