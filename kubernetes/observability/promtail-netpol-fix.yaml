@@ -1,0 +1,13 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: promtail-allow-all-egress
+  namespace: observability
+spec:
+  podSelector:
+    matchLabels:
+      app: promtail
+  policyTypes:
+  - Egress
+  egress:
+  - {} # Allow all egress traffic for Promtail

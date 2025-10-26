@@ -10,14 +10,13 @@ data:
       grpc_listen_port: 0
     clients:
       - url: http://loki.observability.svc.cluster.local:3100/loki/api/v1/push
+        tenant_id: "sage"         # <-- REQUIRED: write to tenant "sage"
     positions:
       filename: /run/promtail/positions.yaml
     scrape_configs:
       - job_name: kubernetes-pods
         pipeline_stages:
           - cri: {}
-          - labeldrop:
-              - filename
           - json:
               expressions:
                 reason_code:
@@ -43,7 +42,6 @@ data:
           - action: keep
             source_labels: [__meta_kubernetes_pod_label_app]
             regex: (omega-monitor|omega-reason-stream|sigma-agent|lambda-cell)
-    # Note: Promtail scrapes container stdout. Ensure omega-reason-stream also prints JSON to stdout in addition to file.
 ---
 apiVersion: apps/v1
 kind: DaemonSet

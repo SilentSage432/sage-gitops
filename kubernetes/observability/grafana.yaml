@@ -24,6 +24,9 @@ data:
         isDefault: true
         jsonData:
           timeout: 60
+          httpHeaderName1: "X-Scope-OrgID"   # <-- REQUIRED HEADER NAME
+        secureJsonData:
+          httpHeaderValue1: "sage"           # <-- REQUIRED HEADER VALUE
 ---
 apiVersion: v1
 kind: ConfigMap
