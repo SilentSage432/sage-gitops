@@ -16,12 +16,6 @@ rules:
     resources: ["leases"]
     verbs: ["get","list","watch","create","update","patch"]
 ---
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: operator
-  namespace: kube-system
----
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -32,5 +26,5 @@ roleRef:
   name: tailscale-operator
 subjects:
   - kind: ServiceAccount
-    name: operator
-    namespace: kube-system
+    name: tailscale-operator
+    namespace: tailscale-operator
