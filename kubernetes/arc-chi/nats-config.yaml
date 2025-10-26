@@ -11,9 +11,9 @@ stringData:
     server_name: chi-bus
     authorization: {
       users: [
-        { user: "omega", password: "Nq0v/J7Cod1rZujoM6ZUQEGUoFfVZeC9yeodqeZwQl0=", permissions: { publish: [], subscribe: ["omega.reason"] } },
-        { user: "sigma", password: "PQXKji6Xc+O44QGVhWXr8k453GR1fLFtm0+9sVC/Y5Q=", permissions: { publish: ["sigma.telemetry"], subscribe: ["omega.reason"] } },
-        { user: "lambda", password: "HiL971Ejca1gcsf7G9OkYWauBid85AqzyVAfFvldfGU=", permissions: { publish: ["lambda.events"], subscribe: [] } }
+        { user: "omega", password: "X2aZZIVsETn8w8gC", permissions: { publish: [], subscribe: ["omega.reason"] } },
+        { user: "sigma", password: "B3UivvFrbBfFB5G5", permissions: { publish: ["sigma.telemetry"], subscribe: ["omega.reason"] } },
+        { user: "lambda", password: "vFKo7L2YihfCtdc3", permissions: { publish: ["lambda.events"], subscribe: [] } }
       ]
     }
     jetstream: false
