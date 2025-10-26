@@ -1,0 +1,13 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: tailscale-operator-egress-simple
+  namespace: kube-system
+spec:
+  endpointSelector:
+    matchLabels:
+      app: tailscale-operator
+  egress:
+    # Allow all egress for now to get the operator working
+    - {}
+
