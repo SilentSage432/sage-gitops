@@ -1,0 +1,24 @@
+name: build-omega-reason-stream
+on:
+  push:
+    branches: [ main ]
+    paths: [ 'apps/arcs/omega-reason-stream/**' ]
+  workflow_dispatch: {}
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions: { contents: read, packages: write }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v6
+        with:
+          context: ./apps/arcs/omega-reason-stream
+          push: true
+          tags: |
+            ghcr.io/silentsage432/omega-reason-stream:0.1.0
+            ghcr.io/silentsage432/omega-reason-stream:latest
