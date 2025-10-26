@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: omega-reason-stream
+  namespace: arc-omega
+  labels: { app: omega-reason-stream }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: omega-reason-stream } }
+  template:
+    metadata: { labels: { app: omega-reason-stream } }
+    spec:
+      serviceAccountName: omega-monitor
+      securityContext:
+        seccompProfile: { type: RuntimeDefault }
+      containers:
+        - name: streamer
+          image: ghcr.io/silentsage432/omega-reason-stream:latest
+          imagePullPolicy: Always
+          env:
+            - name: NATS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: omega-nats-auth
+                  key: NATS_URL
+            - name: STREAM_LOG_PATH
+              valueFrom:
+                configMapKeyRef:
+                  name: omega-reason-stream-config
+                  key: STREAM_LOG_PATH
+            - name: NATS_SUBJECT
+              valueFrom:
+                configMapKeyRef:
+                  name: omega-reason-stream-config
+                  key: NATS_SUBJECT
+          volumeMounts:
+            - name: data
+              mountPath: /data/reason-stream
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 10001
+            readOnlyRootFilesystem: false
+            allowPrivilegeEscalation: false
+            capabilities: { drop: ["ALL"] }
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: omega-reason-stream-pvc

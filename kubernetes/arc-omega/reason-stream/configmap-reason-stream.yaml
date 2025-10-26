@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: omega-reason-stream-config
+  namespace: arc-omega
+data:
+  STREAM_LOG_PATH: "/data/reason-stream/reason.log"
+  NATS_SUBJECT: "omega.reason"
+  NATS_URL_ENV: "NATS_URL"
+  MAX_LOG_SIZE_MB: "25"
+  ROTATE_KEEP: "5"
