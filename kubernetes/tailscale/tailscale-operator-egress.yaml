@@ -1,0 +1,24 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: tailscale-operator-egress
+  namespace: kube-system
+spec:
+  endpointSelector:
+    matchLabels:
+      app: operator   # adjust if your operator pod label differs
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s-app: kube-dns
+      toPorts:
+        - ports: [ { port: "53", protocol: UDP }, { port: "53", protocol: TCP } ]
+          rules: { dns: [ { matchPattern: "*" } ] }
+    - toEntities: [ kube-apiserver ]
+      toPorts: [ { ports: [ { port: "443", protocol: TCP } ] } ]
+    - toFQDNs:
+        - matchName: controlplane.tailscale.com
+        - matchName: login.tailscale.com
+        - matchName: api.tailscale.com
+        - matchPattern: "*.ts.net"
+      toPorts: [ { ports: [ { port: "443", protocol: TCP } ] } ]
