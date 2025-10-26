@@ -1,0 +1,9 @@
+apiVersion: tailscale.com/v1alpha1
+kind: Connector
+metadata:
+  name: loki
+  namespace: observability
+spec:
+  service: loki
+  hostname: loki
+  subdomain: loki

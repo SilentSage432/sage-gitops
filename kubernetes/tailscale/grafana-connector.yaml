@@ -1,0 +1,9 @@
+apiVersion: tailscale.com/v1alpha1
+kind: Connector
+metadata:
+  name: grafana
+  namespace: observability
+spec:
+  service: grafana
+  hostname: grafana
+  subdomain: grafana

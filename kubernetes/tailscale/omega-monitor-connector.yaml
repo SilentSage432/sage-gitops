@@ -1,0 +1,9 @@
+apiVersion: tailscale.com/v1alpha1
+kind: Connector
+metadata:
+  name: omega-monitor
+  namespace: arc-omega
+spec:
+  service: omega-monitor
+  hostname: omega-monitor
+  subdomain: omega-monitor

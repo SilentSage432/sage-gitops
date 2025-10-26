@@ -1,0 +1,9 @@
+apiVersion: tailscale.com/v1alpha1
+kind: Connector
+metadata:
+  name: omega-reason-stream
+  namespace: arc-omega
+spec:
+  service: omega-reason-stream
+  hostname: omega-stream
+  subdomain: omega-stream
