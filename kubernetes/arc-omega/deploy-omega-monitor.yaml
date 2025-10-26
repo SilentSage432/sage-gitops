@@ -19,7 +19,7 @@ spec:
         seccompProfile: { type: RuntimeDefault }
       containers:
         - name: monitor
-          image: ghcr.io/silentsage432/omega-monitor:0.2.0
+          image: ghcr.io/silentsage432/omega-monitor:latest
           imagePullPolicy: Always
           ports: [ { name: http, containerPort: 8080 } ]
           env:
