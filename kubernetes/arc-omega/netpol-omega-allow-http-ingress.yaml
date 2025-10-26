@@ -1,22 +1,12 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  annotations:
-    kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"networking.k8s.io/v1","kind":"NetworkPolicy","metadata":{"annotations":{},"name":"omega-allow-http-ingress","namespace":"arc-omega"},"spec":{"ingress":[{"ports":[{"port":8080,"protocol":"TCP"}]}],"podSelector":{"matchLabels":{"app":"omega-monitor"}},"policyTypes":["Ingress"]}}
-  creationTimestamp: "2025-10-25T22:16:17Z"
-  generation: 2
   name: omega-allow-http-ingress
   namespace: arc-omega
-  resourceVersion: "4778648"
-  uid: 157b8c31-851d-44ca-a20a-e8050dad4803
 spec:
-  ingress:
-  - ports:
-    - port: 8080
-      protocol: TCP
   podSelector:
-    matchLabels:
-      app: omega-monitor
-  policyTypes:
-  - Ingress
+    matchLabels: { app: omega-monitor }
+  policyTypes: [Ingress]
+  ingress:
+    - ports:
+        - { protocol: TCP, port: 8080 }
