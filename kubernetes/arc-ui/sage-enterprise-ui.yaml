@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sage-enterprise-ui
+  namespace: arc-ui
+  labels: { app: sage-enterprise-ui }
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: sage-enterprise-ui }
+  template:
+    metadata:
+      labels: { app: sage-enterprise-ui }
+    spec:
+      containers:
+        - name: ui
+          # TODO: swap this to your real image when you have it handy:
+          # Using nginx for testing - replace with your actual UI image
+          image: nginx:alpine
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 80
+          env:
+            # If your UI expects a base URL, uncomment/tune:
+            # - name: PUBLIC_URL
+            #   value: "/"
+          # Temporarily disabled due to NetworkPolicy issues
+          # readinessProbe:
+          #   httpGet: { path: "/", port: 80 }
+          #   initialDelaySeconds: 5
+          #   periodSeconds: 10
+          #   timeoutSeconds: 3
+          #   failureThreshold: 6
+          # livenessProbe:
+          #   httpGet: { path: "/", port: 80 }
+          #   initialDelaySeconds: 20
+          #   periodSeconds: 20
+          #   timeoutSeconds: 3
+          #   failureThreshold: 6
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sage-enterprise-ui
+  namespace: arc-ui
+  labels: { app: sage-enterprise-ui }
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "sage-ui"
+spec:
+  selector: { app: sage-enterprise-ui }
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 8080         # Service port visible via tailnet
+      targetPort: 80     # Container serves on 80 (nginx/apps)

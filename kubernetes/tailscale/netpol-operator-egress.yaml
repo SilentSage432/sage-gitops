@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: tailscale-operator-egress
+  namespace: tailscale-operator
+spec:
+  podSelector:
+    matchLabels: { app: tailscale-operator }
+  policyTypes: [Egress]
+  egress:
+    # Allow DNS resolution
+    - to:
+        - namespaceSelector:
+            matchLabels: { kubernetes.io/metadata.name: kube-system }
+          podSelector:
+            matchLabels: { k8s-app: kube-dns }
+      ports:
+        - { protocol: UDP, port: 53 }
+        - { protocol: TCP, port: 53 }
+    # Allow HTTPS to Tailscale API
+    - to: []
+      ports:
+        - { protocol: TCP, port: 443 }
+    # Allow all other egress for Tailscale connectivity
+    - {}

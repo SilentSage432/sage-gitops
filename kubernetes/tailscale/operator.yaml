@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: tailscale-operator
+  namespace: tailscale-operator
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tailscale-operator
+  namespace: tailscale-operator
+  labels: { app: tailscale-operator }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: tailscale-operator } }
+  template:
+    metadata: { labels: { app: tailscale-operator } }
+    spec:
+      serviceAccountName: tailscale-operator
+      containers:
+        - name: operator
+          image: ghcr.io/tailscale/k8s-operator:latest
+          imagePullPolicy: Always
+          env:
+            - name: CLIENT_ID_FILE
+              value: "/etc/tailscale/oauth/client_id"
+            - name: CLIENT_SECRET_FILE
+              value: "/etc/tailscale/oauth/client_secret"
+            - name: TS_TAILNET
+              valueFrom: { secretKeyRef: { name: tailscale-oauth, key: TS_TAILNET } }
+            - name: TS_EXTRA_ARGS
+              value: "--advertise-tags=tag:k8s-operator"
+          volumeMounts:
+            - name: oauth-secret
+              mountPath: /etc/tailscale/oauth
+              readOnly: true
+      volumes:
+        - name: oauth-secret
+          secret:
+            secretName: tailscale-oauth
+            items:
+              - key: TS_OAUTH_CLIENT_ID
+                path: client_id
+              - key: TS_OAUTH_CLIENT_SECRET
+                path: client_secret

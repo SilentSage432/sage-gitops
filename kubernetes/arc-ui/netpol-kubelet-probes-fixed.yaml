@@ -1,0 +1,15 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: ui-allow-kubelet-probes-fixed
+  namespace: arc-ui
+spec:
+  podSelector:
+    matchLabels: { app: sage-enterprise-ui }
+  policyTypes: [Ingress]
+  ingress:
+    # Allow kubelet health checks from any source (kubelet runs on nodes)
+    - from: []
+      ports:
+        - protocol: TCP
+          port: 80
