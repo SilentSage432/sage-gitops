@@ -19,11 +19,11 @@ spec:
         seccompProfile: { type: RuntimeDefault }
       containers:
         - name: monitor
-          image: ghcr.io/silentsage432/omega-monitor:0.1.0
+          image: ghcr.io/silentsage432/omega-monitor:latest
           imagePullPolicy: Always
           ports: [ { name: http, containerPort: 8080 } ]
           env:
-            - { name: NATS_URL,     value: "nats://chi-bus.arc-chi.svc.cluster.local:4222" }
+            - { name: NATS_URL,     valueFrom: { secretKeyRef: { name: "omega-nats-auth", key: "NATS_URL" } } }
             - { name: NATS_SUBJECT, value: "omega.reason" }
             - { name: NATS_QUEUE,   value: "omega-workers" }
           securityContext:
@@ -36,13 +36,21 @@ spec:
           volumeMounts:
             - { name: tmp, mountPath: /tmp }
           readinessProbe:
-            httpGet: { path: /health, port: 8080 }
+            exec:
+              command:
+                - python
+                - -c
+                - "import urllib.request; urllib.request.urlopen('http://localhost:8080/health', timeout=5)"
             initialDelaySeconds: 10
             periodSeconds: 10
             timeoutSeconds: 5
             failureThreshold: 6
           livenessProbe:
-            httpGet: { path: /health, port: 8080 }
+            exec:
+              command:
+                - python
+                - -c
+                - "import urllib.request; urllib.request.urlopen('http://localhost:8080/health', timeout=5)"
             initialDelaySeconds: 20
             periodSeconds: 20
             timeoutSeconds: 5
