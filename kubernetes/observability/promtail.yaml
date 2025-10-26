@@ -1,0 +1,114 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: promtail-config
+  namespace: observability
+data:
+  promtail.yaml: |
+    server:
+      http_listen_port: 9080
+      grpc_listen_port: 0
+    clients:
+      - url: http://loki.observability.svc.cluster.local:3100/loki/api/v1/push
+    positions:
+      filename: /run/promtail/positions.yaml
+    scrape_configs:
+      - job_name: kubernetes-pods
+        pipeline_stages:
+          - cri: {}
+          - labeldrop:
+              - filename
+          - json:
+              expressions:
+                reason_code:
+                note:
+                received_at:
+          - labels:
+              reason_code:
+        kubernetes_sd_configs:
+          - role: pod
+        relabel_configs:
+          - action: replace
+            source_labels: [__meta_kubernetes_namespace]
+            target_label: namespace
+          - action: replace
+            source_labels: [__meta_kubernetes_pod_label_app]
+            target_label: app
+          - action: replace
+            source_labels: [__meta_kubernetes_pod_name]
+            target_label: pod
+          - action: replace
+            source_labels: [__meta_kubernetes_container_name]
+            target_label: container
+          - action: keep
+            source_labels: [__meta_kubernetes_pod_label_app]
+            regex: (omega-monitor|omega-reason-stream|sigma-agent|lambda-cell)
+    # Note: Promtail scrapes container stdout. Ensure omega-reason-stream also prints JSON to stdout in addition to file.
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: promtail
+  namespace: observability
+  labels: { app: promtail }
+spec:
+  selector:
+    matchLabels: { app: promtail }
+  template:
+    metadata:
+      labels: { app: promtail }
+    spec:
+      serviceAccountName: promtail
+      securityContext: { seccompProfile: { type: RuntimeDefault } }
+      containers:
+        - name: promtail
+          image: grafana/promtail:2.9.0
+          args: ["-config.file=/etc/promtail/promtail.yaml"]
+          volumeMounts:
+            - { name: config,    mountPath: /etc/promtail }
+            - { name: varlog,    mountPath: /var/log }
+            - { name: podlogs,   mountPath: /var/log/pods }
+            - { name: dockerlib, mountPath: /var/lib/docker/containers, readOnly: true }
+            - { name: positions, mountPath: /run/promtail }
+          securityContext:
+            runAsNonRoot: false
+            allowPrivilegeEscalation: false
+      volumes:
+        - name: config
+          configMap: { name: promtail-config }
+        - name: positions
+          emptyDir: {}
+        - name: varlog
+          hostPath: { path: /var/log }
+        - name: podlogs
+          hostPath: { path: /var/log/pods }
+        - name: dockerlib
+          hostPath: { path: /var/lib/docker/containers }
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: promtail
+  namespace: observability
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: promtail
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "nodes", "namespaces"]
+    verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: promtail
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: promtail
+subjects:
+  - kind: ServiceAccount
+    name: promtail
+    namespace: observability
