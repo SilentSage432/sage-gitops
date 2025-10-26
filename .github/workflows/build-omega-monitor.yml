@@ -25,5 +25,5 @@ jobs:
           context: ./apps/arcs/omega-monitor
           push: true
           tags: |
-            ghcr.io/sagecraft/omega-monitor:0.2.0
-            ghcr.io/sagecraft/omega-monitor:latest
+            ghcr.io/${{ github.actor }}/omega-monitor:0.2.0
+            ghcr.io/${{ github.actor }}/omega-monitor:latest
