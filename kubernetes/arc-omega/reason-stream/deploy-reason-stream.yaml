@@ -44,5 +44,4 @@ spec:
             capabilities: { drop: ["ALL"] }
       volumes:
         - name: data
-          persistentVolumeClaim:
-            claimName: omega-reason-stream-pvc
+          emptyDir: {}
