@@ -1,0 +1,30 @@
+# Minimal SA + RBAC patterns; individual arcs add their own if needed
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: arc-reader
+  namespace: arc-sigma
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: arc-logs
+  namespace: arc-sigma
+rules:
+  - apiGroups: [""]
+    resources: ["pods","pods/log"]
+    verbs: ["get","list","watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: arc-logs
+  namespace: arc-sigma
+subjects:
+  - kind: ServiceAccount
+    name: arc-reader
+    namespace: arc-sigma
+roleRef:
+  kind: Role
+  name: arc-logs
+  apiGroup: rbac.authorization.k8s.io

@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: omega-reason-codes
+  namespace: arc-omega
+data:
+  reason-codes.json: |
+    {
+      "OMEGA_REASON_INIT":   {"severity":"info",  "description":"Omega initialized"},
+      "LINK_OK":             {"severity":"info",  "description":"Connectivity to Chi established"},
+      "AUTH_OK":             {"severity":"info",  "description":"Authenticated to Chi"},
+      "SYNC_READY":          {"severity":"info",  "description":"Federation sync ready"},
+      "ACL_DENIED":          {"severity":"warn",  "description":"Chi ACL denied a subject"},
+      "NETPOL_BLOCKED":      {"severity":"warn",  "description":"NetworkPolicy blocked connection"},
+      "PROBE_DEGRADED":      {"severity":"warn",  "description":"Health probe degraded"},
+      "CNI_ROUTE_FAIL":      {"severity":"error", "description":"CNI datapath no-route"}
+    }

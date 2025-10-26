@@ -1,0 +1,6 @@
+# (Optional) If you run chi-bus with its own SA; otherwise omit.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: chi-bus
+  namespace: arc-chi

@@ -1,0 +1,27 @@
+# Default egress deny per namespace (applied per-ns via labelSelector or manually in each ns)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-egress-deny
+  namespace: arc-omega
+spec:
+  podSelector: {}
+  policyTypes: [Egress]
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-egress-deny
+  namespace: arc-sigma
+spec:
+  podSelector: {}
+  policyTypes: [Egress]
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-egress-deny
+  namespace: arc-lambda
+spec:
+  podSelector: {}
+  policyTypes: [Egress]

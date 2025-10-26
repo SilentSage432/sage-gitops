@@ -1,0 +1,4 @@
+apiVersion: apiserver.k8s.io/v1beta1
+kind: AdmissionConfiguration
+# (If you already enforce restricted via PSP/PSA or Gatekeeper, keep that.
+# This file is a placeholder marker; enforcement typically configured cluster-wide.)

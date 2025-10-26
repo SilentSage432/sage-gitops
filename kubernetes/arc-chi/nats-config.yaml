@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: nats-config
+  namespace: arc-chi
+type: Opaque
+stringData:
+  nats-server.conf: |
+    port: 4222
+    http: 8222
+    server_name: chi-bus
+    authorization: {
+      users: [
+        { user: "omega", password: "Nq0v/J7Cod1rZujoM6ZUQEGUoFfVZeC9yeodqeZwQl0=", permissions: { publish: [], subscribe: ["omega.reason"] } },
+        { user: "sigma", password: "PQXKji6Xc+O44QGVhWXr8k453GR1fLFtm0+9sVC/Y5Q=", permissions: { publish: ["sigma.telemetry"], subscribe: ["omega.reason"] } },
+        { user: "lambda", password: "HiL971Ejca1gcsf7G9OkYWauBid85AqzyVAfFvldfGU=", permissions: { publish: ["lambda.events"], subscribe: [] } }
+      ]
+    }
+    jetstream: false
+
+---
+# Mount this Secret into your existing Chi (NATS) Pod/StatefulSet as /etc/nats/nats-server.conf
+# and ensure the container entrypoint runs: `nats-server -c /etc/nats/nats-server.conf`
+# If you deploy NATS via Helm, use values to point to this config.
