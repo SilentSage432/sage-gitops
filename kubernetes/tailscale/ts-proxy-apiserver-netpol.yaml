@@ -16,6 +16,12 @@ spec:
       port: 6443
     - protocol: TCP
       port: 443
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 443
+    - protocol: TCP
+      port: 6443
   - to:
     - namespaceSelector:
         matchLabels:

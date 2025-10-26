@@ -40,6 +40,13 @@ secrets/*.yaml
 !**/secrets/*.enc.yaml
 **/config/**
 
+# Tailscale and other service secrets
+**/auth-secret.yaml
+**/operator-helmrelease.yaml
+**/tailscale-operator-helmrelease.yaml
+**/*-secret.yaml
+**/*-auth.yaml
+
 # Temporary files
 *.tmp
 *.temp
