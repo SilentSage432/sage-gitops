@@ -1,0 +1,31 @@
+name: build-omega
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'apps/arcs/omega-monitor/**'
+  workflow_dispatch: {}
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login to GHCR (user namespace)
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build & push
+        uses: docker/build-push-action@v6
+        with:
+          context: ./apps/arcs/omega-monitor
+          push: true
+          tags: |
+            ghcr.io/silentsage432/omega-monitor:0.2.0
+            ghcr.io/silentsage432/omega-monitor:latest
