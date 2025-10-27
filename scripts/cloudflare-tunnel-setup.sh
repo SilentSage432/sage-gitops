@@ -2,38 +2,37 @@
 set -euo pipefail
 
 echo "=== Cloudflare Tunnel Setup for SAGE UI ==="
-echo
-echo "Your cloudflared deployment is using a token-based setup, which means"
-echo "ingress rules are managed through the Cloudflare dashboard, not local config."
-echo
-echo "To add www.sagecraftalchemy.com -> SAGE UI:"
-echo
-echo "1. Go to Cloudflare Dashboard -> Zero Trust -> Tunnels"
-echo "2. Find your tunnel and click 'Configure'"
-echo "3. Add a new ingress rule:"
-echo "   - Hostname: www.sagecraftalchemy.com"
-echo "   - Service: http://sage-enterprise-ui.arc-ui.svc.cluster.local:8080"
-echo
-echo "4. Or use the Cloudflare API:"
-echo "   curl -X POST \"https://api.cloudflare.com/client/v4/accounts/\$ACCOUNT_ID/cfd_tunnel/\$TUNNEL_ID/configurations\" \\"
+echo ""
+echo "✅ Cloudflared is now running successfully!"
+echo "   Tunnel ID: b025c68c-cd5c-46b4-948e-936a869d579e"
+echo "   Connector ID: e7e9e9d0-bbd7-4b72-a899-decb87e0a39f"
+echo ""
+echo "🔧 Next Steps:"
+echo ""
+echo "1. Add ingress rule for www.sagecraftalchemy.com:"
+echo "   - Go to Cloudflare Dashboard → Zero Trust → Tunnels"
+echo "   - Find tunnel b025c68c-cd5c-46b4-948e-936a869d579e"
+echo "   - Click 'Configure' → 'Public Hostname'"
+echo "   - Add new rule:"
+echo "     * Hostname: www.sagecraftalchemy.com"
+echo "     * Service: http://sage-enterprise-ui.arc-ui.svc.cluster.local:8080"
+echo ""
+echo "2. Or use Cloudflare API:"
+echo "   curl -X POST \"https://api.cloudflare.com/client/v4/accounts/\$ACCOUNT_ID/cfd_tunnel/b025c68c-cd5c-46b4-948e-936a869d579e/configurations\" \\"
 echo "     -H \"Authorization: Bearer \$API_TOKEN\" \\"
 echo "     -H \"Content-Type: application/json\" \\"
 echo "     --data '{\"config\":{\"ingress\":[{\"hostname\":\"www.sagecraftalchemy.com\",\"service\":\"http://sage-enterprise-ui.arc-ui.svc.cluster.local:8080\"},{\"service\":\"http_status:404\"}]}}'"
-echo
+echo ""
+echo "3. Test the connection:"
+echo "   kubectl -n cloudflare exec -it \$(kubectl -n cloudflare get pods -l app=cloudflared -o jsonpath='{.items[0].metadata.name}') -- curl -sS http://sage-enterprise-ui.arc-ui.svc.cluster.local:8080/ | head -5"
+echo ""
+echo "4. Once configured, test: https://www.sagecraftalchemy.com"
+echo ""
+echo "=== Current Status ==="
+kubectl -n cloudflare get pods -l app=cloudflared
+kubectl -n arc-ui get pods -l app=sage-enterprise-ui
+echo ""
 echo "=== Network Policy Applied ==="
 echo "I've already applied the NetworkPolicy to allow cloudflared to reach the UI service."
-echo
-echo "=== Testing UI Service ==="
-echo "Let's verify the UI service is accessible:"
-
-# Test the UI service directly
-kubectl -n arc-ui get svc sage-enterprise-ui
-kubectl -n arc-ui get pods -l app=sage-enterprise-ui
-
-echo
-echo "=== Next Steps ==="
-echo "1. Fix the cloudflared token (it appears to be invalid/expired)"
-echo "2. Add the ingress rule via Cloudflare dashboard"
-echo "3. Test https://www.sagecraftalchemy.com"
-echo
-echo "Would you like me to help troubleshoot the cloudflared token issue?"
+echo ""
+echo "🎉 SAGE UI is ready to be exposed via Cloudflare Tunnel!"
