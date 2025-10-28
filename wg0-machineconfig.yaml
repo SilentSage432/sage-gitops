@@ -1,0 +1,18 @@
+apiVersion: v1alpha1
+kind: MachineConfig
+metadata:
+  name: wg0-config
+spec:
+  network:
+    interfaces:
+      - interface: wg0
+        addresses: ["10.99.0.1/30"]
+        mtu: 1420
+        wireguard:
+          privateKey: "RUZVM0VlOXlmN1dZSi9BbVNpdVpBZlFXbkFFQzJEa2ROY2xSVjdjUUExcz0K"
+          listenPort: 51820
+          peers:
+            - publicKey: "36cEJOJJGMYPUGdDYvVj5UKH3OLQea+O2AGI02G3Xno="
+              allowedIPs:
+                - "10.99.0.2/32"
+              persistentKeepalive: 15

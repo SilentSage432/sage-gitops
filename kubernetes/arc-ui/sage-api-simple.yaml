@@ -1,0 +1,98 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sage-api
+  namespace: arc-ui
+  labels:
+    app: sage-api
+spec:
+  selector:
+    app: sage-api
+  ports:
+    - name: http
+      port: 3000
+      targetPort: 3000
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sage-api
+  namespace: arc-ui
+  labels:
+    app: sage-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sage-api
+  template:
+    metadata:
+      labels:
+        app: sage-api
+    spec:
+      containers:
+      - name: api
+        image: python:3.11-alpine
+        ports:
+        - containerPort: 3000
+        command: ["python", "-c"]
+        args:
+        - |
+          import http.server
+          import json
+          import urllib.parse
+          from datetime import datetime
+          
+          class APIHandler(http.server.BaseHTTPRequestHandler):
+              def do_GET(self):
+                  self.handle_request()
+              
+              def do_POST(self):
+                  self.handle_request()
+              
+              def do_OPTIONS(self):
+                  self.send_cors_headers()
+                  self.send_response(204)
+                  self.end_headers()
+              
+              def send_cors_headers(self):
+                  self.send_header('Access-Control-Allow-Origin', '*')
+                  self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+                  self.send_header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+              
+              def handle_request(self):
+                  self.send_response(200)
+                  self.send_header('Content-Type', 'application/json')
+                  self.send_cors_headers()
+                  self.end_headers()
+                  
+                  timestamp = datetime.utcnow().isoformat() + 'Z'
+                  
+                  if self.path == '/api/status':
+                      response = {
+                          "status": "ok",
+                          "timestamp": timestamp,
+                          "service": "sage-api"
+                      }
+                  elif self.path == '/api/whisperer':
+                      response = {
+                          "message": "Whisperer endpoint ready",
+                          "timestamp": timestamp
+                      }
+                  elif self.path == '/api/auth/status':
+                      response = {
+                          "authenticated": False,
+                          "user": None,
+                          "timestamp": timestamp
+                      }
+                  else:
+                      self.send_response(404)
+                      self.end_headers()
+                      response = {"error": "Not found"}
+                  
+                  self.wfile.write(json.dumps(response).encode())
+          
+          server = http.server.HTTPServer(('0.0.0.0', 3000), APIHandler)
+          print("SAGE API server starting on port 3000...")
+          server.serve_forever()

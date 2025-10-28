@@ -1,0 +1,118 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sage-api
+  namespace: arc-ui
+  labels:
+    app: sage-api
+spec:
+  selector:
+    app: sage-api
+  ports:
+    - name: http
+      port: 3000
+      targetPort: 3000
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sage-api
+  namespace: arc-ui
+  labels:
+    app: sage-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sage-api
+  template:
+    metadata:
+      labels:
+        app: sage-api
+    spec:
+      containers:
+      - name: api
+        image: nginx:alpine
+        ports:
+        - containerPort: 3000
+        volumeMounts:
+        - name: api-config
+          mountPath: /etc/nginx/conf.d
+        - name: api-files
+          mountPath: /usr/share/nginx/html
+      volumes:
+      - name: api-config
+        configMap:
+          name: sage-api-config
+      - name: api-files
+        configMap:
+          name: sage-api-files
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sage-api-config
+  namespace: arc-ui
+data:
+  default.conf: |
+    server {
+        listen 3000;
+        server_name localhost;
+        
+        location /api/status {
+            add_header Content-Type application/json;
+            add_header Access-Control-Allow-Origin *;
+            add_header Access-Control-Allow-Methods "GET, POST, OPTIONS";
+            add_header Access-Control-Allow-Headers "Content-Type, Authorization";
+            
+            if ($request_method = 'OPTIONS') {
+                return 204;
+            }
+            
+            return 200 '{"status":"ok","timestamp":"$(date -u +%Y-%m-%dT%H:%M:%SZ)","service":"sage-api"}';
+        }
+        
+        location /api/whisperer {
+            add_header Content-Type application/json;
+            add_header Access-Control-Allow-Origin *;
+            add_header Access-Control-Allow-Methods "GET, POST, OPTIONS";
+            add_header Access-Control-Allow-Headers "Content-Type, Authorization";
+            
+            if ($request_method = 'OPTIONS') {
+                return 204;
+            }
+            
+            return 200 '{"message":"Whisperer endpoint ready","timestamp":"$(date -u +%Y-%m-%dT%H:%M:%SZ)"}';
+        }
+        
+        location /api/auth/status {
+            add_header Content-Type application/json;
+            add_header Access-Control-Allow-Origin *;
+            add_header Access-Control-Allow-Methods "GET, POST, OPTIONS";
+            add_header Access-Control-Allow-Headers "Content-Type, Authorization";
+            
+            if ($request_method = 'OPTIONS') {
+                return 204;
+            }
+            
+            return 200 '{"authenticated":false,"user":null,"timestamp":"$(date -u +%Y-%m-%dT%H:%M:%SZ)"}';
+        }
+        
+        location / {
+            return 404 '{"error":"Not found"}';
+        }
+    }
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sage-api-files
+  namespace: arc-ui
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html>
+    <head><title>SAGE API</title></head>
+    <body><h1>SAGE API Service</h1><p>API endpoints available</p></body>
+    </html>
