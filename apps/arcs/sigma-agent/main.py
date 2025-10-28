@@ -1,6 +1,6 @@
 import asyncio, os, socket, time, json
 import orjson
-from nats.aio.client import Client as NATS
+import nats
 
 NATS_HOST = os.getenv("NATS_HOST", "127.0.0.1")
 NATS_PORT = int(os.getenv("NATS_PORT", "4222"))
@@ -13,9 +13,8 @@ HEARTBEAT_SEC  = int(os.getenv("HEARTBEAT_SEC", "30"))
 def jdump(obj): return orjson.dumps(obj).decode()
 
 async def main():
-    nc = NATS()
     dsn = f"nats://{NATS_USER}:{NATS_PASS}@{NATS_HOST}:{NATS_PORT}"
-    await nc.connect(servers=[dsn], name="sigma-agent")
+    nc = await nats.connect(servers=[dsn], name="sigma-agent")
 
     hostname = socket.gethostname()
     started  = int(time.time())
