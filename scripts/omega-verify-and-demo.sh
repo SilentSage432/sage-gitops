@@ -13,7 +13,7 @@ SIGMA_PASS="$(kubectl -n ${NS_SIGMA} get secret nats-sigma -o jsonpath='{.data.N
 pub() {
   local subject="$1" payload="$2" name="$3"
   echo "[Ω] Publish ${name} → ${subject}"
-  kubectl -n ${NS_CHI} run "nbox-${name,,}" --restart=Never --image=synadia/nats-box:latest -- \
+  kubectl -n ${NS_CHI} run "nbox-${name,,}" --restart=Never --image=synadia/nats-box:latest --command -- \
     nats pub -s nats://${SIGMA_USER}:${SIGMA_PASS}@${CHI_IP}:4222 ${subject} "${payload}" >/dev/null 2>&1 || true
   # Wait for pod to start and/or complete so logs are available
   for i in {1..15}; do
