@@ -1,0 +1,77 @@
+apiVersion: v1
+kind: ConfigMap
+metadata: 
+  name: phi-rules
+  namespace: arc-phi
+data:
+  rules.yaml: |
+    windows:
+      heartbeat_sec: 180
+    detectors:
+      - name: sigma_heartbeat_gap
+        listen: ["omega.reason"]
+        where:  'json.reason_code == "HEARTBEAT"'
+        if_no_event_for_sec: 120
+        emit_insight:
+          code: "SIGMA_HEARTBEAT_GAP"
+          level: "warn"
+          note: "No heartbeat in 120s"
+      - name: lambda_task_stall
+        listen: ["lambda.acks.>"]
+        if_no_event_for_sec: 180
+        emit_proposal:
+          code: "WAKE_LAMBDA"
+          note: "No acks in 3m—propose task-ping"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: phi-cortex
+  namespace: arc-phi
+  labels: 
+    app: phi-cortex
+    rho2.identity: phi-cortex
+spec:
+  replicas: 1
+  selector: 
+    matchLabels: 
+      app: phi-cortex
+  template:
+    metadata:
+      labels: 
+        app: phi-cortex
+        rho2.identity: phi-cortex
+      annotations: 
+        rho2.posture.hash: seed
+    spec:
+      serviceAccountName: phi-cortex
+      containers:
+      - name: cortex
+        image: ghcr.io/silentsage432/phi-cortex:latest
+        env:
+          - name: NATS_URL
+            value: "nats://rho2-gate.arc-rho2.svc.cluster.local:4223"
+          - name: RULES_PATH
+            value: "/etc/phi/rules.yaml"
+        volumeMounts:
+          - name: rules
+            mountPath: /etc/phi
+            readOnly: true
+        securityContext:
+          runAsNonRoot: true
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
+          seccompProfile:
+            type: RuntimeDefault
+      volumes:
+        - name: rules
+          configMap: 
+            name: phi-rules
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata: 
+  name: phi-cortex
+  namespace: arc-phi

@@ -1,0 +1,26 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata: 
+  name: xi-egress
+  namespace: arc-xi
+spec:
+  endpointSelector: 
+    matchLabels: 
+      app: xenolith-ledger
+  egress:
+  - toEndpoints:
+    - matchLabels:
+        k8s:io.kubernetes.pod.namespace: arc-rho2
+        k8s:app: rho2-gate
+    toPorts: 
+      - ports: 
+          - port: "4223"
+            protocol: TCP
+  - toEndpoints:
+    - matchLabels:
+        k8s:io.kubernetes.pod.namespace: kube-system
+        k8s:k8s-app: kube-dns
+    toPorts: 
+      - ports: 
+          - port: "53"
+            protocol: ANY

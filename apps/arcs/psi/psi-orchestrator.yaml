@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: psi-orchestrator
+  namespace: arc-psi
+  labels: 
+    app: psi-orchestrator
+    rho2.identity: psi-orchestrator
+spec:
+  replicas: 1
+  selector: 
+    matchLabels: 
+      app: psi-orchestrator
+  template:
+    metadata:
+      labels: 
+        app: psi-orchestrator
+        rho2.identity: psi-orchestrator
+      annotations: 
+        rho2.posture.hash: seed
+    spec:
+      serviceAccountName: psi-orchestrator
+      containers:
+      - name: orchestrator
+        image: ghcr.io/silentsage432/psi-orchestrator:latest
+        env:
+          - name: NATS_URL
+            value: "nats://rho2-gate.arc-rho2.svc.cluster.local:4223"
+          - name: ALLOWLIST
+            value: "/etc/psi/images.txt"
+          - name: POLICY
+            value: "/etc/psi/policy.yaml"
+        volumeMounts:
+          - name: cfg
+            mountPath: /etc/psi
+            readOnly: true
+        securityContext:
+          runAsNonRoot: true
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
+          seccompProfile:
+            type: RuntimeDefault
+      volumes:
+        - name: cfg
+          configMap: 
+            name: psi-allowlist
