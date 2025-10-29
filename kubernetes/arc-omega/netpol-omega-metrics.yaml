@@ -1,0 +1,15 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: omega-metrics-ingress
+  namespace: arc-omega
+spec:
+  endpointSelector:
+    matchLabels:
+      app: omega-monitor
+  ingress:
+    - fromEntities: ["cluster"]
+      toPorts:
+        - ports:
+            - port: "8081"
+              protocol: TCP

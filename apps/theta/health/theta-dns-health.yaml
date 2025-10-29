@@ -1,0 +1,29 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata: 
+  name: theta-dns-health
+  namespace: arc-theta
+spec:
+  schedule: "*/5 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: check
+            image: curlimages/curl:8.10.1
+            command: ["/bin/sh","-lc"]
+            args:
+              - >
+                set -e;
+                echo "[Θ] resolving example.com via cluster DNS…";
+                getent hosts example.com || nslookup example.com || exit 1;
+                echo "[Θ] ok";
+            securityContext:
+              allowPrivilegeEscalation: false
+              runAsNonRoot: true
+              capabilities:
+                drop: ["ALL"]
+              seccompProfile:
+                type: RuntimeDefault

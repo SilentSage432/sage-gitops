@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: omega-monitor
+  namespace: arc-omega
+spec:
+  template:
+    spec:
+      volumes:
+        - name: reason-contract
+          configMap:
+            name: reason-contract
+            items:
+              - key: reason-contract.json
+                path: reason-contract.json
+      containers:
+        - name: monitor
+          volumeMounts:
+            - name: reason-contract
+              mountPath: /etc/omega
+              readOnly: true
+          env:
+            - name: REASON_CONTRACT_PATH
+              value: /etc/omega/reason-contract.json
+            - name: METRICS_PORT
+              value: "8081"
+          ports:
+            - name: metrics
+              containerPort: 8081
+

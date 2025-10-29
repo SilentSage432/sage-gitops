@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: reason-contract
+  namespace: arc-omega
+data:
+  reason-contract.json: |
+    {
+      "allowed_reasons": [
+        "HEARTBEAT",
+        "SYNC_READY",
+        "SIGMA_TELEMETRY",
+        "F2_TEST"
+      ],
+      "aliases": {
+        "sigma.telemetry.node": "SIGMA_TELEMETRY"
+      }
+    }

@@ -1,0 +1,11 @@
+{
+  "allowed_reasons": [
+    "HEARTBEAT",
+    "SYNC_READY",
+    "SIGMA_TELEMETRY",
+    "F2_TEST"
+  ],
+  "aliases": {
+    "sigma.telemetry.node": "SIGMA_TELEMETRY"
+  }
+}
