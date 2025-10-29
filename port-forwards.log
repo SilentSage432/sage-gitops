@@ -10166,3 +10166,5121 @@ Handling connection for 3000
    [0;32m✅ Grafana: Running[0m
    [0;31m❌ Loki: Down[0m
 
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+Handling connection for 3000
+Handling connection for 3000
+Handling connection for 3000
+Handling connection for 3000
+Handling connection for 3000
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;31m❌ Grafana: Down[0m
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+   [0;31m❌ Grafana: Down[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+   [0;31m❌ Grafana: Down[0m
+   [0;31m❌ Loki: Down[0m
+
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+   [0;31m❌ Grafana: Down[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+   [0;31m❌ Grafana: Down[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+   [0;31m❌ Grafana: Down[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+   [0;31m❌ Grafana: Down[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+   [0;31m❌ Grafana: Down[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+   [0;31m❌ Grafana: Down[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+   [0;31m❌ Grafana: Down[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+[0;34m📊 Status Check:[0m
+   [0;31m❌ Grafana: Down[0m
+   [0;31m❌ Loki: Down[0m
+
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+   [0;31m❌ Grafana: Down[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+   [0;31m❌ Grafana: Down[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+   [0;31m❌ Grafana: Down[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+   [0;31m❌ Grafana: Down[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+   [0;31m❌ Grafana: Down[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+   [0;31m❌ Grafana: Down[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+   [0;31m❌ Grafana: Down[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+   [0;31m❌ Grafana: Down[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+   [0;31m❌ Grafana: Down[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+   [0;31m❌ Grafana: Down[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+   [0;31m❌ Grafana: Down[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+   [0;31m❌ Grafana: Down[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+   [0;31m❌ Grafana: Down[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+   [0;31m❌ Grafana: Down[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+   [0;31m❌ Grafana: Down[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Grafana port-forward failed, restarting in 5s...[0m
+[0;32m📡 Grafana: kubectl port-forward svc/grafana 3000:3000[0m
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+
+[0;31m❌ Loki port-forward failed, restarting in 5s...[0m
+[0;32m📡 Loki: kubectl port-forward svc/loki 3100:3100[0m
+[0;34m📊 Status Check:[0m
+Handling connection for 3000
+   [0;32m✅ Grafana: Running[0m
+   [0;31m❌ Loki: Down[0m
+

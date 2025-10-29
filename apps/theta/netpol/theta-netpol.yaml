@@ -1,0 +1,41 @@
+# CoreDNS egress → only DoH service
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata: 
+  name: coredns-egress-doh
+  namespace: kube-system
+spec:
+  endpointSelector: 
+    matchLabels: 
+      k8s-app: kube-dns
+  egress:
+  - toEndpoints:
+    - matchLabels: 
+        k8s:io.kubernetes.pod.namespace: arc-theta
+        k8s:app: cloudflared-doh
+    toPorts: 
+      - ports: 
+          - port: "5053"
+            protocol: TCP
+
+---
+# Arcs egress DNS → only CoreDNS
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata: 
+  name: arcs-egress-dns
+  namespace: arc-omega
+spec:
+  endpointSelector: 
+    matchLabels: {}
+  egress:
+  - toEndpoints:
+    - matchLabels: 
+        k8s:io.kubernetes.pod.namespace: kube-system
+        k8s:k8s-app: kube-dns
+    toPorts: 
+      - ports: 
+          - port: "53"
+            protocol: ANY
+---
+# Repeat arcs-egress-dns for arc-sigma, arc-lambda, arc-zeta (or use CiliumClusterwidePolicy)

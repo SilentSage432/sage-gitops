@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: ConfigMap
+metadata: 
+  name: rho2-rotation
+  namespace: arc-rho2
+data:
+  rotate.sh: |
+    #!/usr/bin/env sh
+    set -eu
+    # Example: rotate posture hash every 24h to force fresh attest
+    NEW="$(head -c 32 /dev/urandom | base64 | tr -d '\n=')"
+    kubectl -n arc-omega patch deploy/omega-monitor --type=json \
+      -p="[{'op':'add','path':'/spec/template/metadata/annotations/rho2.posture.hash','value':'${NEW}'}]"
+    kubectl -n arc-sigma patch deploy/sigma-agent --type=json \
+      -p="[{'op':'add','path':'/spec/template/metadata/annotations/rho2.posture.hash','value':'${NEW}'}]"
+    kubectl -n arc-lambda patch deploy/lambda-cell --type=json \
+      -p="[{'op':'add','path':'/spec/template/metadata/annotations/rho2.posture.hash','value':'${NEW}'}]"
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata: 
+  name: rho2-rotate
+  namespace: arc-rho2
+spec:
+  schedule: "0 */24 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: rho2-guardian
+          restartPolicy: OnFailure
+          containers:
+          - name: rotator
+            image: bitnami/kubectl:1.30
+            command: ["/bin/sh","/work/rotate.sh"]
+            securityContext:
+              allowPrivilegeEscalation: false
+              runAsNonRoot: true
+              capabilities:
+                drop: ["ALL"]
+              seccompProfile:
+                type: RuntimeDefault
+            volumeMounts: 
+              - name: work
+                mountPath: /work
+          volumes: 
+            - name: work
+              configMap: 
+                name: rho2-rotation

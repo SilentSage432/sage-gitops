@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Namespace
+metadata: 
+  name: arc-rho2
+  labels: 
+    rho2.sanctum: "true"
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata: 
+  name: rho2-guardian
+  namespace: arc-rho2
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata: 
+  name: rho2-guardian
+  namespace: arc-rho2
+rules:
+- apiGroups: [""]         # read only config + secrets in own ns
+  resources: ["configmaps","secrets"]
+  verbs: ["get","list","watch"]
+- apiGroups: [""]         # emit heartbeat via downscoped token if needed
+  resources: ["events"]
+  verbs: ["create","patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata: 
+  name: rho2-guardian
+  namespace: arc-rho2
+subjects: 
+  - kind: ServiceAccount
+    name: rho2-guardian
+    namespace: arc-rho2
+roleRef: 
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: rho2-guardian

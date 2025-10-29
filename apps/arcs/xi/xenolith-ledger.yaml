@@ -1,0 +1,101 @@
+apiVersion: v1
+kind: ConfigMap
+metadata: 
+  name: xi-policy
+  namespace: arc-xi
+data:
+  retention.yaml: |
+    segment_max_mb: 64
+    keep_segments: 120
+    subjects:
+      - omega.reason
+      - sigma.telemetry.>
+      - lambda.acks.>
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: xenolith-ledger
+  namespace: arc-xi
+  labels: 
+    app: xenolith-ledger
+    rho2.identity: xenolith-ledger
+spec:
+  replicas: 1
+  selector: 
+    matchLabels: 
+      app: xenolith-ledger
+  template:
+    metadata:
+      labels: 
+        app: xenolith-ledger
+        rho2.identity: xenolith-ledger
+      annotations: 
+        rho2.posture.hash: seed
+    spec:
+      serviceAccountName: xenolith-ledger
+      containers:
+      - name: ledger
+        image: ghcr.io/silentsage432/xenolith-ledger:latest
+        env:
+          - name: NATS_URL
+            value: "nats://rho2-gate.arc-rho2.svc.cluster.local:4223"
+          - name: SUBJECTS
+            valueFrom: 
+              configMapKeyRef: 
+                name: xi-policy
+                key: retention.yaml
+        ports:
+          - name: http
+            containerPort: 8090
+        volumeMounts:
+          - name: data
+            mountPath: /data
+          - name: policy
+            mountPath: /etc/xi
+            readOnly: true
+        securityContext:
+          runAsNonRoot: true
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
+          seccompProfile:
+            type: RuntimeDefault
+      volumes:
+        - name: data
+          persistentVolumeClaim: 
+            claimName: xi-ledger-pvc
+        - name: policy
+          configMap: 
+            name: xi-policy
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: xenolith-ledger
+  namespace: arc-xi
+spec:
+  selector: 
+    app: xenolith-ledger
+  ports:
+    - name: http
+      port: 8090
+      targetPort: 8090
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata: 
+  name: xi-ledger-pvc
+  namespace: arc-xi
+spec:
+  accessModes: ["ReadWriteOnce"]
+  resources: 
+    requests: 
+      storage: 10Gi
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata: 
+  name: xenolith-ledger
+  namespace: arc-xi

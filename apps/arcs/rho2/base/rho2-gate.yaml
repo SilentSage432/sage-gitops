@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: rho2-gate
+  namespace: arc-rho2
+  labels: 
+    app: rho2-gate
+spec:
+  replicas: 1
+  selector: 
+    matchLabels: 
+      app: rho2-gate
+  template:
+    metadata: 
+      labels: 
+        app: rho2-gate
+        rho2.identity: rho2-gate
+      annotations:
+        rho2.posture.hash: seed
+    spec:
+      serviceAccountName: rho2-guardian
+      containers:
+      - name: gate
+        image: nats:2.10-alpine
+        args: ["nats-server", "--port", "4223"]
+        ports: 
+          - name: nats
+            containerPort: 4223
+        volumeMounts:
+          - name: policy
+            mountPath: /etc/rho2
+            readOnly: true
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsUser: 1000
+          runAsGroup: 1000
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop: ["ALL"]
+          seccompProfile:
+            type: RuntimeDefault
+      volumes:
+        - name: policy
+          configMap: 
+            name: rho2-policy
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: rho2-gate
+  namespace: arc-rho2
+spec:
+  selector: 
+    app: rho2-gate
+  ports: 
+    - name: nats
+      port: 4223
+      targetPort: 4223

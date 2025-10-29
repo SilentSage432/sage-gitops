@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: ConfigMap
+metadata: 
+  name: rho2-policy
+  namespace: arc-rho2
+data:
+  policy.yaml: |
+    # who may publish/subscribe which NATS subjects, and from which namespace
+    identities:
+      - ns: arc-sigma
+        name: sigma-agent
+        nats_user: sigma
+        publish: ["omega.reason","sigma.telemetry.>"]
+        subscribe: []
+      - ns: arc-lambda
+        name: lambda-cell
+        nats_user: lambda
+        publish: ["lambda.acks.>","omega.reason"]
+        subscribe: ["lambda.tasks.>"]
+      - ns: arc-omega
+        name: omega-monitor
+        nats_user: omega
+        publish: ["omega.quarantine"]
+        subscribe: ["omega.reason"]
+      - ns: arc-zeta
+        name: observer-api
+        nats_user: omega
+        publish: []
+        subscribe: ["omega.reason"]
+      - ns: arc-xi
+        name: xenolith-ledger
+        nats_user: xi
+        publish: []
+        subscribe: ["omega.reason","sigma.telemetry.>","lambda.acks.>"]
+      - ns: arc-phi
+        name: phi-cortex
+        nats_user: phi
+        publish: ["omega.insight.>","omega.proposal.>"]
+        subscribe: ["omega.reason","sigma.telemetry.>"]
+      - ns: arc-psi
+        name: psi-orchestrator
+        nats_user: psi
+        publish: ["psi.audit.>","lambda.tasks.>"]
+        subscribe: ["omega.proposal.>"]
+    quarantine_subject: "omega.quarantine"
+    # posture proof: container must carry these exact labels/annotations
+    posture:
+      requiredPodLabels:
+        - key: app
+        - key: rho2.identity
+      requiredAnnotations:
+        - key: rho2.posture.hash

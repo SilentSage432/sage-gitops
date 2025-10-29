@@ -1,0 +1,5 @@
+[
+  { "op":"add","path":"/spec/template/metadata/labels/rho2.identity","value":"omega-monitor" },
+  { "op":"add","path":"/spec/template/metadata/annotations/rho2.posture.hash","value":"seed" },
+  { "op":"replace","path":"/spec/template/spec/containers/0/env/0/value","value":"nats://rho2-gate.arc-rho2.svc.cluster.local:4223" }
+]

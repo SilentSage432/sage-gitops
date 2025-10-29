@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: quarantine-dumper
+  namespace: arc-omega
+  labels: 
+    app: quarantine-dumper
+    rho2.identity: quarantine-dumper
+spec:
+  replicas: 1
+  selector: 
+    matchLabels: 
+      app: quarantine-dumper
+  template:
+    metadata:
+      labels: 
+        app: quarantine-dumper
+        rho2.identity: quarantine-dumper
+      annotations: 
+        rho2.posture.hash: seed
+    spec:
+      containers:
+      - name: dump
+        image: ghcr.io/silentsage432/nats-dumper:latest
+        env:
+        - name: NATS_URL
+          value: "nats://rho2-gate.arc-rho2.svc.cluster.local:4223"
+        - name: SUBJECT
+          value: "omega.quarantine"
+        - name: OUTPUT
+          value: "/data/quarantine.log"
+        volumeMounts: 
+          - name: data
+            mountPath: /data
+      volumes: 
+        - name: data
+          emptyDir: {}

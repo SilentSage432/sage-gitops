@@ -1,0 +1,30 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicy
+metadata: 
+  name: rho2-pod-posture
+spec:
+  paramKind: 
+    apiVersion: v1
+    kind: ConfigMap
+  failurePolicy: Fail
+  matchConstraints: 
+    resourceRules: 
+      - apiGroups: [""]
+        apiVersions: ["v1"]
+        operations: ["CREATE","UPDATE"]
+        resources: ["pods"]
+  validations:
+    - expression: "has(object.metadata.labels) && 'app' in object.metadata.labels"
+      message: "rho2: pod requires label app"
+    - expression: "has(object.metadata.labels) && 'rho2.identity' in object.metadata.labels"
+      message: "rho2: pod requires label rho2.identity"
+    - expression: "has(object.metadata.annotations) && 'rho2.posture.hash' in object.metadata.annotations"
+      message: "rho2: pod requires annotation rho2.posture.hash"
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata: 
+  name: rho2-pod-posture-binding
+spec:
+  policyName: rho2-pod-posture
+  validationActions: ["Deny"]
