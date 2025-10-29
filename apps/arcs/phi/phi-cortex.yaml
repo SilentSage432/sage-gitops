@@ -45,6 +45,11 @@ spec:
         rho2.posture.hash: seed
     spec:
       serviceAccountName: phi-cortex
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
       containers:
       - name: cortex
         image: ghcr.io/silentsage432/phi-cortex:latest
