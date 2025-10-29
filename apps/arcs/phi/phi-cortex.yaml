@@ -47,7 +47,7 @@ spec:
       serviceAccountName: phi-cortex
       containers:
       - name: cortex
-        image: nats:2.10-alpine
+        image: ghcr.io/silentsage432/phi-cortex:latest
         env:
           - name: NATS_URL
             value: "nats://rho2-gate.arc-rho2.svc.cluster.local:4223"

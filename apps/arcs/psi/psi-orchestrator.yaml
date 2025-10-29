@@ -22,7 +22,7 @@ spec:
       serviceAccountName: psi-orchestrator
       containers:
       - name: orchestrator
-        image: nats:2.10-alpine
+        image: ghcr.io/silentsage432/psi-orchestrator:latest
         env:
           - name: NATS_URL
             value: "nats://rho2-gate.arc-rho2.svc.cluster.local:4223"

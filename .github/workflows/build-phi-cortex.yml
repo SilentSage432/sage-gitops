@@ -1,0 +1,26 @@
+name: build-phi-cortex
+on:
+  push:
+    paths:
+      - 'services/phi-cortex/**'
+      - '.github/workflows/build-phi-cortex.yml'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+    - uses: actions/checkout@v4
+    - uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    - uses: docker/build-push-action@v5
+      with:
+        context: services/phi-cortex
+        push: true
+        tags: ghcr.io/silentsage432/phi-cortex:latest
+
+

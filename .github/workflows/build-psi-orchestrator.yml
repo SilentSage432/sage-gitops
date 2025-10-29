@@ -1,0 +1,26 @@
+name: build-psi-orchestrator
+on:
+  push:
+    paths:
+      - 'services/psi-orchestrator/**'
+      - '.github/workflows/build-psi-orchestrator.yml'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+    - uses: actions/checkout@v4
+    - uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    - uses: docker/build-push-action@v5
+      with:
+        context: services/psi-orchestrator
+        push: true
+        tags: ghcr.io/silentsage432/psi-orchestrator:latest
+
+

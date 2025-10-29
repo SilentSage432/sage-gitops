@@ -36,7 +36,7 @@ spec:
       serviceAccountName: xenolith-ledger
       containers:
       - name: ledger
-        image: nats:2.10-alpine
+        image: ghcr.io/silentsage432/xenolith-ledger:latest
         env:
           - name: NATS_URL
             value: "nats://rho2-gate.arc-rho2.svc.cluster.local:4223"

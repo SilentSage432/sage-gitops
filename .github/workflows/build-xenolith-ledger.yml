@@ -1,0 +1,28 @@
+name: build-xenolith-ledger
+on:
+  push:
+    paths:
+      - 'services/xenolith-ledger/**'
+      - '.github/workflows/build-xenolith-ledger.yml'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+    - uses: actions/checkout@v4
+    - name: Login GHCR
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    - name: Build & Push
+      uses: docker/build-push-action@v5
+      with:
+        context: services/xenolith-ledger
+        push: true
+        tags: ghcr.io/silentsage432/xenolith-ledger:latest
+
+

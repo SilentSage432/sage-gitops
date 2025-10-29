@@ -1,0 +1,5 @@
+nats-py==2.6.0
+aiohttp==3.9.5
+orjson==3.10.7
+
+
