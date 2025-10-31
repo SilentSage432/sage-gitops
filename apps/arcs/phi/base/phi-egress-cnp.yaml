@@ -1,0 +1,68 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: phi-egress
+  namespace: arc-phi
+spec:
+  endpointSelector:
+    matchLabels: { app: phi, role: cortex }
+  egress:
+    # CoreDNS (classic label)
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s:k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - { port: "53", protocol: UDP }
+            - { port: "53", protocol: TCP }
+          rules: { dns: [ { matchPattern: "*" } ] }
+    # CoreDNS (modern label)
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s:k8s-app: coredns
+      toPorts:
+        - ports:
+            - { port: "53", protocol: UDP }
+            - { port: "53", protocol: TCP }
+          rules: { dns: [ { matchPattern: "*" } ] }
+    # CoreDNS (app.kubernetes.io/name=coredns)
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s:app.kubernetes.io/name: coredns
+      toPorts:
+        - ports:
+            - { port: "53", protocol: UDP }
+            - { port: "53", protocol: TCP }
+          rules: { dns: [ { matchPattern: "*" } ] }
+    # kube-dns Service IP (safety net)
+    - toCIDR:
+        - "10.96.0.10/32"
+      toPorts:
+        - ports:
+            - { port: "53", protocol: UDP }
+            - { port: "53", protocol: TCP }
+    # NodeLocal DNSCache (common default)
+    - toCIDR:
+        - "169.254.20.10/32"
+      toPorts:
+        - ports:
+            - { port: "53", protocol: UDP }
+            - { port: "53", protocol: TCP }
+    # Allow Φ -> Chi leaf (Service, Service IP, and Pods) — belt & suspenders
+    - toServices:
+        - k8sService: { namespace: arc-chi, serviceName: chi-bus }
+      toPorts:
+        - ports: [ { port: "7422", protocol: TCP } ]
+    - toCIDR:
+        - "10.111.237.23/32"
+      toPorts:
+        - ports: [ { port: "7422", protocol: TCP } ]
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: arc-chi
+            app: chi-bus
+      toPorts:
+        - ports: [ { port: "7422", protocol: TCP } ]
