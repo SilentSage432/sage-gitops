@@ -1,0 +1,64 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"cilium.io/v2","kind":"CiliumNetworkPolicy","metadata":{"annotations":{},"name":"omega-egress","namespace":"arc-omega"},"spec":{"egress":[{"toEndpoints":[{"matchLabels":{"k8s:io.kubernetes.pod.namespace":"kube-system","k8s:k8s-app":"kube-dns"}},{"matchLabels":{"k8s:app.kubernetes.io/name":"coredns","k8s:io.kubernetes.pod.namespace":"kube-system"}},{"matchLabels":{"k8s:io.kubernetes.pod.namespace":"kube-system","k8s:k8s-app":"coredns"}}],"toPorts":[{"ports":[{"port":"53","protocol":"UDP"},{"port":"53","protocol":"TCP"}],"rules":{"dns":[{"matchPattern":"*"}]}}]},{"toCIDR":["10.96.0.10/32"],"toPorts":[{"ports":[{"port":"53","protocol":"UDP"},{"port":"53","protocol":"TCP"}]}]},{"toPorts":[{"ports":[{"port":"4222","protocol":"TCP"}]}],"toServices":[{"k8sService":{"namespace":"arc-chi","serviceName":"chi-bus"}}]},{"toCIDR":["10.111.237.23/32"],"toPorts":[{"ports":[{"port":"4222","protocol":"TCP"}]}]}],"endpointSelector":{"matchLabels":{"k8s:app":"omega"}}}}
+  creationTimestamp: "2025-10-31T20:02:35Z"
+  generation: 1
+  name: omega-egress
+  namespace: arc-omega
+  resourceVersion: "6359525"
+  uid: 2a415007-95d9-4776-94d6-48dbce070c75
+spec:
+  egress:
+  - toEndpoints:
+    - matchLabels:
+        k8s:io.kubernetes.pod.namespace: kube-system
+        k8s:k8s-app: kube-dns
+    - matchLabels:
+        k8s:app.kubernetes.io/name: coredns
+        k8s:io.kubernetes.pod.namespace: kube-system
+    - matchLabels:
+        k8s:io.kubernetes.pod.namespace: kube-system
+        k8s:k8s-app: coredns
+    toPorts:
+    - ports:
+      - port: "53"
+        protocol: UDP
+      - port: "53"
+        protocol: TCP
+      rules:
+        dns:
+        - matchPattern: '*'
+  - toCIDR:
+    - 10.96.0.10/32
+    toPorts:
+    - ports:
+      - port: "53"
+        protocol: UDP
+      - port: "53"
+        protocol: TCP
+  - toPorts:
+    - ports:
+      - port: "4222"
+        protocol: TCP
+    toServices:
+    - k8sService:
+        namespace: arc-chi
+        serviceName: chi-bus
+  - toCIDR:
+    - 10.111.237.23/32
+    toPorts:
+    - ports:
+      - port: "4222"
+        protocol: TCP
+  endpointSelector:
+    matchLabels:
+      k8s:app: omega
+status:
+  conditions:
+  - lastTransitionTime: "2025-10-31T20:02:35Z"
+    message: Policy validation succeeded
+    status: "True"
+    type: Valid
