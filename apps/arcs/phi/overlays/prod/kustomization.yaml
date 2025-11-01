@@ -1,0 +1,57 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: arc-phi
+resources:
+  - ../../../_base/app
+namePrefix: phi-
+commonLabels:
+  app: phi
+  rho2.identity: arc-phi
+patches:
+  - target: { kind: Deployment, name: APPNAME }
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: phi
+      - op: replace
+        path: /spec/selector/matchLabels/app
+        value: phi
+      - op: replace
+        path: /spec/template/metadata/labels/app
+        value: phi
+      - op: replace
+        path: /spec/template/spec/containers/0/name
+        value: phi
+      - op: replace
+        path: /spec/template/spec/containers/0/image
+        value: silentsage432/phi-cortex:prod
+      - op: replace
+        path: /spec/template/spec/containers/1/name
+        value: phi-leaf
+      - op: replace
+        path: /spec/template/spec/volumes/0/configMap/name
+        value: phi-leaf-config
+  - target: { kind: ConfigMap, name: APPNAME-leaf-config }
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: phi-leaf-config
+      - op: replace
+        path: /data/nats.conf
+        value: |
+          port: 4222
+          server_name: "phi-leaf"
+          leafnodes { remotes = [ { url: "nats://${NATS_USER}:${NATS_PASS}@${CHI_HOST}:${CHI_LEAF_PORT}" } ] }
+  - target: { kind: CiliumNetworkPolicy, name: APPNAME-egress }
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: phi-egress
+      - op: replace
+        path: /spec/endpointSelector/matchLabels/app
+        value: phi
+images:
+  - name: REPLACE_APP_IMAGE
+    newName: silentsage432/phi-cortex
+    newTag: prod
+configMapGenerator: []
