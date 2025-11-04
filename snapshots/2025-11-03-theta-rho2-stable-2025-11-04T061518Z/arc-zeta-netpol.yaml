@@ -1,0 +1,241 @@
+apiVersion: v1
+items:
+- apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"NetworkPolicy","metadata":{"annotations":{},"name":"allow-egress-nats-dns","namespace":"arc-zeta"},"spec":{"egress":[{"ports":[{"port":53,"protocol":"UDP"},{"port":53,"protocol":"TCP"}],"to":[{"namespaceSelector":{"matchLabels":{"kubernetes.io/metadata.name":"kube-system"}}}]},{"ports":[{"port":4222,"protocol":"TCP"}],"to":[{"namespaceSelector":{"matchLabels":{"kubernetes.io/metadata.name":"infra"}}}]}],"podSelector":{"matchLabels":{"app":"observer-api"}},"policyTypes":["Egress"]}}
+    creationTimestamp: "2025-10-09T23:24:30Z"
+    generation: 1
+    name: allow-egress-nats-dns
+    namespace: arc-zeta
+    resourceVersion: "2071737"
+    uid: 7aeb7062-eed1-4dca-b619-56598698876a
+  spec:
+    egress:
+    - ports:
+      - port: 53
+        protocol: UDP
+      - port: 53
+        protocol: TCP
+      to:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: kube-system
+    - ports:
+      - port: 4222
+        protocol: TCP
+      to:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: infra
+    podSelector:
+      matchLabels:
+        app: observer-api
+    policyTypes:
+    - Egress
+- apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"NetworkPolicy","metadata":{"annotations":{},"name":"allow-http-ingress","namespace":"arc-zeta"},"spec":{"ingress":[{"ports":[{"port":80,"protocol":"TCP"}]}],"podSelector":{"matchLabels":{"app":"observer-api"}},"policyTypes":["Ingress"]}}
+    creationTimestamp: "2025-10-09T23:24:30Z"
+    generation: 3
+    name: allow-http-ingress
+    namespace: arc-zeta
+    resourceVersion: "2122294"
+    uid: dab0e6da-d79a-4e98-b1d4-fbd339730f5c
+  spec:
+    ingress:
+    - ports:
+      - port: 80
+        protocol: TCP
+      - port: 8080
+        protocol: TCP
+      - port: 8000
+        protocol: TCP
+    podSelector:
+      matchLabels:
+        app: observer-api
+    policyTypes:
+    - Ingress
+- apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"NetworkPolicy","metadata":{"annotations":{},"name":"default-deny","namespace":"arc-zeta"},"spec":{"podSelector":{},"policyTypes":["Ingress","Egress"]}}
+    creationTimestamp: "2025-10-09T23:24:30Z"
+    generation: 1
+    name: default-deny
+    namespace: arc-zeta
+    resourceVersion: "2071735"
+    uid: 5be8d7ea-ec20-41b4-9869-fe56a2a067d5
+  spec:
+    podSelector: {}
+    policyTypes:
+    - Ingress
+    - Egress
+- apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"NetworkPolicy","metadata":{"annotations":{},"name":"egress-dns-and-chi-allow","namespace":"arc-zeta"},"spec":{"egress":[{"ports":[{"port":1053,"protocol":"UDP"},{"port":1053,"protocol":"TCP"},{"port":53,"protocol":"UDP"},{"port":53,"protocol":"TCP"}],"to":[{"namespaceSelector":{"matchLabels":{"kubernetes.io/metadata.name":"kube-system"}},"podSelector":{"matchLabels":{"k8s-app":"kube-dns"}}}]},{"ports":[{"port":4222,"protocol":"TCP"},{"port":7422,"protocol":"TCP"}],"to":[{"namespaceSelector":{"matchLabels":{"kubernetes.io/metadata.name":"arc-chi"}},"podSelector":{"matchLabels":{"app":"chi-bus","rho2.identity":"chi"}}}]}],"podSelector":{},"policyTypes":["Egress"]}}
+    creationTimestamp: "2025-11-02T15:37:00Z"
+    generation: 1
+    name: egress-dns-and-chi-allow
+    namespace: arc-zeta
+    resourceVersion: "7363633"
+    uid: bd48328b-b526-4ae3-b479-d1390fb53124
+  spec:
+    egress:
+    - ports:
+      - port: 1053
+        protocol: UDP
+      - port: 1053
+        protocol: TCP
+      - port: 53
+        protocol: UDP
+      - port: 53
+        protocol: TCP
+      to:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: kube-system
+        podSelector:
+          matchLabels:
+            k8s-app: kube-dns
+    - ports:
+      - port: 4222
+        protocol: TCP
+      - port: 7422
+        protocol: TCP
+      to:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: arc-chi
+        podSelector:
+          matchLabels:
+            app: chi-bus
+            rho2.identity: chi
+    podSelector: {}
+    policyTypes:
+    - Egress
+- apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"NetworkPolicy","metadata":{"annotations":{},"name":"egress-dns-chi-explicit","namespace":"arc-zeta"},"spec":{"egress":[{"ports":[{"port":53,"protocol":"UDP"},{"port":53,"protocol":"TCP"}],"to":[{"ipBlock":{"cidr":"10.96.0.10/32"}}]},{"ports":[{"port":1053,"protocol":"UDP"},{"port":1053,"protocol":"TCP"}],"to":[{"ipBlock":{"cidr":"10.244.0.145/32"}},{"ipBlock":{"cidr":"10.244.0.66/32"}},{"ipBlock":{"cidr":"192.168.1.117/32"}},{"ipBlock":{"cidr":"10.244.0.5/32"}},{"ipBlock":{"cidr":"10.244.0.178/32"}}]},{"ports":[{"port":4222,"protocol":"TCP"},{"port":7422,"protocol":"TCP"}],"to":[{"ipBlock":{"cidr":"10.244.0.105/32"}}]}],"podSelector":{},"policyTypes":["Egress"]}}
+    creationTimestamp: "2025-11-02T15:46:34Z"
+    generation: 1
+    name: egress-dns-chi-explicit
+    namespace: arc-zeta
+    resourceVersion: "7366705"
+    uid: 7d78ca3d-b07e-4821-a71a-bddaa42af537
+  spec:
+    egress:
+    - ports:
+      - port: 53
+        protocol: UDP
+      - port: 53
+        protocol: TCP
+      to:
+      - ipBlock:
+          cidr: 10.96.0.10/32
+    - ports:
+      - port: 1053
+        protocol: UDP
+      - port: 1053
+        protocol: TCP
+      to:
+      - ipBlock:
+          cidr: 10.244.0.145/32
+      - ipBlock:
+          cidr: 10.244.0.66/32
+      - ipBlock:
+          cidr: 192.168.1.117/32
+      - ipBlock:
+          cidr: 10.244.0.5/32
+      - ipBlock:
+          cidr: 10.244.0.178/32
+    - ports:
+      - port: 4222
+        protocol: TCP
+      - port: 7422
+        protocol: TCP
+      to:
+      - ipBlock:
+          cidr: 10.244.0.105/32
+    podSelector: {}
+    policyTypes:
+    - Egress
+- apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"NetworkPolicy","metadata":{"annotations":{},"name":"observer-api-allow-80","namespace":"arc-zeta"},"spec":{"ingress":[{"ports":[{"port":80,"protocol":"TCP"}]}],"podSelector":{"matchLabels":{"app":"observer-api"}},"policyTypes":["Ingress"]}}
+    creationTimestamp: "2025-10-08T19:50:52Z"
+    generation: 2
+    name: observer-api-allow-80
+    namespace: arc-zeta
+    resourceVersion: "1646052"
+    uid: 8a2b3a93-f948-457f-a1fe-bdf8c5b66eff
+  spec:
+    ingress:
+    - ports:
+      - port: 8000
+        protocol: TCP
+    podSelector:
+      matchLabels:
+        app: observer-api
+    policyTypes:
+    - Ingress
+- apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    creationTimestamp: "2025-10-06T03:05:41Z"
+    generation: 1
+    labels:
+      kustomize.toolkit.fluxcd.io/name: arc-zeta
+      kustomize.toolkit.fluxcd.io/namespace: flux-system
+    name: observer-egress
+    namespace: arc-zeta
+    resourceVersion: "1764791"
+    uid: 40abc28c-b291-4544-9fbc-0932dba09ba9
+  spec:
+    egress:
+    - ports:
+      - port: 53
+        protocol: UDP
+      - port: 53
+        protocol: TCP
+      to:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: kube-system
+        podSelector:
+          matchLabels:
+            k8s-app: kube-dns
+    - ports:
+      - port: 4222
+        protocol: TCP
+      to:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: infra
+        podSelector:
+          matchLabels:
+            app: nats
+    podSelector:
+      matchLabels:
+        app: observer-api
+    policyTypes:
+    - Egress
+kind: List
+metadata:
+  resourceVersion: ""

@@ -20,6 +20,11 @@ spec:
         rho2.posture.hash: seed
     spec:
       serviceAccountName: psi-orchestrator
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
       containers:
       - name: orchestrator
         image: ghcr.io/silentsage432/psi-orchestrator:latest

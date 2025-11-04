@@ -1,0 +1,159 @@
+NAMESPACE           NAME                                                      TYPE           CLUSTER-IP       EXTERNAL-IP     PORT(S)                         AGE
+arc-chi             service/chi-bus                                           ClusterIP      10.111.237.23    <none>          4222/TCP,7422/TCP,8222/TCP      16d
+arc-chi             service/chi-bus-nodeport                                  NodePort       10.106.205.193   <none>          4222:30222/TCP,4223:30223/TCP   16d
+arc-epsilon         service/epsilon-ui                                        ClusterIP      10.103.94.98     <none>          80/TCP                          29d
+arc-iota            service/iota-api                                          ClusterIP      10.100.9.163     <none>          80/TCP                          24d
+arc-kappa           service/kappa-api                                         ClusterIP      10.107.140.95    <none>          80/TCP                          24d
+arc-kappa           service/kappa-postgres                                    ClusterIP      10.99.126.222    <none>          5432/TCP                        23d
+arc-lambda-locked   service/lambda-api                                        ClusterIP      10.109.33.210    <none>          8000/TCP                        9d
+arc-lambda          service/lambda-api                                        ClusterIP      10.100.53.67     <none>          80/TCP                          24d
+arc-mu              service/mu-api                                            ClusterIP      10.111.137.215   <none>          80/TCP                          23d
+arc-nu              service/nu-api                                            ClusterIP      10.111.207.175   <none>          80/TCP                          23d
+arc-omega           service/omega-monitor                                     ClusterIP      10.99.50.7       <none>          8080/TCP                        9d
+arc-omega           service/omega-monitor-metrics                             ClusterIP      10.110.166.30    <none>          8081/TCP                        6d17h
+arc-omega           service/omega-reason-stream                               ClusterIP      10.100.113.121   <none>          8081/TCP                        9d
+arc-omicron         service/omicron-api                                       ClusterIP      10.100.18.169    <none>          80/TCP                          22d
+arc-rho2            service/rho2-api                                          ClusterIP      10.107.151.240   <none>          8000/TCP                        22d
+arc-rho2            service/rho2-gate                                         ClusterIP      10.108.132.144   <none>          4223/TCP                        6d5h
+arc-rho2b           service/rho2b-api                                         ClusterIP      10.110.54.192    <none>          8000/TCP                        21d
+arc-rho2c           service/rho2c-api                                         ClusterIP      10.105.199.155   <none>          8000/TCP                        21d
+arc-theta           service/cloudflared-doh                                   ClusterIP      10.107.179.154   <none>          5053/TCP                        6d5h
+arc-theta           service/theta-api                                         ClusterIP      10.100.7.204     <none>          80/TCP                          25d
+arc-ui              service/sage-api                                          ClusterIP      10.105.170.54    <none>          3000/TCP                        7d13h
+arc-ui              service/sage-enterprise-ui                                ClusterIP      10.99.137.202    <none>          8080/TCP                        8d
+arc-ui              service/ui-gateway                                        ClusterIP      10.99.212.180    <none>          8080/TCP                        3d9h
+arc-xi              service/xenolith-ledger                                   ClusterIP      10.96.20.250     <none>          8090/TCP                        6d
+arc-xi              service/xi-api                                            ClusterIP      10.96.73.225     <none>          80/TCP                          23d
+arc-zeta            service/observer-api                                      ClusterIP      10.111.86.234    <none>          80/TCP                          29d
+arc-zeta            service/observer-api-ws                                   ClusterIP      10.99.242.7      <none>          8082/TCP                        7d2h
+cert-manager        service/cert-manager                                      ClusterIP      10.106.54.172    <none>          9402/TCP                        15d
+cert-manager        service/cert-manager-webhook                              ClusterIP      10.104.92.161    <none>          443/TCP                         15d
+default             service/kubelet                                           ClusterIP      None             <none>          10250/TCP,10255/TCP,4194/TCP    28d
+default             service/kubernetes                                        ClusterIP      10.96.0.1        <none>          443/TCP                         32d
+flux-system         service/notification-controller                           ClusterIP      10.108.165.37    <none>          80/TCP                          30d
+flux-system         service/source-controller                                 ClusterIP      10.98.62.37      <none>          80/TCP                          30d
+flux-system         service/webhook-receiver                                  ClusterIP      10.100.28.33     <none>          80/TCP                          30d
+infra               service/nats                                              ClusterIP      10.104.55.153    <none>          4222/TCP,8222/TCP               29d
+ingress-nginx       service/ingress-nginx-controller                          LoadBalancer   10.103.200.216   192.168.1.200   80:30843/TCP,443:32611/TCP      32d
+ingress-nginx       service/ingress-nginx-controller-admission                ClusterIP      10.105.158.8     <none>          443/TCP                         15d
+kube-system         service/api-proxy                                         ClusterIP      10.99.53.229     <none>          6443/TCP                        18d
+kube-system         service/cilium-envoy                                      ClusterIP      None             <none>          9964/TCP                        20d
+kube-system         service/cloudflared-doh                                   ClusterIP      10.103.117.89    <none>          5053/UDP,5053/TCP               7d20h
+kube-system         service/hubble-peer                                       ClusterIP      10.101.44.67     <none>          443/TCP                         10d
+kube-system         service/ksm                                               ClusterIP      10.107.27.74     <none>          8080/TCP                        19d
+kube-system         service/kube-dns                                          ClusterIP      10.96.0.10       <none>          53/UDP,53/TCP                   2d5h
+kube-system         service/kube-prom-kube-prometheus-coredns                 ClusterIP      None             <none>          9153/TCP                        28d
+kube-system         service/kube-prom-kube-prometheus-kubelet                 ClusterIP      None             <none>          10250/TCP,10255/TCP,4194/TCP    28d
+kube-system         service/sigma-insightd                                    ClusterIP      10.97.87.249     <none>          8790/TCP                        19d
+kube-system         service/ts-epsilon-ui-6m226                               ClusterIP      None             <none>          <none>                          13d
+kube-system         service/ts-grafana-4t85d                                  ClusterIP      None             <none>          <none>                          9d
+kube-system         service/ts-kube-prom-kube-prometheus-alertmanager-sszrl   ClusterIP      None             <none>          <none>                          13d
+kube-system         service/ts-kube-prom-kube-prometheus-prometheus-8ppfp     ClusterIP      None             <none>          <none>                          13d
+kube-system         service/ts-loki-5lkvx                                     ClusterIP      None             <none>          <none>                          9d
+kube-system         service/ts-omega-monitor-qqt9f                            ClusterIP      None             <none>          <none>                          9d
+kube-system         service/ts-omega-reason-stream-7vwz8                      ClusterIP      None             <none>          <none>                          9d
+kube-system         service/ts-sage-4fsfb                                     ClusterIP      None             <none>          <none>                          13d
+longhorn-system     service/longhorn-admission-webhook                        ClusterIP      10.102.7.155     <none>          9502/TCP                        24d
+longhorn-system     service/longhorn-backend                                  ClusterIP      10.111.170.167   <none>          9500/TCP                        24d
+longhorn-system     service/longhorn-frontend                                 ClusterIP      10.104.33.92     <none>          80/TCP                          24d
+longhorn-system     service/longhorn-recovery-backend                         ClusterIP      10.98.193.24     <none>          9503/TCP                        24d
+metallb-system      service/metallb-webhook-service                           ClusterIP      10.104.209.29    <none>          443/TCP                         32d
+observability       service/alertmanager-operated                             ClusterIP      None             <none>          9093/TCP,9094/TCP,9094/UDP      28d
+observability       service/grafana                                           ClusterIP      10.108.217.161   <none>          3000/TCP                        9d
+observability       service/grafana-lb                                        LoadBalancer   10.99.82.228     <pending>       80:32626/TCP                    8d
+observability       service/grafana-np                                        NodePort       10.111.202.126   <none>          3000:30300/TCP                  8d
+observability       service/kube-prom-kube-prometheus-alertmanager            ClusterIP      10.110.177.95    <none>          9093/TCP,8080/TCP               28d
+observability       service/kube-prom-kube-prometheus-operator                ClusterIP      10.100.176.215   <none>          8080/TCP                        28d
+observability       service/kube-prom-kube-prometheus-prometheus              ClusterIP      10.99.245.241    <none>          9090/TCP,8080/TCP               28d
+observability       service/kube-prom-kube-state-metrics                      ClusterIP      10.106.209.133   <none>          8080/TCP                        28d
+observability       service/loki                                              ClusterIP      10.100.164.48    <none>          3100/TCP,9095/TCP               28d
+observability       service/loki-gateway                                      ClusterIP      10.106.74.102    <none>          80/TCP                          28d
+observability       service/loki-headless                                     ClusterIP      None             <none>          3100/TCP                        28d
+observability       service/loki-memberlist                                   ClusterIP      None             <none>          7946/TCP                        28d
+observability       service/node-exporter                                     ClusterIP      10.100.144.255   <none>          9100/TCP                        26d
+observability       service/node-exporter-prometheus-node-exporter            ClusterIP      10.111.134.213   <none>          9100/TCP                        26d
+observability       service/prometheus-operated                               ClusterIP      None             <none>          9090/TCP                        28d
+observability       service/sage-log-viewer                                   LoadBalancer   10.103.194.54    <pending>       80:30743/TCP                    8d
+observability       service/sage-log-viewer-np                                NodePort       10.98.131.114    <none>          8080:30800/TCP                  8d
+observability       service/sage-log-viewer-test                              NodePort       10.98.29.254     <none>          80:30801/TCP                    8d
+sage                service/sage                                              NodePort       10.103.249.241   <none>          80:30080/TCP                    32d
+
+NAMESPACE           NAME                                                        ENDPOINTS                                                    AGE
+arc-chi             endpoints/chi-bus                                           <none>                                                       16d
+arc-chi             endpoints/chi-bus-nodeport                                  <none>                                                       16d
+arc-epsilon         endpoints/epsilon-ui                                        <none>                                                       29d
+arc-iota            endpoints/iota-api                                          <none>                                                       24d
+arc-kappa           endpoints/kappa-api                                         <none>                                                       24d
+arc-kappa           endpoints/kappa-postgres                                    <none>                                                       23d
+arc-lambda-locked   endpoints/lambda-api                                        10.244.0.175:8000                                            9d
+arc-lambda          endpoints/lambda-api                                        <none>                                                       24d
+arc-mu              endpoints/mu-api                                            <none>                                                       23d
+arc-nu              endpoints/nu-api                                            <none>                                                       23d
+arc-omega           endpoints/omega-monitor                                     <none>                                                       9d
+arc-omega           endpoints/omega-monitor-metrics                             <none>                                                       6d17h
+arc-omega           endpoints/omega-reason-stream                               <none>                                                       9d
+arc-omicron         endpoints/omicron-api                                       <none>                                                       22d
+arc-rho2            endpoints/rho2-api                                          <none>                                                       22d
+arc-rho2            endpoints/rho2-gate                                         <none>                                                       6d5h
+arc-rho2b           endpoints/rho2b-api                                         <none>                                                       21d
+arc-rho2c           endpoints/rho2c-api                                         <none>                                                       21d
+arc-theta           endpoints/cloudflared-doh                                   <none>                                                       6d5h
+arc-theta           endpoints/theta-api                                         <none>                                                       25d
+arc-ui              endpoints/sage-api                                          10.244.0.52:3000                                             7d13h
+arc-ui              endpoints/sage-enterprise-ui                                10.244.0.209:8080                                            8d
+arc-ui              endpoints/ui-gateway                                        <none>                                                       3d9h
+arc-xi              endpoints/xenolith-ledger                                   <none>                                                       6d
+arc-xi              endpoints/xi-api                                            <none>                                                       23d
+arc-zeta            endpoints/observer-api                                      <none>                                                       29d
+arc-zeta            endpoints/observer-api-ws                                   <none>                                                       7d2h
+cert-manager        endpoints/cert-manager                                      <none>                                                       15d
+cert-manager        endpoints/cert-manager-webhook                                                                                           15d
+default             endpoints/kubelet                                           100.74.233.89:10250,100.74.233.89:10255,100.74.233.89:4194   28d
+default             endpoints/kubernetes                                        192.168.1.117:6443                                           19d
+flux-system         endpoints/notification-controller                           <none>                                                       30d
+flux-system         endpoints/source-controller                                 <none>                                                       30d
+flux-system         endpoints/webhook-receiver                                  <none>                                                       30d
+infra               endpoints/nats                                              <none>                                                       29d
+ingress-nginx       endpoints/ingress-nginx-controller                          <none>                                                       32d
+ingress-nginx       endpoints/ingress-nginx-controller-admission                <none>                                                       15d
+kube-system         endpoints/api-proxy                                         10.244.0.188:6443                                            18d
+kube-system         endpoints/cilium-envoy                                      192.168.1.117:9964                                           20d
+kube-system         endpoints/cloudflared-doh                                   <none>                                                       7d20h
+kube-system         endpoints/hubble-peer                                       192.168.1.117:4244                                           10d
+kube-system         endpoints/ksm                                               <none>                                                       19d
+kube-system         endpoints/kube-dns                                          <none>                                                       2d5h
+kube-system         endpoints/kube-prom-kube-prometheus-coredns                 <none>                                                       28d
+kube-system         endpoints/kube-prom-kube-prometheus-kubelet                 100.74.233.89:10250,100.74.233.89:10255,100.74.233.89:4194   28d
+kube-system         endpoints/sigma-insightd                                    <none>                                                       19d
+kube-system         endpoints/ts-epsilon-ui-6m226                               <none>                                                       13d
+kube-system         endpoints/ts-grafana-4t85d                                                                                               9d
+kube-system         endpoints/ts-kube-prom-kube-prometheus-alertmanager-sszrl                                                                13d
+kube-system         endpoints/ts-kube-prom-kube-prometheus-prometheus-8ppfp                                                                  13d
+kube-system         endpoints/ts-loki-5lkvx                                                                                                  9d
+kube-system         endpoints/ts-omega-monitor-qqt9f                                                                                         9d
+kube-system         endpoints/ts-omega-reason-stream-7vwz8                                                                                   9d
+kube-system         endpoints/ts-sage-4fsfb                                     <none>                                                       13d
+longhorn-system     endpoints/longhorn-admission-webhook                        <none>                                                       24d
+longhorn-system     endpoints/longhorn-backend                                                                                               24d
+longhorn-system     endpoints/longhorn-frontend                                 <none>                                                       24d
+longhorn-system     endpoints/longhorn-recovery-backend                         <none>                                                       24d
+metallb-system      endpoints/metallb-webhook-service                           <none>                                                       32d
+observability       endpoints/alertmanager-operated                             <none>                                                       28d
+observability       endpoints/grafana                                           10.244.0.174:3000                                            9d
+observability       endpoints/grafana-lb                                        10.244.0.174:3000                                            8d
+observability       endpoints/grafana-np                                        10.244.0.174:3000                                            8d
+observability       endpoints/kube-prom-kube-prometheus-alertmanager            <none>                                                       28d
+observability       endpoints/kube-prom-kube-prometheus-operator                <none>                                                       28d
+observability       endpoints/kube-prom-kube-prometheus-prometheus              <none>                                                       28d
+observability       endpoints/kube-prom-kube-state-metrics                      <none>                                                       28d
+observability       endpoints/loki                                              <none>                                                       28d
+observability       endpoints/loki-gateway                                      <none>                                                       28d
+observability       endpoints/loki-headless                                     <none>                                                       28d
+observability       endpoints/loki-memberlist                                   <none>                                                       28d
+observability       endpoints/node-exporter                                     192.168.1.117:9100                                           26d
+observability       endpoints/node-exporter-prometheus-node-exporter            192.168.1.117:9100                                           26d
+observability       endpoints/prometheus-operated                               <none>                                                       28d
+observability       endpoints/sage-log-viewer                                   10.244.0.45:80                                               8d
+observability       endpoints/sage-log-viewer-np                                10.244.0.45:8080                                             8d
+observability       endpoints/sage-log-viewer-test                              10.244.0.90:80                                               8d
+sage                endpoints/sage                                              <none>                                                       32d

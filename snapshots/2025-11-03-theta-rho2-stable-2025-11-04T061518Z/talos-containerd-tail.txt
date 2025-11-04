@@ -1,0 +1,45 @@
+sage: {"level":"info","msg":"starting containerd","revision":"75cb2b7193e4e490e9fbdc236c0e811ccaba3376","time":"2025-10-11T05:08:36.717561527Z","version":"v2.1.4"}
+sage: {"id":"io.containerd.content.v1.content","level":"info","msg":"loading plugin","time":"2025-10-11T05:08:36.721548864Z","type":"io.containerd.content.v1"}
+sage: {"id":"io.containerd.image-verifier.v1.bindir","level":"info","msg":"loading plugin","time":"2025-10-11T05:08:36.721600118Z","type":"io.containerd.image-verifier.v1"}
+sage: {"id":"io.containerd.warning.v1.deprecations","level":"info","msg":"loading plugin","time":"2025-10-11T05:08:36.721612085Z","type":"io.containerd.warning.v1"}
+sage: {"id":"io.containerd.snapshotter.v1.native","level":"info","msg":"loading plugin","time":"2025-10-11T05:08:36.721621642Z","type":"io.containerd.snapshotter.v1"}
+sage: {"id":"io.containerd.snapshotter.v1.overlayfs","level":"info","msg":"loading plugin","time":"2025-10-11T05:08:36.721659158Z","type":"io.containerd.snapshotter.v1"}
+sage: {"id":"io.containerd.event.v1.exchange","level":"info","msg":"loading plugin","time":"2025-10-11T05:08:36.721787596Z","type":"io.containerd.event.v1"}
+sage: {"id":"io.containerd.monitor.task.v1.cgroups","level":"info","msg":"loading plugin","time":"2025-10-11T05:08:36.721808745Z","type":"io.containerd.monitor.task.v1"}
+sage: {"id":"io.containerd.metadata.v1.bolt","level":"info","msg":"loading plugin","time":"2025-10-11T05:08:36.721985103Z","type":"io.containerd.metadata.v1"}
+sage: {"level":"info","msg":"metadata content store policy set","policy":"shared","time":"2025-10-11T05:08:36.722011284Z"}
+sage: {"id":"io.containerd.gc.v1.scheduler","level":"info","msg":"loading plugin","time":"2025-10-11T05:08:36.722688508Z","type":"io.containerd.gc.v1"}
+sage: {"id":"io.containerd.differ.v1.walking","level":"info","msg":"loading plugin","time":"2025-10-11T05:08:36.722713886Z","type":"io.containerd.differ.v1"}
+sage: {"id":"io.containerd.lease.v1.manager","level":"info","msg":"loading plugin","time":"2025-10-11T05:08:36.722721526Z","type":"io.containerd.lease.v1"}
+sage: {"id":"io.containerd.service.v1.containers-service","level":"info","msg":"loading plugin","time":"2025-10-11T05:08:36.722728716Z","type":"io.containerd.service.v1"}
+sage: {"id":"io.containerd.service.v1.content-service","level":"info","msg":"loading plugin","time":"2025-10-11T05:08:36.722734622Z","type":"io.containerd.service.v1"}
+sage: {"id":"io.containerd.service.v1.diff-service","level":"info","msg":"loading plugin","time":"2025-10-11T05:08:36.722740032Z","type":"io.containerd.service.v1"}
+sage: {"id":"io.containerd.service.v1.images-service","level":"info","msg":"loading plugin","time":"2025-10-11T05:08:36.722746021Z","type":"io.containerd.service.v1"}
+sage: {"id":"io.containerd.service.v1.introspection-service","level":"info","msg":"loading plugin","time":"2025-10-11T05:08:36.722751787Z","type":"io.containerd.service.v1"}
+sage: {"id":"io.containerd.service.v1.namespaces-service","level":"info","msg":"loading plugin","time":"2025-10-11T05:08:36.722757416Z","type":"io.containerd.service.v1"}
+sage: {"id":"io.containerd.service.v1.snapshots-service","level":"info","msg":"loading plugin","time":"2025-10-11T05:08:36.722764706Z","type":"io.containerd.service.v1"}
+sage: {"id":"io.containerd.shim.v1.manager","level":"info","msg":"loading plugin","time":"2025-10-11T05:08:36.722772448Z","type":"io.containerd.shim.v1"}
+sage: {"id":"io.containerd.runtime.v2.task","level":"info","msg":"loading plugin","time":"2025-10-11T05:08:36.722778972Z","type":"io.containerd.runtime.v2"}
+sage: {"id":"io.containerd.service.v1.tasks-service","level":"info","msg":"loading plugin","time":"2025-10-11T05:08:36.722809660Z","type":"io.containerd.service.v1"}
+sage: {"id":"io.containerd.grpc.v1.containers","level":"info","msg":"loading plugin","time":"2025-10-11T05:08:36.722816888Z","type":"io.containerd.grpc.v1"}
+sage: {"id":"io.containerd.grpc.v1.content","level":"info","msg":"loading plugin","time":"2025-10-11T05:08:36.722822860Z","type":"io.containerd.grpc.v1"}
+sage: {"id":"io.containerd.grpc.v1.diff","level":"info","msg":"loading plugin","time":"2025-10-11T05:08:36.722827946Z","type":"io.containerd.grpc.v1"}
+sage: {"id":"io.containerd.grpc.v1.events","level":"info","msg":"loading plugin","time":"2025-10-11T05:08:36.722832757Z","type":"io.containerd.grpc.v1"}
+sage: {"id":"io.containerd.grpc.v1.images","level":"info","msg":"loading plugin","time":"2025-10-11T05:08:36.722838378Z","type":"io.containerd.grpc.v1"}
+sage: {"id":"io.containerd.grpc.v1.introspection","level":"info","msg":"loading plugin","time":"2025-10-11T05:08:36.722843768Z","type":"io.containerd.grpc.v1"}
+sage: {"id":"io.containerd.grpc.v1.leases","level":"info","msg":"loading plugin","time":"2025-10-11T05:08:36.722853004Z","type":"io.containerd.grpc.v1"}
+sage: {"id":"io.containerd.grpc.v1.namespaces","level":"info","msg":"loading plugin","time":"2025-10-11T05:08:36.722858445Z","type":"io.containerd.grpc.v1"}
+sage: {"id":"io.containerd.grpc.v1.snapshots","level":"info","msg":"loading plugin","time":"2025-10-11T05:08:36.722863537Z","type":"io.containerd.grpc.v1"}
+sage: {"id":"io.containerd.streaming.v1.manager","level":"info","msg":"loading plugin","time":"2025-10-11T05:08:36.722869276Z","type":"io.containerd.streaming.v1"}
+sage: {"id":"io.containerd.grpc.v1.streaming","level":"info","msg":"loading plugin","time":"2025-10-11T05:08:36.722875472Z","type":"io.containerd.grpc.v1"}
+sage: {"id":"io.containerd.grpc.v1.tasks","level":"info","msg":"loading plugin","time":"2025-10-11T05:08:36.722880919Z","type":"io.containerd.grpc.v1"}
+sage: {"id":"io.containerd.transfer.v1.local","level":"info","msg":"loading plugin","time":"2025-10-11T05:08:36.722887025Z","type":"io.containerd.transfer.v1"}
+sage: {"id":"io.containerd.grpc.v1.transfer","level":"info","msg":"loading plugin","time":"2025-10-11T05:08:36.722901219Z","type":"io.containerd.grpc.v1"}
+sage: {"id":"io.containerd.grpc.v1.version","level":"info","msg":"loading plugin","time":"2025-10-11T05:08:36.722907761Z","type":"io.containerd.grpc.v1"}
+sage: {"id":"io.containerd.grpc.v1.healthcheck","level":"info","msg":"loading plugin","time":"2025-10-11T05:08:36.722912479Z","type":"io.containerd.grpc.v1"}
+sage: {"address":"/system/run/containerd/containerd.sock.ttrpc","level":"info","msg":"serving...","time":"2025-10-11T05:08:36.723024749Z"}
+sage: {"address":"/system/run/containerd/containerd.sock","level":"info","msg":"serving...","time":"2025-10-11T05:08:36.723046966Z"}
+sage: {"level":"info","msg":"containerd successfully booted in 0.006472s","time":"2025-10-11T05:08:36.723056180Z"}
+sage: {"address":"unix:///run/containerd/s/814eeaf75962b52d1228c72642b2a1e34f6ad18299621a2bc0a0d887e86f9db6","level":"info","msg":"connecting to shim apid","namespace":"system","protocol":"ttrpc","time":"2025-10-11T05:08:43.736640097Z","version":3}
+sage: {"address":"unix:///run/containerd/s/5fa90b83e183f45a761a15c4d691cc248504e7544f0fd8787e47e42f16c45345","level":"info","msg":"connecting to shim trustd","namespace":"system","protocol":"ttrpc","time":"2025-10-11T05:08:51.293568577Z","version":3}
+sage: {"address":"unix:///run/containerd/s/36dd51478408a3c10c2d441d38a580ba39abeafd0089845e6f7add11599099c0","level":"info","msg":"connecting to shim ext-iscsid","namespace":"system","protocol":"ttrpc","time":"2025-10-11T05:09:03.246682627Z","version":3}

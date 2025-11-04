@@ -1,0 +1,340 @@
+apiVersion: v1
+items:
+- apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"NetworkPolicy","metadata":{"annotations":{},"name":"chi-allow-bus","namespace":"arc-chi"},"spec":{"egress":[{"ports":[{"port":4222,"protocol":"TCP"}],"to":[{"podSelector":{"matchLabels":{"app":"chi-bus"}}}]}],"podSelector":{},"policyTypes":["Egress"]}}
+    creationTimestamp: "2025-10-24T15:25:44Z"
+    generation: 1
+    name: chi-allow-bus
+    namespace: arc-chi
+    resourceVersion: "4527363"
+    uid: 5ac93996-133b-4279-ab6f-2effd609d682
+  spec:
+    egress:
+    - ports:
+      - port: 4222
+        protocol: TCP
+      to:
+      - podSelector:
+          matchLabels:
+            app: chi-bus
+    podSelector: {}
+    policyTypes:
+    - Egress
+- apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"NetworkPolicy","metadata":{"annotations":{},"name":"chi-allow-dns","namespace":"arc-chi"},"spec":{"egress":[{"ports":[{"port":53,"protocol":"UDP"},{"port":53,"protocol":"TCP"}],"to":[{"namespaceSelector":{"matchLabels":{"kubernetes.io/metadata.name":"kube-system"}},"podSelector":{"matchLabels":{"k8s-app":"kube-dns"}}}]}],"podSelector":{},"policyTypes":["Egress"]}}
+    creationTimestamp: "2025-10-24T15:25:44Z"
+    generation: 1
+    name: chi-allow-dns
+    namespace: arc-chi
+    resourceVersion: "4527362"
+    uid: 51d7bd3b-74bd-4746-8740-63d8a4a4dbfd
+  spec:
+    egress:
+    - ports:
+      - port: 53
+        protocol: UDP
+      - port: 53
+        protocol: TCP
+      to:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: kube-system
+        podSelector:
+          matchLabels:
+            k8s-app: kube-dns
+    podSelector: {}
+    policyTypes:
+    - Egress
+- apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"NetworkPolicy","metadata":{"annotations":{},"name":"chi-allow-omega-sigma-lambda","namespace":"arc-chi"},"spec":{"ingress":[{"from":[{"namespaceSelector":{"matchLabels":{"kubernetes.io/metadata.name":"arc-omega"}}},{"namespaceSelector":{"matchLabels":{"kubernetes.io/metadata.name":"arc-sigma"}}},{"namespaceSelector":{"matchLabels":{"kubernetes.io/metadata.name":"arc-lambda"}}}],"ports":[{"port":4222,"protocol":"TCP"}]}],"podSelector":{},"policyTypes":["Ingress"]}}
+    creationTimestamp: "2025-10-26T03:55:53Z"
+    generation: 1
+    name: chi-allow-omega-sigma-lambda
+    namespace: arc-chi
+    resourceVersion: "4823123"
+    uid: 9982c9b2-bb44-4936-8683-4fd2ddd2e273
+  spec:
+    ingress:
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: arc-omega
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: arc-sigma
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: arc-lambda
+      ports:
+      - port: 4222
+        protocol: TCP
+    podSelector: {}
+    policyTypes:
+    - Ingress
+- apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"NetworkPolicy","metadata":{"annotations":{},"name":"chi-bus-allow-ingress","namespace":"arc-chi"},"spec":{"ingress":[{"from":[{"namespaceSelector":{"matchLabels":{"kubernetes.io/metadata.name":"arc-chi"}}}],"ports":[{"port":4222,"protocol":"TCP"},{"port":8222,"protocol":"TCP"}]},{"from":[{"namespaceSelector":{"matchLabels":{"kubernetes.io/metadata.name":"arc-lambda-locked"}}}],"ports":[{"port":4222,"protocol":"TCP"}]}],"podSelector":{"matchLabels":{"app":"chi-bus"}},"policyTypes":["Ingress"]}}
+    creationTimestamp: "2025-10-25T00:43:48Z"
+    generation: 1
+    name: chi-bus-allow-ingress
+    namespace: arc-chi
+    resourceVersion: "4601184"
+    uid: 09eb6912-2f60-42d2-854a-1b578a21a069
+  spec:
+    ingress:
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: arc-chi
+      ports:
+      - port: 4222
+        protocol: TCP
+      - port: 8222
+        protocol: TCP
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: arc-lambda-locked
+      ports:
+      - port: 4222
+        protocol: TCP
+    podSelector:
+      matchLabels:
+        app: chi-bus
+    policyTypes:
+    - Ingress
+- apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"NetworkPolicy","metadata":{"annotations":{},"name":"chi-bus-allow-kubelet-probes","namespace":"arc-chi"},"spec":{"ingress":[{"from":[],"ports":[{"port":7422,"protocol":"TCP"},{"port":4222,"protocol":"TCP"},{"port":8222,"protocol":"TCP"}]}],"podSelector":{"matchLabels":{"app":"chi-bus"}},"policyTypes":["Ingress"]}}
+    creationTimestamp: "2025-10-31T01:44:23Z"
+    generation: 2
+    name: chi-bus-allow-kubelet-probes
+    namespace: arc-chi
+    resourceVersion: "6038203"
+    uid: 52e10476-758c-40a6-a7e7-61d70bfdee42
+  spec:
+    ingress:
+    - ports:
+      - port: 7422
+        protocol: TCP
+      - port: 4222
+        protocol: TCP
+      - port: 8222
+        protocol: TCP
+    podSelector:
+      matchLabels:
+        app: chi-bus
+    policyTypes:
+    - Ingress
+- apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"NetworkPolicy","metadata":{"annotations":{},"name":"chi-bus-allow-omega","namespace":"arc-chi"},"spec":{"ingress":[{"from":[{"namespaceSelector":{"matchLabels":{"kubernetes.io/metadata.name":"arc-omega"}}}],"ports":[{"port":4222,"protocol":"TCP"}]}],"podSelector":{"matchLabels":{"app":"chi-bus"}},"policyTypes":["Ingress"]}}
+    creationTimestamp: "2025-10-25T20:03:37Z"
+    generation: 1
+    name: chi-bus-allow-omega
+    namespace: arc-chi
+    resourceVersion: "4754972"
+    uid: c1e6abe8-5b0e-4daf-b006-1c7580b994ad
+  spec:
+    ingress:
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: arc-omega
+      ports:
+      - port: 4222
+        protocol: TCP
+    podSelector:
+      matchLabels:
+        app: chi-bus
+    policyTypes:
+    - Ingress
+- apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"NetworkPolicy","metadata":{"annotations":{},"name":"chi-bus-ingress-allow-any","namespace":"arc-chi"},"spec":{"ingress":[{"from":[{"namespaceSelector":{}}],"ports":[{"port":4222,"protocol":"TCP"},{"port":7422,"protocol":"TCP"}]}],"podSelector":{"matchLabels":{"app":"chi-bus","rho2.identity":"chi"}},"policyTypes":["Ingress"]}}
+    creationTimestamp: "2025-11-02T15:46:35Z"
+    generation: 1
+    name: chi-bus-ingress-allow-any
+    namespace: arc-chi
+    resourceVersion: "7366710"
+    uid: a0bc167f-06a8-4be3-8089-bd613339e74e
+  spec:
+    ingress:
+    - from:
+      - namespaceSelector: {}
+      ports:
+      - port: 4222
+        protocol: TCP
+      - port: 7422
+        protocol: TCP
+    podSelector:
+      matchLabels:
+        app: chi-bus
+        rho2.identity: chi
+    policyTypes:
+    - Ingress
+- apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"NetworkPolicy","metadata":{"annotations":{},"name":"chi-bus-ingress-from-any","namespace":"arc-chi"},"spec":{"ingress":[{"from":[{"namespaceSelector":{}}],"ports":[{"port":4222,"protocol":"TCP"},{"port":7422,"protocol":"TCP"}]}],"podSelector":{"matchLabels":{"app":"chi-bus","rho2.identity":"chi"}},"policyTypes":["Ingress"]}}
+    creationTimestamp: "2025-11-02T15:36:55Z"
+    generation: 1
+    name: chi-bus-ingress-from-any
+    namespace: arc-chi
+    resourceVersion: "7363597"
+    uid: 88be1d4d-c26a-4011-9820-363ca510eb52
+  spec:
+    ingress:
+    - from:
+      - namespaceSelector: {}
+      ports:
+      - port: 4222
+        protocol: TCP
+      - port: 7422
+        protocol: TCP
+    podSelector:
+      matchLabels:
+        app: chi-bus
+        rho2.identity: chi
+    policyTypes:
+    - Ingress
+- apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"NetworkPolicy","metadata":{"annotations":{},"name":"chi-egress-default-deny","namespace":"arc-chi"},"spec":{"egress":[],"podSelector":{},"policyTypes":["Egress"]}}
+    creationTimestamp: "2025-10-24T15:25:44Z"
+    generation: 1
+    name: chi-egress-default-deny
+    namespace: arc-chi
+    resourceVersion: "4527360"
+    uid: f9374fd8-81d2-40c8-bf31-d8e7edcccd23
+  spec:
+    podSelector: {}
+    policyTypes:
+    - Egress
+- apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"NetworkPolicy","metadata":{"annotations":{},"name":"egress-dns-and-chi-allow","namespace":"arc-chi"},"spec":{"egress":[{"ports":[{"port":1053,"protocol":"UDP"},{"port":1053,"protocol":"TCP"},{"port":53,"protocol":"UDP"},{"port":53,"protocol":"TCP"}],"to":[{"namespaceSelector":{"matchLabels":{"kubernetes.io/metadata.name":"kube-system"}},"podSelector":{"matchLabels":{"k8s-app":"kube-dns"}}}]},{"ports":[{"port":4222,"protocol":"TCP"},{"port":7422,"protocol":"TCP"}],"to":[{"namespaceSelector":{"matchLabels":{"kubernetes.io/metadata.name":"arc-chi"}},"podSelector":{"matchLabels":{"app":"chi-bus","rho2.identity":"chi"}}}]}],"podSelector":{},"policyTypes":["Egress"]}}
+    creationTimestamp: "2025-11-02T15:36:55Z"
+    generation: 1
+    name: egress-dns-and-chi-allow
+    namespace: arc-chi
+    resourceVersion: "7363600"
+    uid: ad66befc-08bc-41f9-b627-1169a8f8f004
+  spec:
+    egress:
+    - ports:
+      - port: 1053
+        protocol: UDP
+      - port: 1053
+        protocol: TCP
+      - port: 53
+        protocol: UDP
+      - port: 53
+        protocol: TCP
+      to:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: kube-system
+        podSelector:
+          matchLabels:
+            k8s-app: kube-dns
+    - ports:
+      - port: 4222
+        protocol: TCP
+      - port: 7422
+        protocol: TCP
+      to:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: arc-chi
+        podSelector:
+          matchLabels:
+            app: chi-bus
+            rho2.identity: chi
+    podSelector: {}
+    policyTypes:
+    - Egress
+- apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"NetworkPolicy","metadata":{"annotations":{},"name":"egress-dns-chi-explicit","namespace":"arc-chi"},"spec":{"egress":[{"ports":[{"port":53,"protocol":"UDP"},{"port":53,"protocol":"TCP"}],"to":[{"ipBlock":{"cidr":"10.96.0.10/32"}}]},{"ports":[{"port":1053,"protocol":"UDP"},{"port":1053,"protocol":"TCP"}],"to":[{"ipBlock":{"cidr":"10.244.0.145/32"}},{"ipBlock":{"cidr":"10.244.0.66/32"}},{"ipBlock":{"cidr":"192.168.1.117/32"}},{"ipBlock":{"cidr":"10.244.0.5/32"}},{"ipBlock":{"cidr":"10.244.0.178/32"}}]},{"ports":[{"port":4222,"protocol":"TCP"},{"port":7422,"protocol":"TCP"}],"to":[{"ipBlock":{"cidr":"10.244.0.105/32"}}]}],"podSelector":{},"policyTypes":["Egress"]}}
+    creationTimestamp: "2025-11-02T15:46:33Z"
+    generation: 1
+    name: egress-dns-chi-explicit
+    namespace: arc-chi
+    resourceVersion: "7366695"
+    uid: bc062029-bc25-43c8-8d5f-ddcef5e4f5d4
+  spec:
+    egress:
+    - ports:
+      - port: 53
+        protocol: UDP
+      - port: 53
+        protocol: TCP
+      to:
+      - ipBlock:
+          cidr: 10.96.0.10/32
+    - ports:
+      - port: 1053
+        protocol: UDP
+      - port: 1053
+        protocol: TCP
+      to:
+      - ipBlock:
+          cidr: 10.244.0.145/32
+      - ipBlock:
+          cidr: 10.244.0.66/32
+      - ipBlock:
+          cidr: 192.168.1.117/32
+      - ipBlock:
+          cidr: 10.244.0.5/32
+      - ipBlock:
+          cidr: 10.244.0.178/32
+    - ports:
+      - port: 4222
+        protocol: TCP
+      - port: 7422
+        protocol: TCP
+      to:
+      - ipBlock:
+          cidr: 10.244.0.105/32
+    podSelector: {}
+    policyTypes:
+    - Egress
+kind: List
+metadata:
+  resourceVersion: ""

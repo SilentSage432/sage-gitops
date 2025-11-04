@@ -1,0 +1,98 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "81"
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"k8s-app":"kube-dns"},"name":"coredns","namespace":"kube-system"},"spec":{"replicas":1,"selector":{"matchLabels":{"k8s-app":"kube-dns"}},"template":{"metadata":{"labels":{"k8s-app":"kube-dns"}},"spec":{"containers":[{"args":["-conf","/etc/coredns/Corefile"],"image":"registry.k8s.io/coredns/coredns:v1.12.2","livenessProbe":{"failureThreshold":5,"httpGet":{"path":"/health","port":8080},"initialDelaySeconds":5,"periodSeconds":10,"timeoutSeconds":5},"name":"coredns","ports":[{"containerPort":53,"name":"dns","protocol":"UDP"},{"containerPort":53,"name":"dns-tcp","protocol":"TCP"},{"containerPort":9153,"name":"metrics","protocol":"TCP"}],"readinessProbe":{"failureThreshold":3,"httpGet":{"path":"/ready","port":8181},"periodSeconds":2,"timeoutSeconds":2},"securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"add":["NET_BIND_SERVICE"],"drop":["ALL"]},"readOnlyRootFilesystem":true,"runAsUser":65532},"volumeMounts":[{"mountPath":"/etc/coredns","name":"config-volume","readOnly":true}]}],"dnsPolicy":"ClusterFirst","securityContext":{"runAsNonRoot":true},"serviceAccountName":"coredns","volumes":[{"configMap":{"items":[{"key":"Corefile","path":"Corefile"}],"name":"coredns"},"name":"config-volume"}]}}}}
+    kubectl.kubernetes.io/restartedAt: "2025-11-04T01:06:51Z"
+  creationTimestamp: "2025-11-01T04:55:04Z"
+  generation: 118
+  labels:
+    k8s-app: kube-dns
+  name: coredns
+  namespace: kube-system
+  resourceVersion: "8068859"
+  uid: e9ce84b1-c48e-4081-a18e-c0a8a4b94050
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      k8s-app: kube-dns
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/restartedAt: "2025-11-03T17:51:25-07:00"
+        rho2.posture.hash: v1:nonroot:rofs:cap-netbind:seccomp-runtime-default
+      labels:
+        app: kube-dns
+        k8s-app: kube-dns
+        rho2.identity: system
+    spec:
+      containers:
+      - image: registry.k8s.io/coredns/coredns:v1.12.2
+        imagePullPolicy: IfNotPresent
+        name: coredns
+        resources: {}
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            add:
+            - NET_BIND_SERVICE
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 65532
+          seccompProfile:
+            type: RuntimeDefault
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /etc/coredns
+          name: config-volume
+        - mountPath: /tmp
+          name: tmp
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext:
+        fsGroup: 65532
+        runAsGroup: 65532
+        runAsNonRoot: true
+        runAsUser: 65532
+      serviceAccount: coredns
+      serviceAccountName: coredns
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: coredns
+        name: config-volume
+      - emptyDir: {}
+        name: tmp
+status:
+  conditions:
+  - lastTransitionTime: "2025-11-04T01:02:58Z"
+    lastUpdateTime: "2025-11-04T01:06:57Z"
+    message: ReplicaSet "coredns-b8d5bf6cf" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  - lastTransitionTime: "2025-11-04T06:10:41Z"
+    lastUpdateTime: "2025-11-04T06:10:41Z"
+    message: Deployment does not have minimum availability.
+    reason: MinimumReplicasUnavailable
+    status: "False"
+    type: Available
+  observedGeneration: 118
+  replicas: 1
+  unavailableReplicas: 1
+  updatedReplicas: 1

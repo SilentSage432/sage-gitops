@@ -1,0 +1,9 @@
+NODE     sage
+ID       containerd
+STATE    Running
+HEALTH   OK
+EVENTS   [Running]: Health check successful (577h7m19s ago)
+         [Running]: Process Process(["/bin/containerd" "--address" "/system/run/containerd/containerd.sock" "--state" "/system/run/containerd" "--root" "/system/var/lib/containerd"]) started with PID 1406 (577h7m20s ago)
+         [Preparing]: Creating service runner (577h7m20s ago)
+         [Preparing]: Running pre state (577h7m20s ago)
+         [Starting]: Starting service (577h7m20s ago)

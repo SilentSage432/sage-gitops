@@ -1,0 +1,12 @@
+NAME                                READY   STATUS    RESTARTS   AGE     IP       NODE     NOMINATED NODE   READINESS GATES
+pod/observer-api-66c6659577-nfj9q   0/1     Pending   0          4m58s   <none>   <none>   <none>           <none>
+
+NAME                      TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE    SELECTOR
+service/observer-api      ClusterIP   10.111.86.234   <none>        80/TCP     29d    app=observer-api
+service/observer-api-ws   ClusterIP   10.99.242.7     <none>        8082/TCP   7d2h   app=observer-api
+
+NAME                           READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES                                      SELECTOR
+deployment.apps/observer-api   0/1     1            0           25d   api          ghcr.io/silentsage432/observer-api:latest   app=observer-api
+
+NAME                                      DESIRED   CURRENT   READY   AGE    CONTAINERS   IMAGES                                      SELECTOR
+replicaset.apps/observer-api-66c6659577   1         1         0       7d2h   api          ghcr.io/silentsage432/observer-api:latest   app=observer-api,pod-template-hash=66c6659577

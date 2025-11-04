@@ -34,6 +34,11 @@ spec:
         rho2.posture.hash: seed
     spec:
       serviceAccountName: xenolith-ledger
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
       containers:
       - name: ledger
         image: ghcr.io/silentsage432/xenolith-ledger:latest
@@ -49,7 +54,7 @@ spec:
           - name: http
             containerPort: 8090
         volumeMounts:
-          - name: data
+          - name: xi-ledger-data
             mountPath: /data
           - name: policy
             mountPath: /etc/xi
@@ -63,9 +68,8 @@ spec:
           seccompProfile:
             type: RuntimeDefault
       volumes:
-        - name: data
-          persistentVolumeClaim: 
-            claimName: xi-ledger-pvc
+        - name: xi-ledger-data
+          emptyDir: {}
         - name: policy
           configMap: 
             name: xi-policy

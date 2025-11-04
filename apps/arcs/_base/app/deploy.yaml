@@ -1,0 +1,100 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: APPNAME
+  namespace: ARCNS
+  labels:
+    app: APPNAME
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: APPNAME
+  template:
+    metadata:
+      labels:
+        app: APPNAME
+        rho2.identity: ARCIDENT
+        rho2.tier: app
+    spec:
+      serviceAccountName: default
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile: { type: RuntimeDefault }
+      volumes:
+        - name: nats-leaf-conf
+          configMap:
+            name: APPNAME-leaf-config
+            items: [ { key: nats.conf, path: nats.conf } ]
+        - name: tmp
+          emptyDir: {}
+      containers:
+        # --- Main app container (talks to localhost:4222) ---
+        - name: APPNAME
+          image: REPLACE_APP_IMAGE
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: NATS_URL
+              value: nats://127.0.0.1:4222
+          ports:
+            - { name: http, containerPort: 8080, protocol: TCP }
+          readinessProbe:
+            httpGet: { path: /healthz, port: 8080 }
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 5
+          livenessProbe:
+            httpGet: { path: /healthz, port: 8080 }
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 5
+          resources:
+            requests: { cpu: 50m, memory: 64Mi }
+            limits:   { cpu: 300m, memory: 256Mi }
+          volumeMounts:
+            - { name: tmp, mountPath: /tmp }
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: { drop: ["ALL"] }
+
+        # --- NATS leaf sidecar (authenticates upstream to Chi) ---
+        - name: APPNAME-leaf
+          image: nats:2.10.14
+          args: ["-c","/etc/nats/nats.conf"]
+          ports:
+            - { name: leaf, containerPort: 7422, protocol: TCP }
+            - { name: nats, containerPort: 4222, protocol: TCP }
+          volumeMounts:
+            - { name: nats-leaf-conf, mountPath: /etc/nats }
+          env:
+            - name: NATS_USER
+              valueFrom: { secretKeyRef: { name: NATS_SECRET, key: user } }
+            - name: NATS_PASS
+              valueFrom: { secretKeyRef: { name: NATS_SECRET, key: pass } }
+            - name: CHI_HOST
+              value: chi-bus.arc-chi.svc.cluster.local
+            - name: CHI_LEAF_PORT
+              value: "7422"
+          readinessProbe:
+            tcpSocket: { port: 4222 }
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 10
+          livenessProbe:
+            tcpSocket: { port: 4222 }
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 6
+          resources:
+            requests: { cpu: 50m, memory: 64Mi }
+            limits:   { cpu: 300m, memory: 256Mi }
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: { drop: ["ALL"] }

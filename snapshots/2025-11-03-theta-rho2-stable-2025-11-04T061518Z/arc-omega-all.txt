@@ -1,0 +1,42 @@
+NAME                                       READY   STATUS    RESTARTS   AGE     IP       NODE     NOMINATED NODE   READINESS GATES
+pod/omega-agent-78944fffdc-2ph2l           0/1     Pending   0          4m50s   <none>   <none>   <none>           <none>
+pod/omega-reason-stream-595f4f9c66-57cg2   0/1     Pending   0          4m49s   <none>   <none>   <none>           <none>
+pod/rho2-miss                              0/1     Pending   0          4h14m   <none>   <none>   <none>           <none>
+pod/rho2-ok                                0/1     Pending   0          4h14m   <none>   <none>   <none>           <none>
+
+NAME                            TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE     SELECTOR
+service/omega-monitor           ClusterIP   10.99.50.7       <none>        8080/TCP   9d      app=omega-monitor
+service/omega-monitor-metrics   ClusterIP   10.110.166.30    <none>        8081/TCP   6d17h   app=omega-monitor
+service/omega-reason-stream     ClusterIP   10.100.113.121   <none>        8081/TCP   9d      app=omega-reason-stream
+
+NAME                                  READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS          IMAGES                                                           SELECTOR
+deployment.apps/omega-agent           0/1     1            0           16d   beats               nicolaka/netshoot:latest                                         app=omega-agent
+deployment.apps/omega-monitor         0/0     0            0           9d    monitor,nats-leaf   ghcr.io/silentsage432/omega-monitor:latest,nats:2.10.29-alpine   app=omega-monitor
+deployment.apps/omega-reason-stream   0/1     1            0           9d    streamer            ghcr.io/silentsage432/omega-reason-stream:latest                 app=omega-reason-stream
+
+NAME                                             DESIRED   CURRENT   READY   AGE     CONTAINERS                             IMAGES                                                           SELECTOR
+replicaset.apps/omega-agent-56dcfc9575           0         0         0       11d     reasons,reasons-writer                 busybox:1.36,nicolaka/netshoot:latest                            app=omega-agent,pod-template-hash=56dcfc9575
+replicaset.apps/omega-agent-5b879c766            0         0         0       11d     reasons,reasons-writer,bus-keepalive   busybox:1.36,nicolaka/netshoot:latest,nicolaka/netshoot:latest   app=omega-agent,pod-template-hash=5b879c766
+replicaset.apps/omega-agent-65db78ff7c           0         0         0       11d     reasons,reasons-writer                 busybox:1.36,nicolaka/netshoot:latest                            app=omega-agent,pod-template-hash=65db78ff7c
+replicaset.apps/omega-agent-66cf5b5687           0         0         0       11d     reasons,reasons-writer                 busybox:1.36,nicolaka/netshoot:latest                            app=omega-agent,pod-template-hash=66cf5b5687
+replicaset.apps/omega-agent-688b6bc4fc           0         0         0       11d     beats                                  nicolaka/netshoot:latest                                         app=omega-agent,pod-template-hash=688b6bc4fc
+replicaset.apps/omega-agent-77bb78879            0         0         0       11d     reasons,reasons-writer                 busybox:1.36,nicolaka/netshoot:latest                            app=omega-agent,pod-template-hash=77bb78879
+replicaset.apps/omega-agent-78944fffdc           1         1         0       11d     beats                                  nicolaka/netshoot:latest                                         app=omega-agent,pod-template-hash=78944fffdc
+replicaset.apps/omega-agent-85754fd96            0         0         0       11d     beats                                  nicolaka/netshoot:latest                                         app=omega-agent,pod-template-hash=85754fd96
+replicaset.apps/omega-agent-8668fb645            0         0         0       11d     reasons,reasons-writer                 busybox:1.36,nicolaka/netshoot:latest                            app=omega-agent,pod-template-hash=8668fb645
+replicaset.apps/omega-agent-b4c956945            0         0         0       11d     reasons,reasons-writer,bus-keepalive   busybox:1.36,nicolaka/netshoot:latest,nicolaka/netshoot:latest   app=omega-agent,pod-template-hash=b4c956945
+replicaset.apps/omega-agent-fb759d89             0         0         0       11d     reasons,reasons-writer,bus-keepalive   busybox:1.36,nicolaka/netshoot:latest,nicolaka/netshoot:latest   app=omega-agent,pod-template-hash=fb759d89
+replicaset.apps/omega-monitor-599547df87         0         0         0       6d17h   monitor,nats-leaf                      ghcr.io/silentsage432/omega-monitor:latest,nats:2.10.29-alpine   app=omega-monitor,pod-template-hash=599547df87
+replicaset.apps/omega-monitor-6796b77db4         0         0         0       6d17h   monitor,nats-leaf                      ghcr.io/silentsage432/omega-monitor:latest,nats:2.10.29-alpine   app=omega-monitor,pod-template-hash=6796b77db4
+replicaset.apps/omega-monitor-6844ff4685         0         0         0       6d17h   monitor,nats-leaf                      ghcr.io/silentsage432/omega-monitor:latest,nats:2.10.29-alpine   app=omega-monitor,pod-template-hash=6844ff4685
+replicaset.apps/omega-monitor-774dff4cd7         0         0         0       6d17h   monitor,nats-leaf                      ghcr.io/silentsage432/omega-monitor:latest,nats:2.10.29-alpine   app=omega-monitor,pod-template-hash=774dff4cd7
+replicaset.apps/omega-monitor-7875c646ff         0         0         0       7d2h    monitor,nats-leaf                      ghcr.io/silentsage432/omega-monitor:latest,nats:2.10.29-alpine   app=omega-monitor,pod-template-hash=7875c646ff
+replicaset.apps/omega-monitor-78f68ffdd9         0         0         0       6d17h   monitor,nats-leaf                      ghcr.io/silentsage432/omega-monitor:latest,nats:2.10.29-alpine   app=omega-monitor,pod-template-hash=78f68ffdd9
+replicaset.apps/omega-monitor-7b57d6b8b          0         0         0       6d17h   monitor,nats-leaf                      ghcr.io/silentsage432/omega-monitor:latest,nats:2.10.29-alpine   app=omega-monitor,pod-template-hash=7b57d6b8b
+replicaset.apps/omega-monitor-7d5cf859c          0         0         0       6d17h   monitor,nats-leaf                      ghcr.io/silentsage432/omega-monitor:latest,nats:2.10.29-alpine   app=omega-monitor,pod-template-hash=7d5cf859c
+replicaset.apps/omega-monitor-7fb96c9bdc         0         0         0       6d17h   monitor,nats-leaf                      ghcr.io/silentsage432/omega-monitor:latest,nats:2.10.29-alpine   app=omega-monitor,pod-template-hash=7fb96c9bdc
+replicaset.apps/omega-monitor-86d76cdb6          0         0         0       7d2h    monitor,nats-leaf                      ghcr.io/silentsage432/omega-monitor:latest,nats:2.10.29-alpine   app=omega-monitor,pod-template-hash=86d76cdb6
+replicaset.apps/omega-monitor-fb576bd88          0         0         0       6d17h   monitor,nats-leaf                      ghcr.io/silentsage432/omega-monitor:latest,nats:2.10.29-alpine   app=omega-monitor,pod-template-hash=fb576bd88
+replicaset.apps/omega-reason-stream-556567ff4b   0         0         0       9d      streamer                               ghcr.io/silentsage432/omega-reason-stream:latest                 app=omega-reason-stream,pod-template-hash=556567ff4b
+replicaset.apps/omega-reason-stream-595f4f9c66   1         1         0       9d      streamer                               ghcr.io/silentsage432/omega-reason-stream:latest                 app=omega-reason-stream,pod-template-hash=595f4f9c66
+replicaset.apps/omega-reason-stream-5bfdb49f74   0         0         0       9d      streamer                               ghcr.io/silentsage432/omega-reason-stream:latest                 app=omega-reason-stream,pod-template-hash=5bfdb49f74

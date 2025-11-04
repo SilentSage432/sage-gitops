@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: observer-api
+  namespace: arc-zeta
+  labels:
+    app: zeta
+spec:
+  selector:
+    app: zeta
+  ports:
+    - { name: http, port: 8082, targetPort: 8080, protocol: TCP }

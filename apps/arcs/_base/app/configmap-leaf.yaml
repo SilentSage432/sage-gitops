@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: APPNAME-leaf-config
+  namespace: ARCNS
+data:
+  nats.conf: |
+    # App connects to this local server on 4222
+    port: 4222
+    server_name: "APPNAME-leaf"
+    leafnodes {
+      remotes = [
+        { url: "nats://${NATS_USER}:${NATS_PASS}@${CHI_HOST}:${CHI_LEAF_PORT}" }
+      ]
+    }

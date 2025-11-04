@@ -1,0 +1,26 @@
+NAME                           READY   STATUS    RESTARTS   AGE     IP             NODE     NOMINATED NODE   READINESS GATES
+pod/chi-bus-7b74bf8d95-79prd   0/1     Pending   0          4m42s   <none>         <none>   <none>           <none>
+pod/chi-observer-nhrpc         1/1     Running   0          16d     10.244.0.108   sage     <none>           <none>
+
+NAME                       TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                         AGE   SELECTOR
+service/chi-bus            ClusterIP   10.111.237.23    <none>        4222/TCP,7422/TCP,8222/TCP      16d   app=chi-bus,rho2.identity=chi
+service/chi-bus-nodeport   NodePort    10.106.205.193   <none>        4222:30222/TCP,4223:30223/TCP   16d   app=chi-bus
+
+NAME                          DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE   CONTAINERS     IMAGES                     SELECTOR
+daemonset.apps/chi-observer   0         0         0       0            0           <none>          16d   chi-observer   nicolaka/netshoot:latest   app=chi-observer
+
+NAME                      READY   UP-TO-DATE   AVAILABLE   AGE    CONTAINERS   IMAGES         SELECTOR
+deployment.apps/chi-bus   0/1     1            0           4d4h   chi-bus      nats:2.10.14   app=chi-bus,rho2.identity=chi
+
+NAME                                 DESIRED   CURRENT   READY   AGE     CONTAINERS   IMAGES         SELECTOR
+replicaset.apps/chi-bus-559d7cd5ff   0         0         0       4d2h    chi-bus      nats:2.10.14   app=chi-bus,pod-template-hash=559d7cd5ff,rho2.identity=chi
+replicaset.apps/chi-bus-565df669ff   0         0         0       4d2h    chi-bus      nats:2.10.14   app=chi-bus,pod-template-hash=565df669ff,rho2.identity=chi
+replicaset.apps/chi-bus-5df6d4889    0         0         0       4d2h    chi-bus      nats:2.10.14   app=chi-bus,pod-template-hash=5df6d4889,rho2.identity=chi
+replicaset.apps/chi-bus-6587ffc5bf   0         0         0       4d2h    chi-bus      nats:2.10.14   app=chi-bus,pod-template-hash=6587ffc5bf,rho2.identity=chi
+replicaset.apps/chi-bus-6d7b599dd6   0         0         0       4d2h    chi-bus      nats:2.10.14   app=chi-bus,pod-template-hash=6d7b599dd6,rho2.identity=chi
+replicaset.apps/chi-bus-75958c749c   0         0         0       4d2h    chi-bus      nats:2.10.14   app=chi-bus,pod-template-hash=75958c749c,rho2.identity=chi
+replicaset.apps/chi-bus-78885c58c6   0         0         0       4d2h    chi-bus      nats:2.10.14   app=chi-bus,pod-template-hash=78885c58c6,rho2.identity=chi
+replicaset.apps/chi-bus-799656cff8   0         0         0       3d16h   chi-bus      nats:2.10.14   app=chi-bus,pod-template-hash=799656cff8,rho2.identity=chi
+replicaset.apps/chi-bus-7b74bf8d95   1         1         0       3d10h   chi-bus      nats:2.10.14   app=chi-bus,pod-template-hash=7b74bf8d95,rho2.identity=chi
+replicaset.apps/chi-bus-7d9976ff46   0         0         0       4d2h    chi-bus      nats:2.10.14   app=chi-bus,pod-template-hash=7d9976ff46,rho2.identity=chi
+replicaset.apps/chi-bus-7fb8f74b74   0         0         0       3d15h   chi-bus      nats:2.10.14   app=chi-bus,pod-template-hash=7fb8f74b74,rho2.identity=chi

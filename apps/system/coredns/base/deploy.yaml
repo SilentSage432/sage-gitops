@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: coredns
+  namespace: kube-system
+  labels:
+    app: coredns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: kube-dns          # IMMUTABLE: must match live
+  template:
+    metadata:
+      annotations:
+      labels:
+        app: coredns
+        k8s-app: kube-dns        # Must match Service selector
+        rho2.identity: system-dns
+        rho2.tier: system
+    spec:
+      serviceAccountName: coredns
+      automountServiceAccountToken: true
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile: { type: RuntimeDefault }
+      volumes:
+        - name: config-volume
+          configMap:
+            name: coredns
+            items:
+              - key: Corefile
+                path: Corefile
+      containers:
+        - name: coredns
+          image: registry.k8s.io/coredns/coredns:v1.11.1
+          imagePullPolicy: IfNotPresent
+          args: ["-conf","/etc/coredns/Corefile"]
+          ports:
+            - { name: dns-udp,  containerPort: 1053, protocol: UDP }
+            - { name: dns-tcp,  containerPort: 1053, protocol: TCP }
+            - { name: metrics,  containerPort: 9153, protocol: TCP }
+            - { name: health,   containerPort: 8080, protocol: TCP }
+          livenessProbe:
+            httpGet: { path: /health, port: 8080 }
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet: { path: /ready,  port: 8080 }
+            initialDelaySeconds: 3
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+          volumeMounts:
+            - { name: config-volume, mountPath: /etc/coredns }
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: { drop: ["ALL"] }

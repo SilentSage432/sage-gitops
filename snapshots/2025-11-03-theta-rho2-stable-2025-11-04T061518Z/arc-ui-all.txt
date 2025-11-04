@@ -1,0 +1,25 @@
+NAME                                      READY   STATUS    RESTARTS   AGE     IP             NODE   NOMINATED NODE   READINESS GATES
+pod/sage-api-d85ff8859-xpwnk              1/1     Running   0          7d13h   10.244.0.52    sage   <none>           <none>
+pod/sage-enterprise-ui-7f64c4648b-pzsqb   1/1     Running   0          3d3h    10.244.0.209   sage   <none>           <none>
+
+NAME                         TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE     SELECTOR
+service/sage-api             ClusterIP   10.105.170.54   <none>        3000/TCP   7d13h   app=sage-api
+service/sage-enterprise-ui   ClusterIP   10.99.137.202   <none>        8080/TCP   8d      app=sage-enterprise-ui
+service/ui-gateway           ClusterIP   10.99.212.180   <none>        8080/TCP   3d9h    app=ui-gateway
+
+NAME                                 READY   UP-TO-DATE   AVAILABLE   AGE     CONTAINERS   IMAGES                                    SELECTOR
+deployment.apps/sage-api             1/1     1            1           7d13h   api          python:3.11-alpine                        app=sage-api
+deployment.apps/sage-enterprise-ui   1/1     1            1           8d      ui           nginxinc/nginx-unprivileged:1.27-alpine   app=sage-enterprise-ui
+deployment.apps/ui-gateway           0/0     0            0           3d9h    ui-gateway   nginx:1.27-alpine                         app=ui-gateway
+
+NAME                                            DESIRED   CURRENT   READY   AGE     CONTAINERS   IMAGES                                    SELECTOR
+replicaset.apps/sage-api-d85ff8859              1         1         1       7d13h   api          python:3.11-alpine                        app=sage-api,pod-template-hash=d85ff8859
+replicaset.apps/sage-enterprise-ui-556f857454   0         0         0       3d4h    ui           nginxinc/nginx-unprivileged:1.27-alpine   app=sage-enterprise-ui,pod-template-hash=556f857454
+replicaset.apps/sage-enterprise-ui-68497555b8   0         0         0       3d3h    ui           nginxinc/nginx-unprivileged:1.27-alpine   app=sage-enterprise-ui,pod-template-hash=68497555b8
+replicaset.apps/sage-enterprise-ui-75cfcdcfd6   0         0         0       3d3h    ui           nginxinc/nginx-unprivileged:1.27-alpine   app=sage-enterprise-ui,pod-template-hash=75cfcdcfd6
+replicaset.apps/sage-enterprise-ui-7c67cd4b55   0         0         0       3d3h    ui           nginxinc/nginx-unprivileged:1.27-alpine   app=sage-enterprise-ui,pod-template-hash=7c67cd4b55
+replicaset.apps/sage-enterprise-ui-7f64c4648b   1         1         1       3d3h    ui           nginxinc/nginx-unprivileged:1.27-alpine   app=sage-enterprise-ui,pod-template-hash=7f64c4648b
+replicaset.apps/sage-enterprise-ui-848f7d5446   0         0         0       3d4h    ui           nginxinc/nginx-unprivileged:1.27-alpine   app=sage-enterprise-ui,pod-template-hash=848f7d5446
+replicaset.apps/ui-gateway-5494b9b57d           0         0         0       3d4h    ui-gateway   nginx:1.27-alpine                         app=ui-gateway,pod-template-hash=5494b9b57d
+replicaset.apps/ui-gateway-58f5674b79           0         0         0       3d4h    ui-gateway   nginx:1.27-alpine                         app=ui-gateway,pod-template-hash=58f5674b79
+replicaset.apps/ui-gateway-66996895bf           0         0         0       3d3h    ui-gateway   nginx:1.27-alpine                         app=ui-gateway,pod-template-hash=66996895bf

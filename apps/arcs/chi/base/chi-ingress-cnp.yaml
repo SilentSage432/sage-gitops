@@ -1,0 +1,19 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: chi-ingress
+  namespace: arc-chi
+spec:
+  endpointSelector:
+    matchLabels: { app: chi-bus }
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: arc-phi
+            app: phi
+            role: cortex
+      toPorts:
+        - ports: [ { port: "7422", protocol: TCP } ]
+    - fromEntities: [ "host", "remote-node" ]
+      toPorts:
+        - ports: [ { port: "8222", protocol: TCP } ]

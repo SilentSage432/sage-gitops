@@ -1,0 +1,108 @@
+apiVersion: v1
+items:
+- apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"NetworkPolicy","metadata":{"annotations":{},"name":"allow-egress-dns-nats","namespace":"arc-theta"},"spec":{"egress":[{"ports":[{"port":53,"protocol":"UDP"},{"port":53,"protocol":"TCP"}],"to":[{"namespaceSelector":{"matchLabels":{"kubernetes.io/metadata.name":"kube-system"}}}]},{"ports":[{"port":4222,"protocol":"TCP"}],"to":[{"namespaceSelector":{"matchLabels":{"kubernetes.io/metadata.name":"infra"}}}]}],"podSelector":{"matchLabels":{"app":"theta-api"}},"policyTypes":["Egress"]}}
+    creationTimestamp: "2025-10-10T03:24:13Z"
+    generation: 1
+    name: allow-egress-dns-nats
+    namespace: arc-theta
+    resourceVersion: "2134404"
+    uid: 2abb188d-c2b0-4ff1-8a4d-d8186cd765c9
+  spec:
+    egress:
+    - ports:
+      - port: 53
+        protocol: UDP
+      - port: 53
+        protocol: TCP
+      to:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: kube-system
+    - ports:
+      - port: 4222
+        protocol: TCP
+      to:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: infra
+    podSelector:
+      matchLabels:
+        app: theta-api
+    policyTypes:
+    - Egress
+- apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"NetworkPolicy","metadata":{"annotations":{},"name":"allow-http-ingress","namespace":"arc-theta"},"spec":{"ingress":[{"ports":[{"port":80,"protocol":"TCP"},{"port":8080,"protocol":"TCP"}]}],"podSelector":{"matchLabels":{"app":"theta-api"}},"policyTypes":["Ingress"]}}
+    creationTimestamp: "2025-10-10T03:24:13Z"
+    generation: 1
+    name: allow-http-ingress
+    namespace: arc-theta
+    resourceVersion: "2134403"
+    uid: 814eb342-3fc7-4b42-a2f4-47e9f377edb1
+  spec:
+    ingress:
+    - ports:
+      - port: 80
+        protocol: TCP
+      - port: 8080
+        protocol: TCP
+    podSelector:
+      matchLabels:
+        app: theta-api
+    policyTypes:
+    - Ingress
+- apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"NetworkPolicy","metadata":{"annotations":{},"name":"allow-kubelet-probes","namespace":"arc-theta"},"spec":{"egress":[{"to":[{"ipBlock":{"cidr":"0.0.0.0/0"}}]}],"ingress":[{"ports":[{"port":8080,"protocol":"TCP"}]}],"podSelector":{"matchLabels":{"app":"theta-api"}},"policyTypes":["Ingress","Egress"]}}
+    creationTimestamp: "2025-10-10T03:41:03Z"
+    generation: 2
+    name: allow-kubelet-probes
+    namespace: arc-theta
+    resourceVersion: "2141202"
+    uid: b94c9037-debd-4ebb-bcda-9dbfce7b8b63
+  spec:
+    egress:
+    - to:
+      - ipBlock:
+          cidr: 10.244.0.0/16
+    ingress:
+    - ports:
+      - port: 8080
+        protocol: TCP
+    podSelector:
+      matchLabels:
+        app: theta-api
+    policyTypes:
+    - Ingress
+    - Egress
+- apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"NetworkPolicy","metadata":{"annotations":{},"name":"default-deny","namespace":"arc-theta"},"spec":{"podSelector":{},"policyTypes":["Ingress","Egress"]}}
+    creationTimestamp: "2025-10-10T03:24:12Z"
+    generation: 1
+    name: default-deny
+    namespace: arc-theta
+    resourceVersion: "2134400"
+    uid: a7ee1559-b9ed-4ad6-a2dd-8752362158c1
+  spec:
+    podSelector: {}
+    policyTypes:
+    - Ingress
+    - Egress
+kind: List
+metadata:
+  resourceVersion: ""

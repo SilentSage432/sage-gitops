@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: phi-leaf-config
+  namespace: arc-phi
+data:
+  nats.conf: |
+    leafnodes {
+      remotes: [
+        { url: "nats://phi:phi@chi-bus.arc-chi.svc.cluster.local:7422" }
+      ]
+    }
+    http_port: 8222
