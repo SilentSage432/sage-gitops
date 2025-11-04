@@ -1,0 +1,2 @@
+NODE   NTP-SERVER            NODE-TIME                                 NTP-SERVER-TIME
+sage   time.cloudflare.com   2025-11-04 06:15:57.200716309 +0000 UTC   2025-11-04 06:15:57.198004117 +0000 UTC

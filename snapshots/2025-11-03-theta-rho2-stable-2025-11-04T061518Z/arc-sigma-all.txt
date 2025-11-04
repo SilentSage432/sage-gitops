@@ -1,0 +1,26 @@
+NAME                              READY   STATUS    RESTARTS   AGE     IP       NODE     NOMINATED NODE   READINESS GATES
+pod/sigma-agent-565bcf865-26rjs   0/1     Pending   0          4m50s   <none>   <none>   <none>           <none>
+
+NAME                          READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES                                     SELECTOR
+deployment.apps/sigma-agent   0/1     1            0           16d   agent        ghcr.io/silentsage432/sigma-agent:latest   app=sigma-agent
+
+NAME                                     DESIRED   CURRENT   READY   AGE    CONTAINERS   IMAGES                                     SELECTOR
+replicaset.apps/sigma-agent-55bdb9d54    0         0         0       7d2h   agent        ghcr.io/silentsage432/sigma-agent:latest   app=sigma-agent,pod-template-hash=55bdb9d54
+replicaset.apps/sigma-agent-565bcf865    1         1         0       7d1h   agent        ghcr.io/silentsage432/sigma-agent:latest   app=sigma-agent,pod-template-hash=565bcf865
+replicaset.apps/sigma-agent-5f49d68c78   0         0         0       7d2h   agent        ghcr.io/silentsage432/sigma-agent:latest   app=sigma-agent,pod-template-hash=5f49d68c78
+replicaset.apps/sigma-agent-65c647fd99   0         0         0       7d2h   agent        ghcr.io/silentsage432/sigma-agent:0.1.1    app=sigma-agent,pod-template-hash=65c647fd99
+replicaset.apps/sigma-agent-66678c44bf   0         0         0       7d2h   agent        ghcr.io/silentsage432/sigma-agent:latest   app=sigma-agent,pod-template-hash=66678c44bf
+replicaset.apps/sigma-agent-667d7d4bd7   0         0         0       7d2h   agent        ghcr.io/silentsage432/sigma-agent:0.1.0    app=sigma-agent,pod-template-hash=667d7d4bd7
+replicaset.apps/sigma-agent-6845856fdc   0         0         0       7d2h   agent        ghcr.io/silentsage432/sigma-agent:latest   app=sigma-agent,pod-template-hash=6845856fdc
+replicaset.apps/sigma-agent-74495d587b   0         0         0       7d2h   agent        ghcr.io/silentsage432/sigma-agent:latest   app=sigma-agent,pod-template-hash=74495d587b
+replicaset.apps/sigma-agent-7566c7b4d    0         0         0       7d2h   agent        ghcr.io/silentsage432/sigma-agent:0.1.0    app=sigma-agent,pod-template-hash=7566c7b4d
+replicaset.apps/sigma-agent-789dc86797   0         0         0       7d2h   agent        ghcr.io/silentsage432/sigma-agent:latest   app=sigma-agent,pod-template-hash=789dc86797
+replicaset.apps/sigma-agent-c666879fc    0         0         0       7d2h   agent        ghcr.io/silentsage432/sigma-agent:0.1.1    app=sigma-agent,pod-template-hash=c666879fc
+
+NAME                            SCHEDULE      TIMEZONE   SUSPEND   ACTIVE   LAST SCHEDULE   AGE    CONTAINERS   IMAGES                    SELECTOR
+cronjob.batch/sigma-heartbeat   */1 * * * *   <none>     True      0        7d2h            7d2h   hb           synadia/nats-box:latest   <none>
+
+NAME                                 STATUS     COMPLETIONS   DURATION   AGE    CONTAINERS   IMAGES                    SELECTOR
+job.batch/sigma-heartbeat-29360410   Complete   1/1           16s        7d2h   hb           synadia/nats-box:latest   batch.kubernetes.io/controller-uid=efaf6287-098b-47f6-9fd4-ade772ca5967
+job.batch/sigma-heartbeat-29360411   Complete   1/1           7s         7d2h   hb           synadia/nats-box:latest   batch.kubernetes.io/controller-uid=08ef7ea4-6f1a-47f6-85c8-52a944abccb9
+job.batch/sigma-heartbeat-29360412   Complete   1/1           10s        7d2h   hb           synadia/nats-box:latest   batch.kubernetes.io/controller-uid=6d60835c-50c6-4433-ac28-e9092bf07b10

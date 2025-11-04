@@ -1,0 +1,1282 @@
+apiVersion: v1
+items:
+- apiVersion: cilium.io/v2
+  kind: CiliumNetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"cilium.io/v2","kind":"CiliumNetworkPolicy","metadata":{"annotations":{},"name":"allow-dns-to-coredns-hostnet","namespace":"kube-system"},"spec":{"endpointSelector":{"matchLabels":{"k8s-app":"kube-dns"}},"ingress":[{"fromEntities":["cluster"],"toPorts":[{"ports":[{"port":"1053","protocol":"UDP"},{"port":"1053","protocol":"TCP"}]}]}]}}
+    creationTimestamp: "2025-11-03T23:55:25Z"
+    generation: 1
+    name: allow-dns-to-coredns-hostnet
+    namespace: kube-system
+    resourceVersion: "7979871"
+    uid: 31f1e6d4-27c4-4a4a-a62e-60d828f52328
+  spec:
+    endpointSelector:
+      matchLabels:
+        k8s-app: kube-dns
+    ingress:
+    - fromEntities:
+      - cluster
+      toPorts:
+      - ports:
+        - port: "1053"
+          protocol: UDP
+        - port: "1053"
+          protocol: TCP
+  status:
+    conditions:
+    - lastTransitionTime: "2025-11-03T23:55:25Z"
+      message: Policy validation succeeded
+      status: "True"
+      type: Valid
+- apiVersion: cilium.io/v2
+  kind: CiliumNetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"cilium.io/v2","kind":"CiliumNetworkPolicy","metadata":{"annotations":{},"name":"allow-dns-to-kube-dns","namespace":"kube-system"},"spec":{"egress":[{"toEndpoints":[{"matchLabels":{"k8s:io.kubernetes.pod.namespace":"kube-system","k8s:k8s-app":"kube-dns"}}],"toPorts":[{"ports":[{"port":"53","protocol":"UDP"},{"port":"53","protocol":"TCP"}]}]}],"endpointSelector":{}}}
+    creationTimestamp: "2025-11-04T00:04:20Z"
+    generation: 1
+    name: allow-dns-to-kube-dns
+    namespace: kube-system
+    resourceVersion: "7982827"
+    uid: 78da48ba-4115-4e67-8bfd-86dda3ca6f7d
+  spec:
+    egress:
+    - toEndpoints:
+      - matchLabels:
+          k8s:io.kubernetes.pod.namespace: kube-system
+          k8s:k8s-app: kube-dns
+      toPorts:
+      - ports:
+        - port: "53"
+          protocol: UDP
+        - port: "53"
+          protocol: TCP
+    endpointSelector: {}
+  status:
+    conditions:
+    - lastTransitionTime: "2025-11-04T00:04:20Z"
+      message: Policy validation succeeded
+      status: "True"
+      type: Valid
+- apiVersion: cilium.io/v2
+  kind: CiliumNetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"cilium.io/v2","kind":"CiliumNetworkPolicy","metadata":{"annotations":{},"name":"cloudflared-doh-egress","namespace":"kube-system"},"spec":{"egress":[{"toEndpoints":[{"matchLabels":{"k8s:io.kubernetes.pod.namespace":"kube-system","k8s:k8s-app":"kube-dns"}}],"toPorts":[{"ports":[{"port":"53","protocol":"ANY"}],"rules":{"dns":[{"matchPattern":"*"}]}}]},{"toEntities":["world"],"toPorts":[{"ports":[{"port":"443","protocol":"TCP"}]}]}],"endpointSelector":{"matchLabels":{"app":"cloudflared-doh"}}}}
+    creationTimestamp: "2025-10-27T09:47:15Z"
+    generation: 1
+    name: cloudflared-doh-egress
+    namespace: kube-system
+    resourceVersion: "5079274"
+    uid: f67b51d6-c881-44a5-be01-d919cd3b104c
+  spec:
+    egress:
+    - toEndpoints:
+      - matchLabels:
+          k8s:io.kubernetes.pod.namespace: kube-system
+          k8s:k8s-app: kube-dns
+      toPorts:
+      - ports:
+        - port: "53"
+          protocol: ANY
+        rules:
+          dns:
+          - matchPattern: '*'
+    - toEntities:
+      - world
+      toPorts:
+      - ports:
+        - port: "443"
+          protocol: TCP
+    endpointSelector:
+      matchLabels:
+        app: cloudflared-doh
+  status:
+    conditions:
+    - lastTransitionTime: "2025-10-27T09:47:15Z"
+      message: Policy validation succeeded
+      status: "True"
+      type: Valid
+- apiVersion: cilium.io/v2
+  kind: CiliumNetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"cilium.io/v2","kind":"CiliumNetworkPolicy","metadata":{"annotations":{},"name":"cloudflared-doh-ingress","namespace":"kube-system"},"spec":{"endpointSelector":{"matchLabels":{"app":"cloudflared-doh"}},"ingress":[{"fromEndpoints":[{"matchLabels":{"k8s:io.kubernetes.pod.namespace":"kube-system","k8s:k8s-app":"kube-dns"}}],"toPorts":[{"ports":[{"port":"5355","protocol":"ANY"}]}]}]}}
+    creationTimestamp: "2025-10-27T09:50:26Z"
+    generation: 1
+    name: cloudflared-doh-ingress
+    namespace: kube-system
+    resourceVersion: "5079865"
+    uid: aa6b90d4-c3d7-41d1-9e51-af604e5991b4
+  spec:
+    endpointSelector:
+      matchLabels:
+        app: cloudflared-doh
+    ingress:
+    - fromEndpoints:
+      - matchLabels:
+          k8s:io.kubernetes.pod.namespace: kube-system
+          k8s:k8s-app: kube-dns
+      toPorts:
+      - ports:
+        - port: "5355"
+          protocol: ANY
+  status:
+    conditions:
+    - lastTransitionTime: "2025-10-27T09:50:26Z"
+      message: Policy validation succeeded
+      status: "True"
+      type: Valid
+- apiVersion: cilium.io/v2
+  kind: CiliumNetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"cilium.io/v2","kind":"CiliumNetworkPolicy","metadata":{"annotations":{},"name":"coredns-allow-host-probes-dns","namespace":"kube-system"},"spec":{"egress":[{"toEntities":["kube-apiserver"],"toPorts":[{"ports":[{"port":"443","protocol":"TCP"}]}]}],"endpointSelector":{"matchLabels":{"k8s:io.kubernetes.pod.namespace":"kube-system","k8s:k8s-app":"kube-dns"}},"ingress":[{"fromEntities":["host"],"toPorts":[{"ports":[{"port":"8181","protocol":"TCP"},{"port":"9153","protocol":"TCP"},{"port":"53","protocol":"UDP"},{"port":"53","protocol":"TCP"}]}]}]}}
+    creationTimestamp: "2025-11-04T00:18:27Z"
+    generation: 1
+    name: coredns-allow-host-probes-dns
+    namespace: kube-system
+    resourceVersion: "7987633"
+    uid: 804ee7ea-d26f-46dc-88b0-547ce8a3294a
+  spec:
+    egress:
+    - toEntities:
+      - kube-apiserver
+      toPorts:
+      - ports:
+        - port: "443"
+          protocol: TCP
+    endpointSelector:
+      matchLabels:
+        k8s:io.kubernetes.pod.namespace: kube-system
+        k8s:k8s-app: kube-dns
+    ingress:
+    - fromEntities:
+      - host
+      toPorts:
+      - ports:
+        - port: "8181"
+          protocol: TCP
+        - port: "9153"
+          protocol: TCP
+        - port: "53"
+          protocol: UDP
+        - port: "53"
+          protocol: TCP
+  status:
+    conditions:
+    - lastTransitionTime: "2025-11-04T00:18:27Z"
+      message: Policy validation succeeded
+      status: "True"
+      type: Valid
+- apiVersion: cilium.io/v2
+  kind: CiliumNetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"cilium.io/v2","kind":"CiliumNetworkPolicy","metadata":{"annotations":{},"name":"coredns-allow-probes-and-dns","namespace":"kube-system"},"spec":{"egress":[{"toEntities":["kube-apiserver"],"toPorts":[{"ports":[{"port":"443","protocol":"TCP"}]}]}],"endpointSelector":{"matchLabels":{"k8s:io.kubernetes.pod.namespace":"kube-system","k8s:k8s-app":"kube-dns"}},"ingress":[{"fromEntities":["host"],"toPorts":[{"ports":[{"port":"8181","protocol":"TCP"},{"port":"9153","protocol":"TCP"},{"port":"53","protocol":"UDP"},{"port":"53","protocol":"TCP"}]}]}]}}
+    creationTimestamp: "2025-11-04T00:15:08Z"
+    generation: 1
+    name: coredns-allow-probes-and-dns
+    namespace: kube-system
+    resourceVersion: "7986463"
+    uid: ca246459-46ca-4bf5-b4f0-a099e47d3380
+  spec:
+    egress:
+    - toEntities:
+      - kube-apiserver
+      toPorts:
+      - ports:
+        - port: "443"
+          protocol: TCP
+    endpointSelector:
+      matchLabels:
+        k8s:io.kubernetes.pod.namespace: kube-system
+        k8s:k8s-app: kube-dns
+    ingress:
+    - fromEntities:
+      - host
+      toPorts:
+      - ports:
+        - port: "8181"
+          protocol: TCP
+        - port: "9153"
+          protocol: TCP
+        - port: "53"
+          protocol: UDP
+        - port: "53"
+          protocol: TCP
+  status:
+    conditions:
+    - lastTransitionTime: "2025-11-04T00:15:08Z"
+      message: Policy validation succeeded
+      status: "True"
+      type: Valid
+- apiVersion: cilium.io/v2
+  kind: CiliumNetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"cilium.io/v2","kind":"CiliumNetworkPolicy","metadata":{"annotations":{},"name":"coredns-egress-allow-apiserver-fat","namespace":"kube-system"},"spec":{"egress":[{"toEntities":["kube-apiserver"],"toPorts":[{"ports":[{"port":"443","protocol":"TCP"}]}]},{"toPorts":[{"ports":[{"port":"443","protocol":"TCP"}]}],"toServices":[{"k8sService":{"namespace":"default","serviceName":"kubernetes"}}]},{"toCIDRSet":[{"cidr":"10.96.0.1/32"},{"cidr":"192.168.1.117/32"}],"toPorts":[{"ports":[{"port":"443","protocol":"TCP"},{"port":"6443","protocol":"TCP"}]}]}],"endpointSelector":{"matchLabels":{"k8s-app":"kube-dns"}}}}
+    creationTimestamp: "2025-11-03T04:00:36Z"
+    generation: 1
+    name: coredns-egress-allow-apiserver-fat
+    namespace: kube-system
+    resourceVersion: "7601737"
+    uid: f68d7389-9297-4641-9bc1-17bb368220a2
+  spec:
+    egress:
+    - toEntities:
+      - kube-apiserver
+      toPorts:
+      - ports:
+        - port: "443"
+          protocol: TCP
+    - toPorts:
+      - ports:
+        - port: "443"
+          protocol: TCP
+      toServices:
+      - k8sService:
+          namespace: default
+          serviceName: kubernetes
+    - toCIDRSet:
+      - cidr: 10.96.0.1/32
+      - cidr: 192.168.1.117/32
+      toPorts:
+      - ports:
+        - port: "443"
+          protocol: TCP
+        - port: "6443"
+          protocol: TCP
+    endpointSelector:
+      matchLabels:
+        k8s-app: kube-dns
+  status:
+    conditions:
+    - lastTransitionTime: "2025-11-03T04:00:36Z"
+      message: Policy validation succeeded
+      status: "True"
+      type: Valid
+- apiVersion: cilium.io/v2
+  kind: CiliumNetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"cilium.io/v2","kind":"CiliumNetworkPolicy","metadata":{"annotations":{},"name":"coredns-egress-allow-apiserver-final","namespace":"kube-system"},"spec":{"egress":[{"toEntities":["kube-apiserver"],"toPorts":[{"ports":[{"port":"443","protocol":"TCP"}]}]},{"toPorts":[{"ports":[{"port":"443","protocol":"TCP"}]}],"toServices":[{"k8sService":{"namespace":"default","serviceName":"kubernetes"}}]},{"toCIDRSet":[{"cidr":"10.96.0.1/32"},{"cidr":"192.168.1.117/32"}],"toPorts":[{"ports":[{"port":"443","protocol":"TCP"},{"port":"6443","protocol":"TCP"}]}]}],"endpointSelector":{"matchLabels":{"k8s-app":"kube-dns"}}}}
+    creationTimestamp: "2025-11-03T10:54:08Z"
+    generation: 1
+    name: coredns-egress-allow-apiserver-final
+    namespace: kube-system
+    resourceVersion: "7732879"
+    uid: 253cec9f-6c2a-4b73-aef9-d84e99347c03
+  spec:
+    egress:
+    - toEntities:
+      - kube-apiserver
+      toPorts:
+      - ports:
+        - port: "443"
+          protocol: TCP
+    - toPorts:
+      - ports:
+        - port: "443"
+          protocol: TCP
+      toServices:
+      - k8sService:
+          namespace: default
+          serviceName: kubernetes
+    - toCIDRSet:
+      - cidr: 10.96.0.1/32
+      - cidr: 192.168.1.117/32
+      toPorts:
+      - ports:
+        - port: "443"
+          protocol: TCP
+        - port: "6443"
+          protocol: TCP
+    endpointSelector:
+      matchLabels:
+        k8s-app: kube-dns
+  status:
+    conditions:
+    - lastTransitionTime: "2025-11-03T10:54:08Z"
+      message: Policy validation succeeded
+      status: "True"
+      type: Valid
+- apiVersion: cilium.io/v2
+  kind: CiliumNetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"cilium.io/v2","kind":"CiliumNetworkPolicy","metadata":{"annotations":{},"name":"coredns-egress-allow-apiserver-hard","namespace":"kube-system"},"spec":{"egress":[{"toEntities":["kube-apiserver"],"toPorts":[{"ports":[{"port":"443","protocol":"TCP"}]}]}],"endpointSelector":{"matchLabels":{"k8s-app":"kube-dns"}}}}
+    creationTimestamp: "2025-11-03T03:55:13Z"
+    generation: 1
+    name: coredns-egress-allow-apiserver-hard
+    namespace: kube-system
+    resourceVersion: "7599984"
+    uid: dce91c10-77b1-42cb-bfea-24a395e562fc
+  spec:
+    egress:
+    - toEntities:
+      - kube-apiserver
+      toPorts:
+      - ports:
+        - port: "443"
+          protocol: TCP
+    endpointSelector:
+      matchLabels:
+        k8s-app: kube-dns
+  status:
+    conditions:
+    - lastTransitionTime: "2025-11-03T03:55:14Z"
+      message: Policy validation succeeded
+      status: "True"
+      type: Valid
+- apiVersion: cilium.io/v2
+  kind: CiliumNetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"cilium.io/v2","kind":"CiliumNetworkPolicy","metadata":{"annotations":{},"name":"coredns-egress-allow-apiserver-temp","namespace":"kube-system"},"spec":{"egress":[{"toEntities":["kube-apiserver","host","remote-node"],"toPorts":[{"ports":[{"port":"6443","protocol":"TCP"},{"port":"443","protocol":"TCP"}]}]},{"toCIDR":["10.96.0.1/32"],"toPorts":[{"ports":[{"port":"443","protocol":"TCP"}]}]},{"toCIDR":["192.168.1.117/32"],"toPorts":[{"ports":[{"port":"6443","protocol":"TCP"},{"port":"443","protocol":"TCP"}]}]}],"endpointSelector":{"matchLabels":{"k8s-app":"kube-dns"}}}}
+    creationTimestamp: "2025-11-02T15:15:24Z"
+    generation: 1
+    name: coredns-egress-allow-apiserver-temp
+    namespace: kube-system
+    resourceVersion: "7356659"
+    uid: e51ead37-5a01-4a58-a0c3-77c9762010b7
+  spec:
+    egress:
+    - toEntities:
+      - kube-apiserver
+      - host
+      - remote-node
+      toPorts:
+      - ports:
+        - port: "6443"
+          protocol: TCP
+        - port: "443"
+          protocol: TCP
+    - toCIDR:
+      - 10.96.0.1/32
+      toPorts:
+      - ports:
+        - port: "443"
+          protocol: TCP
+    - toCIDR:
+      - 192.168.1.117/32
+      toPorts:
+      - ports:
+        - port: "6443"
+          protocol: TCP
+        - port: "443"
+          protocol: TCP
+    endpointSelector:
+      matchLabels:
+        k8s-app: kube-dns
+  status:
+    conditions:
+    - lastTransitionTime: "2025-11-02T15:15:24Z"
+      message: Policy validation succeeded
+      status: "True"
+      type: Valid
+- apiVersion: cilium.io/v2
+  kind: CiliumNetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"cilium.io/v2","kind":"CiliumNetworkPolicy","metadata":{"annotations":{},"name":"coredns-egress-apiserver-443","namespace":"kube-system"},"spec":{"egress":[{"toEntities":["kube-apiserver"],"toPorts":[{"ports":[{"port":"443","protocol":"TCP"}]}]}],"endpointSelector":{"matchLabels":{"rho2.identity":"system.coredns"}}}}
+    creationTimestamp: "2025-11-03T02:32:27Z"
+    generation: 1
+    name: coredns-egress-apiserver-443
+    namespace: kube-system
+    resourceVersion: "7573343"
+    uid: 355df283-3a1e-48f4-814c-70ac0c98c0a8
+  spec:
+    egress:
+    - toEntities:
+      - kube-apiserver
+      toPorts:
+      - ports:
+        - port: "443"
+          protocol: TCP
+    endpointSelector:
+      matchLabels:
+        rho2.identity: system.coredns
+  status:
+    conditions:
+    - lastTransitionTime: "2025-11-03T02:32:27Z"
+      message: Policy validation succeeded
+      status: "True"
+      type: Valid
+- apiVersion: cilium.io/v2
+  kind: CiliumNetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"cilium.io/v2","kind":"CiliumNetworkPolicy","metadata":{"annotations":{},"name":"coredns-egress-apiserver-ip","namespace":"kube-system"},"spec":{"egress":[{"toCIDR":["10.96.0.1/32"],"toPorts":[{"ports":[{"port":"443","protocol":"TCP"}]}]}],"endpointSelector":{"matchLabels":{"rho2.identity":"system.coredns"}}}}
+    creationTimestamp: "2025-11-03T02:32:27Z"
+    generation: 1
+    name: coredns-egress-apiserver-ip
+    namespace: kube-system
+    resourceVersion: "7573348"
+    uid: 46a6be11-7946-49bb-8be0-33fd2dca5bb9
+  spec:
+    egress:
+    - toCIDR:
+      - 10.96.0.1/32
+      toPorts:
+      - ports:
+        - port: "443"
+          protocol: TCP
+    endpointSelector:
+      matchLabels:
+        rho2.identity: system.coredns
+  status:
+    conditions:
+    - lastTransitionTime: "2025-11-03T02:32:27Z"
+      message: Policy validation succeeded
+      status: "True"
+      type: Valid
+- apiVersion: cilium.io/v2
+  kind: CiliumNetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"cilium.io/v2","kind":"CiliumNetworkPolicy","metadata":{"annotations":{},"name":"coredns-egress-temp-any-443","namespace":"kube-system"},"spec":{"egress":[{"toEntities":["host","cluster","world"],"toPorts":[{"ports":[{"port":"443","protocol":"TCP"},{"port":"6443","protocol":"TCP"}]}]}],"endpointSelector":{"matchLabels":{"k8s-app":"kube-dns"}}}}
+    creationTimestamp: "2025-11-03T10:56:34Z"
+    generation: 1
+    name: coredns-egress-temp-any-443
+    namespace: kube-system
+    resourceVersion: "7733678"
+    uid: 8625f57c-10ad-4682-9b8a-38759e6028fd
+  spec:
+    egress:
+    - toEntities:
+      - host
+      - cluster
+      - world
+      toPorts:
+      - ports:
+        - port: "443"
+          protocol: TCP
+        - port: "6443"
+          protocol: TCP
+    endpointSelector:
+      matchLabels:
+        k8s-app: kube-dns
+  status:
+    conditions:
+    - lastTransitionTime: "2025-11-03T10:56:35Z"
+      message: Policy validation succeeded
+      status: "True"
+      type: Valid
+- apiVersion: cilium.io/v2
+  kind: CiliumNetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"cilium.io/v2","kind":"CiliumNetworkPolicy","metadata":{"annotations":{},"name":"coredns-ingress-1053-cluster","namespace":"kube-system"},"spec":{"endpointSelector":{"matchLabels":{"k8s-app":"kube-dns"}},"ingress":[{"fromEntities":["cluster"],"toPorts":[{"ports":[{"port":"1053","protocol":"UDP"},{"port":"1053","protocol":"TCP"}]}]}]}}
+    creationTimestamp: "2025-11-03T02:56:36Z"
+    generation: 1
+    name: coredns-ingress-1053-cluster
+    namespace: kube-system
+    resourceVersion: "7581108"
+    uid: 5e8605d3-b7aa-4ce0-9182-2f95708cdba2
+  spec:
+    endpointSelector:
+      matchLabels:
+        k8s-app: kube-dns
+    ingress:
+    - fromEntities:
+      - cluster
+      toPorts:
+      - ports:
+        - port: "1053"
+          protocol: UDP
+        - port: "1053"
+          protocol: TCP
+  status:
+    conditions:
+    - lastTransitionTime: "2025-11-03T02:56:36Z"
+      message: Policy validation succeeded
+      status: "True"
+      type: Valid
+- apiVersion: cilium.io/v2
+  kind: CiliumNetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"cilium.io/v2","kind":"CiliumNetworkPolicy","metadata":{"annotations":{},"name":"coredns-ingress-from-cluster","namespace":"kube-system"},"spec":{"endpointSelector":{"matchLabels":{"k8s-app":"kube-dns"}},"ingress":[{"fromEntities":["cluster"],"toPorts":[{"ports":[{"port":"53","protocol":"UDP"},{"port":"53","protocol":"TCP"}]}]}]}}
+    creationTimestamp: "2025-11-03T04:00:35Z"
+    generation: 1
+    name: coredns-ingress-from-cluster
+    namespace: kube-system
+    resourceVersion: "7601731"
+    uid: fdcf6a13-34ef-4ad4-bc92-8d6feaa8955c
+  spec:
+    endpointSelector:
+      matchLabels:
+        k8s-app: kube-dns
+    ingress:
+    - fromEntities:
+      - cluster
+      toPorts:
+      - ports:
+        - port: "53"
+          protocol: UDP
+        - port: "53"
+          protocol: TCP
+  status:
+    conditions:
+    - lastTransitionTime: "2025-11-03T04:00:35Z"
+      message: Policy validation succeeded
+      status: "True"
+      type: Valid
+- apiVersion: cilium.io/v2
+  kind: CiliumNetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"cilium.io/v2","kind":"CiliumNetworkPolicy","metadata":{"annotations":{},"name":"dnscheck-egress-allow","namespace":"kube-system"},"spec":{"egress":[{"toEntities":["cluster"],"toPorts":[{"ports":[{"port":"53","protocol":"UDP"},{"port":"53","protocol":"TCP"}]}]},{"toEndpoints":[{"matchLabels":{"k8s-app":"kube-dns"}}],"toPorts":[{"ports":[{"port":"1053","protocol":"UDP"},{"port":"1053","protocol":"TCP"}]}]}],"endpointSelector":{"matchLabels":{"app":"dnscheck","rho2.identity":"util.dnscheck"}}}}
+    creationTimestamp: "2025-11-03T03:47:01Z"
+    generation: 1
+    name: dnscheck-egress-allow
+    namespace: kube-system
+    resourceVersion: "7597367"
+    uid: 146c1b19-c311-4e9e-ba7a-84e41f6f5578
+  spec:
+    egress:
+    - toEntities:
+      - cluster
+      toPorts:
+      - ports:
+        - port: "53"
+          protocol: UDP
+        - port: "53"
+          protocol: TCP
+    - toEndpoints:
+      - matchLabels:
+          k8s-app: kube-dns
+      toPorts:
+      - ports:
+        - port: "1053"
+          protocol: UDP
+        - port: "1053"
+          protocol: TCP
+    endpointSelector:
+      matchLabels:
+        app: dnscheck
+        rho2.identity: util.dnscheck
+  status:
+    conditions:
+    - lastTransitionTime: "2025-11-03T03:47:01Z"
+      message: Policy validation succeeded
+      status: "True"
+      type: Valid
+- apiVersion: cilium.io/v2
+  kind: CiliumNetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"cilium.io/v2","kind":"CiliumNetworkPolicy","metadata":{"annotations":{},"name":"tailscale-operator-egress","namespace":"kube-system"},"spec":{"egress":[{"toEndpoints":[{"matchLabels":{"k8s-app":"kube-dns"}}],"toPorts":[{"ports":[{"port":"53","protocol":"ANY"}],"rules":{"dns":[{"matchPattern":"*"}]}}]},{"toCIDR":["10.96.0.1/32"],"toPorts":[{"ports":[{"port":"443","protocol":"TCP"}]}]},{"toEntities":["kube-apiserver","host"],"toPorts":[{"ports":[{"port":"443","protocol":"TCP"}]}]},{"toFQDNs":[{"matchName":"controlplane.tailscale.com"},{"matchName":"login.tailscale.com"},{"matchName":"api.tailscale.com"},{"matchPattern":"*.ts.net"}],"toPorts":[{"ports":[{"port":"443","protocol":"TCP"}]}]}],"endpointSelector":{"matchLabels":{"app":"operator"}}}}
+    creationTimestamp: "2025-10-27T03:38:38Z"
+    generation: 1
+    name: tailscale-operator-egress
+    namespace: kube-system
+    resourceVersion: "5026262"
+    uid: f0d12075-3740-4a1f-8134-81fc3d5db471
+  spec:
+    egress:
+    - toEndpoints:
+      - matchLabels:
+          k8s-app: kube-dns
+      toPorts:
+      - ports:
+        - port: "53"
+          protocol: ANY
+        rules:
+          dns:
+          - matchPattern: '*'
+    - toCIDR:
+      - 10.96.0.1/32
+      toPorts:
+      - ports:
+        - port: "443"
+          protocol: TCP
+    - toEntities:
+      - kube-apiserver
+      - host
+      toPorts:
+      - ports:
+        - port: "443"
+          protocol: TCP
+    - toFQDNs:
+      - matchName: controlplane.tailscale.com
+      - matchName: login.tailscale.com
+      - matchName: api.tailscale.com
+      - matchPattern: '*.ts.net'
+      toPorts:
+      - ports:
+        - port: "443"
+          protocol: TCP
+    endpointSelector:
+      matchLabels:
+        app: operator
+  status:
+    conditions:
+    - lastTransitionTime: "2025-10-27T03:38:38Z"
+      message: Policy validation succeeded
+      status: "True"
+      type: Valid
+kind: List
+metadata:
+  resourceVersion: ""
+apiVersion: v1
+items:
+- apiVersion: cilium.io/v2
+  kind: CiliumNetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"cilium.io/v2","kind":"CiliumNetworkPolicy","metadata":{"annotations":{},"name":"allow-dns-to-coredns-hostnet","namespace":"kube-system"},"spec":{"endpointSelector":{"matchLabels":{"k8s-app":"kube-dns"}},"ingress":[{"fromEntities":["cluster"],"toPorts":[{"ports":[{"port":"1053","protocol":"UDP"},{"port":"1053","protocol":"TCP"}]}]}]}}
+    creationTimestamp: "2025-11-03T23:55:25Z"
+    generation: 1
+    name: allow-dns-to-coredns-hostnet
+    namespace: kube-system
+    resourceVersion: "7979871"
+    uid: 31f1e6d4-27c4-4a4a-a62e-60d828f52328
+  spec:
+    endpointSelector:
+      matchLabels:
+        k8s-app: kube-dns
+    ingress:
+    - fromEntities:
+      - cluster
+      toPorts:
+      - ports:
+        - port: "1053"
+          protocol: UDP
+        - port: "1053"
+          protocol: TCP
+  status:
+    conditions:
+    - lastTransitionTime: "2025-11-03T23:55:25Z"
+      message: Policy validation succeeded
+      status: "True"
+      type: Valid
+- apiVersion: cilium.io/v2
+  kind: CiliumNetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"cilium.io/v2","kind":"CiliumNetworkPolicy","metadata":{"annotations":{},"name":"allow-dns-to-kube-dns","namespace":"kube-system"},"spec":{"egress":[{"toEndpoints":[{"matchLabels":{"k8s:io.kubernetes.pod.namespace":"kube-system","k8s:k8s-app":"kube-dns"}}],"toPorts":[{"ports":[{"port":"53","protocol":"UDP"},{"port":"53","protocol":"TCP"}]}]}],"endpointSelector":{}}}
+    creationTimestamp: "2025-11-04T00:04:20Z"
+    generation: 1
+    name: allow-dns-to-kube-dns
+    namespace: kube-system
+    resourceVersion: "7982827"
+    uid: 78da48ba-4115-4e67-8bfd-86dda3ca6f7d
+  spec:
+    egress:
+    - toEndpoints:
+      - matchLabels:
+          k8s:io.kubernetes.pod.namespace: kube-system
+          k8s:k8s-app: kube-dns
+      toPorts:
+      - ports:
+        - port: "53"
+          protocol: UDP
+        - port: "53"
+          protocol: TCP
+    endpointSelector: {}
+  status:
+    conditions:
+    - lastTransitionTime: "2025-11-04T00:04:20Z"
+      message: Policy validation succeeded
+      status: "True"
+      type: Valid
+- apiVersion: cilium.io/v2
+  kind: CiliumNetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"cilium.io/v2","kind":"CiliumNetworkPolicy","metadata":{"annotations":{},"name":"cloudflared-doh-egress","namespace":"kube-system"},"spec":{"egress":[{"toEndpoints":[{"matchLabels":{"k8s:io.kubernetes.pod.namespace":"kube-system","k8s:k8s-app":"kube-dns"}}],"toPorts":[{"ports":[{"port":"53","protocol":"ANY"}],"rules":{"dns":[{"matchPattern":"*"}]}}]},{"toEntities":["world"],"toPorts":[{"ports":[{"port":"443","protocol":"TCP"}]}]}],"endpointSelector":{"matchLabels":{"app":"cloudflared-doh"}}}}
+    creationTimestamp: "2025-10-27T09:47:15Z"
+    generation: 1
+    name: cloudflared-doh-egress
+    namespace: kube-system
+    resourceVersion: "5079274"
+    uid: f67b51d6-c881-44a5-be01-d919cd3b104c
+  spec:
+    egress:
+    - toEndpoints:
+      - matchLabels:
+          k8s:io.kubernetes.pod.namespace: kube-system
+          k8s:k8s-app: kube-dns
+      toPorts:
+      - ports:
+        - port: "53"
+          protocol: ANY
+        rules:
+          dns:
+          - matchPattern: '*'
+    - toEntities:
+      - world
+      toPorts:
+      - ports:
+        - port: "443"
+          protocol: TCP
+    endpointSelector:
+      matchLabels:
+        app: cloudflared-doh
+  status:
+    conditions:
+    - lastTransitionTime: "2025-10-27T09:47:15Z"
+      message: Policy validation succeeded
+      status: "True"
+      type: Valid
+- apiVersion: cilium.io/v2
+  kind: CiliumNetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"cilium.io/v2","kind":"CiliumNetworkPolicy","metadata":{"annotations":{},"name":"cloudflared-doh-ingress","namespace":"kube-system"},"spec":{"endpointSelector":{"matchLabels":{"app":"cloudflared-doh"}},"ingress":[{"fromEndpoints":[{"matchLabels":{"k8s:io.kubernetes.pod.namespace":"kube-system","k8s:k8s-app":"kube-dns"}}],"toPorts":[{"ports":[{"port":"5355","protocol":"ANY"}]}]}]}}
+    creationTimestamp: "2025-10-27T09:50:26Z"
+    generation: 1
+    name: cloudflared-doh-ingress
+    namespace: kube-system
+    resourceVersion: "5079865"
+    uid: aa6b90d4-c3d7-41d1-9e51-af604e5991b4
+  spec:
+    endpointSelector:
+      matchLabels:
+        app: cloudflared-doh
+    ingress:
+    - fromEndpoints:
+      - matchLabels:
+          k8s:io.kubernetes.pod.namespace: kube-system
+          k8s:k8s-app: kube-dns
+      toPorts:
+      - ports:
+        - port: "5355"
+          protocol: ANY
+  status:
+    conditions:
+    - lastTransitionTime: "2025-10-27T09:50:26Z"
+      message: Policy validation succeeded
+      status: "True"
+      type: Valid
+- apiVersion: cilium.io/v2
+  kind: CiliumNetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"cilium.io/v2","kind":"CiliumNetworkPolicy","metadata":{"annotations":{},"name":"coredns-allow-host-probes-dns","namespace":"kube-system"},"spec":{"egress":[{"toEntities":["kube-apiserver"],"toPorts":[{"ports":[{"port":"443","protocol":"TCP"}]}]}],"endpointSelector":{"matchLabels":{"k8s:io.kubernetes.pod.namespace":"kube-system","k8s:k8s-app":"kube-dns"}},"ingress":[{"fromEntities":["host"],"toPorts":[{"ports":[{"port":"8181","protocol":"TCP"},{"port":"9153","protocol":"TCP"},{"port":"53","protocol":"UDP"},{"port":"53","protocol":"TCP"}]}]}]}}
+    creationTimestamp: "2025-11-04T00:18:27Z"
+    generation: 1
+    name: coredns-allow-host-probes-dns
+    namespace: kube-system
+    resourceVersion: "7987633"
+    uid: 804ee7ea-d26f-46dc-88b0-547ce8a3294a
+  spec:
+    egress:
+    - toEntities:
+      - kube-apiserver
+      toPorts:
+      - ports:
+        - port: "443"
+          protocol: TCP
+    endpointSelector:
+      matchLabels:
+        k8s:io.kubernetes.pod.namespace: kube-system
+        k8s:k8s-app: kube-dns
+    ingress:
+    - fromEntities:
+      - host
+      toPorts:
+      - ports:
+        - port: "8181"
+          protocol: TCP
+        - port: "9153"
+          protocol: TCP
+        - port: "53"
+          protocol: UDP
+        - port: "53"
+          protocol: TCP
+  status:
+    conditions:
+    - lastTransitionTime: "2025-11-04T00:18:27Z"
+      message: Policy validation succeeded
+      status: "True"
+      type: Valid
+- apiVersion: cilium.io/v2
+  kind: CiliumNetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"cilium.io/v2","kind":"CiliumNetworkPolicy","metadata":{"annotations":{},"name":"coredns-allow-probes-and-dns","namespace":"kube-system"},"spec":{"egress":[{"toEntities":["kube-apiserver"],"toPorts":[{"ports":[{"port":"443","protocol":"TCP"}]}]}],"endpointSelector":{"matchLabels":{"k8s:io.kubernetes.pod.namespace":"kube-system","k8s:k8s-app":"kube-dns"}},"ingress":[{"fromEntities":["host"],"toPorts":[{"ports":[{"port":"8181","protocol":"TCP"},{"port":"9153","protocol":"TCP"},{"port":"53","protocol":"UDP"},{"port":"53","protocol":"TCP"}]}]}]}}
+    creationTimestamp: "2025-11-04T00:15:08Z"
+    generation: 1
+    name: coredns-allow-probes-and-dns
+    namespace: kube-system
+    resourceVersion: "7986463"
+    uid: ca246459-46ca-4bf5-b4f0-a099e47d3380
+  spec:
+    egress:
+    - toEntities:
+      - kube-apiserver
+      toPorts:
+      - ports:
+        - port: "443"
+          protocol: TCP
+    endpointSelector:
+      matchLabels:
+        k8s:io.kubernetes.pod.namespace: kube-system
+        k8s:k8s-app: kube-dns
+    ingress:
+    - fromEntities:
+      - host
+      toPorts:
+      - ports:
+        - port: "8181"
+          protocol: TCP
+        - port: "9153"
+          protocol: TCP
+        - port: "53"
+          protocol: UDP
+        - port: "53"
+          protocol: TCP
+  status:
+    conditions:
+    - lastTransitionTime: "2025-11-04T00:15:08Z"
+      message: Policy validation succeeded
+      status: "True"
+      type: Valid
+- apiVersion: cilium.io/v2
+  kind: CiliumNetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"cilium.io/v2","kind":"CiliumNetworkPolicy","metadata":{"annotations":{},"name":"coredns-egress-allow-apiserver-fat","namespace":"kube-system"},"spec":{"egress":[{"toEntities":["kube-apiserver"],"toPorts":[{"ports":[{"port":"443","protocol":"TCP"}]}]},{"toPorts":[{"ports":[{"port":"443","protocol":"TCP"}]}],"toServices":[{"k8sService":{"namespace":"default","serviceName":"kubernetes"}}]},{"toCIDRSet":[{"cidr":"10.96.0.1/32"},{"cidr":"192.168.1.117/32"}],"toPorts":[{"ports":[{"port":"443","protocol":"TCP"},{"port":"6443","protocol":"TCP"}]}]}],"endpointSelector":{"matchLabels":{"k8s-app":"kube-dns"}}}}
+    creationTimestamp: "2025-11-03T04:00:36Z"
+    generation: 1
+    name: coredns-egress-allow-apiserver-fat
+    namespace: kube-system
+    resourceVersion: "7601737"
+    uid: f68d7389-9297-4641-9bc1-17bb368220a2
+  spec:
+    egress:
+    - toEntities:
+      - kube-apiserver
+      toPorts:
+      - ports:
+        - port: "443"
+          protocol: TCP
+    - toPorts:
+      - ports:
+        - port: "443"
+          protocol: TCP
+      toServices:
+      - k8sService:
+          namespace: default
+          serviceName: kubernetes
+    - toCIDRSet:
+      - cidr: 10.96.0.1/32
+      - cidr: 192.168.1.117/32
+      toPorts:
+      - ports:
+        - port: "443"
+          protocol: TCP
+        - port: "6443"
+          protocol: TCP
+    endpointSelector:
+      matchLabels:
+        k8s-app: kube-dns
+  status:
+    conditions:
+    - lastTransitionTime: "2025-11-03T04:00:36Z"
+      message: Policy validation succeeded
+      status: "True"
+      type: Valid
+- apiVersion: cilium.io/v2
+  kind: CiliumNetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"cilium.io/v2","kind":"CiliumNetworkPolicy","metadata":{"annotations":{},"name":"coredns-egress-allow-apiserver-final","namespace":"kube-system"},"spec":{"egress":[{"toEntities":["kube-apiserver"],"toPorts":[{"ports":[{"port":"443","protocol":"TCP"}]}]},{"toPorts":[{"ports":[{"port":"443","protocol":"TCP"}]}],"toServices":[{"k8sService":{"namespace":"default","serviceName":"kubernetes"}}]},{"toCIDRSet":[{"cidr":"10.96.0.1/32"},{"cidr":"192.168.1.117/32"}],"toPorts":[{"ports":[{"port":"443","protocol":"TCP"},{"port":"6443","protocol":"TCP"}]}]}],"endpointSelector":{"matchLabels":{"k8s-app":"kube-dns"}}}}
+    creationTimestamp: "2025-11-03T10:54:08Z"
+    generation: 1
+    name: coredns-egress-allow-apiserver-final
+    namespace: kube-system
+    resourceVersion: "7732879"
+    uid: 253cec9f-6c2a-4b73-aef9-d84e99347c03
+  spec:
+    egress:
+    - toEntities:
+      - kube-apiserver
+      toPorts:
+      - ports:
+        - port: "443"
+          protocol: TCP
+    - toPorts:
+      - ports:
+        - port: "443"
+          protocol: TCP
+      toServices:
+      - k8sService:
+          namespace: default
+          serviceName: kubernetes
+    - toCIDRSet:
+      - cidr: 10.96.0.1/32
+      - cidr: 192.168.1.117/32
+      toPorts:
+      - ports:
+        - port: "443"
+          protocol: TCP
+        - port: "6443"
+          protocol: TCP
+    endpointSelector:
+      matchLabels:
+        k8s-app: kube-dns
+  status:
+    conditions:
+    - lastTransitionTime: "2025-11-03T10:54:08Z"
+      message: Policy validation succeeded
+      status: "True"
+      type: Valid
+- apiVersion: cilium.io/v2
+  kind: CiliumNetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"cilium.io/v2","kind":"CiliumNetworkPolicy","metadata":{"annotations":{},"name":"coredns-egress-allow-apiserver-hard","namespace":"kube-system"},"spec":{"egress":[{"toEntities":["kube-apiserver"],"toPorts":[{"ports":[{"port":"443","protocol":"TCP"}]}]}],"endpointSelector":{"matchLabels":{"k8s-app":"kube-dns"}}}}
+    creationTimestamp: "2025-11-03T03:55:13Z"
+    generation: 1
+    name: coredns-egress-allow-apiserver-hard
+    namespace: kube-system
+    resourceVersion: "7599984"
+    uid: dce91c10-77b1-42cb-bfea-24a395e562fc
+  spec:
+    egress:
+    - toEntities:
+      - kube-apiserver
+      toPorts:
+      - ports:
+        - port: "443"
+          protocol: TCP
+    endpointSelector:
+      matchLabels:
+        k8s-app: kube-dns
+  status:
+    conditions:
+    - lastTransitionTime: "2025-11-03T03:55:14Z"
+      message: Policy validation succeeded
+      status: "True"
+      type: Valid
+- apiVersion: cilium.io/v2
+  kind: CiliumNetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"cilium.io/v2","kind":"CiliumNetworkPolicy","metadata":{"annotations":{},"name":"coredns-egress-allow-apiserver-temp","namespace":"kube-system"},"spec":{"egress":[{"toEntities":["kube-apiserver","host","remote-node"],"toPorts":[{"ports":[{"port":"6443","protocol":"TCP"},{"port":"443","protocol":"TCP"}]}]},{"toCIDR":["10.96.0.1/32"],"toPorts":[{"ports":[{"port":"443","protocol":"TCP"}]}]},{"toCIDR":["192.168.1.117/32"],"toPorts":[{"ports":[{"port":"6443","protocol":"TCP"},{"port":"443","protocol":"TCP"}]}]}],"endpointSelector":{"matchLabels":{"k8s-app":"kube-dns"}}}}
+    creationTimestamp: "2025-11-02T15:15:24Z"
+    generation: 1
+    name: coredns-egress-allow-apiserver-temp
+    namespace: kube-system
+    resourceVersion: "7356659"
+    uid: e51ead37-5a01-4a58-a0c3-77c9762010b7
+  spec:
+    egress:
+    - toEntities:
+      - kube-apiserver
+      - host
+      - remote-node
+      toPorts:
+      - ports:
+        - port: "6443"
+          protocol: TCP
+        - port: "443"
+          protocol: TCP
+    - toCIDR:
+      - 10.96.0.1/32
+      toPorts:
+      - ports:
+        - port: "443"
+          protocol: TCP
+    - toCIDR:
+      - 192.168.1.117/32
+      toPorts:
+      - ports:
+        - port: "6443"
+          protocol: TCP
+        - port: "443"
+          protocol: TCP
+    endpointSelector:
+      matchLabels:
+        k8s-app: kube-dns
+  status:
+    conditions:
+    - lastTransitionTime: "2025-11-02T15:15:24Z"
+      message: Policy validation succeeded
+      status: "True"
+      type: Valid
+- apiVersion: cilium.io/v2
+  kind: CiliumNetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"cilium.io/v2","kind":"CiliumNetworkPolicy","metadata":{"annotations":{},"name":"coredns-egress-apiserver-443","namespace":"kube-system"},"spec":{"egress":[{"toEntities":["kube-apiserver"],"toPorts":[{"ports":[{"port":"443","protocol":"TCP"}]}]}],"endpointSelector":{"matchLabels":{"rho2.identity":"system.coredns"}}}}
+    creationTimestamp: "2025-11-03T02:32:27Z"
+    generation: 1
+    name: coredns-egress-apiserver-443
+    namespace: kube-system
+    resourceVersion: "7573343"
+    uid: 355df283-3a1e-48f4-814c-70ac0c98c0a8
+  spec:
+    egress:
+    - toEntities:
+      - kube-apiserver
+      toPorts:
+      - ports:
+        - port: "443"
+          protocol: TCP
+    endpointSelector:
+      matchLabels:
+        rho2.identity: system.coredns
+  status:
+    conditions:
+    - lastTransitionTime: "2025-11-03T02:32:27Z"
+      message: Policy validation succeeded
+      status: "True"
+      type: Valid
+- apiVersion: cilium.io/v2
+  kind: CiliumNetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"cilium.io/v2","kind":"CiliumNetworkPolicy","metadata":{"annotations":{},"name":"coredns-egress-apiserver-ip","namespace":"kube-system"},"spec":{"egress":[{"toCIDR":["10.96.0.1/32"],"toPorts":[{"ports":[{"port":"443","protocol":"TCP"}]}]}],"endpointSelector":{"matchLabels":{"rho2.identity":"system.coredns"}}}}
+    creationTimestamp: "2025-11-03T02:32:27Z"
+    generation: 1
+    name: coredns-egress-apiserver-ip
+    namespace: kube-system
+    resourceVersion: "7573348"
+    uid: 46a6be11-7946-49bb-8be0-33fd2dca5bb9
+  spec:
+    egress:
+    - toCIDR:
+      - 10.96.0.1/32
+      toPorts:
+      - ports:
+        - port: "443"
+          protocol: TCP
+    endpointSelector:
+      matchLabels:
+        rho2.identity: system.coredns
+  status:
+    conditions:
+    - lastTransitionTime: "2025-11-03T02:32:27Z"
+      message: Policy validation succeeded
+      status: "True"
+      type: Valid
+- apiVersion: cilium.io/v2
+  kind: CiliumNetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"cilium.io/v2","kind":"CiliumNetworkPolicy","metadata":{"annotations":{},"name":"coredns-egress-temp-any-443","namespace":"kube-system"},"spec":{"egress":[{"toEntities":["host","cluster","world"],"toPorts":[{"ports":[{"port":"443","protocol":"TCP"},{"port":"6443","protocol":"TCP"}]}]}],"endpointSelector":{"matchLabels":{"k8s-app":"kube-dns"}}}}
+    creationTimestamp: "2025-11-03T10:56:34Z"
+    generation: 1
+    name: coredns-egress-temp-any-443
+    namespace: kube-system
+    resourceVersion: "7733678"
+    uid: 8625f57c-10ad-4682-9b8a-38759e6028fd
+  spec:
+    egress:
+    - toEntities:
+      - host
+      - cluster
+      - world
+      toPorts:
+      - ports:
+        - port: "443"
+          protocol: TCP
+        - port: "6443"
+          protocol: TCP
+    endpointSelector:
+      matchLabels:
+        k8s-app: kube-dns
+  status:
+    conditions:
+    - lastTransitionTime: "2025-11-03T10:56:35Z"
+      message: Policy validation succeeded
+      status: "True"
+      type: Valid
+- apiVersion: cilium.io/v2
+  kind: CiliumNetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"cilium.io/v2","kind":"CiliumNetworkPolicy","metadata":{"annotations":{},"name":"coredns-ingress-1053-cluster","namespace":"kube-system"},"spec":{"endpointSelector":{"matchLabels":{"k8s-app":"kube-dns"}},"ingress":[{"fromEntities":["cluster"],"toPorts":[{"ports":[{"port":"1053","protocol":"UDP"},{"port":"1053","protocol":"TCP"}]}]}]}}
+    creationTimestamp: "2025-11-03T02:56:36Z"
+    generation: 1
+    name: coredns-ingress-1053-cluster
+    namespace: kube-system
+    resourceVersion: "7581108"
+    uid: 5e8605d3-b7aa-4ce0-9182-2f95708cdba2
+  spec:
+    endpointSelector:
+      matchLabels:
+        k8s-app: kube-dns
+    ingress:
+    - fromEntities:
+      - cluster
+      toPorts:
+      - ports:
+        - port: "1053"
+          protocol: UDP
+        - port: "1053"
+          protocol: TCP
+  status:
+    conditions:
+    - lastTransitionTime: "2025-11-03T02:56:36Z"
+      message: Policy validation succeeded
+      status: "True"
+      type: Valid
+- apiVersion: cilium.io/v2
+  kind: CiliumNetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"cilium.io/v2","kind":"CiliumNetworkPolicy","metadata":{"annotations":{},"name":"coredns-ingress-from-cluster","namespace":"kube-system"},"spec":{"endpointSelector":{"matchLabels":{"k8s-app":"kube-dns"}},"ingress":[{"fromEntities":["cluster"],"toPorts":[{"ports":[{"port":"53","protocol":"UDP"},{"port":"53","protocol":"TCP"}]}]}]}}
+    creationTimestamp: "2025-11-03T04:00:35Z"
+    generation: 1
+    name: coredns-ingress-from-cluster
+    namespace: kube-system
+    resourceVersion: "7601731"
+    uid: fdcf6a13-34ef-4ad4-bc92-8d6feaa8955c
+  spec:
+    endpointSelector:
+      matchLabels:
+        k8s-app: kube-dns
+    ingress:
+    - fromEntities:
+      - cluster
+      toPorts:
+      - ports:
+        - port: "53"
+          protocol: UDP
+        - port: "53"
+          protocol: TCP
+  status:
+    conditions:
+    - lastTransitionTime: "2025-11-03T04:00:35Z"
+      message: Policy validation succeeded
+      status: "True"
+      type: Valid
+- apiVersion: cilium.io/v2
+  kind: CiliumNetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"cilium.io/v2","kind":"CiliumNetworkPolicy","metadata":{"annotations":{},"name":"dnscheck-egress-allow","namespace":"kube-system"},"spec":{"egress":[{"toEntities":["cluster"],"toPorts":[{"ports":[{"port":"53","protocol":"UDP"},{"port":"53","protocol":"TCP"}]}]},{"toEndpoints":[{"matchLabels":{"k8s-app":"kube-dns"}}],"toPorts":[{"ports":[{"port":"1053","protocol":"UDP"},{"port":"1053","protocol":"TCP"}]}]}],"endpointSelector":{"matchLabels":{"app":"dnscheck","rho2.identity":"util.dnscheck"}}}}
+    creationTimestamp: "2025-11-03T03:47:01Z"
+    generation: 1
+    name: dnscheck-egress-allow
+    namespace: kube-system
+    resourceVersion: "7597367"
+    uid: 146c1b19-c311-4e9e-ba7a-84e41f6f5578
+  spec:
+    egress:
+    - toEntities:
+      - cluster
+      toPorts:
+      - ports:
+        - port: "53"
+          protocol: UDP
+        - port: "53"
+          protocol: TCP
+    - toEndpoints:
+      - matchLabels:
+          k8s-app: kube-dns
+      toPorts:
+      - ports:
+        - port: "1053"
+          protocol: UDP
+        - port: "1053"
+          protocol: TCP
+    endpointSelector:
+      matchLabels:
+        app: dnscheck
+        rho2.identity: util.dnscheck
+  status:
+    conditions:
+    - lastTransitionTime: "2025-11-03T03:47:01Z"
+      message: Policy validation succeeded
+      status: "True"
+      type: Valid
+- apiVersion: cilium.io/v2
+  kind: CiliumNetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"cilium.io/v2","kind":"CiliumNetworkPolicy","metadata":{"annotations":{},"name":"tailscale-operator-egress","namespace":"kube-system"},"spec":{"egress":[{"toEndpoints":[{"matchLabels":{"k8s-app":"kube-dns"}}],"toPorts":[{"ports":[{"port":"53","protocol":"ANY"}],"rules":{"dns":[{"matchPattern":"*"}]}}]},{"toCIDR":["10.96.0.1/32"],"toPorts":[{"ports":[{"port":"443","protocol":"TCP"}]}]},{"toEntities":["kube-apiserver","host"],"toPorts":[{"ports":[{"port":"443","protocol":"TCP"}]}]},{"toFQDNs":[{"matchName":"controlplane.tailscale.com"},{"matchName":"login.tailscale.com"},{"matchName":"api.tailscale.com"},{"matchPattern":"*.ts.net"}],"toPorts":[{"ports":[{"port":"443","protocol":"TCP"}]}]}],"endpointSelector":{"matchLabels":{"app":"operator"}}}}
+    creationTimestamp: "2025-10-27T03:38:38Z"
+    generation: 1
+    name: tailscale-operator-egress
+    namespace: kube-system
+    resourceVersion: "5026262"
+    uid: f0d12075-3740-4a1f-8134-81fc3d5db471
+  spec:
+    egress:
+    - toEndpoints:
+      - matchLabels:
+          k8s-app: kube-dns
+      toPorts:
+      - ports:
+        - port: "53"
+          protocol: ANY
+        rules:
+          dns:
+          - matchPattern: '*'
+    - toCIDR:
+      - 10.96.0.1/32
+      toPorts:
+      - ports:
+        - port: "443"
+          protocol: TCP
+    - toEntities:
+      - kube-apiserver
+      - host
+      toPorts:
+      - ports:
+        - port: "443"
+          protocol: TCP
+    - toFQDNs:
+      - matchName: controlplane.tailscale.com
+      - matchName: login.tailscale.com
+      - matchName: api.tailscale.com
+      - matchPattern: '*.ts.net'
+      toPorts:
+      - ports:
+        - port: "443"
+          protocol: TCP
+    endpointSelector:
+      matchLabels:
+        app: operator
+  status:
+    conditions:
+    - lastTransitionTime: "2025-10-27T03:38:38Z"
+      message: Policy validation succeeded
+      status: "True"
+      type: Valid
+kind: List
+metadata:
+  resourceVersion: ""

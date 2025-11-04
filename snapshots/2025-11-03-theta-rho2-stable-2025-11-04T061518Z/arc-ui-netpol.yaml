@@ -1,0 +1,200 @@
+apiVersion: v1
+items:
+- apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"NetworkPolicy","metadata":{"annotations":{},"name":"egress-dns-and-chi-allow","namespace":"arc-ui"},"spec":{"egress":[{"ports":[{"port":1053,"protocol":"UDP"},{"port":1053,"protocol":"TCP"},{"port":53,"protocol":"UDP"},{"port":53,"protocol":"TCP"}],"to":[{"namespaceSelector":{"matchLabels":{"kubernetes.io/metadata.name":"kube-system"}},"podSelector":{"matchLabels":{"k8s-app":"kube-dns"}}}]},{"ports":[{"port":4222,"protocol":"TCP"},{"port":7422,"protocol":"TCP"}],"to":[{"namespaceSelector":{"matchLabels":{"kubernetes.io/metadata.name":"arc-chi"}},"podSelector":{"matchLabels":{"app":"chi-bus","rho2.identity":"chi"}}}]}],"podSelector":{},"policyTypes":["Egress"]}}
+    creationTimestamp: "2025-11-02T15:37:00Z"
+    generation: 1
+    name: egress-dns-and-chi-allow
+    namespace: arc-ui
+    resourceVersion: "7363635"
+    uid: 5b64a584-b6dd-4f3e-93c8-5b94c61c3165
+  spec:
+    egress:
+    - ports:
+      - port: 1053
+        protocol: UDP
+      - port: 1053
+        protocol: TCP
+      - port: 53
+        protocol: UDP
+      - port: 53
+        protocol: TCP
+      to:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: kube-system
+        podSelector:
+          matchLabels:
+            k8s-app: kube-dns
+    - ports:
+      - port: 4222
+        protocol: TCP
+      - port: 7422
+        protocol: TCP
+      to:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: arc-chi
+        podSelector:
+          matchLabels:
+            app: chi-bus
+            rho2.identity: chi
+    podSelector: {}
+    policyTypes:
+    - Egress
+- apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"NetworkPolicy","metadata":{"annotations":{},"name":"egress-dns-chi-explicit","namespace":"arc-ui"},"spec":{"egress":[{"ports":[{"port":53,"protocol":"UDP"},{"port":53,"protocol":"TCP"}],"to":[{"ipBlock":{"cidr":"10.96.0.10/32"}}]},{"ports":[{"port":1053,"protocol":"UDP"},{"port":1053,"protocol":"TCP"}],"to":[{"ipBlock":{"cidr":"10.244.0.145/32"}},{"ipBlock":{"cidr":"10.244.0.66/32"}},{"ipBlock":{"cidr":"192.168.1.117/32"}},{"ipBlock":{"cidr":"10.244.0.5/32"}},{"ipBlock":{"cidr":"10.244.0.178/32"}}]},{"ports":[{"port":4222,"protocol":"TCP"},{"port":7422,"protocol":"TCP"}],"to":[{"ipBlock":{"cidr":"10.244.0.105/32"}}]}],"podSelector":{},"policyTypes":["Egress"]}}
+    creationTimestamp: "2025-11-02T15:46:35Z"
+    generation: 1
+    name: egress-dns-chi-explicit
+    namespace: arc-ui
+    resourceVersion: "7366706"
+    uid: d64014d1-9272-4bc2-8917-082472c6070f
+  spec:
+    egress:
+    - ports:
+      - port: 53
+        protocol: UDP
+      - port: 53
+        protocol: TCP
+      to:
+      - ipBlock:
+          cidr: 10.96.0.10/32
+    - ports:
+      - port: 1053
+        protocol: UDP
+      - port: 1053
+        protocol: TCP
+      to:
+      - ipBlock:
+          cidr: 10.244.0.145/32
+      - ipBlock:
+          cidr: 10.244.0.66/32
+      - ipBlock:
+          cidr: 192.168.1.117/32
+      - ipBlock:
+          cidr: 10.244.0.5/32
+      - ipBlock:
+          cidr: 10.244.0.178/32
+    - ports:
+      - port: 4222
+        protocol: TCP
+      - port: 7422
+        protocol: TCP
+      to:
+      - ipBlock:
+          cidr: 10.244.0.105/32
+    podSelector: {}
+    policyTypes:
+    - Egress
+- apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"NetworkPolicy","metadata":{"annotations":{},"name":"ui-allow-kubelet-probes","namespace":"arc-ui"},"spec":{"ingress":[{"from":[{"namespaceSelector":{"matchLabels":{"kubernetes.io/metadata.name":"kube-system"}}}],"ports":[{"port":80,"protocol":"TCP"}]}],"podSelector":{"matchLabels":{"app":"sage-enterprise-ui"}},"policyTypes":["Ingress"]}}
+    creationTimestamp: "2025-10-26T15:42:17Z"
+    generation: 1
+    name: ui-allow-kubelet-probes
+    namespace: arc-ui
+    resourceVersion: "4925035"
+    uid: 20963d6f-c4ce-401a-95b6-427719964f6a
+  spec:
+    ingress:
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: kube-system
+      ports:
+      - port: 80
+        protocol: TCP
+    podSelector:
+      matchLabels:
+        app: sage-enterprise-ui
+    policyTypes:
+    - Ingress
+- apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"NetworkPolicy","metadata":{"annotations":{},"name":"ui-allow-kubelet-probes-fixed","namespace":"arc-ui"},"spec":{"ingress":[{"from":[],"ports":[{"port":80,"protocol":"TCP"}]}],"podSelector":{"matchLabels":{"app":"sage-enterprise-ui"}},"policyTypes":["Ingress"]}}
+    creationTimestamp: "2025-10-26T15:52:01Z"
+    generation: 1
+    name: ui-allow-kubelet-probes-fixed
+    namespace: arc-ui
+    resourceVersion: "4926659"
+    uid: 14b8b510-18ec-47e8-baca-0d6ec5b02499
+  spec:
+    ingress:
+    - ports:
+      - port: 80
+        protocol: TCP
+    podSelector:
+      matchLabels:
+        app: sage-enterprise-ui
+    policyTypes:
+    - Ingress
+- apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"NetworkPolicy","metadata":{"annotations":{},"name":"ui-egress","namespace":"arc-ui"},"spec":{"egress":[{"ports":[{"port":53,"protocol":"UDP"},{"port":53,"protocol":"TCP"}],"to":[{"namespaceSelector":{"matchLabels":{"kubernetes.io/metadata.name":"kube-system"}},"podSelector":{"matchLabels":{"k8s-app":"kube-dns"}}}]},{}],"podSelector":{"matchLabels":{"app":"sage-enterprise-ui"}},"policyTypes":["Egress"]}}
+    creationTimestamp: "2025-10-26T15:40:08Z"
+    generation: 1
+    name: ui-egress
+    namespace: arc-ui
+    resourceVersion: "4924625"
+    uid: dc63881c-a139-426a-a3f7-b3c19c900ca0
+  spec:
+    egress:
+    - ports:
+      - port: 53
+        protocol: UDP
+      - port: 53
+        protocol: TCP
+      to:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: kube-system
+        podSelector:
+          matchLabels:
+            k8s-app: kube-dns
+    - {}
+    podSelector:
+      matchLabels:
+        app: sage-enterprise-ui
+    policyTypes:
+    - Egress
+- apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"NetworkPolicy","metadata":{"annotations":{},"name":"ui-ingress","namespace":"arc-ui"},"spec":{"ingress":[{}],"podSelector":{"matchLabels":{"app":"sage-enterprise-ui"}},"policyTypes":["Ingress"]}}
+    creationTimestamp: "2025-10-26T15:40:08Z"
+    generation: 1
+    name: ui-ingress
+    namespace: arc-ui
+    resourceVersion: "4924627"
+    uid: 8f9a74bc-b448-4df7-87c8-e265f179f776
+  spec:
+    ingress:
+    - {}
+    podSelector:
+      matchLabels:
+        app: sage-enterprise-ui
+    policyTypes:
+    - Ingress
+kind: List
+metadata:
+  resourceVersion: ""
