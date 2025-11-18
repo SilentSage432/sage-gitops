@@ -1,38 +1,55 @@
 import { defineConfig } from "vite";
-import react from '@vitejs/plugin-react'
-import path from 'path';
+import react from "@vitejs/plugin-react";
+import path from "path";
 
 export default defineConfig({
   plugins: [react()],
-  base: '/',
+
+  // IMPORTANT — UI will be hosted at root in dev
+  base: "/",
+
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      "@": path.resolve(__dirname, "./src"),
     },
   },
+
   define: {
-    'process.env.VITE_API_BASE': JSON.stringify(process.env.VITE_API_BASE || 'http://api.sage'),
-    'process.env.VITE_WS_BASE': JSON.stringify(process.env.VITE_WS_BASE || 'ws://api.sage'),
+    "process.env.VITE_API_BASE": JSON.stringify(process.env.VITE_API_BASE),
+    "process.env.VITE_WS_BASE": JSON.stringify(process.env.VITE_WS_BASE),
   },
+
   server: {
-    host: true, // Allow external connections
+    host: true,
     port: 8080,
+
+    // Local Arc Bridge proxy (7070)
     proxy: {
-      "/v1": { target: process.env.VITE_API_BASE || "http://api.sage", changeOrigin: true },
-      "/api": { 
-        target: process.env.VITE_API_BASE || "http://sage-enterprise-ui:8081", 
+      "/api": {
+        target: process.env.VITE_API_BASE,
         changeOrigin: true,
         secure: false,
       },
+      "/v1": {
+        target: process.env.VITE_API_BASE,
+        changeOrigin: true,
+        secure: false,
+      },
+      "/stream": {
+        target: process.env.VITE_WS_BASE?.replace("ws://", "http://").replace("wss://", "https://") || "http://localhost:7070",
+        ws: true,
+        changeOrigin: true,
+      },
     },
   },
+
   preview: {
-    host: true,       // "0.0.0.0"
+    host: true,
     port: 8080,
-    strictPort: true
   },
+
   build: {
-    outDir: 'dist',
+    outDir: "dist",
     sourcemap: true,
   },
-})
+});
