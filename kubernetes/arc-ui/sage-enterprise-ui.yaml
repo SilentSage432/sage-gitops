@@ -16,6 +16,14 @@ spec:
         - name: ui
           image: ghcr.io/silentsage432/sage-enterprise-ui:bridge-v10
           imagePullPolicy: Always
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL
           ports:
             - name: http
               containerPort: 80
