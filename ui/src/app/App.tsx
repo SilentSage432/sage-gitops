@@ -11,6 +11,7 @@ import { OnboardingNexus } from '../features/federation/OnboardingNexus';
 import { NodesView } from '../features/federation/NodesView';
 import { AgentsOverview } from '../features/agents/AgentsOverview';
 import { AgentDetails } from '../features/agents/AgentDetails';
+import { WhispererTerminal } from '../components/WhispererTerminal/WhispererTerminal';
 
 /**
  * App – Root component that wires the Bridge Frame
@@ -71,6 +72,7 @@ export const App: React.FC = () => {
   return (
     <BridgeFrame
       activeChamber={renderActiveChamber()}
+      centerConsole={<WhispererTerminal />}
       selectedItem={selectedItem}
       onSelectItem={setSelectedItem}
     />

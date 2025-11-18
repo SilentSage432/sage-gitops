@@ -1,126 +1,101 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { WhispererInput } from './WhispererInput';
+import { WhispererMessageLog } from './WhispererMessageLog';
+import { WhispererMessage } from './whispererTypes';
+import './whisperer.css';
 
-interface LogMessage {
-  id: string;
-  timestamp: string;
-  message: string;
-  type?: 'system' | 'operator' | 'federation';
-}
+const createMessage = (
+  type: WhispererMessage['type'],
+  content: string,
+): WhispererMessage => ({
+  id: `${type}-${crypto.randomUUID?.() ?? Date.now()}`,
+  type,
+  content,
+  timestamp: new Date().toISOString(),
+});
 
-/**
- * WhispererTerminal – Main console with scrollable log and input
- */
 export const WhispererTerminal: React.FC = () => {
-  const [messages, setMessages] = useState<LogMessage[]>([
-    {
-      id: '1',
-      timestamp: new Date().toISOString(),
-      message: 'Greetings, Operator.',
-      type: 'system'
-    },
-    {
-      id: '2',
-      timestamp: new Date().toISOString(),
-      message: '[SYSTEM] Bridge frame initialized.',
-      type: 'system'
-    }
+  const [messages, setMessages] = useState<WhispererMessage[]>(() => [
+    createMessage('system', 'Whisperer Terminal 3.0 initialized. Awaiting operator signal.'),
   ]);
-  const [input, setInput] = useState('');
-  const logEndRef = useRef<HTMLDivElement>(null);
+  const replyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const enqueueMessage = useCallback((message: WhispererMessage) => {
+    setMessages((prev) => [...prev, message]);
+  }, []);
+
+  const handleSend = useCallback(
+    (content: string) => {
+      enqueueMessage(createMessage('operator', content));
+
+      if (replyTimerRef.current) {
+        clearTimeout(replyTimerRef.current);
+      }
+
+      replyTimerRef.current = window.setTimeout(() => {
+        enqueueMessage(createMessage('sage', 'SAGE is listening…'));
+        replyTimerRef.current = null;
+      }, 900);
+    },
+    [enqueueMessage],
+  );
 
   useEffect(() => {
-    logEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!input.trim()) return;
-
-    const newMessage: LogMessage = {
-      id: Date.now().toString(),
-      timestamp: new Date().toISOString(),
-      message: input,
-      type: 'operator'
+    return () => {
+      if (replyTimerRef.current) {
+        clearTimeout(replyTimerRef.current);
+      }
     };
+  }, []);
 
-    setMessages((prev) => [...prev, newMessage]);
-    setInput('');
-
-    // Echo response placeholder
-    setTimeout(() => {
-      const response: LogMessage = {
-        id: (Date.now() + 1).toString(),
-        timestamp: new Date().toISOString(),
-        message: `[ECHO] ${input}`,
-        type: 'system'
-      };
-      setMessages((prev) => [...prev, response]);
-    }, 100);
-  };
-
-  const formatTime = (isoString: string) => {
-    return new Date(isoString).toLocaleTimeString('en-US', {
-      hour12: false,
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit'
-    });
-  };
+  const diagnostics = useMemo(
+    () => [
+      { label: 'Signal', value: 'Aligned' },
+      { label: 'Flux', value: `${messages.length} msgs` },
+      { label: 'Bridge', value: 'Stable' },
+    ],
+    [messages.length],
+  );
 
   return (
-    <div className="h-full flex flex-col bg-[#030304]">
-      {/* Terminal Header */}
-      <div className="px-6 py-3 border-b border-slate-800 bg-slate-900/50">
-        <h2 className="text-sm font-semibold text-slate-200 uppercase tracking-wide">
-          Whisperer Terminal
-        </h2>
-      </div>
-
-      {/* Scrollable Log Area */}
-      <div className="flex-1 overflow-y-auto p-6 font-mono text-sm space-y-2">
-        {messages.map((msg) => (
-          <div
-            key={msg.id}
-            className="flex gap-3 text-slate-300 hover:text-slate-100 transition-colors"
-          >
-            <span className="text-slate-600 flex-shrink-0">
-              {formatTime(msg.timestamp)}
-            </span>
-            <span
-              className={
-                msg.type === 'system'
-                  ? 'text-cyan-400'
-                  : msg.type === 'operator'
-                  ? 'text-purple-400'
-                  : 'text-slate-300'
-              }
-            >
-              {msg.message}
-            </span>
+    <section className="whisperer-terminal holo-console flex-1 flex flex-row gap-6 p-6 snap-pinned">
+      <div className="flex flex-1 flex-col gap-4 min-w-0">
+        <header className="terminal-header flex items-center justify-between rounded-2xl border border-purple-500/30 px-4 py-3">
+          <div>
+            <p className="text-xs uppercase tracking-widest text-purple-300/80">Primary Console</p>
+            <h2 className="text-2xl font-semibold text-white">Whisperer Terminal</h2>
           </div>
-        ))}
-        <div ref={logEndRef} />
+          <div className="text-right">
+            <p className="text-xs text-slate-400">Phase 1 · Scaffold</p>
+            <p className="text-xs text-slate-500">Mesh-ready · Offline logic</p>
+          </div>
+        </header>
+
+        <div className="flex flex-1 flex-col min-h-0 rounded-3xl border border-slate-900/60 bg-black/40 backdrop-blur">
+          <WhispererMessageLog messages={messages} />
+          <div className="border-t border-purple-500/20 p-4">
+            <WhispererInput onSend={handleSend} />
+          </div>
+        </div>
       </div>
 
-      {/* Input Bar */}
-      <div className="border-t border-slate-800 bg-slate-900/50 p-4">
-        <form onSubmit={handleSubmit} className="flex gap-2">
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Enter command or query..."
-            className="flex-1 bg-slate-800/50 border border-slate-700 rounded px-4 py-2 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
-          />
-          <button
-            type="submit"
-            className="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded text-white font-medium transition-colors"
-          >
-            Send
-          </button>
-        </form>
-      </div>
-    </div>
+      <aside className="whisperer-vitals hidden lg:flex w-72 flex-col gap-4 rounded-3xl border border-purple-500/30 p-4">
+        <div>
+          <p className="text-sm uppercase tracking-[0.3em] text-purple-300/70">Vitals</p>
+          <p className="text-base text-slate-400">Mesh resonance snapshot</p>
+        </div>
+        <div className="space-y-3">
+          {diagnostics.map((item) => (
+            <div key={item.label} className="diagnostic-pill">
+              <span>{item.label}</span>
+              <strong>{item.value}</strong>
+            </div>
+          ))}
+        </div>
+        <div className="mt-auto text-xs text-slate-500">
+          Placeholder for future telemetry once consciousness bridge is online.
+        </div>
+      </aside>
+    </section>
   );
 };
-

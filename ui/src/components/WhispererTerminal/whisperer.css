@@ -1,0 +1,137 @@
+.whisperer-terminal {
+  position: relative;
+  background: radial-gradient(circle at top, rgba(139, 92, 246, 0.18), transparent 45%),
+    #030304;
+  box-shadow:
+    0 0 35px rgba(139, 92, 246, 0.25),
+    inset 0 0 60px rgba(3, 3, 4, 0.9);
+}
+
+.whisperer-terminal::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160"%3E%3Cpath fill="%23ffffff" fill-opacity="0.02" d="M0 0h160v160H0z"/%3E%3C/svg%3E');
+  opacity: 0.8;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.whisperer-terminal > * {
+  position: relative;
+  z-index: 1;
+}
+
+.terminal-header {
+  background: rgba(3, 3, 4, 0.7);
+  box-shadow: 0 0 25px rgba(139, 92, 246, 0.25);
+}
+
+.whisperer-log {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background: linear-gradient(180deg, rgba(10, 10, 15, 0.85), rgba(3, 3, 4, 0.9));
+  border-radius: 1.5rem 1.5rem 0 0;
+}
+
+.whisperer-message {
+  display: flex;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 1rem;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  background: rgba(3, 3, 4, 0.65);
+  animation: fadeIn 0.4s ease forwards;
+}
+
+.whisperer-message .timestamp {
+  font-size: 0.75rem;
+  color: rgba(148, 163, 184, 0.7);
+  flex-shrink: 0;
+  width: 4.5rem;
+}
+
+.whisperer-message .content {
+  margin: 0;
+  color: #f8fafc;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.whisperer-message.operator {
+  border-color: rgba(99, 102, 241, 0.4);
+  box-shadow: 0 0 25px rgba(99, 102, 241, 0.2);
+}
+
+.whisperer-message.sage {
+  border-color: rgba(16, 185, 129, 0.3);
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.25);
+}
+
+.whisperer-message.system {
+  border-style: dashed;
+  border-color: rgba(148, 163, 184, 0.3);
+}
+
+.whisperer-message.warn {
+  border-color: rgba(251, 191, 36, 0.4);
+  background: rgba(251, 191, 36, 0.08);
+}
+
+.whisperer-message.error {
+  border-color: rgba(248, 113, 113, 0.45);
+  background: rgba(248, 113, 113, 0.12);
+  box-shadow: 0 0 30px rgba(248, 113, 113, 0.25);
+}
+
+.whisperer-input {
+  position: relative;
+}
+
+.whisperer-send-btn {
+  background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+  color: #f9fafb;
+  letter-spacing: 0.15em;
+  box-shadow: 0 15px 35px rgba(109, 40, 217, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.whisperer-send-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 25px 45px rgba(109, 40, 217, 0.45);
+}
+
+.whisperer-vitals {
+  background: rgba(3, 3, 4, 0.75);
+  box-shadow: inset 0 0 25px rgba(139, 92, 246, 0.15);
+}
+
+.diagnostic-pill {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 0.9rem;
+  border-radius: 0.9rem;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: rgba(226, 232, 240, 0.75);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+

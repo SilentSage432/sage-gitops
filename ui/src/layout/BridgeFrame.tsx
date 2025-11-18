@@ -1,10 +1,10 @@
 import React from 'react';
 import { SidebarNavigator } from '../components/SidebarNavigator/SidebarNavigator';
-import { WhispererTerminal } from '../components/WhispererTerminal/WhispererTerminal';
 import { StatusBar } from '../components/StatusBar/StatusBar';
 
 interface BridgeFrameProps {
   activeChamber?: React.ReactNode;
+  centerConsole?: React.ReactNode;
   selectedItem?: string;
   onSelectItem?: (item: string) => void;
 }
@@ -15,6 +15,7 @@ interface BridgeFrameProps {
  */
 export const BridgeFrame: React.FC<BridgeFrameProps> = ({ 
   activeChamber, 
+  centerConsole,
   selectedItem,
   onSelectItem
 }) => {
@@ -29,7 +30,7 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
 
         {/* Center: Whisperer Terminal */}
         <div className="flex-1 flex flex-col overflow-hidden min-h-0">
-          <WhispererTerminal />
+          {centerConsole}
         </div>
 
         {/* Right Panel: Active Chamber / Detail Panel */}
