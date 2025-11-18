@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: ui
-          image: ghcr.io/silentsage432/sage-enterprise-ui:bridge-v6
+          image: ghcr.io/silentsage432/sage-enterprise-ui:bridge-v7
           imagePullPolicy: Always
           ports:
             - name: http
