@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: ui
-          image: ghcr.io/silentsage432/sage-enterprise-ui:bridge-v10
+          image: ghcr.io/silentsage432/sage-enterprise-ui:bridge-v11
           imagePullPolicy: Always
           securityContext:
             allowPrivilegeEscalation: false
