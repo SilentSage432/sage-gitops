@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { buildResponse, classifyIntent } from './responseEngine';
+import { buildResponse } from './responseEngine';
+import { routeCommand } from './commandRouter';
 import { MessageEntry, MessageRole } from './messageTypes';
 import './styles.css';
 
@@ -40,7 +41,7 @@ export const WhispererTerminal: React.FC = () => {
         return;
       }
 
-      const intent = classifyIntent(trimmed);
+      const route = routeCommand(trimmed);
       enqueueMessage(createMessage('operator', trimmed));
       setDraft('');
 
@@ -49,7 +50,7 @@ export const WhispererTerminal: React.FC = () => {
       }
 
       setIsThinking(true);
-      const { delay, body } = buildResponse(trimmed, intent);
+      const { delay, body } = buildResponse(route);
 
       replyTimerRef.current = window.setTimeout(() => {
         enqueueMessage(createMessage('sage', body));
@@ -133,8 +134,8 @@ export const WhispererTerminal: React.FC = () => {
             <h2 className="text-2xl font-semibold text-white">Whisperer Terminal</h2>
           </div>
           <div className="text-right">
-            <p className="text-xs text-slate-400">Phase 2 · Refinement</p>
-            <p className="text-xs text-slate-500">Enterprise channel · Offline logic</p>
+            <p className="text-xs text-slate-400">Phase 3 · Command Routing</p>
+            <p className="text-xs text-slate-500">Enterprise channel · Arc awareness</p>
           </div>
         </header>
 

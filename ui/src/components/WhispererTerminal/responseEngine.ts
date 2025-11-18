@@ -1,49 +1,74 @@
 import { MessageRole } from './messageTypes';
+import { CommandRoute } from './commandRouter';
 
-export type ResponseIntent =
-  | 'status'
-  | 'arc'
-  | 'federation'
-  | 'epoch'
-  | 'rho2'
-  | 'health'
-  | 'unknown';
+const baseDelay = 200;
+const delayVariance = 100;
 
-const responseMap: Record<ResponseIntent, string> = {
-  status: 'Systems steady. No variance detected.',
-  arc: 'Arc channels aligned. Awaiting directive.',
-  federation: 'Federation lattice holds. All relays reporting nominal.',
-  epoch: 'Epoch clocks synchronized. Temporal drift negligible.',
-  rho2: 'Rho2 lodges sealed. Clearance remains restricted.',
-  health: 'Vital bands are stable. No faults to report.',
-  unknown: 'Directive parsed. Standing by.',
-};
-
-const intentMatchers: Array<{ intent: ResponseIntent; pattern: RegExp }> = [
-  { intent: 'status', pattern: /(status|state|report|overview|diagnostic)/i },
-  { intent: 'arc', pattern: /(arc|theta|sigma|omega|lambda|chi)/i },
-  { intent: 'federation', pattern: /(federation|mesh|council|summit)/i },
-  { intent: 'epoch', pattern: /(epoch|cycle|phase|chrono)/i },
-  { intent: 'rho2', pattern: /(rho2|rho-2|rho 2)/i },
-  { intent: 'health', pattern: /(health|vitals|pulse|integrity)/i },
-];
-
-export const classifyIntent = (input: string): ResponseIntent => {
-  for (const matcher of intentMatchers) {
-    if (matcher.pattern.test(input)) {
-      return matcher.intent;
-    }
+const formatArcName = (target?: string): string => {
+  if (!target) {
+    return 'ARC';
   }
-  return 'unknown';
+  const normalized = target.toLowerCase();
+  const arcMap: Record<string, string> = {
+    theta: 'Θ',
+    sigma: 'Σ',
+    omega: 'Ω',
+    lambda: 'Λ',
+    chi: 'Χ',
+    rho2: 'Ρ²',
+    rho: 'Ρ',
+  };
+  return arcMap[normalized] || target.toUpperCase();
 };
 
-const baseDelay = 350;
-const delayVariance = 200;
+const buildHelpResponse = (): string => {
+  return `COMMAND INDEX
+———————————————————
+status                system summary
+arc <name>           query arc health
+rho2 epoch           show epoch state
+federation nodes     list federation nodes
+nodes                local node status
+help                 show this index`;
+};
 
-export const buildResponse = (input: string, intent: ResponseIntent) => {
+const buildArcQueryResponse = (target?: string): string => {
+  const arcName = formatArcName(target);
+  return `ARC ${arcName} :: status: operational (mock placeholder)`;
+};
+
+export const buildResponse = (route: CommandRoute) => {
   const role: MessageRole = 'sage';
-  const resolvedIntent = intent === 'unknown' ? classifyIntent(input) : intent;
-  const body = responseMap[resolvedIntent];
+  let body: string;
+
+  switch (route.type) {
+    case 'SYSTEM_STATUS':
+      body = 'SAGE systems nominal. All arcs responsive.';
+      break;
+    case 'ARC_STATUS':
+      body = 'Arc channels aligned. Awaiting directive.';
+      break;
+    case 'ARC_QUERY':
+      body = buildArcQueryResponse(route.target);
+      break;
+    case 'FEDERATION_QUERY':
+      body = 'Federation lattice holds. All relays reporting nominal.';
+      break;
+    case 'NODE_STATUS':
+      body = 'Local node status: operational (mock placeholder).';
+      break;
+    case 'RHO2_EPOCH':
+      body = 'Rho² epoch stream initialized (placeholder).';
+      break;
+    case 'HELP':
+      body = buildHelpResponse();
+      break;
+    case 'UNKNOWN':
+    default:
+      body = "Unrecognized directive. Type 'help' for valid commands.";
+      break;
+  }
+
   const delay = baseDelay + Math.floor(Math.random() * delayVariance);
 
   return { role, body, delay };
