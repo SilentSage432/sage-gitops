@@ -1,48 +1,58 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { WhispererInput } from './WhispererInput';
-import { WhispererMessageLog } from './WhispererMessageLog';
-import { parseCommand } from './commandParser';
-import { resolveSageResponse } from './sageResponder';
-import { WhispererIntent, WhispererMessage } from './whispererTypes';
-import './whisperer.css';
+import { buildResponse, classifyIntent } from './responseEngine';
+import { MessageEntry, MessageRole } from './messageTypes';
+import './styles.css';
 
-const createMessage = (
-  type: WhispererMessage['type'],
-  content: string,
-  intent?: WhispererIntent,
-): WhispererMessage => ({
-  id: `${type}-${crypto.randomUUID?.() ?? Date.now()}`,
-  type,
-  content,
+const createMessage = (role: MessageRole, body: string): MessageEntry => ({
+  id: `${role}-${crypto.randomUUID?.() ?? Date.now()}`,
+  role,
+  body,
   timestamp: new Date().toISOString(),
-  intent,
 });
 
 export const WhispererTerminal: React.FC = () => {
-  const [messages, setMessages] = useState<WhispererMessage[]>(() => [
+  const [messages, setMessages] = useState<MessageEntry[]>(() => [
     createMessage('system', 'Whisperer Terminal 3.0 initialized. Awaiting operator signal.'),
   ]);
   const replyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [isThinking, setIsThinking] = useState(false);
+  const [draft, setDraft] = useState('');
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const logRef = useRef<HTMLDivElement>(null);
 
-  const enqueueMessage = useCallback((message: WhispererMessage) => {
+  const enqueueMessage = useCallback((message: MessageEntry) => {
     setMessages((prev) => [...prev, message]);
+  }, []);
+
+  const scrollToLatest = useCallback(() => {
+    if (logRef.current) {
+      logRef.current.scrollTo({
+        top: logRef.current.scrollHeight,
+        behavior: 'smooth',
+      });
+    }
   }, []);
 
   const handleSend = useCallback(
     (content: string) => {
-      const parsed = parseCommand(content);
-      enqueueMessage(createMessage('operator', content, parsed.intent));
+      const trimmed = content.trim();
+      if (!trimmed) {
+        return;
+      }
+
+      const intent = classifyIntent(trimmed);
+      enqueueMessage(createMessage('operator', trimmed));
+      setDraft('');
 
       if (replyTimerRef.current) {
         clearTimeout(replyTimerRef.current);
       }
 
       setIsThinking(true);
-      const { delay, content: responseContent } = resolveSageResponse(parsed);
+      const { delay, body } = buildResponse(trimmed, intent);
 
       replyTimerRef.current = window.setTimeout(() => {
-        enqueueMessage(createMessage('sage', responseContent, parsed.intent));
+        enqueueMessage(createMessage('sage', body));
         setIsThinking(false);
         replyTimerRef.current = null;
       }, delay);
@@ -59,6 +69,27 @@ export const WhispererTerminal: React.FC = () => {
     };
   }, []);
 
+  useEffect(() => {
+    scrollToLatest();
+  }, [messages, scrollToLatest]);
+
+  const adjustTextareaHeight = useCallback(() => {
+    const textarea = textareaRef.current;
+    if (!textarea) {
+      return;
+    }
+
+    textarea.style.height = 'auto';
+    const computed = typeof window !== 'undefined' ? window.getComputedStyle(textarea) : null;
+    const lineHeight = computed ? parseFloat(computed.lineHeight || '20') : 20;
+    const maxHeight = lineHeight * 4;
+    textarea.style.height = `${Math.min(textarea.scrollHeight, maxHeight)}px`;
+  }, []);
+
+  useEffect(() => {
+    adjustTextareaHeight();
+  }, [draft, adjustTextareaHeight]);
+
   const diagnostics = useMemo(
     () => [
       { label: 'Signal', value: 'Aligned' },
@@ -67,6 +98,31 @@ export const WhispererTerminal: React.FC = () => {
     ],
     [messages.length],
   );
+
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        handleSend(draft);
+      }
+    },
+    [draft, handleSend],
+  );
+
+  const labelMap: Record<MessageRole, string> = {
+    operator: 'OPERATOR >',
+    sage: 'SAGE ::',
+    system: '[SYSTEM]',
+    arc: '[ARC]',
+  };
+
+  const formatTimestamp = (timestamp: string) => {
+    return new Date(timestamp).toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    });
+  };
 
   return (
     <section className="whisperer-terminal holo-console flex-1 flex flex-row gap-6 p-6 snap-pinned">
@@ -83,9 +139,48 @@ export const WhispererTerminal: React.FC = () => {
         </header>
 
         <div className="flex flex-1 flex-col min-h-0 rounded-3xl border border-slate-900/60 bg-[#050506]">
-          <WhispererMessageLog messages={messages} isThinking={isThinking} />
-          <div className="border-t border-slate-900/50 p-4">
-            <WhispererInput onSend={handleSend} />
+          <div ref={logRef} className="whisperer-log overflow-y-auto flex-1 rounded-3xl">
+            {messages.map((entry) => (
+              <div key={entry.id} className={`whisperer-line ${entry.role}`}>
+                <div className="whisperer-label">{labelMap[entry.role]}</div>
+                <div className="whisperer-body">
+                  <p className="whisperer-content">{entry.body}</p>
+                  <span className="whisperer-timestamp">{formatTimestamp(entry.timestamp)}</span>
+                </div>
+              </div>
+            ))}
+
+            {isThinking && (
+              <div className="whisperer-line thinking">
+                <div className="whisperer-label">SAGE ::</div>
+                <div className="whisperer-body">
+                  <span className="thinking-glyph" aria-live="polite" aria-label="SAGE processing">
+                    ⋯
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="whisperer-input-panel border-t border-slate-900/80">
+            <div className="whisperer-input-deck">
+              <textarea
+                ref={textareaRef}
+                rows={1}
+                className="whisperer-input-area"
+                placeholder="Transmit directive... (Shift+Enter for newline)"
+                value={draft}
+                onChange={(event) => setDraft(event.target.value)}
+                onKeyDown={handleKeyDown}
+              />
+              <button
+                type="button"
+                onClick={() => handleSend(draft)}
+                className="whisperer-enter-btn"
+                aria-label="Submit directive"
+              >
+                ENTER ↵
+              </button>
+            </div>
           </div>
         </div>
       </div>

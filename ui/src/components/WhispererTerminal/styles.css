@@ -1,0 +1,187 @@
+.whisperer-terminal {
+  background: #04050a;
+  border: 1px solid rgba(71, 85, 105, 0.35);
+  color: #e0e7ff;
+}
+
+.whisperer-terminal .terminal-header {
+  background: rgba(8, 10, 18, 0.9);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+}
+
+.whisperer-log {
+  padding: 1.5rem;
+  background: radial-gradient(circle at 10% 10%, rgba(79, 70, 229, 0.08), transparent 45%),
+    rgba(4, 5, 10, 0.92);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  scrollbar-width: thin;
+}
+
+.whisperer-log::-webkit-scrollbar {
+  width: 6px;
+}
+
+.whisperer-log::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.3);
+}
+
+.whisperer-line {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  opacity: 0;
+  animation: fade-entry 0.2s ease forwards;
+}
+
+.whisperer-line.operator {
+  justify-content: flex-start;
+}
+
+.whisperer-line.sage {
+  margin-left: 1.5rem;
+}
+
+.whisperer-line.system,
+.whisperer-line.arc {
+  justify-content: flex-start;
+}
+
+.whisperer-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  color: rgba(148, 163, 184, 0.6);
+  text-transform: uppercase;
+}
+
+.whisperer-line.operator .whisperer-label {
+  color: rgba(148, 163, 184, 0.8);
+}
+
+.whisperer-line.sage .whisperer-label {
+  color: rgba(167, 139, 250, 0.85);
+}
+
+.whisperer-line.system .whisperer-label,
+.whisperer-line.arc .whisperer-label {
+  color: rgba(251, 191, 36, 0.8);
+}
+
+.whisperer-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.whisperer-content {
+  margin: 0;
+  line-height: 1.4;
+  color: #e2e8f0;
+  font-size: 0.92rem;
+}
+
+.whisperer-line.operator .whisperer-content {
+  font-size: 0.88rem;
+  color: rgba(191, 219, 254, 0.9);
+}
+
+.whisperer-line.sage .whisperer-content {
+  font-weight: 600;
+  color: rgba(196, 181, 253, 0.95);
+  text-shadow: 0 0 8px rgba(79, 70, 229, 0.35);
+}
+
+.whisperer-line.system .whisperer-content,
+.whisperer-line.arc .whisperer-content {
+  font-family: 'IBM Plex Mono', 'SFMono-Regular', Menlo, monospace;
+  color: rgba(125, 211, 252, 0.9);
+}
+
+.whisperer-timestamp {
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: rgba(148, 163, 184, 0.45);
+}
+
+.whisperer-input-panel {
+  background: rgba(6, 8, 15, 0.95);
+  border-top: 1px solid rgba(71, 85, 105, 0.35);
+}
+
+.whisperer-input-deck {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  align-items: flex-end;
+}
+
+.whisperer-input-area {
+  flex: 1;
+  background: rgba(9, 11, 18, 0.9);
+  border: none;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+  color: #f8fafc;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  resize: none;
+  outline: none;
+  padding: 0.35rem 0;
+  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+}
+
+.whisperer-input-area::placeholder {
+  color: rgba(148, 163, 184, 0.45);
+}
+
+.whisperer-enter-btn {
+  background: transparent;
+  border: 1px solid rgba(71, 85, 105, 0.6);
+  color: rgba(148, 163, 184, 0.9);
+  font-size: 0.75rem;
+  letter-spacing: 0.35em;
+  padding: 0.45rem 0.9rem;
+  border-radius: 0.3rem;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.whisperer-enter-btn:hover,
+.whisperer-enter-btn:focus-visible {
+  border-color: rgba(129, 140, 248, 0.85);
+  color: rgba(196, 181, 253, 0.95);
+}
+
+.thinking-glyph {
+  font-size: 1rem;
+  color: rgba(196, 181, 253, 0.85);
+  animation: thinking-cycle 0.6s linear infinite;
+}
+
+.thinking {
+  margin-left: 1.5rem;
+}
+
+@keyframes fade-entry {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes thinking-cycle {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
