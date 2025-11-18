@@ -1,34 +1,19 @@
-import axios from "axios";
+const API_BASE = (import.meta.env.VITE_API_BASE ?? "http://localhost:7070").replace(/\/$/, "");
 
-const API_URL = import.meta.env.VITE_API_URL || "/api";
+export async function apiGet<T = any>(path: string): Promise<T> {
+  const url = `${API_BASE}${path}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`GET ${path} failed`);
+  return res.json();
+}
 
-export const apiClient = axios.create({
-  baseURL: API_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
-
-// Request interceptor
-apiClient.interceptors.request.use(
-  (config) => {
-    // Add auth tokens, etc. here if needed
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-
-// Response interceptor
-apiClient.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  (error) => {
-    // Handle errors globally here
-    return Promise.reject(error);
-  }
-);
-
-export default apiClient;
+export async function apiPost<T = any>(path: string, body: any): Promise<T> {
+  const url = `${API_BASE}${path}`;
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body)
+  });
+  if (!res.ok) throw new Error(`POST ${path} failed`);
+  return res.json();
+}
