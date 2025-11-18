@@ -1,136 +1,162 @@
 .whisperer-terminal {
   position: relative;
-  background: radial-gradient(circle at top, rgba(139, 92, 246, 0.18), transparent 45%),
-    #030304;
-  box-shadow:
-    0 0 35px rgba(139, 92, 246, 0.25),
-    inset 0 0 60px rgba(3, 3, 4, 0.9);
-}
-
-.whisperer-terminal::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160"%3E%3Cpath fill="%23ffffff" fill-opacity="0.02" d="M0 0h160v160H0z"/%3E%3C/svg%3E');
-  opacity: 0.8;
-  mix-blend-mode: screen;
-  pointer-events: none;
-}
-
-.whisperer-terminal > * {
-  position: relative;
-  z-index: 1;
+  background: #030304;
+  border: 1px solid rgba(148, 163, 184, 0.1);
 }
 
 .terminal-header {
-  background: rgba(3, 3, 4, 0.7);
-  box-shadow: 0 0 25px rgba(139, 92, 246, 0.25);
+  background: rgba(5, 5, 6, 0.8);
+  border: 1px solid rgba(99, 102, 241, 0.2);
 }
 
 .whisperer-log {
-  padding: 1.5rem;
+  padding: 1rem 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  background: linear-gradient(180deg, rgba(10, 10, 15, 0.85), rgba(3, 3, 4, 0.9));
+  gap: 0.75rem;
+  background: rgba(5, 5, 6, 0.9);
   border-radius: 1.5rem 1.5rem 0 0;
+}
+
+.message-row {
+  display: flex;
+}
+
+.message-row.operator {
+  justify-content: flex-end;
+}
+
+.message-row.sage {
+  justify-content: flex-start;
+}
+
+.message-row.system {
+  justify-content: center;
 }
 
 .whisperer-message {
   display: flex;
-  gap: 1rem;
-  padding: 0.75rem 1rem;
-  border-radius: 1rem;
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(148, 163, 184, 0.1);
-  background: rgba(3, 3, 4, 0.65);
-  animation: fadeIn 0.4s ease forwards;
+  gap: 0.75rem;
+  padding: 0.65rem 0.9rem;
+  border-radius: 0.9rem;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(3, 4, 7, 0.8);
+  animation: fadeIn 0.2s ease-out forwards;
 }
 
 .whisperer-message .timestamp {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   color: rgba(148, 163, 184, 0.7);
   flex-shrink: 0;
-  width: 4.5rem;
+  width: 4.2rem;
 }
 
 .whisperer-message .content {
   margin: 0;
-  color: #f8fafc;
-  font-size: 0.95rem;
-  line-height: 1.5;
+  color: #e2e8f0;
+  font-size: 0.93rem;
+  line-height: 1.45;
 }
 
 .whisperer-message.operator {
-  border-color: rgba(99, 102, 241, 0.4);
-  box-shadow: 0 0 25px rgba(99, 102, 241, 0.2);
+  border-right: 2px solid rgba(148, 197, 241, 0.45);
+  align-self: flex-end;
 }
 
 .whisperer-message.sage {
-  border-color: rgba(16, 185, 129, 0.3);
-  box-shadow: 0 0 20px rgba(16, 185, 129, 0.25);
+  border-left: 2px solid rgba(99, 102, 241, 0.45);
 }
 
 .whisperer-message.system {
-  border-style: dashed;
-  border-color: rgba(148, 163, 184, 0.3);
-}
-
-.whisperer-message.warn {
-  border-color: rgba(251, 191, 36, 0.4);
-  background: rgba(251, 191, 36, 0.08);
-}
-
-.whisperer-message.error {
-  border-color: rgba(248, 113, 113, 0.45);
-  background: rgba(248, 113, 113, 0.12);
-  box-shadow: 0 0 30px rgba(248, 113, 113, 0.25);
+  border-color: rgba(100, 116, 139, 0.4);
+  background: rgba(8, 10, 15, 0.9);
+  text-align: center;
 }
 
 .whisperer-input {
   position: relative;
 }
 
+.whisperer-input-area {
+  border-color: rgba(99, 102, 241, 0.15);
+  color: #e2e8f0;
+  box-shadow: inset 0 0 0 1px rgba(99, 102, 241, 0.08);
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.whisperer-input-area:focus {
+  border-color: rgba(148, 163, 184, 0.5);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
 .whisperer-send-btn {
-  background: linear-gradient(135deg, #8b5cf6, #6d28d9);
-  color: #f9fafb;
-  letter-spacing: 0.15em;
-  box-shadow: 0 15px 35px rgba(109, 40, 217, 0.35);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background: rgba(99, 102, 241, 0.12);
+  color: #f8fafc;
+  border: 1px solid rgba(99, 102, 241, 0.4);
+  letter-spacing: 0.1em;
 }
 
 .whisperer-send-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 25px 45px rgba(109, 40, 217, 0.45);
+  background: rgba(99, 102, 241, 0.2);
 }
 
 .whisperer-vitals {
-  background: rgba(3, 3, 4, 0.75);
-  box-shadow: inset 0 0 25px rgba(139, 92, 246, 0.15);
+  background: rgba(5, 5, 6, 0.85);
+  border: 1px solid rgba(99, 102, 241, 0.2);
 }
 
 .diagnostic-pill {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.6rem 0.9rem;
-  border-radius: 0.9rem;
-  background: rgba(15, 23, 42, 0.7);
-  border: 1px solid rgba(139, 92, 246, 0.25);
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: rgba(226, 232, 240, 0.75);
+  padding: 0.55rem 0.85rem;
+  border-radius: 0.85rem;
+  background: rgba(8, 9, 12, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  color: rgba(226, 232, 240, 0.72);
+}
+
+.typing-indicator {
+  width: 4rem;
+  height: 0.4rem;
+  border-radius: 0.4rem;
+  background: rgba(99, 102, 241, 0.25);
+  overflow: hidden;
+}
+
+.typing-indicator span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: rgba(99, 102, 241, 0.6);
+  animation: pulse 1.9s ease-in-out infinite;
+}
+
+.message-row.thinking {
+  justify-content: flex-start;
+  padding-left: 4.2rem;
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(8px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0.2;
   }
 }
 

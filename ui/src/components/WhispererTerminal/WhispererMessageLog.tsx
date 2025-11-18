@@ -1,11 +1,13 @@
 import React, { useEffect, useRef } from 'react';
+import { TypingIndicator } from './TypingIndicator';
 import { WhispererMessage } from './whispererTypes';
 
 interface WhispererMessageLogProps {
   messages: WhispererMessage[];
+  isThinking?: boolean;
 }
 
-export const WhispererMessageLog: React.FC<WhispererMessageLogProps> = ({ messages }) => {
+export const WhispererMessageLog: React.FC<WhispererMessageLogProps> = ({ messages, isThinking }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -28,13 +30,19 @@ export const WhispererMessageLog: React.FC<WhispererMessageLogProps> = ({ messag
   return (
     <div ref={containerRef} className="whisperer-log overflow-y-auto flex-1 rounded-xl">
       {messages.map((message) => (
-        <div key={message.id} className={`whisperer-message ${message.type}`}>
-          <span className="timestamp">{formatTimestamp(message.timestamp)}</span>
-          <p className="content">{message.content}</p>
+        <div key={message.id} className={`message-row ${message.type}`}>
+          <div className={`whisperer-message ${message.type}`}>
+            <span className="timestamp">{formatTimestamp(message.timestamp)}</span>
+            <p className="content">{message.content}</p>
+          </div>
         </div>
       ))}
+
+      {isThinking && (
+        <div className="message-row sage thinking" aria-live="polite">
+          <TypingIndicator />
+        </div>
+      )}
     </div>
   );
 };
-
-

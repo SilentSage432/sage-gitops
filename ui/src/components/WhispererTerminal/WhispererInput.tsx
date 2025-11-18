@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 interface WhispererInputProps {
   onSend: (content: string) => void;
@@ -6,6 +6,21 @@ interface WhispererInputProps {
 
 export const WhispererInput: React.FC<WhispererInputProps> = ({ onSend }) => {
   const [value, setValue] = useState('');
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const adjustHeight = useCallback(() => {
+    const textarea = textareaRef.current;
+    if (!textarea) {
+      return;
+    }
+
+    textarea.style.height = 'auto';
+    const computed = typeof window !== 'undefined' ? window.getComputedStyle(textarea) : null;
+    const lineHeight = computed ? parseFloat(computed.lineHeight || '20') : 20;
+    const maxHeight = lineHeight * 4;
+    const nextHeight = Math.min(textarea.scrollHeight, maxHeight);
+    textarea.style.height = `${nextHeight}px`;
+  }, []);
 
   const handleSend = useCallback(() => {
     const trimmed = value.trim();
@@ -27,11 +42,16 @@ export const WhispererInput: React.FC<WhispererInputProps> = ({ onSend }) => {
     [handleSend],
   );
 
+  useEffect(() => {
+    adjustHeight();
+  }, [value, adjustHeight]);
+
   return (
     <div className="whisperer-input flex items-end gap-3">
       <textarea
-        className="flex-1 resize-none rounded-xl bg-black/50 border border-purple-500/40 focus:border-purple-400 focus:ring-2 focus:ring-purple-500/40 outline-none p-3 text-sm text-slate-100 placeholder:text-slate-500 transition"
-        rows={2}
+        ref={textareaRef}
+        className="whisperer-input-area flex-1 resize-none rounded-xl border bg-[#050506] p-3 text-sm text-slate-100 placeholder:text-slate-500 transition"
+        rows={1}
         placeholder="Transmit to the Mesh… (Shift+Enter for newline)"
         value={value}
         onChange={(event) => setValue(event.target.value)}

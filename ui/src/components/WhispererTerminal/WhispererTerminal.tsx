@@ -1,17 +1,21 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { WhispererInput } from './WhispererInput';
 import { WhispererMessageLog } from './WhispererMessageLog';
-import { WhispererMessage } from './whispererTypes';
+import { parseCommand } from './commandParser';
+import { resolveSageResponse } from './sageResponder';
+import { WhispererIntent, WhispererMessage } from './whispererTypes';
 import './whisperer.css';
 
 const createMessage = (
   type: WhispererMessage['type'],
   content: string,
+  intent?: WhispererIntent,
 ): WhispererMessage => ({
   id: `${type}-${crypto.randomUUID?.() ?? Date.now()}`,
   type,
   content,
   timestamp: new Date().toISOString(),
+  intent,
 });
 
 export const WhispererTerminal: React.FC = () => {
@@ -19,6 +23,7 @@ export const WhispererTerminal: React.FC = () => {
     createMessage('system', 'Whisperer Terminal 3.0 initialized. Awaiting operator signal.'),
   ]);
   const replyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [isThinking, setIsThinking] = useState(false);
 
   const enqueueMessage = useCallback((message: WhispererMessage) => {
     setMessages((prev) => [...prev, message]);
@@ -26,16 +31,21 @@ export const WhispererTerminal: React.FC = () => {
 
   const handleSend = useCallback(
     (content: string) => {
-      enqueueMessage(createMessage('operator', content));
+      const parsed = parseCommand(content);
+      enqueueMessage(createMessage('operator', content, parsed.intent));
 
       if (replyTimerRef.current) {
         clearTimeout(replyTimerRef.current);
       }
 
+      setIsThinking(true);
+      const { delay, content: responseContent } = resolveSageResponse(parsed);
+
       replyTimerRef.current = window.setTimeout(() => {
-        enqueueMessage(createMessage('sage', 'SAGE is listening…'));
+        enqueueMessage(createMessage('sage', responseContent, parsed.intent));
+        setIsThinking(false);
         replyTimerRef.current = null;
-      }, 900);
+      }, delay);
     },
     [enqueueMessage],
   );
@@ -44,6 +54,7 @@ export const WhispererTerminal: React.FC = () => {
     return () => {
       if (replyTimerRef.current) {
         clearTimeout(replyTimerRef.current);
+        setIsThinking(false);
       }
     };
   }, []);
@@ -60,28 +71,28 @@ export const WhispererTerminal: React.FC = () => {
   return (
     <section className="whisperer-terminal holo-console flex-1 flex flex-row gap-6 p-6 snap-pinned">
       <div className="flex flex-1 flex-col gap-4 min-w-0">
-        <header className="terminal-header flex items-center justify-between rounded-2xl border border-purple-500/30 px-4 py-3">
+        <header className="terminal-header flex items-center justify-between rounded-2xl px-4 py-3">
           <div>
-            <p className="text-xs uppercase tracking-widest text-purple-300/80">Primary Console</p>
+            <p className="text-xs uppercase tracking-[0.35em] text-slate-400">Primary Console</p>
             <h2 className="text-2xl font-semibold text-white">Whisperer Terminal</h2>
           </div>
           <div className="text-right">
-            <p className="text-xs text-slate-400">Phase 1 · Scaffold</p>
-            <p className="text-xs text-slate-500">Mesh-ready · Offline logic</p>
+            <p className="text-xs text-slate-400">Phase 2 · Refinement</p>
+            <p className="text-xs text-slate-500">Enterprise channel · Offline logic</p>
           </div>
         </header>
 
-        <div className="flex flex-1 flex-col min-h-0 rounded-3xl border border-slate-900/60 bg-black/40 backdrop-blur">
-          <WhispererMessageLog messages={messages} />
-          <div className="border-t border-purple-500/20 p-4">
+        <div className="flex flex-1 flex-col min-h-0 rounded-3xl border border-slate-900/60 bg-[#050506]">
+          <WhispererMessageLog messages={messages} isThinking={isThinking} />
+          <div className="border-t border-slate-900/50 p-4">
             <WhispererInput onSend={handleSend} />
           </div>
         </div>
       </div>
 
-      <aside className="whisperer-vitals hidden lg:flex w-72 flex-col gap-4 rounded-3xl border border-purple-500/30 p-4">
+      <aside className="whisperer-vitals hidden lg:flex w-72 flex-col gap-4 rounded-3xl p-4">
         <div>
-          <p className="text-sm uppercase tracking-[0.3em] text-purple-300/70">Vitals</p>
+          <p className="text-sm uppercase tracking-[0.3em] text-indigo-200/70">Vitals</p>
           <p className="text-base text-slate-400">Mesh resonance snapshot</p>
         </div>
         <div className="space-y-3">
