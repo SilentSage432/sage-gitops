@@ -35,7 +35,7 @@ export const WhispererTerminal: React.FC = () => {
   }, []);
 
   const handleSend = useCallback(
-    (content: string) => {
+    async (content: string) => {
       const trimmed = content.trim();
       if (!trimmed) {
         return;
@@ -50,7 +50,7 @@ export const WhispererTerminal: React.FC = () => {
       }
 
       setIsThinking(true);
-      const { delay, body } = buildResponse(route);
+      const { delay, body } = await buildResponse(route);
 
       replyTimerRef.current = window.setTimeout(() => {
         enqueueMessage(createMessage('sage', body));

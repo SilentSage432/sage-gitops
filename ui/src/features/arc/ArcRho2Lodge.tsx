@@ -1,15 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { getEpochStream, EpochStream } from '../../services/rho2Service';
 
 /**
  * ArcRho2Lodge – Rho² Cosmic Lodge shell
  */
 export const ArcRho2Lodge: React.FC = () => {
-  const mockEpochs = [
-    { id: '1127', timestamp: '2025-01-15T21:14:00Z', status: 'active' },
-    { id: '1126', timestamp: '2025-01-15T20:00:00Z', status: 'completed' },
-    { id: '1125', timestamp: '2025-01-15T19:00:00Z', status: 'completed' },
-    { id: '1124', timestamp: '2025-01-15T18:00:00Z', status: 'completed' }
-  ];
+  const [epochData, setEpochData] = useState<EpochStream | null>(null);
+
+  useEffect(() => {
+    const loadData = async () => {
+      const data = await getEpochStream();
+      setEpochData(data);
+    };
+    loadData();
+  }, []);
 
   return (
     <div className="space-y-6">
@@ -24,36 +28,29 @@ export const ArcRho2Lodge: React.FC = () => {
 
       <div className="mt-8 space-y-4">
         <h3 className="text-sm font-semibold text-slate-300 uppercase tracking-wide">
-          Epoch History
+          Epoch Stream
         </h3>
-        <div className="space-y-2">
-          {mockEpochs.map((epoch) => (
-            <div
-              key={epoch.id}
-              className="p-4 bg-slate-900/50 rounded border border-slate-800 hover:border-slate-700 transition-colors"
-            >
-              <div className="flex items-center justify-between">
-                <div>
-                  <span className="text-purple-400 font-mono font-semibold">
-                    Epoch {epoch.id}
-                  </span>
-                  <span className="ml-3 text-xs text-slate-500">
-                    {epoch.timestamp}
-                  </span>
-                </div>
-                <span
-                  className={`text-xs px-2 py-1 rounded ${
-                    epoch.status === 'active'
-                      ? 'bg-green-600/30 text-green-400'
-                      : 'bg-slate-700 text-slate-400'
-                  }`}
-                >
-                  {epoch.status}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
+        {epochData ? (
+          <div className="p-4 bg-slate-900/50 rounded border border-slate-800 space-y-2 text-sm">
+            <p className="text-slate-300">
+              <span className="text-slate-500">Current Epoch:</span> {epochData.currentEpoch}
+            </p>
+            <p className="text-slate-300">
+              <span className="text-slate-500">Fingerprint:</span> {epochData.fingerprint}
+            </p>
+            <p className="text-slate-300">
+              <span className="text-slate-500">Participants:</span> {epochData.participants}
+            </p>
+            <p className="text-slate-300">
+              <span className="text-slate-500">Integrity:</span> {epochData.integrity}
+            </p>
+            <p className="text-slate-300">
+              <span className="text-slate-500">Next Epoch ETA:</span> {epochData.nextEpochEtaSeconds}s
+            </p>
+          </div>
+        ) : (
+          <p className="text-slate-500 text-sm">Loading...</p>
+        )}
       </div>
     </div>
   );

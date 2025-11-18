@@ -1,15 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { getFederationNodes, FederationNode } from '../../services/federationService';
 
 /**
  * PiClusterChamber – Pi Kluster constellation shell
  */
 export const PiClusterChamber: React.FC = () => {
-  const mockNodes = [
-    { id: 'node-1', name: 'pi-node-alpha', status: 'healthy', pods: 12 },
-    { id: 'node-2', name: 'pi-node-beta', status: 'healthy', pods: 8 },
-    { id: 'node-3', name: 'pi-node-gamma', status: 'warning', pods: 6 },
-    { id: 'node-4', name: 'pi-node-delta', status: 'healthy', pods: 10 }
-  ];
+  const [nodes, setNodes] = useState<FederationNode[]>([]);
+
+  useEffect(() => {
+    const loadData = async () => {
+      const data = await getFederationNodes();
+      setNodes(data);
+    };
+    loadData();
+  }, []);
 
   const statusColor = (status: string) => {
     switch (status) {
@@ -39,33 +43,37 @@ export const PiClusterChamber: React.FC = () => {
         <h3 className="text-sm font-semibold text-slate-300 uppercase tracking-wide">
           Cluster Nodes
         </h3>
-        <div className="space-y-2">
-          {mockNodes.map((node) => (
-            <div
-              key={node.id}
-              className="p-4 bg-slate-900/50 rounded border border-slate-800 hover:border-slate-700 transition-colors"
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 rounded-full bg-green-400"></div>
-                  <div>
-                    <span className="text-slate-200 font-medium font-mono">
-                      {node.name}
-                    </span>
-                    <span className="ml-3 text-xs text-slate-500">
-                      {node.pods} pods
-                    </span>
+        {nodes.length > 0 ? (
+          <div className="space-y-2">
+            {nodes.map((node) => (
+              <div
+                key={node.id}
+                className="p-4 bg-slate-900/50 rounded border border-slate-800 hover:border-slate-700 transition-colors"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-2 h-2 rounded-full ${node.status === 'healthy' ? 'bg-green-400' : 'bg-yellow-400'}`}></div>
+                    <div>
+                      <span className="text-slate-200 font-medium font-mono">
+                        {node.id}
+                      </span>
+                      <span className="ml-3 text-xs text-slate-500">
+                        {node.role} | {node.pods} pods
+                      </span>
+                    </div>
                   </div>
+                  <span
+                    className={`text-xs px-2 py-1 rounded ${statusColor(node.status)}`}
+                  >
+                    {node.status}
+                  </span>
                 </div>
-                <span
-                  className={`text-xs px-2 py-1 rounded ${statusColor(node.status)}`}
-                >
-                  {node.status}
-                </span>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-slate-500 text-sm">Loading...</p>
+        )}
       </div>
     </div>
   );
