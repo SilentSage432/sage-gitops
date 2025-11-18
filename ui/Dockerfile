@@ -32,7 +32,9 @@ COPY proxy_params /etc/nginx/proxy_params
 # Static assets
 COPY dist /usr/share/nginx/html
 
-EXPOSE 8080
+EXPOSE 80
 
-# Run nginx in foreground
-CMD ["nginx", "-g", "daemon off;"]
+# Explicitly override any entrypoint from base image and run nginx directly in foreground
+# This ensures nginx stays running and doesn't exit after entrypoint scripts
+ENTRYPOINT ["nginx"]
+CMD ["-g", "daemon off;"]
