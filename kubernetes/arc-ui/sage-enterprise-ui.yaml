@@ -21,7 +21,7 @@ spec:
               containerPort: 80
           readinessProbe:
             httpGet:
-              path: "/ui/"
+              path: "/ui/index.html"
               port: 80
             initialDelaySeconds: 15
             timeoutSeconds: 5
@@ -29,7 +29,7 @@ spec:
             failureThreshold: 10
           livenessProbe:
             httpGet:
-              path: "/ui/"
+              path: "/ui/index.html"
               port: 80
             initialDelaySeconds: 45
             timeoutSeconds: 5
