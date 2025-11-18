@@ -26,7 +26,7 @@ ENV VITE_BUILD_ID=${VITE_BUILD_ID}
 FROM nginxinc/nginx-unprivileged:1.27-alpine
 
 # NGINX config for UI + /api proxy
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY proxy_params /etc/nginx/proxy_params
 
 # Static assets
