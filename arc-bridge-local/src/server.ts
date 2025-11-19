@@ -7,7 +7,7 @@ import whisperer from "./routes/whisperer.js";
 import rho2 from "./routes/rho2.js";
 import federation from "./routes/federation.js";
 
-import { initWSS, broadcast } from "./ws/stream.js";
+import { initWSS, broadcast } from "./ws/stream";
 
 // -----------------------------------------------------------------------------
 // Initialize Express
