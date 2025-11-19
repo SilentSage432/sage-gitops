@@ -1,18 +1,17 @@
 import { WebSocketServer } from "ws";
 
-let wss: WebSocketServer;
+let wss: WebSocketServer | null = null;
 
-export function initWSS(server: any) {
-  wss = new WebSocketServer({ server, path: "/stream" });
-  console.log("WebSocket /stream online");
+export function setWSS(server: WebSocketServer) {
+  wss = server;
 }
 
 export function broadcastEvent(event: any) {
   if (!wss) return;
-  wss.clients.forEach(client => {
-    try {
-      client.send(JSON.stringify(event));
-    } catch {}
-  });
+  const raw = JSON.stringify(event);
+  for (const client of wss.clients) {
+    if (client.readyState === 1) {
+      client.send(raw);
+    }
+  }
 }
-
