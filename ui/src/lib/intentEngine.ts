@@ -1,8 +1,11 @@
+import { resolveContext } from "./contextEngine";
+
 export interface IntentResult {
   type: "arc" | "federation" | "rho2" | "agent" | "system" | "ui" | "unknown";
   action: string;
   target?: string;
   payload?: any;
+  resolvedFromContext?: boolean;
 }
 
 export function parseIntent(input: string): IntentResult {
@@ -39,5 +42,19 @@ export function parseIntent(input: string): IntentResult {
     return { type: "ui", action: "open-panel", target: "agents" };
 
   return { type: "unknown", action: "none" };
+}
+
+export function parseIntentWithContext(
+  input: string,
+  memory: any
+) {
+  const base = parseIntent(input);
+  const contextual = resolveContext(input, memory);
+
+  if (contextual) {
+    return { ...contextual, resolvedFromContext: true };
+  }
+
+  return base;
 }
 
