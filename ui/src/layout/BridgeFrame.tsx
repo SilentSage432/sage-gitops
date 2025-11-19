@@ -35,8 +35,8 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
 
         {/* Right Panel: Active Chamber / Detail Panel */}
         {activeChamber && (
-          <div className="w-96 border-l border-slate-800 flex-shrink-0 overflow-y-auto relative">
-            <div className="p-6">
+          <div className="w-96 border-l border-slate-800 flex-shrink-0 relative overflow-hidden">
+            <div className="absolute inset-0 p-6">
               {activeChamber}
             </div>
           </div>
