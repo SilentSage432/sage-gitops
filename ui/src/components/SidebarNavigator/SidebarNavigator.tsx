@@ -52,7 +52,10 @@ export const SidebarNavigator: React.FC<SidebarNavigatorProps> = ({
     },
     {
       title: 'Operator',
-      items: [{ id: 'tools', label: 'Operator Tools' }]
+      items: [
+        { id: 'tools', label: 'Operator Tools' },
+        { id: 'operator-terminal', label: 'Operator Terminal', symbol: '⌘' }
+      ]
     }
   ];
 

@@ -12,6 +12,7 @@ import { NodesView } from '../features/federation/NodesView';
 import { AgentsOverview } from '../features/agents/AgentsOverview';
 import { AgentDetails } from '../features/agents/AgentDetails';
 import { WhispererTerminal } from '../components/WhispererTerminal/WhispererTerminal';
+import { OperatorTerminal } from "../features/operator/OperatorTerminal";
 
 /**
  * App – Root component that wires the Bridge Frame
@@ -63,6 +64,9 @@ export const App: React.FC = () => {
             </div>
           </div>
         );
+      
+      case "operator-terminal":
+        return <OperatorTerminal />;
       
       default:
         return null;
