@@ -15,17 +15,27 @@ export function initStream(onMessage: (msg: string) => void) {
     console.log("🔵 Whisperer Stream Connected");
   };
 
-  ws.onmessage = (event) => {
-    try {
-      const data = JSON.parse(event.data);
-      if (data?.type && data?.payload) {
-        onMessage(`[${data.type}] ${JSON.stringify(data.payload)}`);
-      } else {
-        onMessage(event.data);
-      }
-    } catch {
-      onMessage(event.data);
-    }
+  ws.onmessage = async (event) => {
+    const msg = JSON.parse(event.data);
+
+    // Verify dev-mode Rho² signature
+    const expected = await crypto.subtle.digest(
+      "SHA-256",
+      new TextEncoder().encode(JSON.stringify(msg.payload) + "rho2-dev-secret-key")
+    );
+    const expectedHex = Array.from(new Uint8Array(expected))
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
+
+    const trusted = msg.signature === expectedHex;
+
+    const prefix = trusted ? "🟢" : "🔴 UNSIGNED";
+
+    onMessage(
+      `${prefix} [${msg.type}] @${new Date(msg.timestamp).toLocaleTimeString()} → ${
+        trusted ? "verified" : "unverified"
+      }\n${JSON.stringify(msg.payload, null, 2)}`
+    );
   };
 
   ws.onclose = () => {

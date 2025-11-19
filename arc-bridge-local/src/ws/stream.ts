@@ -1,5 +1,11 @@
 import type { Server as HttpServer } from "http";
 import { WebSocketServer, WebSocket } from "ws";
+import { signPayload } from "../util/sign.js";
+import type { SageEvent } from "../types/telemetry.js";
+
+declare global {
+  var SAGE_STREAM: ((obj: any) => void) | undefined;
+}
 
 let wss: WebSocketServer | null = null;
 
@@ -33,6 +39,29 @@ export function initWSS(server: HttpServer) {
     });
   });
 
+  function broadcast(obj: any) {
+    if (!wss) {
+      return;
+    }
+    // Wrap into Fortress Telemetry Envelope
+    const event: SageEvent = {
+      type: obj.type || "GENERIC",
+      timestamp: Date.now(),
+      payload: obj.payload || obj,
+      signature: signPayload(obj.payload || obj)
+    };
+
+    const data = JSON.stringify(event);
+    for (const client of wss.clients) {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(data);
+      }
+    }
+  }
+
+  // Expose broadcast so routes can send events
+  globalThis.SAGE_STREAM = broadcast;
+
   console.log("WebSocket stream: ws://localhost:7070/stream");
 }
 
@@ -40,16 +69,18 @@ export function broadcast(payload: Record<string, unknown>) {
   if (!wss) {
     return;
   }
-  const envelope = {
-    kind: payload.kind ?? "telemetry",
-    ts: payload.ts ?? Date.now(),
-    ...payload,
+  // Wrap into Fortress Telemetry Envelope
+  const event: SageEvent = {
+    type: (payload as any).type || "GENERIC",
+    timestamp: Date.now(),
+    payload: (payload as any).payload || payload,
+    signature: signPayload((payload as any).payload || payload)
   };
-  const raw = JSON.stringify(envelope);
 
+  const data = JSON.stringify(event);
   for (const client of wss.clients) {
     if (client.readyState === WebSocket.OPEN) {
-      client.send(raw);
+      client.send(data);
     }
   }
 }

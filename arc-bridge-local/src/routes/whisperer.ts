@@ -12,7 +12,10 @@ router.post("/whisperer/message", (req, res) => {
     timestamp: Date.now()
   };
 
-  broadcast({ kind: "whisperer-message", payload: msg });
+  broadcast({
+    type: "WHISPERER_NOTICE",
+    payload: msg
+  });
 
   res.json({ ok: true, message: msg });
 });
