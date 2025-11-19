@@ -17,16 +17,26 @@ export const OperatorTerminal: React.FC<OperatorTerminalProps> = () => {
     setInput("");
 
     try {
-      const res = await fetch("http://localhost:7070/api/intent", {
+      // 1: Get intent
+      const intentRes = await fetch("http://localhost:7070/api/intent", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: userText })
       });
+      const intent = await intentRes.json();
+      setLogs((prev) => [...prev, `[intent] ${JSON.stringify(intent)}`]);
 
-      const data = await res.json();
-      setLogs((prev) => [...prev, JSON.stringify(data, null, 2)]);
+      // 2: Route action
+      const actionRes = await fetch("http://localhost:7070/api/act", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ intent })
+      });
+      const action = await actionRes.json();
+      setLogs((prev) => [...prev, `[action] ${JSON.stringify(action)}`]);
+
     } catch (err) {
-      setLogs((prev) => [...prev, "[error] Could not process intent"]);
+      setLogs((prev) => [...prev, "[error] Intent or action routing failed"]);
     }
   };
 

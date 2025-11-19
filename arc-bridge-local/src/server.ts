@@ -7,6 +7,7 @@ import whisperer from "./routes/whisperer.js";
 import rho2 from "./routes/rho2.js";
 import federation from "./routes/federation.js";
 import intent from "./routes/intent.js";
+import act from "./routes/act.js";
 
 import { initWSS, broadcast } from "./ws/stream";
 
@@ -28,6 +29,7 @@ app.use("/api", whisperer);
 app.use("/api", rho2);
 app.use("/api", federation);
 app.use("/api", intent);
+app.use("/api", act);
 
 // -----------------------------------------------------------------------------
 // PHASE 7 — UNIFIED TELEMETRY STREAM
