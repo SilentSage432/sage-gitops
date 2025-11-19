@@ -1,0 +1,67 @@
+.terminal-wrapper {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.terminal-log {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  font-family: Menlo, monospace;
+  color: #cfcfcf;
+}
+
+.terminal-line {
+  margin-bottom: 6px;
+}
+
+.terminal-line-operator {
+  color: #a78bfa; /* purple-300 */
+}
+
+.terminal-line-sage {
+  color: #818cf8; /* indigo-400 */
+}
+
+.terminal-input-bar {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #0d0d0f;
+  border-top: 1px solid #222;
+  padding: 12px;
+  display: flex;
+  gap: 8px;
+}
+
+.terminal-input {
+  flex: 1;
+  padding: 8px 12px;
+  background: #1a1a1d;
+  border: 1px solid #333;
+  border-radius: 6px;
+  color: white;
+}
+
+.terminal-input:focus {
+  outline: none;
+  border-color: #6f42c1;
+}
+
+.terminal-send {
+  padding: 8px 14px;
+  background: #6f42c1; /* SAGE purple */
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+}
+
+.terminal-send:hover {
+  background: #8b5bf0;
+}
+

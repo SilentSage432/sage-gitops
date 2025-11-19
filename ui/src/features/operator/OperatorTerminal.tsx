@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { parseIntentWithContext } from "../../lib/intentEngine";
 import { createInitialMemory } from "../../lib/contextEngine";
+import "./OperatorTerminal.css";
 
 interface OperatorTerminalProps {
   onNavigate?: (target: string) => void;
@@ -71,42 +72,30 @@ export const OperatorTerminal: React.FC<OperatorTerminalProps> = ({ onNavigate }
   }, [messages]);
 
   return (
-    <div className="flex flex-col h-full bg-black/40">
-
-      {/* Scrollable message log */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-2 font-mono text-sm">
+    <div className="terminal-wrapper">
+      {/* Scrollable log area */}
+      <div className="terminal-log">
         {messages.map((m, i) => (
-          <div
-            key={i}
-            className={`${
-              m.from === "operator"
-                ? "text-purple-300"
-                : "text-indigo-200"
-            }`}
-          >
+          <div key={i} className={`terminal-line ${m.from === "operator" ? "terminal-line-operator" : "terminal-line-sage"}`}>
             <strong>{m.from === "operator" ? "You" : "SAGE"}:</strong> {m.text}
           </div>
         ))}
         <div ref={logEndRef} />
       </div>
 
-      {/* Fixed bottom input bar */}
-      <div className="border-t border-slate-700 p-3 flex space-x-2 bg-black/60">
+      {/* Fixed input bar */}
+      <div className="terminal-input-bar">
         <input
-          className="flex-1 bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-slate-200 focus:outline-none"
-          placeholder="Issue command…"
+          className="terminal-input"
           value={input}
+          placeholder="Issue command..."
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && sendMessage()}
         />
-        <button
-          onClick={sendMessage}
-          className="px-4 py-2 bg-indigo-700 hover:bg-indigo-600 text-white text-sm rounded"
-        >
+        <button className="terminal-send" onClick={sendMessage}>
           Send
         </button>
       </div>
-
     </div>
   );
 };
