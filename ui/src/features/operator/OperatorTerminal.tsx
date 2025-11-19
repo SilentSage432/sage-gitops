@@ -1,6 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
+import { parseIntent } from "../../lib/intentEngine";
 
-export const OperatorTerminal: React.FC = () => {
+interface OperatorTerminalProps {
+  onNavigate?: (target: string) => void;
+}
+
+export const OperatorTerminal: React.FC<OperatorTerminalProps> = ({ onNavigate }) => {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<
     { from: "operator" | "sage"; text: string }[]
@@ -10,18 +15,45 @@ export const OperatorTerminal: React.FC = () => {
   const sendMessage = () => {
     if (!input.trim()) return;
 
-    // Append operator message
+    // Operator chat message
     setMessages((prev) => [...prev, { from: "operator", text: input }]);
 
-    // Simple placeholder intent engine
-    const lower = input.toLowerCase();
+    const intent = parseIntent(input);
 
-    let response = "I heard you, Operator.";
-    if (lower.includes("rho")) response = "Rho² systems acknowledged.";
-    if (lower.includes("node")) response = "Node map request queued.";
-    if (lower.includes("status")) response = "Status check initialized.";
+    switch (intent.type) {
+      case "ui":
+        if (intent.action === "open-panel" && intent.target && onNavigate) {
+          onNavigate(intent.target);
+          setMessages((prev) => [
+            ...prev,
+            { from: "sage", text: `Opening ${intent.target}...` },
+          ]);
+        }
+        break;
 
-    setMessages((prev) => [...prev, { from: "sage", text: response }]);
+      case "rho2":
+        setMessages((prev) => [
+          ...prev,
+          { from: "sage", text: "Simulating Rho² epoch rotation..." },
+        ]);
+        break;
+
+      case "system":
+        setMessages((prev) => [
+          ...prev,
+          { from: "sage", text: "System status: All nodes responsive." },
+        ]);
+        break;
+
+      default:
+        setMessages((prev) => [
+          ...prev,
+          {
+            from: "sage",
+            text: "I heard you. No direct mapping yet — but learning.",
+          },
+        ]);
+    }
 
     setInput("");
   };

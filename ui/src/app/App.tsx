@@ -66,7 +66,7 @@ export const App: React.FC = () => {
         );
       
       case "operator-terminal":
-        return <OperatorTerminal />;
+        return <OperatorTerminal onNavigate={setSelectedItem} />;
       
       default:
         return null;
