@@ -1,13 +1,13 @@
 import express from "express";
 import cors from "cors";
-import http from "http";
+import * as http from "http";
 
 import health from "./routes/health.js";
 import whisperer from "./routes/whisperer.js";
 import rho2 from "./routes/rho2.js";
 import federation from "./routes/federation.js";
 
-import { WebSocketServer } from "ws";
+import { WebSocketServer, WebSocket } from "ws";
 import { setWSS } from "./ws/stream.js";
 
 // -----------------------------------------------------------------------------
@@ -44,7 +44,7 @@ function broadcast(msg: any) {
 }
 
 // Log connections
-wss.on("connection", (ws) => {
+wss.on("connection", (ws: WebSocket) => {
   console.log("🔵 Telemetry client connected");
 
   ws.send(
