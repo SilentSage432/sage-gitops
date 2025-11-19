@@ -15,23 +15,23 @@ export const OperatorTerminal: React.FC<OperatorTerminalProps> = () => {
   };
 
   return (
-    <div className="flex flex-col h-full w-full bg-black/20">
-
-      {/* Scrollable log window */}
+    <div className="absolute -m-6 inset-0 bg-[#0a0a0a] flex flex-col overflow-hidden">
+      {/* Scrollable log window - takes remaining space */}
       <div
         id="terminal-log"
-        className="flex-1 overflow-y-auto p-4 text-slate-200 text-sm space-y-1"
+        className="flex-1 overflow-y-auto p-4 text-[#cfcfcf] text-sm font-mono space-y-1"
+        style={{ paddingBottom: '64px' }}
       >
         {logs.map((line, idx) => (
-          <div key={idx}>{line}</div>
+          <div key={idx} className="whitespace-pre-wrap">{line}</div>
         ))}
       </div>
 
-      {/* Bottom input bar */}
-      <div className="border-t border-slate-800 p-4 flex items-center gap-2 bg-black/30">
+      {/* Fixed bottom input bar */}
+      <div className="absolute bottom-0 left-0 right-0 border-t border-[#222] bg-[#0d0d0d] p-3 flex items-center gap-2 z-10">
         <input
           placeholder="Issue command..."
-          className="flex-1 bg-black/40 border border-slate-700 rounded px-3 py-2 text-slate-100 text-sm"
+          className="flex-1 bg-[#1a1a1d] border border-[#333] px-3 py-2 text-[#cfcfcf] text-sm font-mono focus:outline-none focus:border-[#6f42c1]"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && sendCommand()}
@@ -39,12 +39,11 @@ export const OperatorTerminal: React.FC<OperatorTerminalProps> = () => {
 
         <button
           onClick={sendCommand}
-          className="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded text-white text-sm"
+          className="px-4 py-2 bg-[#6f42c1] hover:bg-[#8b5bf0] text-white text-sm font-mono border-0 cursor-pointer"
         >
           Send
         </button>
       </div>
-
     </div>
   );
 };
