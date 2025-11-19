@@ -15,20 +15,20 @@ export const OperatorTerminal: React.FC<OperatorTerminalProps> = () => {
   };
 
   return (
-    <div className="absolute -m-6 inset-0 bg-[#0a0a0a] flex flex-col overflow-hidden">
+    <div className="absolute inset-0 -m-6 bg-[#0a0a0a] flex flex-col overflow-hidden">
       {/* Scrollable log window - takes remaining space */}
       <div
         id="terminal-log"
         className="flex-1 overflow-y-auto p-4 text-[#cfcfcf] text-sm font-mono space-y-1"
-        style={{ paddingBottom: '64px' }}
+        style={{ paddingBottom: '60px' }}
       >
         {logs.map((line, idx) => (
           <div key={idx} className="whitespace-pre-wrap">{line}</div>
         ))}
       </div>
 
-      {/* Fixed bottom input bar */}
-      <div className="absolute bottom-0 left-0 right-0 border-t border-[#222] bg-[#0d0d0d] p-3 flex items-center gap-2 z-10">
+      {/* Fixed bottom input bar - positioned above status bar */}
+      <div className="flex-shrink-0 border-t border-[#222] bg-[#0d0d0d] p-3 flex items-center gap-2">
         <input
           placeholder="Issue command..."
           className="flex-1 bg-[#1a1a1d] border border-[#333] px-3 py-2 text-[#cfcfcf] text-sm font-mono focus:outline-none focus:border-[#6f42c1]"
