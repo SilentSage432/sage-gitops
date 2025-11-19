@@ -1,9 +1,8 @@
 .terminal-wrapper {
-  position: relative;
   height: 100%;
-  width: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .terminal-log {
@@ -12,6 +11,7 @@
   padding: 16px;
   font-family: Menlo, monospace;
   color: #cfcfcf;
+  background: #0b0b0d;
 }
 
 .terminal-line {
@@ -29,7 +29,6 @@
 .terminal-input-bar {
   position: sticky;
   bottom: 0;
-  left: 0;
   width: 100%;
   background: #0d0d0f;
   border-top: 1px solid #222;

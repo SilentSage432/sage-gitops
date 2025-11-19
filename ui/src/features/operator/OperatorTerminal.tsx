@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./OperatorTerminal.css";
 
 interface OperatorTerminalProps {
   onNavigate?: (target: string) => void;
@@ -15,7 +16,7 @@ export const OperatorTerminal: React.FC<OperatorTerminalProps> = () => {
   };
 
   return (
-    <div className="absolute inset-0 -m-6 bg-[#0a0a0a] flex flex-col overflow-hidden">
+    <div className="terminal-wrapper h-full flex flex-col">
       {/* Scrollable log window - takes remaining space */}
       <div
         id="terminal-log"
