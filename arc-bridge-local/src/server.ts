@@ -7,8 +7,7 @@ import whisperer from "./routes/whisperer.js";
 import rho2 from "./routes/rho2.js";
 import federation from "./routes/federation.js";
 
-import { WebSocketServer, WebSocket } from "ws";
-import { setWSS } from "./ws/stream.js";
+import { initWSS, broadcast } from "./ws/stream.js";
 
 // -----------------------------------------------------------------------------
 // Initialize Express
@@ -31,59 +30,28 @@ app.use("/api", federation);
 // -----------------------------------------------------------------------------
 // PHASE 7 — UNIFIED TELEMETRY STREAM
 // -----------------------------------------------------------------------------
-const wss = new WebSocketServer({ server, path: "/stream" });
-setWSS(wss); // Initialize for broadcastEvent in routes
-
-function broadcast(msg: any) {
-  const raw = JSON.stringify(msg);
-  for (const client of wss.clients) {
-    if (client.readyState === 1) {
-      client.send(raw);
-    }
-  }
-}
-
-// Log connections
-wss.on("connection", (ws: WebSocket) => {
-  console.log("🔵 Telemetry client connected");
-
-  ws.send(
-    JSON.stringify({
-      type: "system",
-      level: "info",
-      source: "arc-bridge",
-      message: "Arc Bridge Local Telemetry Online",
-      ts: Date.now(),
-    })
-  );
-});
+initWSS(server);
 
 // -----------------------------------------------------------------------------
 // Emit example test packets every 3s (UI verification)
 // -----------------------------------------------------------------------------
 setInterval(() => {
   broadcast({
-    type: "telemetry",
     source: "arc",
     level: "info",
     message: "Arc heartbeat",
-    ts: Date.now(),
   });
 
   broadcast({
-    type: "telemetry",
     source: "rho2",
     level: "debug",
     message: "Rho² encryption module sync pulse",
-    ts: Date.now(),
   });
 
   broadcast({
-    type: "telemetry",
     source: "whisperer",
     level: "trace",
     message: "Whisperer idle",
-    ts: Date.now(),
   });
 }, 3000);
 

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import type { WhispererMessage } from "../types/shared.js";
-import { broadcastEvent } from "../ws/stream.js";
+import { broadcast } from "../ws/stream.js";
 
 const router = Router();
 
@@ -12,7 +12,7 @@ router.post("/whisperer/message", (req, res) => {
     timestamp: Date.now()
   };
 
-  broadcastEvent({ type: "whisperer-message", payload: msg });
+  broadcast({ kind: "whisperer-message", payload: msg });
 
   res.json({ ok: true, message: msg });
 });
