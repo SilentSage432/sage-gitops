@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 
 import { useTelemetryFilter } from "../../core/filters/useTelemetryFilter";
 import { useWhispererStream } from "./useWhispererStream";
+import { processCognitiveHooks } from "../../sage/cognition/whispererCognition";
 import "./whisperer.css";
 
 export function WhispererTerminal() {
@@ -35,6 +36,8 @@ export function WhispererTerminal() {
     if (containerRef.current) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
+
+    processCognitiveHooks(messages);
   }, [messages]);
 
   return (
