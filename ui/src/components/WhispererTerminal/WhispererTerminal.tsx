@@ -1,24 +1,48 @@
 import React, { useEffect, useState } from "react";
-import { initStream } from "@/services/stream";
+import { useOperatorEffect } from "../../core/OperatorEffectContext";
 
 export const WhispererTerminal: React.FC = () => {
-  const [messages, setMessages] = useState<string[]>([]);
+  const [log, setLog] = useState<string[]>([]);
+  const { dispatch } = useOperatorEffect();
 
+  // WebSocket connection (local dev)
   useEffect(() => {
-    initStream((msg: string) => {
-      setMessages((prev) => [...prev, msg]);
-    });
-  }, []);
+    const ws = new WebSocket("ws://localhost:7070/stream");
+
+    ws.onmessage = (ev) => {
+      const message = ev.data;
+      setLog((prev) => [...prev, message]);
+
+      // --- Autonomous Agent Layer ---
+      if (message.includes("RHO2:EPOCH_ROTATION")) {
+        dispatch({ type: "FLASH_PURPLE" });
+      }
+
+      if (message.includes("ARC:SIGMA:CRITICAL")) {
+        dispatch({ type: "NOTIFY", message: "Sigma reports instability." });
+      }
+
+      if (message.includes("WHISPER:FOCUS")) {
+        dispatch({ type: "FOCUS_WHISPERER" });
+      }
+    };
+
+    ws.onopen = () => {
+      setLog((prev) => [...prev, "[connected → Arc Bridge]"]);
+    };
+
+    ws.onclose = () => {
+      setLog((prev) => [...prev, "[disconnected]"]);
+    };
+
+    return () => ws.close();
+  }, [dispatch]);
 
   return (
-    <div className="flex flex-col h-full overflow-hidden p-4 text-slate-200 font-mono text-sm">
-      <div className="flex-1 overflow-y-auto space-y-1 custom-scrollbar">
-        {messages.map((m, i) => (
-          <div key={i} className="text-slate-300 whitespace-pre-wrap">
-            {m}
-          </div>
-        ))}
-      </div>
+    <div className="p-4 overflow-y-auto font-mono text-sm text-slate-300">
+      {log.map((line, idx) => (
+        <div key={idx} className="mb-1">{line}</div>
+      ))}
     </div>
   );
 };

@@ -14,6 +14,7 @@ export function initWSS(server: HttpServer) {
 
   wss.on("connection", (ws: WebSocket) => {
     console.log("🔵 Telemetry client connected");
+    ws.send("WHISPERER:CONNECTED");
 
     ws.on("message", (data) => {
       let msg: { kind?: string; content?: string } | undefined;
@@ -34,8 +35,36 @@ export function initWSS(server: HttpServer) {
       }
     });
 
+    // periodic mock signals simulating early federation traffic
+    const interval1 = setInterval(() => {
+      if (ws.readyState === WebSocket.OPEN) {
+        ws.send("RHO2:EPOCH_ROTATION → epoch=4412");
+      } else {
+        clearInterval(interval1);
+      }
+    }, 8000);
+
+    const interval2 = setInterval(() => {
+      if (ws.readyState === WebSocket.OPEN) {
+        ws.send("ARC:SIGMA:CRITICAL → anomaly spike");
+      } else {
+        clearInterval(interval2);
+      }
+    }, 15000);
+
+    const interval3 = setInterval(() => {
+      if (ws.readyState === WebSocket.OPEN) {
+        ws.send("WHISPER:FOCUS → operator may need attention");
+      } else {
+        clearInterval(interval3);
+      }
+    }, 20000);
+
     ws.on("close", () => {
       console.log("🔴 Telemetry client disconnected");
+      clearInterval(interval1);
+      clearInterval(interval2);
+      clearInterval(interval3);
     });
   });
 
