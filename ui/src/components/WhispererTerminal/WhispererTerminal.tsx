@@ -1,28 +1,25 @@
-import React, { useEffect, useState } from "react";
-import { usePulseStore } from "../../sage/state/pulseStore";
-import { useFederationSignals } from "../../sage/hooks/useFederationSignals";
+import React, { useState } from "react";
 
-export const WhispererTerminal: React.FC = () => {
-  const [lines, setLines] = useState<string[]>([]);
-  const pulses = usePulseStore((s) => s.pulses);
+import { TelemetryCategory } from "../../sage/telemetry/TelemetryTypes";
+import { useTelemetryFeed } from "../../sage/telemetry/useTelemetryFeed";
+import { FilterBar } from "./FilterBar";
+import "./whisperer.css";
 
-  useFederationSignals();
-
-  useEffect(() => {
-    if (!pulses.length) return;
-
-    const last = pulses[pulses.length - 1];
-    setLines((prev) => [
-      ...prev,
-      `[${last.signal}] from ${last.source}`,
-    ]);
-  }, [pulses]);
+export function WhispererTerminal() {
+  const [filter, setFilter] = useState<TelemetryCategory>("ALL");
+  const events = useTelemetryFeed(filter);
 
   return (
-    <div className="p-4 overflow-y-auto font-mono text-sm text-purple-200">
-      {lines.map((l, i) => (
-        <div key={i}>{l}</div>
-      ))}
+    <div className="whisperer-frame">
+      <FilterBar active={filter} onSelect={setFilter} />
+
+      <div className="whisperer-log">
+        {events.map((e, idx) => (
+          <div key={idx} className={`log-line log-${e.category.toLowerCase()}`}>
+            [{e.category}] {e.message}
+          </div>
+        ))}
+      </div>
     </div>
   );
-};
+}
