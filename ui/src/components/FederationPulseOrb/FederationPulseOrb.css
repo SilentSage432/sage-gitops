@@ -1,0 +1,12 @@
+.pulse-orb {
+  border-radius: 50%;
+  animation: sagePulse ease-in-out infinite;
+  transition: all 0.25s ease;
+}
+
+@keyframes sagePulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+

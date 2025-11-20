@@ -13,6 +13,28 @@ export const WhispererTerminal: React.FC = () => {
       const message = ev.data;
       setLog((prev) => [...prev, message]);
 
+      // Feed telemetry into HeartbeatEngine
+      import("../../sage/core/HeartbeatEngine").then(mod => {
+        try {
+          const data = typeof message === 'string' ? JSON.parse(message) : message;
+          mod.updatePulseFromTelemetry(data);
+        } catch {
+          // If not JSON, try to extract metrics from string message
+          const payload: any = {};
+          if (message.includes("RHO2:EPOCH_ROTATION")) {
+            payload.events = 1;
+            payload.stress = 0.3;
+          }
+          if (message.includes("ARC:SIGMA:CRITICAL")) {
+            payload.stress = 0.8;
+            payload.load = 0.7;
+          }
+          if (Object.keys(payload).length > 0) {
+            mod.updatePulseFromTelemetry(payload);
+          }
+        }
+      });
+
       // --- Autonomous Agent Layer ---
       if (message.includes("RHO2:EPOCH_ROTATION")) {
         dispatch({ type: "FLASH_PURPLE" });
