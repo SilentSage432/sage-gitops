@@ -13,7 +13,7 @@ import { OnboardingNexus } from '../features/federation/OnboardingNexus';
 import { NodesView } from '../features/federation/NodesView';
 import { AgentsOverview } from '../features/agents/AgentsOverview';
 import { AgentDetails } from '../features/agents/AgentDetails';
-import { OperatorTerminal } from "../features/operator/OperatorTerminal";
+import OperatorTerminal from "../features/operator/OperatorTerminal";
 
 /**
  * App – Root component that wires the Bridge Frame
@@ -67,7 +67,7 @@ export const App: React.FC = () => {
         );
       
       case "operator-terminal":
-        return <OperatorTerminal onNavigate={setSelectedItem} />;
+        return <OperatorTerminal />;
       
       default:
         return null;
