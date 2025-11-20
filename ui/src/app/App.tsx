@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { BridgeFrame } from '../layout/BridgeFrame';
+import { OperatorEffectProvider } from "../core/OperatorEffectContext";
 import { ArcThetaPanel } from '../features/arc/ArcThetaPanel';
 import { ArcSigmaPanel } from '../features/arc/ArcSigmaPanel';
 import { ArcOmegaPanel } from '../features/arc/ArcOmegaPanel';
@@ -11,7 +12,6 @@ import { OnboardingNexus } from '../features/federation/OnboardingNexus';
 import { NodesView } from '../features/federation/NodesView';
 import { AgentsOverview } from '../features/agents/AgentsOverview';
 import { AgentDetails } from '../features/agents/AgentDetails';
-import { WhispererTerminal } from '../components/WhispererTerminal/WhispererTerminal';
 import { OperatorTerminal } from "../features/operator/OperatorTerminal";
 
 /**
@@ -74,12 +74,13 @@ export const App: React.FC = () => {
   };
 
   return (
-    <BridgeFrame
-      activeChamber={renderActiveChamber()}
-      centerConsole={<WhispererTerminal />}
-      selectedItem={selectedItem}
-      onSelectItem={setSelectedItem}
-    />
+    <OperatorEffectProvider>
+      <BridgeFrame
+        activeChamber={renderActiveChamber()}
+        selectedItem={selectedItem}
+        onSelectItem={setSelectedItem}
+      />
+    </OperatorEffectProvider>
   );
 };
 

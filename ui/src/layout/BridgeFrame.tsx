@@ -1,10 +1,11 @@
 import React from 'react';
 import { SidebarNavigator } from '../components/SidebarNavigator/SidebarNavigator';
+import { WhispererTerminal } from '../components/WhispererTerminal/WhispererTerminal';
 import { StatusBar } from '../components/StatusBar/StatusBar';
+import { useOperatorEffect } from "../core/OperatorEffectContext";
 
 interface BridgeFrameProps {
   activeChamber?: React.ReactNode;
-  centerConsole?: React.ReactNode;
   selectedItem?: string;
   onSelectItem?: (item: string) => void;
 }
@@ -15,13 +16,19 @@ interface BridgeFrameProps {
  */
 export const BridgeFrame: React.FC<BridgeFrameProps> = ({ 
   activeChamber, 
-  centerConsole,
   selectedItem,
   onSelectItem
 }) => {
+  const { state } = useOperatorEffect();
+
   return (
-    <div className="flex h-screen w-screen bg-[#030304] text-white overflow-hidden flex-col">
-      {/* Main content area */}
+    <div
+      className={`
+        flex h-screen w-screen bg-[#030304] text-white overflow-hidden flex-col
+        transition-all duration-500
+        ${state.flash ? "ring-4 ring-purple-500" : ""}
+      `}
+    >
       <div className="flex flex-1 overflow-hidden min-h-0">
         {/* Left Sidebar: Federation Navigator */}
         <div className="w-64 border-r border-slate-800 flex-shrink-0 overflow-y-auto">
@@ -30,13 +37,15 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
 
         {/* Center: Whisperer Terminal */}
         <div className="flex-1 flex flex-col overflow-hidden min-h-0">
-          {centerConsole}
+          <WhispererTerminal />
         </div>
 
         {/* Right Panel: Active Chamber / Detail Panel */}
         {activeChamber && (
-          <div className="w-96 border-l border-slate-800 flex-shrink-0 flex flex-col overflow-hidden">
-            {activeChamber}
+          <div className="w-96 border-l border-slate-800 flex-shrink-0 overflow-y-auto">
+            <div className="p-6">
+              {activeChamber}
+            </div>
           </div>
         )}
       </div>
