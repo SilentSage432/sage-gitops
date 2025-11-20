@@ -9,7 +9,7 @@ import federation from "./routes/federation.js";
 import intent from "./routes/intent.js";
 import act from "./routes/act.js";
 
-import { initWSS, broadcast } from "./ws/stream";
+import { initWSS, broadcast } from "./ws/stream.js";
 
 // -----------------------------------------------------------------------------
 // Initialize Express
