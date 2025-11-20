@@ -33,7 +33,7 @@ export const SidebarNavigator: React.FC<SidebarNavigatorProps> = ({
         { id: 'arc-theta', label: 'Theta', symbol: 'Θ' },
         { id: 'arc-sigma', label: 'Sigma', symbol: 'Σ' },
         { id: 'arc-omega', label: 'Omega', symbol: 'Ω' },
-        { id: 'arc-rho2', label: 'Rho²', symbol: 'Rho²' },
+        { id: 'arc-rho2', label: 'Rho²', symbol: 'ρ²' },
         { id: 'arc-lambda', label: 'Lambda', symbol: 'Λ' },
         { id: 'arc-chi', label: 'Chi', symbol: 'Χ' }
       ]
