@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { BridgeFrame } from '../layout/BridgeFrame';
 import { OperatorEffectProvider } from "../core/OperatorEffectContext";
+import { HybridModeProvider } from "../sage/hybrid/HybridModeContext";
 import { ArcThetaPanel } from '../features/arc/ArcThetaPanel';
 import { ArcSigmaPanel } from '../features/arc/ArcSigmaPanel';
 import { ArcOmegaPanel } from '../features/arc/ArcOmegaPanel';
@@ -75,11 +76,13 @@ export const App: React.FC = () => {
 
   return (
     <OperatorEffectProvider>
-      <BridgeFrame
-        activeChamber={renderActiveChamber()}
-        selectedItem={selectedItem}
-        onSelectItem={setSelectedItem}
-      />
+      <HybridModeProvider>
+        <BridgeFrame
+          activeChamber={renderActiveChamber()}
+          selectedItem={selectedItem}
+          onSelectItem={setSelectedItem}
+        />
+      </HybridModeProvider>
     </OperatorEffectProvider>
   );
 };

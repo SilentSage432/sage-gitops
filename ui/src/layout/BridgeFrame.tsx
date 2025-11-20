@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SidebarNavigator } from '../components/SidebarNavigator/SidebarNavigator';
 import { WhispererTerminal } from '../components/WhispererTerminal/WhispererTerminal';
 import { StatusBar } from '../components/StatusBar/StatusBar';
 import { useOperatorEffect } from "../core/OperatorEffectContext";
+import { useHybridAutonomy } from "../sage/hybrid/useHybridAutonomy";
 
 interface BridgeFrameProps {
   activeChamber?: React.ReactNode;
@@ -20,6 +21,28 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
   onSelectItem
 }) => {
   const { state } = useOperatorEffect();
+  useHybridAutonomy();
+
+  // UI Action Dispatcher Listener
+  useEffect(() => {
+    function onAction(e: CustomEvent) {
+      const { action, payload } = e.detail;
+
+      if (action === "ui.focus.arc") {
+        onSelectItem?.(`arc-${payload.arc}`);
+      }
+      if (action === "ui.focus.rho2") {
+        onSelectItem?.("arc-rho2");
+      }
+      if (action === "ui.open.operator-terminal") {
+        onSelectItem?.("operator-terminal");
+      }
+    }
+
+    window.addEventListener("SAGE_UI_ACTION", onAction as EventListener);
+    return () =>
+      window.removeEventListener("SAGE_UI_ACTION", onAction as EventListener);
+  }, [onSelectItem]);
 
   return (
     <div
