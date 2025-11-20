@@ -1,11 +1,6 @@
 import type { Server as HttpServer } from "http";
 import { WebSocketServer, WebSocket } from "ws";
-import { signPayload } from "../util/sign.js";
-import type { SageEvent } from "../types/telemetry.js";
-
-declare global {
-  var SAGE_STREAM: ((obj: any) => void) | undefined;
-}
+import { FederationSignalBus } from "../federation/FederationSignalBus.js";
 
 let wss: WebSocketServer | null = null;
 
@@ -14,103 +9,28 @@ export function initWSS(server: HttpServer) {
 
   wss.on("connection", (ws: WebSocket) => {
     console.log("🔵 Telemetry client connected");
-    ws.send("WHISPERER:CONNECTED");
-
-    ws.on("message", (data) => {
-      let msg: { kind?: string; content?: string } | undefined;
-      try {
-        msg = JSON.parse(String(data));
-      } catch {
-        return;
-      }
-
-      if (msg?.kind === "operator_command") {
-        ws.send(
-          JSON.stringify({
-            kind: "ack",
-            content: `Command received: ${msg.content}`,
-            ts: Date.now(),
-          }),
-        );
-      }
-    });
-
-    // periodic mock signals simulating early federation traffic
-    const interval1 = setInterval(() => {
-      if (ws.readyState === WebSocket.OPEN) {
-        ws.send("RHO2:EPOCH_ROTATION → epoch=4412");
-      } else {
-        clearInterval(interval1);
-      }
-    }, 8000);
-
-    const interval2 = setInterval(() => {
-      if (ws.readyState === WebSocket.OPEN) {
-        ws.send("ARC:SIGMA:CRITICAL → anomaly spike");
-      } else {
-        clearInterval(interval2);
-      }
-    }, 15000);
-
-    const interval3 = setInterval(() => {
-      if (ws.readyState === WebSocket.OPEN) {
-        ws.send("WHISPER:FOCUS → operator may need attention");
-      } else {
-        clearInterval(interval3);
-      }
-    }, 20000);
+    ws.send(JSON.stringify({ type: "CONNECTED", at: Date.now() }));
 
     ws.on("close", () => {
       console.log("🔴 Telemetry client disconnected");
-      clearInterval(interval1);
-      clearInterval(interval2);
-      clearInterval(interval3);
     });
   });
 
-  function broadcast(obj: any) {
-    if (!wss) {
-      return;
+  // Broadcast every FSO event to all sockets
+  FederationSignalBus.on("federation-signal", (evt) => {
+    const msg = JSON.stringify({ type: "FEDERATION_EVENT", evt });
+    if (wss) {
+      wss.clients.forEach((client) => {
+        if (client.readyState === 1) client.send(msg);
+      });
     }
-    // Wrap into Fortress Telemetry Envelope
-    const event: SageEvent = {
-      type: obj.type || "GENERIC",
-      timestamp: Date.now(),
-      payload: obj.payload || obj,
-      signature: signPayload(obj.payload || obj)
-    };
-
-    const data = JSON.stringify(event);
-    for (const client of wss.clients) {
-      if (client.readyState === WebSocket.OPEN) {
-        client.send(data);
-      }
-    }
-  }
-
-  // Expose broadcast so routes can send events
-  globalThis.SAGE_STREAM = broadcast;
+  });
 
   console.log("WebSocket stream: ws://localhost:7070/stream");
 }
 
-export function broadcast(payload: Record<string, unknown>) {
-  if (!wss) {
-    return;
-  }
-  // Wrap into Fortress Telemetry Envelope
-  const event: SageEvent = {
-    type: (payload as any).type || "GENERIC",
-    timestamp: Date.now(),
-    payload: (payload as any).payload || payload,
-    signature: signPayload((payload as any).payload || payload)
-  };
-
-  const data = JSON.stringify(event);
-  for (const client of wss.clients) {
-    if (client.readyState === WebSocket.OPEN) {
-      client.send(data);
-    }
-  }
+export function broadcast(text: string) {
+  if (!wss) return;
+  wss.clients.forEach((c) => c.readyState === 1 && c.send(text));
 }
 

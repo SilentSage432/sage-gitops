@@ -1,6 +1,6 @@
 import { Router } from "express";
 import type { WhispererMessage } from "../types/shared.js";
-import { broadcast } from "../ws/stream.js";
+import { FederationSignalBus } from "../federation/FederationSignalBus.js";
 
 const router = Router();
 
@@ -12,12 +12,20 @@ router.post("/whisperer/message", (req, res) => {
     timestamp: Date.now()
   };
 
-  broadcast({
-    type: "WHISPERER_NOTICE",
-    payload: msg
-  });
+  FederationSignalBus.emitSignal("WHISPERER_MESSAGE", "operator", msg);
 
   res.json({ ok: true, message: msg });
+});
+
+router.post("/whisperer/send", (req, res) => {
+  const { message } = req.body;
+  
+  FederationSignalBus.emitSignal("WHISPERER_MESSAGE", "operator", {
+    text: message,
+    timestamp: Date.now()
+  });
+
+  res.json({ ok: true });
 });
 
 export default router;

@@ -1,69 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { useOperatorEffect } from "../../core/OperatorEffectContext";
+import { usePulseStore } from "../../sage/state/pulseStore";
+import { useFederationSignals } from "../../sage/hooks/useFederationSignals";
 
 export const WhispererTerminal: React.FC = () => {
-  const [log, setLog] = useState<string[]>([]);
-  const { dispatch } = useOperatorEffect();
+  const [lines, setLines] = useState<string[]>([]);
+  const pulses = usePulseStore((s) => s.pulses);
 
-  // WebSocket connection (local dev)
+  useFederationSignals();
+
   useEffect(() => {
-    const ws = new WebSocket("ws://localhost:7070/stream");
+    if (!pulses.length) return;
 
-    ws.onmessage = (ev) => {
-      const message = ev.data;
-      setLog((prev) => [...prev, message]);
-
-      // Feed telemetry into HeartbeatEngine
-      import("../../sage/core/HeartbeatEngine").then(mod => {
-        try {
-          const data = typeof message === 'string' ? JSON.parse(message) : message;
-          mod.updatePulseFromTelemetry(data);
-        } catch {
-          // If not JSON, try to extract metrics from string message
-          const payload: any = {};
-          if (message.includes("RHO2:EPOCH_ROTATION")) {
-            payload.events = 1;
-            payload.stress = 0.3;
-          }
-          if (message.includes("ARC:SIGMA:CRITICAL")) {
-            payload.stress = 0.8;
-            payload.load = 0.7;
-          }
-          if (Object.keys(payload).length > 0) {
-            mod.updatePulseFromTelemetry(payload);
-          }
-        }
-      });
-
-      // --- Autonomous Agent Layer ---
-      if (message.includes("RHO2:EPOCH_ROTATION")) {
-        dispatch({ type: "FLASH_PURPLE" });
-      }
-
-      if (message.includes("ARC:SIGMA:CRITICAL")) {
-        dispatch({ type: "NOTIFY", message: "Sigma reports instability." });
-      }
-
-      if (message.includes("WHISPER:FOCUS")) {
-        dispatch({ type: "FOCUS_WHISPERER" });
-      }
-    };
-
-    ws.onopen = () => {
-      setLog((prev) => [...prev, "[connected → Arc Bridge]"]);
-    };
-
-    ws.onclose = () => {
-      setLog((prev) => [...prev, "[disconnected]"]);
-    };
-
-    return () => ws.close();
-  }, [dispatch]);
+    const last = pulses[pulses.length - 1];
+    setLines((prev) => [
+      ...prev,
+      `[${last.signal}] from ${last.source}`,
+    ]);
+  }, [pulses]);
 
   return (
-    <div className="p-4 overflow-y-auto font-mono text-sm text-slate-300">
-      {log.map((line, idx) => (
-        <div key={idx} className="mb-1">{line}</div>
+    <div className="p-4 overflow-y-auto font-mono text-sm text-purple-200">
+      {lines.map((l, i) => (
+        <div key={i}>{l}</div>
       ))}
     </div>
   );

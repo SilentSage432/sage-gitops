@@ -9,7 +9,8 @@ import federation from "./routes/federation.js";
 import intent from "./routes/intent.js";
 import act from "./routes/act.js";
 
-import { initWSS, broadcast } from "./ws/stream.js";
+import { initWSS } from "./ws/stream.js";
+import { FederationSignalBus } from "./federation/FederationSignalBus.js";
 
 // -----------------------------------------------------------------------------
 // Initialize Express
@@ -37,25 +38,12 @@ app.use("/api", act);
 initWSS(server);
 
 // -----------------------------------------------------------------------------
-// Emit example test packets every 3s (UI verification)
+// Emit heartbeat every 3 seconds
 // -----------------------------------------------------------------------------
 setInterval(() => {
-  broadcast({
-    source: "arc",
-    level: "info",
-    message: "Arc heartbeat",
-  });
-
-  broadcast({
-    source: "rho2",
-    level: "debug",
-    message: "Rho² encryption module sync pulse",
-  });
-
-  broadcast({
-    source: "whisperer",
-    level: "trace",
-    message: "Whisperer idle",
+  FederationSignalBus.emitSignal("HEARTBEAT_TICK", "arc-bridge-local", {
+    load: Math.random(),
+    uptime: process.uptime(),
   });
 }, 3000);
 
