@@ -1,12 +1,10 @@
-import { EventEmitter } from "events";
-
 export interface PulseMetrics {
   rate: number;      // beats per second
   intensity: number; // 0–1
   hue: number;       // 0–360 degrees
 }
 
-const emitter = new EventEmitter();
+const emitter = new EventTarget();
 let current: PulseMetrics = { rate: 1, intensity: 0.3, hue: 265 };
 
 export function getPulse() {
@@ -24,11 +22,14 @@ export function updatePulseFromTelemetry(payload: any) {
   const hue = 265 + Math.min(30, stress * 15);
 
   current = { rate, intensity, hue };
-  emitter.emit("update", current);
+  emitter.dispatchEvent(new CustomEvent("update", { detail: current }));
 }
 
 export function onPulseUpdate(cb: (m: PulseMetrics) => void) {
-  emitter.on("update", cb);
-  return () => emitter.off("update", cb);
+  const handler = (e: Event) => {
+    cb((e as CustomEvent).detail);
+  };
+  emitter.addEventListener("update", handler);
+  return () => emitter.removeEventListener("update", handler);
 }
 
