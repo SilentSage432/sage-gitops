@@ -3,6 +3,7 @@ import { BridgeFrame } from '../layout/BridgeFrame';
 import { OperatorEffectProvider } from "../core/OperatorEffectContext";
 import { TelemetryFilterProvider } from "../core/filters/useTelemetryFilter";
 import { HybridModeProvider } from "../sage/hybrid/HybridModeContext";
+import { UIShockwaveProvider } from "../core/UIShockwaveContext";
 import { ArcThetaPanel } from '../features/arc/ArcThetaPanel';
 import { ArcSigmaPanel } from '../features/arc/ArcSigmaPanel';
 import { ArcOmegaPanel } from '../features/arc/ArcOmegaPanel';
@@ -79,11 +80,13 @@ export const App: React.FC = () => {
     <OperatorEffectProvider>
       <HybridModeProvider>
         <TelemetryFilterProvider>
-          <BridgeFrame
-            activeChamber={renderActiveChamber()}
-            selectedItem={selectedItem}
-            onSelectItem={setSelectedItem}
-          />
+          <UIShockwaveProvider>
+            <BridgeFrame
+              activeChamber={renderActiveChamber()}
+              selectedItem={selectedItem}
+              onSelectItem={setSelectedItem}
+            />
+          </UIShockwaveProvider>
         </TelemetryFilterProvider>
       </HybridModeProvider>
     </OperatorEffectProvider>
