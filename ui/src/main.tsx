@@ -7,6 +7,7 @@ import "./index.css";
 import "./sage/kernel/animations.css";
 import "./sage/kernel/reflexAnimations.css";
 import "./sage/kernel/heartbeatAnimations.css";
+import "./sage/cognition/defaultPatterns";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
