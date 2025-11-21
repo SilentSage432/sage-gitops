@@ -6,6 +6,7 @@ import { useOperatorEffect } from "../core/OperatorEffectContext";
 import { useHybridAutonomy } from "../sage/hybrid/useHybridAutonomy";
 import { useUIAlertsBridge } from "../core/useUIAlertsBridge";
 import { useUIShockwave } from "../core/UIShockwaveContext";
+import { useKernelHeartbeat } from "../core/hooks/useKernelHeartbeat";
 import "../styles/ui-alerts.css";
 
 interface BridgeFrameProps {
@@ -26,6 +27,7 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
   const { state } = useOperatorEffect();
   useHybridAutonomy();
   useUIAlertsBridge();
+  useKernelHeartbeat();
 
   const alertState = useUIShockwave().state;
 
