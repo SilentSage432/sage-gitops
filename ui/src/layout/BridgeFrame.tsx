@@ -14,7 +14,6 @@ import { useReflex } from "../sage/kernel/useReflex";
 import { useHeartbeat } from "../sage/kernel/useHeartbeat";
 import { startKernelPulse } from "../sage/kernel/KernelPulse";
 import { subscribeKernel } from "../sage/kernel/KernelSignalBus";
-import PulseOrb from "../components/PulseOrb/PulseOrb";
 import "../styles/ui-alerts.css";
 
 interface BridgeFrameProps {
@@ -135,9 +134,6 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
       <div className="h-12 flex-shrink-0 border-t border-slate-800">
         <StatusBar />
       </div>
-
-      {/* Pulse Orb Indicator */}
-      <PulseOrb />
     </div>
   );
 };
