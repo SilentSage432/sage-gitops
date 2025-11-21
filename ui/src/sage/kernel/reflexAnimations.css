@@ -1,0 +1,13 @@
+@keyframes reflexFlash {
+  0%   { box-shadow: 0 0 0px rgba(255,255,255,0); }
+  40%  { box-shadow: 0 0 25px rgba(155, 100, 255, 0.45); }
+  100% { box-shadow: 0 0 0px rgba(255,255,255,0); }
+}
+
+.reflex-purple  { box-shadow: 0 0 20px rgba(155, 80, 255, 0.35); }
+.reflex-red     { box-shadow: 0 0 20px rgba(255, 60, 60, 0.45); }
+.reflex-yellow  { box-shadow: 0 0 20px rgba(255, 225, 60, 0.40); }
+.reflex-blue    { box-shadow: 0 0 20px rgba(60, 150, 255, 0.40); }
+.reflex-green   { box-shadow: 0 0 20px rgba(80, 255, 120, 0.40); }
+.reflex-cyan    { box-shadow: 0 0 20px rgba(0, 255, 255, 0.40); }
+

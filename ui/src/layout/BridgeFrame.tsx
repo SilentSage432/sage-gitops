@@ -8,6 +8,7 @@ import { useUIAlertsBridge } from "../core/useUIAlertsBridge";
 import { useUIShockwave } from "../core/UIShockwaveContext";
 import { useKernelHeartbeat } from "../core/hooks/useKernelHeartbeat";
 import { useKernelSignal } from "../sage/kernel/useKernelSignal";
+import { useReflex } from "../sage/kernel/useReflex";
 import { startKernelPulse } from "../sage/kernel/KernelPulse";
 import { subscribeKernel } from "../sage/kernel/KernelSignalBus";
 import "../styles/ui-alerts.css";
@@ -36,8 +37,11 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
     startKernelPulse();
   }, []);
 
+  useReflex();
+
   const kernelPulse = useKernelSignal("kernel.pulse");
   const kernelWarning = useKernelSignal("kernel.warning");
+  const reflexFlash = useKernelSignal("kernel.flash");
 
   const alertState = useUIShockwave().state;
 
@@ -86,6 +90,7 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
         ${alertClass}
         ${kernelPulse ? "ring-1 ring-purple-600/20" : ""}
         ${kernelWarning ? "bg-[#12030a]" : ""}
+        ${reflexFlash ? `animate-[reflexFlash_0.8s_ease-out]` : ""}
       `}
     >
       <div className="flex flex-1 overflow-hidden min-h-0">

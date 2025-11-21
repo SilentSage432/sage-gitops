@@ -16,5 +16,9 @@ export const KernelActions = {
   intentDetected(intent: string) {
     emitKernel("kernel.intent.detected", { intent });
   },
+
+  reflex(type: string, payload?: any) {
+    emitKernel("kernel.reflex", { type, payload });
+  },
 };
 
