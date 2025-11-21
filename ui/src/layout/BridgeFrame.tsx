@@ -9,8 +9,10 @@ import { useUIShockwave } from "../core/UIShockwaveContext";
 import { useKernelHeartbeat } from "../core/hooks/useKernelHeartbeat";
 import { useKernelSignal } from "../sage/kernel/useKernelSignal";
 import { useReflex } from "../sage/kernel/useReflex";
+import { useHeartbeat } from "../sage/kernel/useHeartbeat";
 import { startKernelPulse } from "../sage/kernel/KernelPulse";
 import { subscribeKernel } from "../sage/kernel/KernelSignalBus";
+import PulseOrb from "../components/PulseOrb/PulseOrb";
 import "../styles/ui-alerts.css";
 
 interface BridgeFrameProps {
@@ -38,10 +40,12 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
   }, []);
 
   useReflex();
+  useHeartbeat();
 
   const kernelPulse = useKernelSignal("kernel.pulse");
   const kernelWarning = useKernelSignal("kernel.warning");
   const reflexFlash = useKernelSignal("kernel.flash");
+  const hb = useKernelSignal("kernel.pulse.ui");
 
   const alertState = useUIShockwave().state;
 
@@ -85,12 +89,13 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
     <div
       className={`
         flex h-screen w-screen bg-[#030304] text-white overflow-hidden flex-col
-        transition-all duration-500
+        transition-all duration-300
         ${state.flash ? "ring-4 ring-purple-500" : ""}
         ${alertClass}
         ${kernelPulse ? "ring-1 ring-purple-600/20" : ""}
         ${kernelWarning ? "bg-[#12030a]" : ""}
         ${reflexFlash ? `animate-[reflexFlash_0.8s_ease-out]` : ""}
+        ${hb ? "animate-[uiPulse_1.2s_ease-in-out]" : ""}
       `}
     >
       <div className="flex flex-1 overflow-hidden min-h-0">
@@ -125,6 +130,9 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
       <div className="h-12 flex-shrink-0 border-t border-slate-800">
         <StatusBar />
       </div>
+
+      {/* Pulse Orb Indicator */}
+      <PulseOrb />
     </div>
   );
 };
