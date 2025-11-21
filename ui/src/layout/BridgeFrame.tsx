@@ -7,6 +7,9 @@ import { useHybridAutonomy } from "../sage/hybrid/useHybridAutonomy";
 import { useUIAlertsBridge } from "../core/useUIAlertsBridge";
 import { useUIShockwave } from "../core/UIShockwaveContext";
 import { useKernelHeartbeat } from "../core/hooks/useKernelHeartbeat";
+import { useKernelSignal } from "../sage/kernel/useKernelSignal";
+import { startKernelPulse } from "../sage/kernel/KernelPulse";
+import { subscribeKernel } from "../sage/kernel/KernelSignalBus";
 import "../styles/ui-alerts.css";
 
 interface BridgeFrameProps {
@@ -28,6 +31,13 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
   useHybridAutonomy();
   useUIAlertsBridge();
   useKernelHeartbeat();
+
+  useEffect(() => {
+    startKernelPulse();
+  }, []);
+
+  const kernelPulse = useKernelSignal("kernel.pulse");
+  const kernelWarning = useKernelSignal("kernel.warning");
 
   const alertState = useUIShockwave().state;
 
@@ -59,6 +69,14 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
       window.removeEventListener("SAGE_UI_ACTION", onAction as EventListener);
   }, [onSelectItem]);
 
+  // Kernel focus arc listener
+  useEffect(() => {
+    const unsub = subscribeKernel("kernel.focus.arc", (payload) => {
+      onSelectItem?.(`arc-${payload.arc}`);
+    });
+    return unsub;
+  }, [onSelectItem]);
+
   return (
     <div
       className={`
@@ -66,6 +84,8 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
         transition-all duration-500
         ${state.flash ? "ring-4 ring-purple-500" : ""}
         ${alertClass}
+        ${kernelPulse ? "ring-1 ring-purple-600/20" : ""}
+        ${kernelWarning ? "bg-[#12030a]" : ""}
       `}
     >
       <div className="flex flex-1 overflow-hidden min-h-0">

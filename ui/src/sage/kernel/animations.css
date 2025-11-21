@@ -1,0 +1,10 @@
+.pulse-flash {
+  animation: pulseFlash 0.9s ease-out;
+}
+
+@keyframes pulseFlash {
+  0%   { box-shadow: 0 0 0px rgba(139, 92, 246, 0.3); }
+  50%  { box-shadow: 0 0 30px rgba(139, 92, 246, 0.35); }
+  100% { box-shadow: 0 0 0px rgba(139, 92, 246, 0.15); }
+}
+
