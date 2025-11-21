@@ -5,6 +5,8 @@ import { StatusBar } from "../components/StatusBar/StatusBar";
 import { useOperatorEffect } from "../core/OperatorEffectContext";
 import { useHybridAutonomy } from "../sage/hybrid/useHybridAutonomy";
 import { useUIAlertsBridge } from "../core/useUIAlertsBridge";
+import { PredictiveOverlay } from "../sage/predictive/ui/PredictiveOverlay";
+import { usePredictiveWS } from "../sage/predictive/ws/usePredictiveWS";
 import { useUIShockwave } from "../core/UIShockwaveContext";
 import { useKernelHeartbeat } from "../core/hooks/useKernelHeartbeat";
 import { useKernelSignal } from "../sage/kernel/useKernelSignal";
@@ -34,6 +36,7 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
   useHybridAutonomy();
   useUIAlertsBridge();
   useKernelHeartbeat();
+  usePredictiveWS();
 
   useEffect(() => {
     startKernelPulse();
@@ -88,7 +91,7 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
   return (
     <div
       className={`
-        flex h-screen w-screen bg-[#030304] text-white overflow-hidden flex-col
+        relative flex h-screen w-screen bg-[#030304] text-white overflow-hidden flex-col
         transition-all duration-300
         ${state.flash ? "ring-4 ring-purple-500" : ""}
         ${alertClass}
@@ -125,6 +128,8 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
           </div>
         )}
       </div>
+
+      <PredictiveOverlay />
 
       {/* Bottom Status Bar */}
       <div className="h-12 flex-shrink-0 border-t border-slate-800">
