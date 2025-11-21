@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { pushThought } from "../../sage/cognition/ThoughtChain";
 
 interface WhispererInputProps {
   onSend: (content: string) => void;
@@ -27,6 +28,14 @@ export const WhispererInput: React.FC<WhispererInputProps> = ({ onSend }) => {
     if (!trimmed) {
       return;
     }
+
+    pushThought({
+      id: crypto.randomUUID(),
+      from: "operator",
+      text: trimmed,
+      tags: ["command"],
+      timestamp: Date.now(),
+    });
 
     onSend(trimmed);
     setValue('');

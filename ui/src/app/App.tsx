@@ -16,6 +16,7 @@ import { NodesView } from '../features/federation/NodesView';
 import { AgentsOverview } from '../features/agents/AgentsOverview';
 import { AgentDetails } from '../features/agents/AgentDetails';
 import OperatorTerminal from "../features/operator/OperatorTerminal";
+import CognitionPanel from "../features/cognition/CognitionPanel";
 
 /**
  * App – Root component that wires the Bridge Frame
@@ -70,6 +71,9 @@ export const App: React.FC = () => {
       
       case "operator-terminal":
         return <OperatorTerminal />;
+      
+      case "cognition":
+        return <CognitionPanel />;
       
       default:
         return null;

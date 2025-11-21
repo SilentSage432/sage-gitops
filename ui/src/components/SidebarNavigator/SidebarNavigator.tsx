@@ -56,6 +56,12 @@ export const SidebarNavigator: React.FC<SidebarNavigatorProps> = ({
         { id: 'tools', label: 'Operator Tools' },
         { id: 'operator-terminal', label: 'Operator Terminal', symbol: '⌘' }
       ]
+    },
+    {
+      title: 'Cognition',
+      items: [
+        { id: 'cognition', label: 'Cognition Stream' }
+      ]
     }
   ];
 
