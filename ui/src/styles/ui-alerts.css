@@ -1,0 +1,41 @@
+@keyframes warning-border-pulse {
+  0% {
+    box-shadow: 0 0 0px #8b5bf040;
+  }
+  50% {
+    box-shadow: 0 0 18px #8b5bff80;
+  }
+  100% {
+    box-shadow: 0 0 0px #8b5bf040;
+  }
+}
+
+@keyframes critical-shockwave {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+  70% {
+    transform: scale(1.4);
+    opacity: 0.2;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+.UI-warning-pulse {
+  animation: warning-border-pulse 1.2s ease-out;
+}
+
+.UI-critical-shockwave::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle, #ff005580 0%, transparent 70%);
+  animation: critical-shockwave 1.4s ease-out;
+  z-index: 9999;
+}
+

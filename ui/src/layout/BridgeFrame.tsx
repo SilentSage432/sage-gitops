@@ -1,9 +1,12 @@
-import React, { useEffect } from 'react';
-import { SidebarNavigator } from '../components/SidebarNavigator/SidebarNavigator';
-import { WhispererTerminal } from '../components/WhispererTerminal/WhispererTerminal';
-import { StatusBar } from '../components/StatusBar/StatusBar';
+import React, { useEffect } from "react";
+import { SidebarNavigator } from "../components/SidebarNavigator/SidebarNavigator";
+import { WhispererTerminal } from "../components/WhispererTerminal/WhispererTerminal";
+import { StatusBar } from "../components/StatusBar/StatusBar";
 import { useOperatorEffect } from "../core/OperatorEffectContext";
 import { useHybridAutonomy } from "../sage/hybrid/useHybridAutonomy";
+import { useUIAlertsBridge } from "../core/useUIAlertsBridge";
+import { useUIShockwave } from "../core/UIShockwaveContext";
+import "../styles/ui-alerts.css";
 
 interface BridgeFrameProps {
   activeChamber?: React.ReactNode;
@@ -22,6 +25,16 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
 }) => {
   const { state } = useOperatorEffect();
   useHybridAutonomy();
+  useUIAlertsBridge();
+
+  const alertState = useUIShockwave().state;
+
+  const alertClass =
+    alertState.level === "critical"
+      ? "UI-critical-shockwave"
+      : alertState.level === "warning" && alertState.burst
+      ? "UI-warning-pulse"
+      : "";
 
   // UI Action Dispatcher Listener
   useEffect(() => {
@@ -50,6 +63,7 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
         flex h-screen w-screen bg-[#030304] text-white overflow-hidden flex-col
         transition-all duration-500
         ${state.flash ? "ring-4 ring-purple-500" : ""}
+        ${alertClass}
       `}
     >
       <div className="flex flex-1 overflow-hidden min-h-0">
