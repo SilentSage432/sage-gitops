@@ -13,6 +13,7 @@
 @import "./styles/reactiveAccent.css";
 @import "./styles/dynamicEnvironment.css";
 @import "./styles/structuralIllumination.css";
+@import "../layout/sageLayout.css";
 @import "./styles/designTokens.css";
 @import "./styles/globalSurfaces.css";
 @import "./styles/typography.css";

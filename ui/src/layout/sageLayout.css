@@ -1,0 +1,54 @@
+/**
+ * UI Renaissance — Visual Phase V16
+ * First True Layout Shift — Structural Foundation
+ *
+ * PURPOSE:
+ *  - Introduce the new SAGE layout architecture
+ *  - Enable future adaptive panel positioning
+ *  - Prepare grid-based restructuring without moving anything yet
+ *
+ * SAFETY:
+ *  - No visual changes yet
+ *  - No repositioning of Whisperer or panels
+ *  - No breakage of current UI flow
+ *
+ * THIS PHASE ONLY:
+ *  - Adds the structural framework (dormant)
+ *  - Activated in later phases (V17–V18)
+ */
+
+/* === ROOT LAYOUT WRAPPER (dormant until activated) === */
+#sageRootLayout {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr auto;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* === FUTURE PANEL ZONES (inactive for now) === */
+.sage-zone-top {
+  grid-row: 1;
+  grid-column: 1;
+}
+
+.sage-zone-center {
+  grid-row: 2;
+  grid-column: 1;
+  display: flex;
+  gap: 16px;
+}
+
+.sage-zone-bottom {
+  grid-row: 3;
+  grid-column: 1;
+}
+
+/* === WHISPERER RESERVED DOCK — NOT MOVED YET === */
+#whispererContainer {
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
