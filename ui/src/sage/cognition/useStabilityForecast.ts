@@ -10,7 +10,7 @@ export function useStabilityForecast() {
 
   useEffect(() => {
     return onCognition((event) => {
-      if (event.type !== "system.error") return;
+      if (event.type !== "system.error" && event.type !== "system.warning") return;
 
       const now = Date.now();
       recent.current.push(now);

@@ -1,27 +1,32 @@
-import { useCallback, useEffect } from "react";
-
-export interface CognitionEvent {
-  type: string;
-  [key: string]: any;
-}
+import { useEffect, useRef } from "react";
+import { CognitionEvent } from "./eventTypes";
 
 export function useCognitionStream() {
-  const onCognition = useCallback((handler: (event: CognitionEvent) => void) => {
-    function eventHandler(e: CustomEvent) {
-      handler(e.detail as CognitionEvent);
-    }
+  const listeners = useRef<((e: CognitionEvent) => void)[]>([]);
 
-    window.addEventListener("SAGE_THOUGHT", eventHandler as EventListener);
-    window.addEventListener("SAGE_RUNTIME_EVENT", eventHandler as EventListener);
-    window.addEventListener("SAGE_ALERT", eventHandler as EventListener);
+  function onCognition(cb: (e: CognitionEvent) => void) {
+    listeners.current.push(cb);
 
     return () => {
-      window.removeEventListener("SAGE_THOUGHT", eventHandler as EventListener);
-      window.removeEventListener("SAGE_RUNTIME_EVENT", eventHandler as EventListener);
-      window.removeEventListener("SAGE_ALERT", eventHandler as EventListener);
+      listeners.current = listeners.current.filter((fn) => fn !== cb);
     };
+  }
+
+  // simulate incoming cognition events
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const event: CognitionEvent = {
+        type: "system.warning",
+        source: "ui.kernel",
+        message: "simulated instability",
+        timestamp: Date.now(),
+      };
+
+      listeners.current.forEach((fn) => fn(event));
+    }, 8000);
+
+    return () => clearInterval(interval);
   }, []);
 
   return { onCognition };
 }
-
