@@ -21,6 +21,7 @@ import { panelRollbackManager } from "../../systems/panelRollbackManager";
 import { panelExecutionScheduler } from "../../systems/panelExecutionScheduler";
 import { panelPriorityEngine } from "../../systems/panelPriorityEngine";
 import { panelSuppressionLayer } from "../../systems/panelSuppressionLayer";
+import { panelRecoveryEngine } from "../../systems/panelRecoveryEngine";
 import "./whisperer.css";
 
 export function WhispererTerminal() {
@@ -393,6 +394,24 @@ export function WhispererTerminal() {
       // NOTE:
       // Phase 61 does NOT remove actions from queue.
       // It only prevents execution until safe.
+    }, 8000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Phase 62 — Autonomous Recovery + Normalization
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const currentState = uxStateMachine.getState();
+      const suppressed = panelSuppressionLayer.isSuppressed();
+
+      const status = panelRecoveryEngine.update(currentState, suppressed);
+
+      console.debug("[SAGE] Recovery status:", status);
+
+      // NOTE:
+      // Phase 62 DOES NOT trigger UI behavior.
+      // It ONLY restores autonomy permissions internally.
     }, 8000);
 
     return () => clearInterval(interval);
