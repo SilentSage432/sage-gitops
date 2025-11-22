@@ -1,0 +1,33 @@
+/**
+ * UI Renaissance — Visual Phase V12
+ * Cinematic Pulse Activation
+ *
+ * PURPOSE:
+ *  - Introduce subtle, slow environmental pulse
+ *  - Create a living, cinematic atmosphere
+ *  - Maintain absolute restraint and focus
+ *
+ * SAFETY:
+ *  - Extremely low-frequency (not noticeable consciously)
+ *  - No component movement or UI displacement
+ *  - Whisperer behavior remains unchanged
+ */
+
+/* === CINEMATIC PULSE — extremely subtle === */
+@keyframes sage-environment-pulse {
+  0% {
+    opacity: 0.85;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.85;
+  }
+}
+
+body::before {
+  animation: sage-environment-pulse 46s ease-in-out infinite;
+  will-change: opacity;
+}
+
