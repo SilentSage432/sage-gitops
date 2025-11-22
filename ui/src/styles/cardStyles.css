@@ -1,0 +1,77 @@
+/**
+ * UI Renaissance — Phase 14
+ * Card + data block visual refinement
+ *
+ * SAFETY:
+ *  - No automatic UI changes
+ *  - No spacing or layout shifts
+ *  - Purely optional application
+ */
+
+/* Base card container */
+.sage-card {
+  background: var(--sage-surface-1);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  box-shadow: var(--sage-elevation-1);
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.3s ease;
+}
+
+/* Elevated state — manual only */
+.sage-card-raised {
+  box-shadow: var(--sage-elevation-2);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Card header — clean structure */
+.sage-card-header {
+  padding: var(--sage-space-4);
+  font-size: var(--sage-text-sm);
+  font-weight: 500;
+  color: var(--sage-text-secondary);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* Title inside header */
+.sage-card-title {
+  font-size: var(--sage-text-md);
+  font-weight: 600;
+  color: var(--sage-text-primary);
+  margin: 0;
+}
+
+/* Card body — content region */
+.sage-card-body {
+  padding: var(--sage-space-4);
+  color: var(--sage-text-primary);
+  font-size: var(--sage-text-sm);
+  line-height: 1.55;
+}
+
+/* Optional footer */
+.sage-card-footer {
+  padding: var(--sage-space-3) var(--sage-space-4);
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  font-size: var(--sage-text-xs);
+  color: var(--sage-text-muted);
+}
+
+/* Status-aware card styling (uses Phase 10 tokens) */
+.sage-card-critical {
+  border-color: var(--sage-border-critical);
+  background: var(--sage-surface-critical);
+}
+
+.sage-card-warning {
+  border-color: var(--sage-border-warning);
+  background: var(--sage-surface-warning);
+}
+
+.sage-card-success {
+  border-color: var(--sage-border-success);
+  background: var(--sage-surface-success);
+}
+

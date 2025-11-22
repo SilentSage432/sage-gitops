@@ -11,6 +11,7 @@
 @import "./styles/resonanceStyles.css";
 @import "./styles/adaptiveSurfaces.css";
 @import "./styles/inputStyles.css";
+@import "./styles/cardStyles.css";
 
 @tailwind base;
 @tailwind components;
