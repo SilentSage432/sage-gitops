@@ -47,6 +47,7 @@
 @import "./styles/contextualResponse.css";
 @import "./styles/tieredModulation.css";
 @import "./styles/preAutonomousSafeguard.css";
+@import "./styles/stateMachineFoundation.css";
 
 @tailwind base;
 @tailwind components;
