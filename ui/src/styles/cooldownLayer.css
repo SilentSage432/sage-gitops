@@ -1,0 +1,51 @@
+/**
+ * Autonomous Action Layer — Phase 61
+ * Cooldown & Execution Damping (Non-Autonomous)
+ *
+ * PURPOSE:
+ *  - Prevent repeated or rapid execution after approval
+ *  - Ensure single-event stability and controlled pacing
+ *  - Maintain strict operator control and non-autonomous design
+ *
+ * SAFETY:
+ *  - No automatic cooldown activation
+ *  - Does NOT trigger or monitor execution
+ *  - No UI, layout, or visual changes
+ *  - Fully inert without .sage-panel-cooldown applied manually
+ *
+ * ACTIVATION REQUIREMENTS (manual only):
+ *  - .sage-auto-init
+ *  - .sage-auto-regulated
+ *  - .sage-auto-awakened
+ *  - .sage-auto-governed
+ *  - .sage-governor-elevated
+ *  - .sage-state-shift-ready
+ *  - .sage-state-shift-authorized
+ *  - .sage-panel-route
+ *  - .sage-panel-eligible
+ *  - .sage-panel-verify
+ *  - .sage-panel-execute
+ *  - .sage-panel-rollback
+ *  - .sage-panel-contain
+ *  - .sage-panel-stabilize
+ *  - .sage-panel-override
+ *  - .sage-panel-cooldown     (new — cooldown permitted, NOT automatic)
+ */
+
+/* === COOLDOWN SAFETY HOOK (inactive, invisible) === */
+.sage-auto-init.sage-auto-regulated.sage-auto-awakened
+.sage-auto-governed.sage-governor-elevated.sage-state-shift-ready
+.sage-state-shift-authorized.sage-panel-route.sage-panel-eligible
+.sage-panel-verify.sage-panel-execute.sage-panel-rollback
+.sage-panel-contain.sage-panel-stabilize.sage-panel-override
+.sage-panel-cooldown {
+  isolation: isolate;
+  pointer-events: auto;
+  /* Cooldown permitted — NOT triggered */
+}
+
+/* === RESERVED FOR PHASE 62 (state restoration lock) === */
+.sage-panel-restore {
+  /* Next: guarantees environment can return to baseline — still gated */
+}
+
