@@ -1,0 +1,47 @@
+/**
+ * UI Renaissance — Visual Phase V7
+ * Accent Activation (First Hint of Magic)
+ *
+ * PURPOSE:
+ *  - Introduce subtle luminous accent identity
+ *  - Enhance interaction clarity without flashiness
+ *  - Begin SAGE's visual personality in a controlled way
+ *
+ * SAFETY:
+ *  - No animations or glow pulses
+ *  - No layout or functional changes
+ *  - Whisperer behavior untouched
+ */
+
+/* === PRIMARY ACCENT TOKEN (activated, still restrained) === */
+:root {
+  --sage-accent-primary: #8a7dff;
+}
+
+/* === INTERACTIVE ACCENT STATES — subtle, elegant === */
+button,
+.sage-action,
+.sage-nav-item {
+  color: var(--sage-text-1);
+  transition: color 120ms ease, border-color 120ms ease;
+}
+
+button:hover,
+.sage-action:hover,
+.sage-nav-item:hover {
+  color: var(--sage-accent-primary);
+}
+
+button:focus-visible,
+.sage-action:focus-visible,
+.sage-nav-item:focus-visible {
+  outline: 2px solid rgba(138, 125, 255, 0.45);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* === WHISPERER INPUT ACCENT — minimal, intentional === */
+#whispererInputContainer:focus-within {
+  border-top: 1px solid rgba(138, 125, 255, 0.35);
+}
+
