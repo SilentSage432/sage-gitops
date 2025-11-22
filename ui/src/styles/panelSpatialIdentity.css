@@ -1,0 +1,44 @@
+/**
+ * UI Renaissance — Visual Phase V17
+ * Panel Separation & Spatial Identity
+ *
+ * PURPOSE:
+ *  - Visually distinguish panel regions without repositioning
+ *  - Prepare for layout activation in Phase V18
+ *  - Begin giving the interface a structured, intentional feel
+ *
+ * SAFETY:
+ *  - No functional or behavioral changes
+ *  - No element movement or resizing
+ *  - Whisperer remains fully anchored
+ */
+
+/* === GLOBAL PANEL SPACING — subtle structural presence === */
+.sage-panel {
+  border-radius: 12px;
+  backdrop-filter: blur(6px);
+  margin-bottom: 18px;
+}
+
+/* === PRIMARY PANEL EMPHASIS (visual only) === */
+.sage-panel-primary {
+  box-shadow:
+    0 0 0 1px rgba(138, 125, 255, 0.14),
+    0 10px 30px rgba(0, 0, 0, 0.44);
+}
+
+/* === SECONDARY PANEL DE-EMPHASIS === */
+.sage-panel-secondary {
+  opacity: 0.82;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.03),
+    0 4px 14px rgba(0, 0, 0, 0.26);
+}
+
+/* === SCROLL AREA POLISH — subtle containment === */
+.sage-scroll-zone {
+  overflow-y: auto;
+  padding-right: 6px;
+  mask-image: linear-gradient(to bottom, transparent, black 12px, black calc(100% - 12px), transparent);
+}
+
