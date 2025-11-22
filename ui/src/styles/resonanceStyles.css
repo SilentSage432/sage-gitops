@@ -1,0 +1,54 @@
+/**
+ * UI Renaissance — Phase 11
+ * SAGE Resonance & Aura System
+ *
+ * SAFE:
+ *  - No layout or spacing changes
+ *  - No automatic activation
+ *  - Visual enhancement only when classes are applied
+ */
+
+/* === SUBTLE SIGNATURE AURA (opt-in) === */
+.sage-aura {
+  position: relative;
+  z-index: 1;
+}
+
+.sage-aura::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  opacity: 0;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(155, 107, 255, 0.15) 0%,
+    rgba(155, 107, 255, 0.05) 45%,
+    transparent 80%
+  );
+  transition: opacity 0.35s ease;
+}
+
+/* === Controlled activation (manual only) === */
+.sage-aura-active::after {
+  opacity: 1;
+}
+
+/* === LOW-KEY RESONANCE PULSE (optional, restrained) === */
+.sage-resonance {
+  animation: sageResonancePulse 6s ease-in-out infinite;
+  opacity: 0.92;
+}
+
+@keyframes sageResonancePulse {
+  0% { opacity: 0.92; }
+  50% { opacity: 1; }
+  100% { opacity: 0.92; }
+}
+
+/* === FUTURE AUTONOMOUS MARKER (does nothing visually yet) === */
+.sage-awakened {
+  /* Reserved for later phases */
+}
+

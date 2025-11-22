@@ -8,6 +8,7 @@
 @import "./styles/microMotion.css";
 @import "./styles/statusTokens.css";
 @import "./styles/statusStyles.css";
+@import "./styles/resonanceStyles.css";
 
 @tailwind base;
 @tailwind components;
