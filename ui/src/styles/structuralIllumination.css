@@ -1,0 +1,52 @@
+/**
+ * UI Renaissance — Visual Phase V15
+ * Structural Illumination & Focus Depth
+ *
+ * PURPOSE:
+ *  - Introduce depth hierarchy based on context state
+ *  - Visually elevate active panels without animation
+ *  - Improve focus and scannability across the UI
+ *
+ * SAFETY:
+ *  - No layout movement or resizing
+ *  - No functional changes
+ *  - Whisperer logic fully untouched
+ *
+ * VISUAL STATES (applied manually):
+ *  - .sage-focus       -> primary active surface
+ *  - .sage-dimmed      -> de-emphasized secondary surfaces
+ */
+
+/* === BASE PANEL DEPTH — neutral state === */
+.sage-panel {
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.04),
+    0 6px 16px rgba(0, 0, 0, 0.32);
+  opacity: 0.96;
+  transition: box-shadow 280ms ease, opacity 280ms ease;
+}
+
+/* === ACTIVE / FOCUSED PANEL — steps visually forward === */
+.sage-panel.sage-focus {
+  box-shadow:
+    0 0 0 1px rgba(138, 125, 255, 0.18),
+    0 10px 28px rgba(0, 0, 0, 0.42);
+  opacity: 1;
+}
+
+/* === DIMMED / SECONDARY PANEL — gently recedes === */
+.sage-panel.sage-dimmed {
+  opacity: 0.70;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.02),
+    0 3px 10px rgba(0, 0, 0, 0.24);
+}
+
+/* === WHISPERER FOCUS ALIGNMENT === */
+#whispererMessageLog.sage-focus {
+  box-shadow:
+    0 0 0 1px rgba(138, 125, 255, 0.22),
+    0 12px 32px rgba(0, 0, 0, 0.46);
+  opacity: 1;
+}
+
