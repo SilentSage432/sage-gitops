@@ -42,6 +42,7 @@
 @import "./styles/atmosphericEvolution.css";
 @import "./styles/environmentCalibration.css";
 @import "./styles/atmosphericIntelligence.css";
+@import "./styles/atmosphericResponse.css";
 
 @tailwind base;
 @tailwind components;

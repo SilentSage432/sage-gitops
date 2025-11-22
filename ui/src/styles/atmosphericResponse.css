@@ -1,0 +1,62 @@
+/**
+ * UI Renaissance — Phase 45
+ * Controlled Atmospheric Response Layer
+ *
+ * PURPOSE:
+ *  - Allow the environment to respond when explicitly activated
+ *  - Enable safe, subtle reactive atmospheric behavior
+ *  - Maintain strict operator control (non-autonomous)
+ *
+ * ACTIVATION REQUIREMENTS:
+ *  - .sage-auto-init
+ *  - .sage-auto-regulated
+ *  - .sage-auto-awakened
+ *  - .sage-atmos-identity
+ *  - .sage-tonal-seed
+ *  - .sage-tonal-awakened
+ *  - .sage-tonal-elevated
+ *  - .sage-atmos-elevated
+ *  - .sage-atmos-calibrated
+ *  - .sage-atmos-intelligent
+ *  - .sage-atmos-active    (new)
+ *
+ * SAFETY:
+ *  - No automatic activation
+ *  - No layout or spacing changes
+ *  - Visual changes remain subtle and reversible
+ */
+
+/* === CONTROLLED ENVIRONMENTAL RESPONSE (manual only) === */
+.sage-auto-init.sage-auto-regulated.sage-auto-awakened
+  .sage-atmos-identity.sage-tonal-seed.sage-tonal-awakened.sage-tonal-elevated
+  .sage-atmos-elevated.sage-atmos-calibrated.sage-atmos-intelligent.sage-atmos-active {
+  opacity: 1;
+  filter:
+    brightness(1.045)
+    contrast(1.055)
+    saturate(1.05);
+  transition:
+    opacity 2.8s ease,
+    filter 2.8s ease;
+}
+
+/* === OPTIONAL ELEMENT-LEVEL RESPONSE === */
+.sage-auto-init.sage-auto-regulated.sage-auto-awakened
+  .sage-atmos-identity.sage-tonal-seed.sage-tonal-awakened.sage-tonal-elevated
+  .sage-atmos-elevated.sage-atmos-calibrated.sage-atmos-intelligent.sage-atmos-active
+  .sage-atmos-layer {
+  opacity: 1;
+  filter:
+    brightness(1.055)
+    contrast(1.065)
+    saturate(1.06);
+  transition:
+    opacity 3s ease,
+    filter 3s ease;
+}
+
+/* === RESERVED FOR PHASE 46 (assisted adaptive response) === */
+.sage-atmos-assisted {
+  /* Next phase: controlled assisted adaptation */
+}
+
