@@ -13,6 +13,7 @@ import { autonomousStateShiftEngine } from "../../systems/autonomousStateShiftEn
 import { panelAutoTriggerEngine } from "../../systems/panelAutoTriggerEngine";
 import { panelAutoOpenEngine } from "../../systems/panelAutoOpenEngine";
 import { panelSafetyGate } from "../../systems/panelSafetyGate";
+import { panelReconfirmBuffer } from "../../systems/panelReconfirmBuffer";
 import "./whisperer.css";
 
 export function WhispererTerminal() {
@@ -238,6 +239,24 @@ export function WhispererTerminal() {
       // Phase 53 makes NO autonomous UI changes.
       // Decisions are logged only — execution comes in later phases.
     }, 10000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Phase 54 — Reconfirmation Buffer Layer
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const trigger = panelAutoTriggerEngine.getPendingAction();
+      const safety = panelSafetyGate.evaluateTrigger(trigger);
+
+      const status = panelReconfirmBuffer.update(trigger, safety);
+
+      console.debug("[SAGE] Reconfirmation status:", trigger, "→", status);
+
+      // NOTE:
+      // Phase 54 DOES NOT execute any actions.
+      // Phase 55+ will consume "confirmed" signals.
+    }, 8000);
 
     return () => clearInterval(interval);
   }, []);
