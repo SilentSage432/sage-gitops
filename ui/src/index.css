@@ -53,6 +53,7 @@
 @import "./styles/severityRouting.css";
 @import "./styles/activationPathway.css";
 @import "./styles/executionVerification.css";
+@import "./styles/executionControl.css";
 
 @tailwind base;
 @tailwind components;
