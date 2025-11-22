@@ -1,0 +1,53 @@
+/**
+ * UI Renaissance — Phase 25
+ * Ambient State Harmonization Layer
+ *
+ * PURPOSE:
+ *  - Smooth transitions between UI presence states
+ *  - Create emotional consistency without animation noise
+ *  - Prepare for future adaptive and cognitive UI behavior
+ *
+ * SAFETY:
+ *  - No automatic activation
+ *  - No layout or spacing changes
+ *  - Purely optional and dormant until applied
+ */
+
+/* === CALM BASELINE (optional) === */
+.sage-ambient-calm {
+  opacity: 0.98;
+  filter: saturate(0.95);
+  transition:
+    opacity 0.5s ease,
+    filter 0.5s ease;
+}
+
+/* === HEIGHTENED ATTENTION (manual only) === */
+.sage-ambient-focus {
+  opacity: 1;
+  filter: saturate(1.05) brightness(1.03);
+  transition:
+    opacity 0.5s ease,
+    filter 0.5s ease;
+}
+
+/* === STABILITY REINFORCEMENT (optional state) === */
+.sage-ambient-stable {
+  box-shadow: var(--sage-elevation-1);
+  transition: box-shadow 0.6s ease;
+}
+
+/* === SOFT UNIFIED DIMMING (for background elements) === */
+.sage-ambient-subdued {
+  opacity: 0.75;
+  filter: saturate(0.85);
+  transition:
+    opacity 0.45s ease,
+    filter 0.45s ease;
+}
+
+/* === RESERVED FOR PHASE 30+ AUTONOMOUS BLENDING === */
+.sage-ambient-awakened {
+  /* Will blend based on system emotional state */
+}
+
