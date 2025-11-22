@@ -7,6 +7,7 @@ import { operatorCognitiveSync } from "../../systems/operatorCognitiveSync";
 import { operatorMemory } from "../../systems/operatorMemory";
 import { contextPromptEngine } from "../../systems/contextPromptEngine";
 import { autonomousAssistEngine } from "../../systems/autonomousAssistEngine";
+import { predictiveModelEngine } from "../../systems/predictiveModelEngine";
 import "./whisperer.css";
 
 export function WhispererTerminal() {
@@ -135,6 +136,35 @@ export function WhispererTerminal() {
 
       autonomousAssistEngine.execute(directive);
     }, 9000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Phase 49 — Predictive Operator Modeling
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const profile = operatorCognitiveSync.getProfile();
+      const trend = operatorMemory.getTrend();
+
+      const projection = predictiveModelEngine.forecast({
+        engagementLevel: profile.engagementLevel,
+        trend,
+      });
+
+      switch (projection) {
+        case "risk_overload":
+          console.debug("[SAGE] Predictive model: operator trend indicates upcoming overload — preparing stabilization.");
+          break;
+
+        case "sustain_focus":
+          console.debug("[SAGE] Predictive model: sustaining focused state — maintaining optimal responsiveness.");
+          break;
+
+        default:
+          // no forecast — remain silent
+          break;
+      }
+    }, 10000);
 
     return () => clearInterval(interval);
   }, []);
