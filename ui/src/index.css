@@ -16,6 +16,7 @@
 @import "./styles/iconography.css";
 @import "./styles/notificationStyles.css";
 @import "./styles/cohesionStyles.css";
+@import "./styles/consistencyLock.css";
 
 @tailwind base;
 @tailwind components;

@@ -1,0 +1,64 @@
+/**
+ * UI Renaissance — Phase 19
+ * Visual consistency lock & stability seal
+ *
+ * PURPOSE:
+ *  - Freeze foundational visual rules
+ *  - Prevent drift before Phase 20+
+ *  - Ensure magical layers do NOT break UI
+ *
+ * SAFETY:
+ *  - No layout changes
+ *  - No automatic overrides
+ *  - Subtle refinement only
+ */
+
+/* === UNIVERSAL SURFACE CONSISTENCY === */
+.sage-surface-1,
+.sage-panel,
+.sage-card {
+  background: var(--sage-surface-1);
+}
+
+.sage-surface-2,
+.sage-terminal,
+.sage-input {
+  background: var(--sage-surface-2);
+}
+
+/* === BORDER UNIFICATION === */
+.sage-panel,
+.sage-card,
+.sage-input,
+.sage-terminal {
+  border-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+/* === TEXT COLOR LOCK === */
+.sage-text-primary,
+.sage-terminal-entry,
+.sage-card-body,
+p {
+  color: var(--sage-text-primary);
+}
+
+.sage-text-secondary,
+.sage-card-header {
+  color: var(--sage-text-secondary);
+}
+
+/* === DISABLED + MUTED CONSISTENCY === */
+.sage-disabled,
+[disabled],
+.sage-text-muted {
+  opacity: 0.45;
+}
+
+/* === PREVENT UNINTENDED GLOW/SHADOW ESCALATION === */
+.sage-card,
+.sage-panel,
+.sage-surface {
+  box-shadow: var(--sage-elevation-1);
+  transition: box-shadow 0.25s ease;
+}
+
