@@ -1,0 +1,54 @@
+/**
+ * UI Renaissance — Visual Phase V14
+ * Dynamic Environmental Gradient
+ *
+ * PURPOSE:
+ *  - Introduce environment-level visual awareness
+ *  - Subtly shift background based on UI context state
+ *  - Maintain full professionalism and restraint
+ *
+ * SAFETY:
+ *  - No animations beyond V12 pulse already installed
+ *  - No functional or behavioral changes
+ *  - No layout or spacing adjustments
+ *
+ * VISUAL STATES (applied manually by class):
+ *  - body.sage-idle
+ *  - body.sage-active
+ *  - body.sage-receiving
+ */
+
+/* === IDLE BASELINE — calm + neutral === */
+body.sage-idle {
+  background:
+    radial-gradient(
+      circle at 50% 30%,
+      rgba(138, 125, 255, 0.035),
+      transparent 65%
+    ),
+    var(--sage-bg-0);
+}
+
+/* === ACTIVE INPUT — subtle depth increase === */
+body.sage-active {
+  background:
+    radial-gradient(
+      circle at 52% 28%,
+      rgba(138, 125, 255, 0.055),
+      transparent 68%
+    ),
+    var(--sage-bg-0);
+}
+
+/* === RECEIVING OUTPUT — gentle atmospheric lift === */
+body.sage-receiving {
+  background:
+    radial-gradient(
+      circle at 48% 32%,
+      rgba(138, 125, 255, 0.075),
+      transparent 70%
+    ),
+    var(--sage-bg-0);
+  transition: background 420ms ease;
+}
+
