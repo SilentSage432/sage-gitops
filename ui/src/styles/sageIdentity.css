@@ -1,66 +1,46 @@
 /**
- * UI Renaissance — Phase 23
- * SAGE Signature Visual Identity
+ * UI Renaissance — Visual Phase V25
+ * SAGE Identity Reveal
  *
  * PURPOSE:
- *  - Establish SAGE's unique visual fingerprint
- *  - Introduce identity accents and gradient language
- *  - Create a unified, recognizable aesthetic
+ *  - Introduce SAGE's first recognizable visual signature
+ *  - Establish brand-level atmospheric identity
+ *  - Reinforce Whisperer as the core intelligence surface
  *
  * SAFETY:
- *  - No automatic application
- *  - No layout or spacing changes
- *  - Purely optional identity usage
+ *  - No layout or interaction changes
+ *  - No motion added
+ *  - Fully compatible with all previous visual phases
  */
 
-/* === SIGNATURE SPECTRAL ACCENT LINE (manual only) === */
-.sage-accent-line {
-  border-bottom: 1px solid rgba(155, 107, 255, 0.45);
+/* === SIGNATURE EDGE PROFILE — subtle, controlled === */
+.sage-panel {
+  box-shadow:
+    0 0 0 1px rgba(138, 125, 255, 0.10),
+    0 0 28px rgba(138, 125, 255, 0.06),
+    0 10px 28px rgba(0, 0, 0, 0.38);
 }
 
-/* === TOP ACCENT VARIANT === */
-.sage-accent-line-top {
-  border-top: 1px solid rgba(155, 107, 255, 0.45);
+/* === WHISPERER — SIGNATURE IDENTITY PRIORITY === */
+#whispererContainer {
+  box-shadow:
+    0 0 0 1px rgba(138, 125, 255, 0.16),
+    0 0 36px rgba(138, 125, 255, 0.10),
+    0 14px 42px rgba(0, 0, 0, 0.48);
+  background: rgba(12, 12, 18, 0.82);
+  border-radius: 16px;
 }
 
-/* === SAGE SIGNATURE GRADIENT (subtle, not flashy) === */
-.sage-gradient {
-  background: linear-gradient(
-    135deg,
-    rgba(155, 107, 255, 0.10) 0%,
-    rgba(56, 169, 255, 0.10) 100%
-  );
-  transition: background 0.45s ease;
+/* === INPUT SIGNATURE — clean, minimal, intentional === */
+#whispererInputContainer {
+  border-top: 1px solid rgba(138, 125, 255, 0.28);
+  box-shadow:
+    inset 0 0 18px rgba(138, 125, 255, 0.06);
+  background: rgba(8, 8, 12, 0.90);
 }
 
-/* === TITLE PRESENCE — UNIQUE TO SAGE === */
-.sage-title {
-  font-size: var(--sage-text-lg);
-  font-weight: 600;
-  letter-spacing: 0.6px;
-  background: linear-gradient(
-    90deg,
-    rgba(155, 107, 255, 0.85),
-    rgba(56, 169, 255, 0.85)
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+/* === ACCENT SIGNATURE TINT — subtle atmospheric presence === */
+:root {
+  --sage-accent-primary: rgba(156, 145, 255, 1);
+  --sage-accent-soft: rgba(156, 145, 255, 0.22);
 }
-
-/* === SAGE FRAME — ULTRA SUBTLE IDENTITY BORDER === */
-.sage-frame {
-  border: 1px solid rgba(155, 107, 255, 0.15);
-  border-radius: 10px;
-  transition: border-color 0.35s ease;
-}
-
-/* === FRAME ACTIVE STATE (manual only) === */
-.sage-frame-active {
-  border-color: rgba(155, 107, 255, 0.35);
-}
-
-/* === RESERVED FOR PHASE 30+ (identity evolution) === */
-.sage-identity-awakened {
-  /* Will activate when SAGE gains autonomous identity signaling */
-}
-
