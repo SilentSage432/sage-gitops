@@ -1,0 +1,46 @@
+/**
+ * UI Renaissance — Phase 4
+ * Panel elevation + depth refinement
+ *
+ * Safe:
+ * - No layout shifts
+ * - No spacing changes
+ * - No functional impact
+ */
+
+.sage-panel {
+  background: var(--sage-surface-1);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  box-shadow: var(--sage-elevation-1);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: background 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* Slight hover polish ONLY for interactive panels */
+.sage-panel[data-interactive="true"]:hover {
+  box-shadow: var(--sage-elevation-2);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Panel headers — subtle hierarchy */
+.sage-panel-header {
+  padding: var(--sage-space-3);
+  font-size: var(--sage-text-sm);
+  font-weight: 500;
+  color: var(--sage-text-secondary);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* Panel body remains neutral and stable */
+.sage-panel-body {
+  padding: var(--sage-space-4);
+  color: var(--sage-text-primary);
+}
+
+/* Optional accent edge for future states */
+.sage-panel-emphasis {
+  border-left: 2px solid var(--sage-accent-primary);
+}
+
