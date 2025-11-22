@@ -62,6 +62,7 @@
 @import "./styles/restorationLock.css";
 @import "./styles/autonomyHardSeal.css";
 @import "./styles/supervisedMode.css";
+@import "./styles/autonomousCompletion.css";
 
 @tailwind base;
 @tailwind components;
