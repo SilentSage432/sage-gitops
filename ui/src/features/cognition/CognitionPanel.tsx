@@ -6,9 +6,9 @@ export default function CognitionPanel() {
 
   return (
     <div className="p-4 text-sm font-mono text-slate-300 space-y-2 overflow-y-auto h-full">
-      {thoughts.map((t) => (
+      {thoughts.map((t, index) => (
         <div
-          key={t.id}
+          key={`${t.id}-${index}`}
           className={`
             p-2 border rounded
             ${t.tags?.includes("alert") ? "bg-red-900/30 border-red-700" : "bg-slate-900/40 border-slate-800"}

@@ -7,7 +7,13 @@ export function useThoughtStream() {
   useEffect(() => {
     function handler(e: any) {
       const packet = e.detail as ThoughtPacket;
-      setThoughts((prev) => [...prev, packet]);
+      setThoughts((prev) => {
+        // Prevent duplicates by checking if ID already exists
+        if (prev.some((t) => t.id === packet.id)) {
+          return prev;
+        }
+        return [...prev, packet];
+      });
     }
 
     window.addEventListener("SAGE_THOUGHT", handler);
