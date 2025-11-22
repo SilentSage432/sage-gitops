@@ -12,6 +12,7 @@ import { uxStateMachine } from "../../systems/uxStateMachine";
 import { autonomousStateShiftEngine } from "../../systems/autonomousStateShiftEngine";
 import { panelAutoTriggerEngine } from "../../systems/panelAutoTriggerEngine";
 import { panelAutoOpenEngine } from "../../systems/panelAutoOpenEngine";
+import { panelSafetyGate } from "../../systems/panelSafetyGate";
 import "./whisperer.css";
 
 export function WhispererTerminal() {
@@ -224,7 +225,24 @@ export function WhispererTerminal() {
     return () => clearInterval(interval);
   }, []);
 
-  // Phase 53 — Panel Auto-Open Execution
+  // Phase 53 — Severity Classification + Safety Filter
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const trigger = panelAutoTriggerEngine.getPendingAction();
+
+      const decision = panelSafetyGate.evaluateTrigger(trigger);
+
+      console.debug("[SAGE] Safety gate decision:", trigger, "→", decision);
+
+      // NOTE:
+      // Phase 53 makes NO autonomous UI changes.
+      // Decisions are logged only — execution comes in later phases.
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Phase 53 — Panel Auto-Open Execution (with safety gate)
   useEffect(() => {
     const interval = setInterval(() => {
       const state = uxStateMachine.getState();
@@ -240,7 +258,15 @@ export function WhispererTerminal() {
       const triggerAction = panelAutoTriggerEngine.evaluate({ state, projection });
       
       if (triggerAction) {
-        panelAutoOpenEngine.execute(triggerAction);
+        // Validate through safety gate before execution
+        const decision = panelSafetyGate.evaluateTrigger(triggerAction);
+        
+        if (decision === "allow") {
+          panelAutoOpenEngine.execute(triggerAction);
+        } else if (decision === "defer") {
+          console.debug("[SAGE] Panel opening deferred — low priority trigger.");
+        }
+        // "deny" is silently ignored
       }
     }, 11000);
 

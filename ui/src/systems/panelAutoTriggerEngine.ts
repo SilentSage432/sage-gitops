@@ -56,6 +56,10 @@ class PanelAutoTriggerEngine {
     this.pendingAction = null;
     return action;
   }
+
+  getPendingAction(): PanelAction {
+    return this.pendingAction;
+  }
 }
 
 export const panelAutoTriggerEngine = new PanelAutoTriggerEngine();
