@@ -1,0 +1,46 @@
+/**
+ * UI Renaissance — Phase 31
+ * State Synchronization Scaffold
+ *
+ * PURPOSE:
+ *  - Prevent conflicting visual states
+ *  - Enable smooth blending in future phases
+ *  - Establish unified state-handling structure
+ *
+ * SAFETY:
+ *  - No automatic activation
+ *  - No layout or spacing changes
+ *  - Purely dormant until applied
+ */
+
+/* === SYNCHRONIZATION BASE HOOK === */
+.sage-sync-base {
+  transition:
+    opacity 0.45s ease,
+    filter 0.45s ease,
+    box-shadow 0.45s ease;
+}
+
+/* === PRIORITY LOCK (prevents overlap) === */
+.sage-sync-priority {
+  will-change:
+    opacity,
+    filter,
+    box-shadow;
+}
+
+/* === CONFLICT SUPPRESSION (manual only) === */
+.sage-sync-neutralize {
+  opacity: 1 !important;
+  filter: brightness(1) saturate(1) !important;
+  box-shadow: none !important;
+  transition:
+    opacity 0.35s ease,
+    filter 0.35s ease;
+}
+
+/* === RESERVED FOR PHASE 32+ AUTO-BLENDING === */
+.sage-sync-awakened {
+  /* Will manage dynamic visual blending in Phase 32–33 */
+}
+
