@@ -1,0 +1,48 @@
+/**
+ * UI Renaissance — Phase 12
+ * Context-aware depth & adaptive surfaces
+ *
+ * SAFE:
+ *  - No automatic activation
+ *  - No spacing or layout changes
+ *  - Purely optional visual enhancement
+ */
+
+/* === PASSIVE SURFACE (default optional baseline) === */
+.sage-surface-passive {
+  background: var(--sage-surface-1);
+  box-shadow: var(--sage-elevation-0);
+  border-color: rgba(255, 255, 255, 0.04);
+}
+
+/* === ELEVATED / AWARE STATE (manual only) === */
+.sage-surface-raised {
+  background: var(--sage-surface-1);
+  box-shadow: var(--sage-elevation-2);
+  border-color: rgba(255, 255, 255, 0.08);
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+/* === FOCUSED SURFACE (operator-intent or future autonomy) === */
+.sage-surface-focused {
+  background: var(--sage-surface-2);
+  box-shadow: var(--sage-elevation-3);
+  border-color: var(--sage-accent-primary);
+  transition:
+    background 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+}
+
+/* === DIMMED / BACKGROUND CONTEXT (non-intrusive) === */
+.sage-surface-dimmed {
+  opacity: 0.70;
+  filter: saturate(0.85);
+  transition: opacity 0.25s ease, filter 0.25s ease;
+}
+
+/* === RESERVED FOR FUTURE AUTONOMOUS STATES === */
+.sage-surface-awareness {
+  /* Will be activated during cognitive UI phases */
+}
+

@@ -9,6 +9,7 @@
 @import "./styles/statusTokens.css";
 @import "./styles/statusStyles.css";
 @import "./styles/resonanceStyles.css";
+@import "./styles/adaptiveSurfaces.css";
 
 @tailwind base;
 @tailwind components;
