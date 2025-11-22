@@ -1,0 +1,45 @@
+/**
+ * UI Renaissance — Phase 1
+ * SAGE Design Language Foundation
+ *
+ * No UI changes are applied in this phase.
+ * These tokens will be consumed in later phases.
+ */
+
+:root {
+  /* === COLOR SYSTEM === */
+  --sage-surface-0: #0b0d10;   /* primary background */
+  --sage-surface-1: #13161b;   /* elevated surfaces */
+  --sage-surface-2: #1d2128;   /* panels / cards */
+
+  --sage-accent-primary: #9b6bff;  /* signature spectral violet */
+  --sage-accent-secondary: #5bd5ff; /* subtle arc-glow cyan */
+
+  --sage-text-primary: #e8eaf0;
+  --sage-text-secondary: #9aa0ac;
+  --sage-text-muted: #5e6470;
+
+  /* === ELEVATION / SHADOW SCALE === */
+  --sage-elevation-0: none;
+  --sage-elevation-1: 0 2px 6px rgba(0,0,0,0.25);
+  --sage-elevation-2: 0 4px 12px rgba(0,0,0,0.28);
+  --sage-elevation-3: 0 8px 24px rgba(0,0,0,0.32);
+
+  /* === TYPOGRAPHY === */
+  --sage-font-main: 'Inter', system-ui, sans-serif;
+
+  --sage-text-xs: 12px;
+  --sage-text-sm: 14px;
+  --sage-text-md: 16px;
+  --sage-text-lg: 20px;
+  --sage-text-xl: 28px;
+
+  /* === SPACING SCALE === */
+  --sage-space-1: 4px;
+  --sage-space-2: 8px;
+  --sage-space-3: 12px;
+  --sage-space-4: 16px;
+  --sage-space-5: 24px;
+  --sage-space-6: 32px;
+}
+
