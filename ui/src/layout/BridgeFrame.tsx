@@ -14,6 +14,7 @@ import { useReflex } from "../sage/kernel/useReflex";
 import { useHeartbeat } from "../sage/kernel/useHeartbeat";
 import { startKernelPulse } from "../sage/kernel/KernelPulse";
 import { subscribeKernel } from "../sage/kernel/KernelSignalBus";
+import useOperatorCortex from "../core/OperatorCortex";
 import "../styles/ui-alerts.css";
 
 interface BridgeFrameProps {
@@ -32,6 +33,7 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
   onSelectItem
 }) => {
   const { state } = useOperatorEffect();
+  const cortex = useOperatorCortex(selectedItem);
   useHybridAutonomy();
   useUIAlertsBridge();
   useKernelHeartbeat();
@@ -71,13 +73,14 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
       }
       if (action === "ui.open.operator-terminal") {
         onSelectItem?.("operator-terminal");
+        cortex.registerCommand();
       }
     }
 
     window.addEventListener("SAGE_UI_ACTION", onAction as EventListener);
     return () =>
       window.removeEventListener("SAGE_UI_ACTION", onAction as EventListener);
-  }, [onSelectItem]);
+  }, [onSelectItem, cortex]);
 
   // Kernel focus arc listener
   useEffect(() => {
