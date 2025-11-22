@@ -61,6 +61,7 @@
 @import "./styles/cooldownLayer.css";
 @import "./styles/restorationLock.css";
 @import "./styles/autonomyHardSeal.css";
+@import "./styles/supervisedMode.css";
 
 @tailwind base;
 @tailwind components;
