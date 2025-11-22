@@ -5,6 +5,7 @@ import {
   TelemetryFilter,
   useTelemetryFilter,
 } from "../../core/filters/useTelemetryFilter";
+import { useOperatorMemory } from "../../core/OperatorMemoryContext";
 
 type LogCategory = Exclude<TelemetryFilter, "ALL">;
 
@@ -27,6 +28,7 @@ const CATEGORY_SET = new Set<LogCategory>(
 
 export default function OperatorTerminal() {
   const { activeFilter, setActiveFilter } = useTelemetryFilter();
+  const { remember, recallRecent } = useOperatorMemory();
 
   const [input, setInput] = useState("");
   const [log, setLog] = useState<
@@ -68,7 +70,9 @@ export default function OperatorTerminal() {
     setLog((prev) => [
       ...prev,
       { text: `> ${input}`, category: "WHISPERER", ts: Date.now() },
+      ...recallRecent(1).map(m => ({ text: `⟲ ${m.text}`, category: "WHISPERER" as LogCategory, ts: Date.now() })),
     ]);
+    remember(input, "operator");
     setInput("");
   }
 
