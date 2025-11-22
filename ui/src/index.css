@@ -36,6 +36,7 @@
 @import "./styles/partialActivation.css";
 @import "./styles/microAtmosphere.css";
 @import "./styles/ambientIdentity.css";
+@import "./styles/tonalSeeding.css";
 
 @tailwind base;
 @tailwind components;

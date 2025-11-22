@@ -1,0 +1,46 @@
+/**
+ * UI Renaissance — Phase 39
+ * Subtle Visual Tonal Seeding
+ *
+ * PURPOSE:
+ *  - Introduce the ability for future tonal mood shifts
+ *  - Begin seeding micro-depth and contrast modulation
+ *  - Remain dormant until explicitly activated
+ *
+ * ACTIVATION REQUIREMENTS:
+ *  - .sage-auto-init
+ *  - .sage-auto-regulated
+ *  - .sage-auto-awakened
+ *  - .sage-atmos-identity
+ *  - .sage-tonal-seed     (new)
+ *
+ * SAFETY:
+ *  - No automatic activation
+ *  - No layout or spacing changes
+ *  - Zero immediate visual change
+ */
+
+/* === BASE TONAL SEED (inactive until applied) === */
+.sage-auto-init.sage-auto-regulated.sage-auto-awakened.sage-atmos-identity.sage-tonal-seed {
+  transition:
+    opacity 1.4s ease,
+    filter 1.4s ease;
+  opacity: 0.985;
+  filter: brightness(1.008) contrast(1.012);
+}
+
+/* === OPTIONAL TONAL ENHANCEMENT LAYER === */
+.sage-auto-init.sage-auto-regulated.sage-auto-awakened.sage-atmos-identity.sage-tonal-seed
+  .sage-tone-layer {
+  opacity: 0.99;
+  filter: brightness(1.015) contrast(1.016) saturate(1.02);
+  transition:
+    opacity 1.5s ease,
+    filter 1.5s ease;
+}
+
+/* === RESERVED FOR PHASE 41+ (soft visible tonal shift) === */
+.sage-auto-init.sage-auto-regulated.sage-auto-awakened.sage-atmos-identity.sage-tonal-seed.sage-tonal-awakened {
+  /* Will unlock the first visible tonal shift later */
+}
+
