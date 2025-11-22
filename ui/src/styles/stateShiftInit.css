@@ -1,0 +1,36 @@
+/**
+ * Autonomous Action Layer — Phase 51
+ * Controlled State-Shift Initialization
+ *
+ * PURPOSE:
+ *  - Establish the entry point for future state transitions
+ *  - Allow the UI to recognize when a shift is permitted
+ *  - Maintain strict operator control (non-autonomous)
+ *
+ * SAFETY:
+ *  - No automatic activation
+ *  - No UI changes or layout modifications
+ *  - Entirely inert without explicit class application
+ *
+ * ACTIVATION REQUIREMENTS (manual only):
+ *  - .sage-auto-init
+ *  - .sage-auto-regulated
+ *  - .sage-auto-awakened
+ *  - .sage-auto-governed
+ *  - .sage-governor-elevated
+ *  - .sage-state-shift-ready   (new — gateway)
+ */
+
+/* === CONTROLLED STATE-SHIFT GATEWAY (inactive, invisible) === */
+.sage-auto-init.sage-auto-regulated.sage-auto-awakened
+.sage-auto-governed.sage-governor-elevated.sage-state-shift-ready {
+  isolation: isolate;
+  pointer-events: auto;
+  /* No visual output — structural only */
+}
+
+/* === RESERVED FOR PHASE 52 (panel-level action ruleset) === */
+.sage-state-shift-authorized {
+  /* Will allow controlled panel actions — NOT automatic */
+}
+
