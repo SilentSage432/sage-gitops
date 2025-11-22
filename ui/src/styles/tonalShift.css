@@ -1,0 +1,55 @@
+/**
+ * UI Renaissance — Phase 40
+ * First Subtle Visible Tonal Shift
+ *
+ * PURPOSE:
+ *  - Introduce the first perceptible visual change
+ *  - Apply soft tonal modulation under operator control
+ *  - Maintain enterprise-grade restraint and professionalism
+ *
+ * ACTIVATION REQUIREMENTS:
+ *  - .sage-auto-init
+ *  - .sage-auto-regulated
+ *  - .sage-auto-awakened
+ *  - .sage-atmos-identity
+ *  - .sage-tonal-seed
+ *  - .sage-tonal-awakened   (new)
+ *
+ * SAFETY:
+ *  - No automatic activation
+ *  - No layout or spacing changes
+ *  - Subtle and reversible
+ */
+
+/* === FIRST VISIBLE TONAL SHIFT (soft + controlled) === */
+.sage-auto-init.sage-auto-regulated.sage-auto-awakened
+  .sage-atmos-identity.sage-tonal-seed.sage-tonal-awakened {
+  opacity: 0.99;
+  filter:
+    brightness(1.018)
+    contrast(1.02)
+    saturate(1.015);
+  transition:
+    opacity 1.6s ease,
+    filter 1.6s ease;
+}
+
+/* === OPTIONAL ELEMENT-LEVEL DEPTH === */
+.sage-auto-init.sage-auto-regulated.sage-auto-awakened
+  .sage-atmos-identity.sage-tonal-seed.sage-tonal-awakened
+  .sage-tone-layer {
+  opacity: 1;
+  filter:
+    brightness(1.025)
+    contrast(1.03)
+    saturate(1.025);
+  transition:
+    opacity 1.7s ease,
+    filter 1.7s ease;
+}
+
+/* === RESERVED FOR PHASE 42+ (progressive enhancement) === */
+.sage-tonal-elevated {
+  /* Will enable layered tonal evolution later */
+}
+

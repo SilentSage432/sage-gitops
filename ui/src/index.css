@@ -37,6 +37,7 @@
 @import "./styles/microAtmosphere.css";
 @import "./styles/ambientIdentity.css";
 @import "./styles/tonalSeeding.css";
+@import "./styles/tonalShift.css";
 
 @tailwind base;
 @tailwind components;
