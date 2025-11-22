@@ -32,6 +32,7 @@
 @import "./styles/autoBlending.css";
 @import "./styles/softActivation.css";
 @import "./styles/activationRules.css";
+@import "./styles/regulationGate.css";
 
 @tailwind base;
 @tailwind components;

@@ -1,0 +1,48 @@
+/**
+ * UI Renaissance — Phase 35
+ * Regulated Adaptive Activation Gate
+ *
+ * PURPOSE:
+ *  - Prevent uncontrolled activation behavior
+ *  - Ensure adaptive blending occurs slowly and safely
+ *  - Establish operator-controlled activation boundaries
+ *
+ * SAFETY:
+ *  - No automatic activation
+ *  - No layout or spacing changes
+ *  - Takes effect ONLY when .sage-auto-init AND .sage-auto-regulated are applied
+ */
+
+/* === GLOBAL REGULATION MODE (manual only) === */
+.sage-auto-init.sage-auto-regulated .sage-auto-enable {
+  transition-duration: 0.85s !important;
+  transition-timing-function: ease-in-out !important;
+}
+
+/* === REDUCE AGGRESSIVE VISUAL SHIFTING === */
+.sage-auto-init.sage-auto-regulated .sage-auto-enable {
+  will-change:
+    opacity,
+    filter,
+    box-shadow;
+  opacity: 0.97;
+}
+
+/* === REGULATED ACTIVE STATE (subtle and slow) === */
+.sage-auto-init.sage-auto-regulated .sage-auto-enable.sage-context-active,
+.sage-auto-init.sage-auto-regulated .sage-auto-enable.sage-presence-attentive {
+  opacity: 1;
+  filter: brightness(1.03) saturate(1.04);
+}
+
+/* === REGULATED RETURN-TO-CALM === */
+.sage-auto-init.sage-auto-regulated .sage-auto-enable.sage-stabilize {
+  opacity: 0.96;
+  filter: brightness(1) saturate(0.96);
+}
+
+/* === RESERVED FOR PHASE 36 AUTONOMOUS BEGIN === */
+.sage-auto-init.sage-auto-regulated.sage-auto-awakened {
+  /* Will allow limited autonomous activation starting Phase 36 */
+}
+
