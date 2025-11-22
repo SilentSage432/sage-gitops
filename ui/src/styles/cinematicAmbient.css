@@ -1,0 +1,52 @@
+/**
+ * UI Renaissance — Visual Phase V8
+ * Cinematic Ambient Motion
+ *
+ * PURPOSE:
+ *  - Introduce subtle atmospheric movement
+ *  - Create a living, intelligent sense of presence
+ *  - Maintain absolute professionalism and focus
+ *
+ * SAFETY:
+ *  - Extremely low-frequency animation
+ *  - No layout, spacing, or interaction changes
+ *  - Whisperer fully untouched functionally
+ */
+
+/* === AMBIENT BACKDROP MOTION — barely perceptible === */
+@keyframes sage-ambient-shift {
+  0% {
+    background-position: 50% 40%;
+  }
+  50% {
+    background-position: 52% 42%;
+  }
+  100% {
+    background-position: 50% 40%;
+  }
+}
+
+body {
+  background:
+    radial-gradient(
+      circle at 40% 20%,
+      rgba(138, 125, 255, 0.045),
+      transparent 65%
+    ),
+    var(--sage-bg-0);
+  animation: sage-ambient-shift 38s ease-in-out infinite;
+  background-size: 140% 140%;
+}
+
+/* === PANEL SUB-DEPTH MOTION (even softer) === */
+.sage-panel {
+  background:
+    linear-gradient(
+      to bottom right,
+      rgba(255, 255, 255, 0.015),
+      rgba(255, 255, 255, 0.00)
+    ),
+    var(--sage-surface-1);
+  transition: background 600ms ease;
+}
+
