@@ -1,0 +1,45 @@
+/**
+ * UI Renaissance — Phase 44
+ * Passive Atmospheric Intelligence Layer
+ *
+ * PURPOSE:
+ *  - Allow the environment to passively "understand" system state
+ *  - Introduce non-autonomous perception hooks
+ *  - Prepare for future active atmospheric behavior (Phase 45+)
+ *
+ * ACTIVATION REQUIREMENTS:
+ *  - .sage-auto-init
+ *  - .sage-auto-regulated
+ *  - .sage-auto-awakened
+ *  - .sage-atmos-identity
+ *  - .sage-tonal-seed
+ *  - .sage-tonal-awakened
+ *  - .sage-tonal-elevated
+ *  - .sage-atmos-elevated
+ *  - .sage-atmos-calibrated
+ *  - .sage-atmos-intelligent   (new)
+ *
+ * SAFETY:
+ *  - No automatic activation
+ *  - No layout or spacing changes
+ *  - No visual change unless explicitly enabled
+ */
+
+/* === PASSIVE INTELLIGENCE PRESENCE (inactive until applied) === */
+.sage-auto-init.sage-auto-regulated.sage-auto-awakened
+  .sage-atmos-identity.sage-tonal-seed.sage-tonal-awakened.sage-tonal-elevated.sage-atmos-elevated.sage-atmos-calibrated.sage-atmos-intelligent {
+  opacity: 1;
+  filter:
+    brightness(1.04)
+    contrast(1.05)
+    saturate(1.045);
+  transition:
+    opacity 2.8s ease,
+    filter 2.8s ease;
+}
+
+/* === RESERVED FOR PHASE 45 (active atmospheric intelligence) === */
+.sage-atmos-active {
+  /* Will allow controlled environmental response starting next phase */
+}
+
