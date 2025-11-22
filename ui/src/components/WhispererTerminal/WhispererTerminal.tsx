@@ -4,6 +4,7 @@ import { useTelemetryFilter } from "../../core/filters/useTelemetryFilter";
 import { useWhispererStream } from "./useWhispererStream";
 import { processCognitiveHooks } from "../../sage/cognition/whispererCognition";
 import { operatorCognitiveSync } from "../../systems/operatorCognitiveSync";
+import { operatorMemory } from "../../systems/operatorMemory";
 import "./whisperer.css";
 
 export function WhispererTerminal() {
@@ -44,6 +45,9 @@ export function WhispererTerminal() {
   // Phase 45: Adaptive Operator Responses
   useEffect(() => {
     const unsubscribe = operatorCognitiveSync.subscribe((profile) => {
+      // Phase 46: Record state in memory
+      operatorMemory.recordState(profile.engagementLevel);
+
       switch (profile.engagementLevel) {
         case "focused":
           // subtle: system minimizes UX noise
@@ -62,6 +66,29 @@ export function WhispererTerminal() {
     });
 
     return unsubscribe;
+  }, []);
+
+  // Phase 46: Memory-Aware Adaptive Responses
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const trend = operatorMemory.getTrend();
+
+      switch (trend) {
+        case "improving":
+          console.debug("[SAGE] Operator trend improving — optimizing responsiveness.");
+          break;
+
+        case "declining":
+          console.debug("[SAGE] Operator declining — lowering cognitive demand.");
+          break;
+
+        default:
+          // stable baseline — no action
+          break;
+      }
+    }, 5000);
+
+    return () => clearInterval(interval);
   }, []);
 
   return (
