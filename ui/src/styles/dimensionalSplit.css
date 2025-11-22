@@ -1,0 +1,39 @@
+/**
+ * UI Renaissance — Visual Phase V23
+ * Foreground–Background Dimensional Split
+ *
+ * PURPOSE:
+ *  - Visually separate UI surfaces from the ambient environment
+ *  - Create cinematic depth without motion or distraction
+ *  - Establish a three-layer visual hierarchy
+ *
+ * SAFETY:
+ *  - No layout or functional changes
+ *  - No repositioning or resizing
+ *  - Whisperer remains fully stable
+ */
+
+/* === ENVIRONMENT RECESSION — soft atmospheric pushback === */
+body::before {
+  opacity: 0.78; /* slightly reduced from V22 */
+  filter: blur(2px);
+}
+
+/* === FOREGROUND LIFT — subtle atmospheric elevation === */
+.sage-panel,
+#whispererContainer {
+  backdrop-filter: blur(10px) saturate(118%);
+  transform: translateZ(0); /* creates GPU-backed layer separation */
+  will-change: filter, opacity;
+}
+
+/* === SURFACE CLARITY BOOST — increases foreground crispness === */
+.sage-panel {
+  background: rgba(12, 12, 18, 0.78);
+}
+
+/* === WHISPERER CLARITY PRIORITY === */
+#whispererMessageLog {
+  background: rgba(10, 10, 14, 0.82);
+}
+
