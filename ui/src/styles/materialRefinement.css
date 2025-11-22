@@ -1,0 +1,45 @@
+/**
+ * UI Renaissance — Visual Phase V5
+ * Surface Material Refinement
+ *
+ * PURPOSE:
+ *  - Introduce premium translucent material surfaces
+ *  - Add depth without distraction
+ *  - Prepare for future cinematic visual phases
+ *
+ * SAFETY:
+ *  - No layout shifting
+ *  - No animations introduced
+ *  - Fully stable across all panels and Whisperer
+ */
+
+/* === SHARED GLASS MATERIAL BASE — subtle, professional === */
+.sage-panel,
+#whispererMessageLog,
+#whispererInputContainer {
+  background: rgba(30, 30, 36, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* === DEPTH VARIATION FOR TERMINAL LOG — slightly richer === */
+#whispererMessageLog {
+  background: rgba(30, 30, 36, 0.78);
+}
+
+/* === INPUT BAR REMAINS FIXED + CLEAN === */
+#whispererInputContainer {
+  background: rgba(22, 22, 28, 0.70);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* === OPTIONAL ELEMENTS (only applied if present) === */
+.sage-sheet,
+.sage-dialog {
+  background: rgba(28, 28, 34, 0.68);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+}
+
