@@ -19,6 +19,7 @@ import useAutoSurface from "../core/AutoSurfaceEngine";
 import useAwarenessMatrix from "../core/awareness/AwarenessMatrix";
 import useAutonomicSafeguard from "../core/safeguards/useAutonomicSafeguard";
 import useSelfHealingLoop from "../core/recovery/useSelfHealingLoop";
+import { useStabilityForecast } from "../sage/cognition/useStabilityForecast";
 import "../styles/ui-alerts.css";
 
 interface BridgeFrameProps {
@@ -42,6 +43,7 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
   const errorSignal = awareness === "ALERT";
   useAutonomicSafeguard(awareness);
   useSelfHealingLoop(errorSignal);
+  useStabilityForecast();
   useAutoSurface(cortex.isOperatorActive);
   useHybridAutonomy();
   useUIAlertsBridge();
