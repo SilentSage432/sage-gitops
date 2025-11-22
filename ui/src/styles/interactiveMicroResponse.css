@@ -1,0 +1,51 @@
+/**
+ * UI Renaissance — Visual Phase V10
+ * Interactive Micro-Response
+ *
+ * PURPOSE:
+ *  - Introduce subtle tactile interaction feedback
+ *  - Create the feeling of responsive intelligence
+ *  - Maintain full professionalism and restraint
+ *
+ * SAFETY:
+ *  - No large motion or scaling
+ *  - No layout or spacing changes
+ *  - Whisperer behavior untouched
+ */
+
+/* === MICRO-HOVER ELEVATION (subtle, controlled) === */
+button,
+.sage-action,
+.sage-nav-item {
+  transition:
+    background 140ms ease,
+    box-shadow 160ms ease,
+    transform 120ms ease;
+}
+
+button:hover,
+.sage-action:hover,
+.sage-nav-item:hover {
+  box-shadow:
+    0 0 0 1px rgba(138, 125, 255, 0.18),
+    0 6px 14px rgba(0, 0, 0, 0.28);
+  transform: translateY(-1px);
+}
+
+/* === PRESS/ACTIVE RESPONSE (reassuring, not dramatic) === */
+button:active,
+.sage-action:active,
+.sage-nav-item:active {
+  transform: translateY(0);
+  box-shadow:
+    0 0 0 1px rgba(138, 125, 255, 0.24),
+    0 2px 8px rgba(0, 0, 0, 0.30);
+}
+
+/* === INPUT MICRO-ENGAGEMENT — minimal but alive === */
+#whispererInputContainer:focus-within {
+  box-shadow:
+    0 0 12px rgba(138, 125, 255, 0.18),
+    0 0 0 1px rgba(138, 125, 255, 0.28) inset;
+}
+
