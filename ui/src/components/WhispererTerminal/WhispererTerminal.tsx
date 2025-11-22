@@ -3,6 +3,7 @@ import React, { useEffect, useRef } from "react";
 import { useTelemetryFilter } from "../../core/filters/useTelemetryFilter";
 import { useWhispererStream } from "./useWhispererStream";
 import { processCognitiveHooks } from "../../sage/cognition/whispererCognition";
+import { operatorCognitiveSync } from "../../systems/operatorCognitiveSync";
 import "./whisperer.css";
 
 export function WhispererTerminal() {
@@ -39,6 +40,29 @@ export function WhispererTerminal() {
 
     processCognitiveHooks(messages);
   }, [messages]);
+
+  // Phase 45: Adaptive Operator Responses
+  useEffect(() => {
+    const unsubscribe = operatorCognitiveSync.subscribe((profile) => {
+      switch (profile.engagementLevel) {
+        case "focused":
+          // subtle: system minimizes UX noise
+          console.debug("[SAGE] Operator in focused mode — stabilizing output.");
+          break;
+
+        case "overloaded":
+          // subtle: system reduces reactive bursts
+          console.debug("[SAGE] Operator overloaded — reducing UI intensity.");
+          break;
+
+        default:
+          // neutral baseline
+          break;
+      }
+    });
+
+    return unsubscribe;
+  }, []);
 
   return (
     <div

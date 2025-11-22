@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { pushThought } from "../../sage/cognition/ThoughtChain";
+import { operatorCognitiveSync } from "../../systems/operatorCognitiveSync";
 
 interface WhispererInputProps {
   onSend: (content: string) => void;
@@ -28,6 +29,9 @@ export const WhispererInput: React.FC<WhispererInputProps> = ({ onSend }) => {
     if (!trimmed) {
       return;
     }
+
+    // Phase 45: Record operator input event for cognitive sync
+    operatorCognitiveSync.recordInputEvent();
 
     pushThought({
       id: crypto.randomUUID(),
