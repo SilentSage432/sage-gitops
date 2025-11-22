@@ -60,6 +60,7 @@
 @import "./styles/overrideCheckpoint.css";
 @import "./styles/cooldownLayer.css";
 @import "./styles/restorationLock.css";
+@import "./styles/autonomyHardSeal.css";
 
 @tailwind base;
 @tailwind components;
