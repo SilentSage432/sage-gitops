@@ -1,0 +1,56 @@
+/**
+ * UI Renaissance — Phase 27
+ * Context-Adaptive Visual Modulation
+ *
+ * PURPOSE:
+ *  - Enable calm, context-based visual modulation
+ *  - Prepare UI for adaptive + cognitive blending phases
+ *  - Maintain subtlety and enterprise restraint
+ *
+ * SAFETY:
+ *  - No automatic activation
+ *  - No layout or spacing changes
+ *  - Purely optional modulation classes
+ */
+
+/* === LOW-ACTIVITY / BACKGROUND CONTEXT === */
+.sage-context-low {
+  opacity: 0.92;
+  filter: brightness(0.98) saturate(0.92);
+  transition:
+    opacity 0.45s ease,
+    filter 0.45s ease;
+}
+
+/* === HIGH-SIGNAL / ACTIVE CONTEXT (manual only) === */
+.sage-context-active {
+  opacity: 1;
+  filter: brightness(1.04) saturate(1.05);
+  transition:
+    opacity 0.45s ease,
+    filter 0.45s ease;
+}
+
+/* === ENVIRONMENTAL DIM SHIFT (optional) === */
+.sage-context-dim {
+  opacity: 0.75;
+  filter: brightness(0.94) saturate(0.85);
+  transition:
+    opacity 0.45s ease,
+    filter 0.45s ease;
+}
+
+/* === ENVIRONMENTAL CLARITY SHIFT (optional) === */
+.sage-context-clarity {
+  opacity: 1;
+  filter: brightness(1.06) saturate(1.1);
+  transition:
+    opacity 0.45s ease,
+    filter 0.45s ease;
+}
+
+/* === RESERVED FOR COGNITIVE AUTO-BLEND PHASE 33+ === */
+.sage-context-awakened {
+  /* Will blend based on system + operator context */
+}
+
