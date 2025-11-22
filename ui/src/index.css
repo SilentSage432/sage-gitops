@@ -6,6 +6,7 @@
 @import "./styles/navigationFrame.css";
 @import "./styles/terminalStyles.css";
 @import "./styles/microMotion.css";
+@import "./styles/statusTokens.css";
 
 @tailwind base;
 @tailwind components;
