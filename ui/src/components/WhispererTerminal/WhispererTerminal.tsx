@@ -24,6 +24,7 @@ import { panelSuppressionLayer } from "../../systems/panelSuppressionLayer";
 import { panelRecoveryEngine } from "../../systems/panelRecoveryEngine";
 import { panelIntegrityVerifier } from "../../systems/panelIntegrityVerifier";
 import { panelAuthorityEngine } from "../../systems/panelAuthorityEngine";
+import { panelUIExecution } from "../../systems/panelUIExecution";
 import "./whisperer.css";
 
 export function WhispererTerminal() {
@@ -348,6 +349,36 @@ export function WhispererTerminal() {
         setTimeout(() => panelExecutionScheduler.complete(), 1000);
       }
     }, 8000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Phase 65 — FIRST VISIBLE AUTONOMOUS PANEL OPEN
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // Scheduler releases next action safely
+      const nextAction = panelExecutionScheduler.next();
+      if (!nextAction) return;
+
+      // Only proceed if Rho² authority exists
+      if (!panelAuthorityEngine.isAuthorized(nextAction)) {
+        console.debug("[SAGE] UI execution blocked — missing Rho² authority.");
+        return;
+      }
+
+      // Internal execution still runs
+      panelActionExecutor.execute(nextAction);
+      panelRollbackManager.track(nextAction);
+
+      // VISUAL execution — FIRST TIME
+      panelUIExecution.open(nextAction);
+
+      // Authority consumed after execution
+      panelAuthorityEngine.revoke(nextAction);
+
+      // Unlock scheduler after completion
+      setTimeout(() => panelExecutionScheduler.complete(), 1000);
+    }, 9000);
 
     return () => clearInterval(interval);
   }, []);
