@@ -1,0 +1,39 @@
+/**
+ * UI Renaissance — Visual Phase V24
+ * Cinematic Transition Softening
+ *
+ * PURPOSE:
+ *  - Unify and soften UI transitions for premium feel
+ *  - Remove abrupt visual snapping
+ *  - Enhance cinematic texture without adding motion
+ *
+ * SAFETY:
+ *  - No new animations introduced
+ *  - No layout or behavioral changes
+ *  - Whisperer remains fully stable
+ */
+
+/* === GLOBAL SURFACE TRANSITION SMOOTHING === */
+.sage-panel,
+#whispererContainer,
+#whispererMessageLog,
+.sage-zone-right {
+  transition:
+    box-shadow 360ms ease,
+    opacity 320ms ease,
+    background 380ms ease,
+    backdrop-filter 420ms ease;
+  will-change: opacity, box-shadow, backdrop-filter;
+}
+
+/* === INPUT + INTERACTION ELEMENT CONSISTENCY === */
+#whispererInputContainer,
+button,
+.sage-action,
+.sage-nav-item {
+  transition:
+    background 240ms ease,
+    border-color 260ms ease,
+    box-shadow 280ms ease;
+}
+
