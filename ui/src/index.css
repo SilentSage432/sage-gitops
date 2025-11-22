@@ -29,6 +29,7 @@
 @import "./styles/autonomicStabilization.css";
 @import "./styles/cognitiveLinkage.css";
 @import "./styles/stateSynchronization.css";
+@import "./styles/autoBlending.css";
 
 @tailwind base;
 @tailwind components;

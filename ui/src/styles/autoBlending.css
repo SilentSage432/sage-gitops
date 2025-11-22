@@ -1,0 +1,48 @@
+/**
+ * UI Renaissance — Phase 32
+ * Automatic Soft-State Blending Engine
+ *
+ * PURPOSE:
+ *  - Enable smooth automatic transitions BETWEEN states
+ *  - Prevent stacking, flicker, or abrupt shifts
+ *  - Remain fully dormant until explicitly enabled
+ *
+ * SAFETY:
+ *  - No automatic activation
+ *  - No layout or spacing changes
+ *  - No visual change unless .sage-auto-enable is applied
+ */
+
+/* === GLOBAL AUTO-BLENDING ENGINE (inactive by default) === */
+.sage-auto-enable {
+  transition:
+    opacity 0.55s ease,
+    filter 0.55s ease,
+    box-shadow 0.55s ease;
+}
+
+/* === SOFT SHIFT TOWARD ACTIVE STATE === */
+.sage-auto-enable.sage-context-active,
+.sage-auto-enable.sage-presence-attentive {
+  opacity: 1;
+  filter: brightness(1.04) saturate(1.05);
+}
+
+/* === SOFT SHIFT TOWARD CALM / IDLE === */
+.sage-auto-enable.sage-ambient-calm,
+.sage-auto-enable.sage-presence-idle {
+  opacity: 0.96;
+  filter: brightness(1) saturate(0.95);
+}
+
+/* === AUTO-STABILIZATION HOOK (future Phase 33+) === */
+.sage-auto-enable.sage-stabilize {
+  opacity: 0.98;
+  filter: brightness(1) saturate(1);
+}
+
+/* === RESERVED FOR FUTURE AUTONOMOUS MERGING === */
+.sage-auto-awakened {
+  /* Will activate blending without .sage-auto-enable after Phase 36 */
+}
+
