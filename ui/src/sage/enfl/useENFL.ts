@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useWhispererStream } from "../../components/WhispererTerminal/useWhispererStream";
-import { useUIPulse } from "../../core/UIPulseContext";
-import { useUIShockwave } from "../../core/UIShockwaveContext";
+import { useCognitiveStability } from "./useCognitiveStability";
 
 interface SemanticEvent {
   priority?: "high" | "medium" | "low";
@@ -15,8 +14,7 @@ interface SemanticEvent {
  */
 export function useENFL() {
   const { messages } = useWhispererStream();
-  const { pulseSoft } = useUIPulse();
-  const { shockwaveMinor } = useUIShockwave();
+  const { safePulse, safeShockwave } = useCognitiveStability();
   const [latest, setLatest] = useState<SemanticEvent | null>(null);
 
   // Extract latest message and parse for semantic signals
@@ -51,13 +49,13 @@ export function useENFL() {
 
     // High-signal events trigger soft UI pulse
     if (latest.priority === "high") {
-      pulseSoft();
+      safePulse();
     }
 
     // Rare / novel patterns trigger micro-shockwave
     if (latest.semanticTag === "novel-pattern") {
-      shockwaveMinor();
+      safeShockwave();
     }
-  }, [latest, pulseSoft, shockwaveMinor]);
+  }, [latest, safePulse, safeShockwave]);
 }
 
