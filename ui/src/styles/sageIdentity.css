@@ -1,0 +1,66 @@
+/**
+ * UI Renaissance — Phase 23
+ * SAGE Signature Visual Identity
+ *
+ * PURPOSE:
+ *  - Establish SAGE's unique visual fingerprint
+ *  - Introduce identity accents and gradient language
+ *  - Create a unified, recognizable aesthetic
+ *
+ * SAFETY:
+ *  - No automatic application
+ *  - No layout or spacing changes
+ *  - Purely optional identity usage
+ */
+
+/* === SIGNATURE SPECTRAL ACCENT LINE (manual only) === */
+.sage-accent-line {
+  border-bottom: 1px solid rgba(155, 107, 255, 0.45);
+}
+
+/* === TOP ACCENT VARIANT === */
+.sage-accent-line-top {
+  border-top: 1px solid rgba(155, 107, 255, 0.45);
+}
+
+/* === SAGE SIGNATURE GRADIENT (subtle, not flashy) === */
+.sage-gradient {
+  background: linear-gradient(
+    135deg,
+    rgba(155, 107, 255, 0.10) 0%,
+    rgba(56, 169, 255, 0.10) 100%
+  );
+  transition: background 0.45s ease;
+}
+
+/* === TITLE PRESENCE — UNIQUE TO SAGE === */
+.sage-title {
+  font-size: var(--sage-text-lg);
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  background: linear-gradient(
+    90deg,
+    rgba(155, 107, 255, 0.85),
+    rgba(56, 169, 255, 0.85)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* === SAGE FRAME — ULTRA SUBTLE IDENTITY BORDER === */
+.sage-frame {
+  border: 1px solid rgba(155, 107, 255, 0.15);
+  border-radius: 10px;
+  transition: border-color 0.35s ease;
+}
+
+/* === FRAME ACTIVE STATE (manual only) === */
+.sage-frame-active {
+  border-color: rgba(155, 107, 255, 0.35);
+}
+
+/* === RESERVED FOR PHASE 30+ (identity evolution) === */
+.sage-identity-awakened {
+  /* Will activate when SAGE gains autonomous identity signaling */
+}
+

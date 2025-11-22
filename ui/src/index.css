@@ -20,6 +20,7 @@
 @import "./styles/spectralInteraction.css";
 @import "./styles/arcaneMotion.css";
 @import "./styles/cinematicTransitions.css";
+@import "./styles/sageIdentity.css";
 
 @tailwind base;
 @tailwind components;
