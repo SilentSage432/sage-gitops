@@ -9,6 +9,7 @@ import { contextPromptEngine } from "../../systems/contextPromptEngine";
 import { autonomousAssistEngine } from "../../systems/autonomousAssistEngine";
 import { predictiveModelEngine } from "../../systems/predictiveModelEngine";
 import { uxStateMachine } from "../../systems/uxStateMachine";
+import { autonomousStateShiftEngine } from "../../systems/autonomousStateShiftEngine";
 import "./whisperer.css";
 
 export function WhispererTerminal() {
@@ -188,6 +189,16 @@ export function WhispererTerminal() {
 
       uxStateMachine.evaluate({ directive, projection });
     }, 7000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Phase 51 — Autonomous UX State Shifts
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const currentState = uxStateMachine.getState();
+      autonomousStateShiftEngine.execute(currentState);
+    }, 6000);
 
     return () => clearInterval(interval);
   }, []);
