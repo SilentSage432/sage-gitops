@@ -10,6 +10,7 @@ import { autonomousAssistEngine } from "../../systems/autonomousAssistEngine";
 import { predictiveModelEngine } from "../../systems/predictiveModelEngine";
 import { uxStateMachine } from "../../systems/uxStateMachine";
 import { autonomousStateShiftEngine } from "../../systems/autonomousStateShiftEngine";
+import { panelAutoTriggerEngine } from "../../systems/panelAutoTriggerEngine";
 import "./whisperer.css";
 
 export function WhispererTerminal() {
@@ -199,6 +200,25 @@ export function WhispererTerminal() {
       const currentState = uxStateMachine.getState();
       autonomousStateShiftEngine.execute(currentState);
     }, 6000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Phase 52 — Auto-Open Panel Triggering (logic only)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const state = uxStateMachine.getState();
+
+      const profile = operatorCognitiveSync.getProfile();
+      const trend = operatorMemory.getTrend();
+
+      const projection = predictiveModelEngine.forecast({
+        engagementLevel: profile.engagementLevel,
+        trend,
+      });
+
+      panelAutoTriggerEngine.evaluate({ state, projection });
+    }, 9000);
 
     return () => clearInterval(interval);
   }, []);
