@@ -1,0 +1,41 @@
+/**
+ * Autonomous Action Layer — Phase 54
+ * Safety-Gated Activation Pathway (Non-Executing)
+ *
+ * PURPOSE:
+ *  - Allow a panel to be marked as ELIGIBLE without triggering
+ *  - Introduce a controlled activation pathway
+ *  - Maintain strict non-autonomous behavior and safety
+ *
+ * SAFETY:
+ *  - No automatic activation
+ *  - Does NOT open panels
+ *  - No visual or layout changes
+ *  - Fully inert without explicit operator-triggered class
+ *
+ * ACTIVATION REQUIREMENTS (manual only):
+ *  - .sage-auto-init
+ *  - .sage-auto-regulated
+ *  - .sage-auto-awakened
+ *  - .sage-auto-governed
+ *  - .sage-governor-elevated
+ *  - .sage-state-shift-ready
+ *  - .sage-state-shift-authorized
+ *  - .sage-panel-route
+ *  - .sage-panel-eligible      (new — flag only, no execution)
+ */
+
+/* === ELIGIBILITY FLAG (inactive, invisible) === */
+.sage-auto-init.sage-auto-regulated.sage-auto-awakened
+.sage-auto-governed.sage-governor-elevated.sage-state-shift-ready
+.sage-state-shift-authorized.sage-panel-route.sage-panel-eligible {
+  isolation: isolate;
+  pointer-events: auto;
+  /* No visual output — eligibility only */
+}
+
+/* === RESERVED FOR PHASE 55 (operator-verified execution trigger) === */
+.sage-panel-verify {
+  /* Will allow SAGE to REQUEST action — NOT perform it */
+}
+

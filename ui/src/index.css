@@ -51,6 +51,7 @@
 @import "./styles/stateShiftInit.css";
 @import "./styles/panelActionRuleset.css";
 @import "./styles/severityRouting.css";
+@import "./styles/activationPathway.css";
 
 @tailwind base;
 @tailwind components;
