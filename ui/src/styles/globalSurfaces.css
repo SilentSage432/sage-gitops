@@ -1,0 +1,52 @@
+/**
+ * UI Renaissance — Phase 2
+ * Global surface + visual polish
+ *
+ * These rules apply subtle visual upgrades ONLY.
+ * No spacing, structure, or layout changes occur here.
+ */
+
+html, body {
+  background: var(--sage-surface-0);
+  color: var(--sage-text-primary);
+  font-family: var(--sage-font-main);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Smooth scroll feel */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--sage-accent-primary) var(--sage-surface-1);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--sage-surface-1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--sage-accent-primary);
+  border-radius: 8px;
+}
+
+/* Panel + container baseline refinement */
+.sage-surface {
+  background: var(--sage-surface-1);
+  box-shadow: var(--sage-elevation-1);
+  border-radius: 6px;
+}
+
+/* Subtle text smoothing */
+.sage-muted {
+  color: var(--sage-text-secondary);
+}
+
+/* Prevents pop-in contrast shifts */
+img, canvas, video {
+  image-rendering: auto;
+}
+
