@@ -1,0 +1,45 @@
+/**
+ * UI Renaissance — Visual Phase V9
+ * Luminous Accent Depth
+ *
+ * PURPOSE:
+ *  - Introduce soft radiant edge presence
+ *  - Strengthen interactive visual hierarchy
+ *  - Maintain subtlety and professionalism
+ *
+ * SAFETY:
+ *  - No pulsing or animated glow
+ *  - No layout or functional changes
+ *  - Whisperer behavior untouched
+ */
+
+/* === RADIANT BORDER TREATMENT — extremely subtle === */
+.sage-panel {
+  box-shadow:
+    0 0 0 1px rgba(138, 125, 255, 0.06),
+    0 6px 18px rgba(0, 0, 0, 0.32);
+}
+
+/* === ACCENT EDGE ON INTERACTIVE HOVER === */
+button:hover,
+.sage-action:hover,
+.sage-nav-item:hover {
+  border-color: rgba(138, 125, 255, 0.35);
+  color: var(--sage-accent-primary);
+}
+
+/* === FOCUS GLOW WITHOUT PULSE === */
+button:focus-visible,
+.sage-action:focus-visible,
+.sage-nav-item:focus-visible {
+  outline: 2px solid rgba(138, 125, 255, 0.50);
+  box-shadow:
+    0 0 8px rgba(138, 125, 255, 0.22);
+}
+
+/* === INPUT LUMINOUS EDGE — still restrained === */
+#whispererInputContainer:focus-within {
+  box-shadow:
+    0 0 10px rgba(138, 125, 255, 0.14);
+}
+
