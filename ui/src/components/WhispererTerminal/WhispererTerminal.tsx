@@ -22,6 +22,7 @@ import { panelExecutionScheduler } from "../../systems/panelExecutionScheduler";
 import { panelPriorityEngine } from "../../systems/panelPriorityEngine";
 import { panelSuppressionLayer } from "../../systems/panelSuppressionLayer";
 import { panelRecoveryEngine } from "../../systems/panelRecoveryEngine";
+import { panelIntegrityVerifier } from "../../systems/panelIntegrityVerifier";
 import "./whisperer.css";
 
 export function WhispererTerminal() {
@@ -413,6 +414,27 @@ export function WhispererTerminal() {
       // Phase 62 DOES NOT trigger UI behavior.
       // It ONLY restores autonomy permissions internally.
     }, 8000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Phase 63 — Internal Consistency & Corruption Prevention
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const state = uxStateMachine.getState();
+      const suppressed = panelSuppressionLayer.isSuppressed();
+      const eligible = panelEligibilityEngine.getEligible();
+      const executing = panelActionExecutor.getIsExecuting();
+
+      const result = panelIntegrityVerifier.validate({
+        state,
+        suppressed,
+        eligible,
+        executing,
+      });
+
+      console.debug("[SAGE] Integrity status:", result);
+    }, 9000);
 
     return () => clearInterval(interval);
   }, []);
