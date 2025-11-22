@@ -1,0 +1,49 @@
+/**
+ * UI Renaissance — Visual Phase V6
+ * Micro-Contrast & Clarity Pass
+ *
+ * PURPOSE:
+ *  - Improve readability and visual sharpness
+ *  - Strengthen hierarchy without increasing brightness
+ *  - Enhance enterprise clarity without flashiness
+ *
+ * SAFETY:
+ *  - No layout or spacing changes
+ *  - No animations or glow
+ *  - Whisperer functionally unchanged
+ */
+
+/* === TEXT CLARITY ADJUSTMENTS === */
+.sage-body {
+  color: var(--sage-text-1);
+  letter-spacing: 0.1px;
+}
+
+.sage-h1,
+.sage-h2 {
+  color: var(--sage-text-0);
+  letter-spacing: 0.2px;
+}
+
+/* === PANEL EDGE DEFINITION — subtle, non-intrusive === */
+.sage-panel {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+    0 4px 14px rgba(0, 0, 0, 0.32);
+}
+
+/* === WHISPERER MESSAGE READABILITY === */
+#whispererMessageLog {
+  color: var(--sage-text-1);
+  line-height: 1.48;
+  text-rendering: optimizeLegibility;
+}
+
+/* === OPTIONAL ELEMENTS (only if present) === */
+.sage-label,
+.sage-caption {
+  color: var(--sage-text-2);
+  letter-spacing: 0.15px;
+}
+
