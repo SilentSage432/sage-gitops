@@ -20,6 +20,8 @@ import useAwarenessMatrix from "../core/awareness/AwarenessMatrix";
 import useAutonomicSafeguard from "../core/safeguards/useAutonomicSafeguard";
 import useSelfHealingLoop from "../core/recovery/useSelfHealingLoop";
 import { useStabilityForecast } from "../sage/cognition/useStabilityForecast";
+import { ForecastHUD } from "../components/ForecastHUD/ForecastHUD";
+import "../components/ForecastHUD/ForecastHUD.css";
 import "../styles/ui-alerts.css";
 
 interface BridgeFrameProps {
@@ -154,6 +156,8 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
       <div className="h-12 flex-shrink-0 border-t border-slate-800">
         <StatusBar />
       </div>
+
+      <ForecastHUD />
     </div>
   );
 };

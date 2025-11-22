@@ -1,0 +1,22 @@
+.forecast-hud {
+  position: absolute;
+  bottom: 72px;
+  right: 24px;
+  z-index: 1000;
+}
+
+.forecast-pill {
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: Menlo, monospace;
+  background: rgba(20, 20, 28, 0.9);
+  border: 1px solid #3a3a4a;
+  color: #e2e2e2;
+}
+
+.forecast-pill.warning {
+  border-color: #c084fc;
+  color: #c084fc;
+}
+
