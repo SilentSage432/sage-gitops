@@ -1,0 +1,64 @@
+/**
+ * UI Renaissance — Phase 47
+ * Context-Aware Assisted Response Layer
+ *
+ * PURPOSE:
+ *  - Enable assisted environmental response to vary based on context
+ *  - Maintain strict non-autonomous behavior and operator control
+ *  - Prepare for future tiered adaptive modulation
+ *
+ * ACTIVATION REQUIREMENTS:
+ *  - .sage-auto-init
+ *  - .sage-auto-regulated
+ *  - .sage-auto-awakened
+ *  - .sage-atmos-identity
+ *  - .sage-tonal-seed
+ *  - .sage-tonal-awakened
+ *  - .sage-tonal-elevated
+ *  - .sage-atmos-elevated
+ *  - .sage-atmos-calibrated
+ *  - .sage-atmos-intelligent
+ *  - .sage-atmos-active
+ *  - .sage-atmos-assisted
+ *  - .sage-atmos-contextual   (new)
+ *
+ * SAFETY:
+ *  - No automatic activation
+ *  - No visual change until explicitly enabled
+ *  - No layout or spacing changes
+ */
+
+/* === CONTEXT-AWARE ASSISTED RESPONSE (manual only) === */
+.sage-auto-init.sage-auto-regulated.sage-auto-awakened
+  .sage-atmos-identity.sage-tonal-seed.sage-tonal-awakened.sage-tonal-elevated
+  .sage-atmos-elevated.sage-atmos-calibrated.sage-atmos-intelligent.sage-atmos-active.sage-atmos-assisted.sage-atmos-contextual {
+  opacity: 1;
+  filter:
+    brightness(1.07)
+    contrast(1.085)
+    saturate(1.08);
+  transition:
+    opacity 3.4s ease,
+    filter 3.4s ease;
+}
+
+/* === OPTIONAL CONTEXT-SPECIFIC LAYERING === */
+.sage-auto-init.sage-auto-regulated.sage-auto-awakened
+  .sage-atmos-identity.sage-tonal-seed.sage-tonal-awakened.sage-tonal-elevated
+  .sage-atmos-elevated.sage-atmos-calibrated.sage-atmos-intelligent.sage-atmos-active.sage-atmos-assisted.sage-atmos-contextual
+  .sage-atmos-layer {
+  opacity: 1;
+  filter:
+    brightness(1.08)
+    contrast(1.095)
+    saturate(1.085);
+  transition:
+    opacity 3.6s ease,
+    filter 3.6s ease;
+}
+
+/* === RESERVED FOR PHASE 48 (tiered adaptive modulation) === */
+.sage-atmos-tiered {
+  /* Next: tier-based adaptive response (still non-autonomous) */
+}
+

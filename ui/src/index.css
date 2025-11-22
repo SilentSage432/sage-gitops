@@ -44,6 +44,7 @@
 @import "./styles/atmosphericIntelligence.css";
 @import "./styles/atmosphericResponse.css";
 @import "./styles/assistedResponse.css";
+@import "./styles/contextualResponse.css";
 
 @tailwind base;
 @tailwind components;
