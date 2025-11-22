@@ -19,6 +19,7 @@
 @import "./styles/consistencyLock.css";
 @import "./styles/spectralInteraction.css";
 @import "./styles/arcaneMotion.css";
+@import "./styles/cinematicTransitions.css";
 
 @tailwind base;
 @tailwind components;
