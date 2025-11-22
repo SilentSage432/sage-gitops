@@ -1,0 +1,67 @@
+/**
+ * UI Renaissance — Phase 48
+ * Tiered Adaptive Modulation Layer
+ *
+ * PURPOSE:
+ *  - Enable graded environmental response when explicitly allowed
+ *  - Support multiple intensity tiers (still non-autonomous)
+ *  - Maintain full operator control and visual restraint
+ *
+ * ACTIVATION REQUIREMENTS:
+ *  - .sage-auto-init
+ *  - .sage-auto-regulated
+ *  - .sage-auto-awakened
+ *  - .sage-atmos-identity
+ *  - .sage-tonal-seed
+ *  - .sage-tonal-awakened
+ *  - .sage-tonal-elevated
+ *  - .sage-atmos-elevated
+ *  - .sage-atmos-calibrated
+ *  - .sage-atmos-intelligent
+ *  - .sage-atmos-active
+ *  - .sage-atmos-assisted
+ *  - .sage-atmos-contextual
+ *  - .sage-atmos-tiered      (new)
+ *
+ * SAFETY:
+ *  - No automatic activation
+ *  - No layout or spacing changes
+ *  - No visual change unless activated
+ */
+
+/* === TIER 1 — LOW-INTENSITY MODULATION (manual only) === */
+.sage-auto-init.sage-auto-regulated.sage-auto-awakened
+  .sage-atmos-identity.sage-tonal-seed.sage-tonal-awakened.sage-tonal-elevated
+  .sage-atmos-elevated.sage-atmos-calibrated.sage-atmos-intelligent
+  .sage-atmos-active.sage-atmos-assisted.sage-atmos-contextual.sage-atmos-tiered {
+  opacity: 1;
+  filter:
+    brightness(1.075)
+    contrast(1.095)
+    saturate(1.085);
+  transition:
+    opacity 3.8s ease,
+    filter 3.8s ease;
+}
+
+/* === OPTIONAL ELEMENT-LEVEL TIERING === */
+.sage-auto-init.sage-auto-regulated.sage-auto-awakened
+  .sage-atmos-identity.sage-tonal-seed.sage-tonal-awakened.sage-tonal-elevated
+  .sage-atmos-elevated.sage-atmos-calibrated.sage-atmos-intelligent
+  .sage-atmos-active.sage-atmos-assisted.sage-atmos-contextual.sage-atmos-tiered
+  .sage-atmos-layer {
+  opacity: 1;
+  filter:
+    brightness(1.085)
+    contrast(1.105)
+    saturate(1.095);
+  transition:
+    opacity 4s ease,
+    filter 4s ease;
+}
+
+/* === RESERVED FOR PHASE 49 (pre-autonomous safeguard) === */
+.sage-atmos-governed {
+  /* Next: safeguard before any autonomous behavior is allowed */
+}
+

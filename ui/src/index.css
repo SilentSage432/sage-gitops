@@ -45,6 +45,7 @@
 @import "./styles/atmosphericResponse.css";
 @import "./styles/assistedResponse.css";
 @import "./styles/contextualResponse.css";
+@import "./styles/tieredModulation.css";
 
 @tailwind base;
 @tailwind components;
