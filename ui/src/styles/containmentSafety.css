@@ -1,0 +1,46 @@
+/**
+ * Autonomous Action Layer — Phase 58
+ * Fail-Safe Containment Layer (Non-Autonomous)
+ *
+ * PURPOSE:
+ *  - Prevent cascading or chained behaviors after execution
+ *  - Ensure all future actions remain isolated and scoped
+ *  - Maintain strict operator control and non-autonomous design
+ *
+ * SAFETY:
+ *  - No automatic containment
+ *  - Does NOT trigger execution
+ *  - No UI or layout changes
+ *  - Fully inert without .sage-panel-contain applied manually
+ *
+ * ACTIVATION REQUIREMENTS (manual only):
+ *  - .sage-auto-init
+ *  - .sage-auto-regulated
+ *  - .sage-auto-awakened
+ *  - .sage-auto-governed
+ *  - .sage-governor-elevated
+ *  - .sage-state-shift-ready
+ *  - .sage-state-shift-authorized
+ *  - .sage-panel-route
+ *  - .sage-panel-eligible
+ *  - .sage-panel-verify
+ *  - .sage-panel-execute
+ *  - .sage-panel-rollback
+ *  - .sage-panel-contain     (new — containment permitted, NOT automatic)
+ */
+
+/* === CONTAINMENT SAFETY HOOK (inactive, invisible) === */
+.sage-auto-init.sage-auto-regulated.sage-auto-awakened
+.sage-auto-governed.sage-governor-elevated.sage-state-shift-ready
+.sage-state-shift-authorized.sage-panel-route.sage-panel-eligible
+.sage-panel-verify.sage-panel-execute.sage-panel-rollback.sage-panel-contain {
+  isolation: isolate;
+  pointer-events: auto;
+  /* Containment guard — NOT triggered */
+}
+
+/* === RESERVED FOR PHASE 59 (post-containment stabilization) === */
+.sage-panel-stabilize {
+  /* Next: ensures environment remains stable after allowed execution */
+}
+
