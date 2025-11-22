@@ -6,6 +6,7 @@ import { processCognitiveHooks } from "../../sage/cognition/whispererCognition";
 import { operatorCognitiveSync } from "../../systems/operatorCognitiveSync";
 import { operatorMemory } from "../../systems/operatorMemory";
 import { contextPromptEngine } from "../../systems/contextPromptEngine";
+import { autonomousAssistEngine } from "../../systems/autonomousAssistEngine";
 import "./whisperer.css";
 
 export function WhispererTerminal() {
@@ -117,6 +118,23 @@ export function WhispererTerminal() {
           break;
       }
     }, 8000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Phase 48 — Autonomous Assistive Behavior
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const profile = operatorCognitiveSync.getProfile();
+      const trend = operatorMemory.getTrend();
+
+      const directive = contextPromptEngine.evaluate({
+        engagementLevel: profile.engagementLevel,
+        trend,
+      });
+
+      autonomousAssistEngine.execute(directive);
+    }, 9000);
 
     return () => clearInterval(interval);
   }, []);
