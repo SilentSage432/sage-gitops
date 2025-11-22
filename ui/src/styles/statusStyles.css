@@ -1,0 +1,65 @@
+/**
+ * UI Renaissance — Phase 10
+ * Status-aware visual accents
+ *
+ * SAFETY GUARANTEES:
+ *  - No automatic UI changes
+ *  - Only applies when classes are intentionally added
+ *  - No layout or spacing changes
+ *  - Whisperer unaffected
+ */
+
+/* === PANEL STATUS VARIANTS (opt-in only) === */
+
+.sage-status-neutral {
+  border-color: var(--sage-border-neutral);
+}
+
+.sage-status-success {
+  border-color: var(--sage-border-success);
+  background: var(--sage-surface-success);
+}
+
+.sage-status-caution {
+  border-color: var(--sage-border-caution);
+  background: var(--sage-surface-caution);
+}
+
+.sage-status-warning {
+  border-color: var(--sage-border-warning);
+  background: var(--sage-surface-warning);
+}
+
+.sage-status-critical {
+  border-color: var(--sage-border-critical);
+  background: var(--sage-surface-critical);
+}
+
+/* === TEXT STATUS TOKENS (optional & subtle) === */
+
+.sage-text-neutral {
+  color: var(--sage-status-neutral);
+}
+
+.sage-text-success {
+  color: var(--sage-status-success);
+}
+
+.sage-text-caution {
+  color: var(--sage-status-caution);
+}
+
+.sage-text-warning {
+  color: var(--sage-status-warning);
+}
+
+.sage-text-critical {
+  color: var(--sage-status-critical);
+}
+
+/* === OPTIONAL GLOW EDGE FOR FUTURE AUTONOMY PHASES === */
+
+.sage-status-emphasis {
+  box-shadow: 0 0 0 1px var(--sage-border-warning);
+}
+
