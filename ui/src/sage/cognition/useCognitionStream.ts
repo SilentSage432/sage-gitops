@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { CognitionEvent } from "./eventTypes";
+import { routeEvent, getPriority } from "./semanticRouter";
 
 export function useCognitionStream() {
   const listeners = useRef<((e: CognitionEvent) => void)[]>([]);
@@ -12,7 +13,11 @@ export function useCognitionStream() {
     };
   }
 
-  // simulate incoming cognition events
+  // semantic routing layer dispatch
+  function dispatch(event: CognitionEvent) {
+    listeners.current.forEach((fn) => fn(event));
+  }
+
   useEffect(() => {
     const interval = setInterval(() => {
       const event: CognitionEvent = {
@@ -22,7 +27,12 @@ export function useCognitionStream() {
         timestamp: Date.now(),
       };
 
-      listeners.current.forEach((fn) => fn(event));
+      // semantic priority ordering happens here
+      console.log(
+        `[SEMANTIC] priority=${getPriority(event)} type=${event.type}`
+      );
+
+      dispatch(event);
     }, 8000);
 
     return () => clearInterval(interval);
