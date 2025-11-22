@@ -1,0 +1,35 @@
+/**
+ * UI Renaissance — Visual Phase V22
+ * Ambient Motion Differentiation
+ *
+ * PURPOSE:
+ *  - Introduce slow, atmospheric background drift
+ *  - Create cinematic depth without distraction
+ *  - Begin visual separation between UI layers
+ *
+ * SAFETY:
+ *  - Extremely low-frequency motion
+ *  - No panel movement or UI displacement
+ *  - Whisperer and layout remain untouched
+ */
+
+/* === SLOW ENVIRONMENTAL DRIFT === */
+@keyframes sage-env-drift {
+  0% {
+    background-position: 50% 30%;
+  }
+  50% {
+    background-position: 48% 32%;
+  }
+  100% {
+    background-position: 50% 30%;
+  }
+}
+
+/* === APPLY ONLY TO ENVIRONMENT, NEVER UI SURFACES === */
+body::before {
+  animation: sage-env-drift 120s ease-in-out infinite;
+  background-size: 140% 140%;
+  will-change: background-position;
+}
+
