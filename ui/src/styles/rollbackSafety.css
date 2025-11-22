@@ -1,0 +1,45 @@
+/**
+ * Autonomous Action Layer — Phase 57
+ * Rollback & Self-Cancel Safety Layer (Non-Autonomous)
+ *
+ * PURPOSE:
+ *  - Ensure any future execution can be reversed safely
+ *  - Prevent irreversible or locked UI states
+ *  - Maintain strict operator control over all behavior
+ *
+ * SAFETY:
+ *  - No automatic rollback
+ *  - No execution triggered
+ *  - No UI or visual changes
+ *  - Fully inert without .sage-panel-rollback applied manually
+ *
+ * ACTIVATION REQUIREMENTS (manual only):
+ *  - .sage-auto-init
+ *  - .sage-auto-regulated
+ *  - .sage-auto-awakened
+ *  - .sage-auto-governed
+ *  - .sage-governor-elevated
+ *  - .sage-state-shift-ready
+ *  - .sage-state-shift-authorized
+ *  - .sage-panel-route
+ *  - .sage-panel-eligible
+ *  - .sage-panel-verify
+ *  - .sage-panel-execute
+ *  - .sage-panel-rollback      (new — reversal permitted, NOT automatic)
+ */
+
+/* === ROLLBACK SAFETY HOOK (inactive, invisible) === */
+.sage-auto-init.sage-auto-regulated.sage-auto-awakened
+.sage-auto-governed.sage-governor-elevated.sage-state-shift-ready
+.sage-state-shift-authorized.sage-panel-route.sage-panel-eligible
+.sage-panel-verify.sage-panel-execute.sage-panel-rollback {
+  isolation: isolate;
+  pointer-events: auto;
+  /* Safety reversal permitted — NOT triggered */
+}
+
+/* === RESERVED FOR PHASE 58 (fail-safe containment) === */
+.sage-panel-contain {
+  /* Will prevent cascading behavior — still operator-gated */
+}
+
