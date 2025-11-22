@@ -1,0 +1,48 @@
+/**
+ * UI Renaissance — Phase 33
+ * Controlled Soft Activation Layer
+ *
+ * PURPOSE:
+ *  - Allow Phase 32 auto-blending to become functional
+ *  - ONLY when explicitly enabled
+ *  - Maintain operator sovereignty and visual stability
+ *
+ * SAFETY:
+ *  - No automatic activation
+ *  - No layout or spacing changes
+ *  - Nothing changes unless .sage-auto-init is applied
+ */
+
+/* === MASTER ACTIVATION GATE (manual only) === */
+.sage-auto-init .sage-auto-enable {
+  transition:
+    opacity 0.55s ease,
+    filter 0.55s ease,
+    box-shadow 0.55s ease;
+}
+
+/* === ACTIVE STATE BLENDING (subtle + controlled) === */
+.sage-auto-init .sage-auto-enable.sage-context-active,
+.sage-auto-init .sage-auto-enable.sage-presence-attentive {
+  opacity: 1;
+  filter: brightness(1.04) saturate(1.05);
+}
+
+/* === CALM / IDLE BLENDING === */
+.sage-auto-init .sage-auto-enable.sage-ambient-calm,
+.sage-auto-init .sage-auto-enable.sage-presence-idle {
+  opacity: 0.96;
+  filter: brightness(1) saturate(0.95);
+}
+
+/* === STABILIZATION PATHWAY === */
+.sage-auto-init .sage-auto-enable.sage-stabilize {
+  opacity: 0.98;
+  filter: brightness(1) saturate(1);
+}
+
+/* === RESERVED FOR FUTURE AUTONOMOUS MODE (Phase 36+) === */
+.sage-auto-init.sage-auto-awakened {
+  /* Will enable global autonomous blending later */
+}
+

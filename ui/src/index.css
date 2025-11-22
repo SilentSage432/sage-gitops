@@ -30,6 +30,7 @@
 @import "./styles/cognitiveLinkage.css";
 @import "./styles/stateSynchronization.css";
 @import "./styles/autoBlending.css";
+@import "./styles/softActivation.css";
 
 @tailwind base;
 @tailwind components;
