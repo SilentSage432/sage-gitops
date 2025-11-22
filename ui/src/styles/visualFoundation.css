@@ -1,0 +1,76 @@
+/**
+ * UI Renaissance — Visual Phase V1
+ * Visual Identity Foundation
+ *
+ * PURPOSE:
+ *  - Establish premium visual system baseline
+ *  - Introduce scalable color tokens
+ *  - Define typography hierarchy
+ *  - Create professional spacing + depth rules
+ *
+ * SAFETY:
+ *  - No layout shifts
+ *  - No functional changes
+ *  - No animations
+ *  - Whisperer untouched
+ */
+
+:root {
+  /* === CORE NEUTRAL PALETTE (enterprise baseline) === */
+  --sage-bg-0: #0b0b0d;
+  --sage-bg-1: #131317;
+  --sage-bg-2: #1b1b21;
+
+  --sage-surface-0: #1e1e24;
+  --sage-surface-1: #26262e;
+
+  --sage-border-0: rgba(255, 255, 255, 0.06);
+  --sage-border-1: rgba(255, 255, 255, 0.10);
+
+  --sage-text-0: #ffffff;
+  --sage-text-1: rgba(255, 255, 255, 0.72);
+  --sage-text-2: rgba(255, 255, 255, 0.48);
+
+  /* === RESERVED FOR FUTURE MAGIC (Phase V7–V12) === */
+  --sage-accent-primary: #8a7dff; /* placeholder — not applied yet */
+}
+
+body {
+  background-color: var(--sage-bg-0);
+  color: var(--sage-text-1);
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* === TYPOGRAPHY HIERARCHY === */
+.sage-h1 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--sage-text-0);
+}
+
+.sage-h2 {
+  font-size: 1.375rem;
+  font-weight: 500;
+  color: var(--sage-text-0);
+}
+
+.sage-body {
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--sage-text-1);
+}
+
+/* === PANEL BASELINE POLISH (no structural change) === */
+.sage-panel {
+  background: var(--sage-surface-0);
+  border: 1px solid var(--sage-border-0);
+  border-radius: 8px;
+}
+
+/* === WHISPERER REMAINS FUNCTIONALLY UNCHANGED === */
+#whispererMessageLog,
+#whispererInputContainer {
+  background: var(--sage-surface-0);
+}
+
