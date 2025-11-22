@@ -1,0 +1,45 @@
+/**
+ * UI Renaissance — Phase 34
+ * Gradual Safe-Activation Ruleset
+ *
+ * PURPOSE:
+ *  - Ensure activation happens smoothly and safely
+ *  - Prevent harsh shifting or over-stimulation
+ *  - Maintain visual stability during initial activation
+ *
+ * SAFETY:
+ *  - No automatic activation
+ *  - No layout or spacing changes
+ *  - Only applies when .sage-auto-init is present
+ */
+
+/* === SOFT ACTIVATION RATE LIMITER === */
+.sage-auto-init .sage-auto-enable {
+  transition-duration: 0.65s !important;
+}
+
+/* === PREVENT RAPID STATE FLIPPING === */
+.sage-auto-init .sage-auto-enable {
+  will-change:
+    opacity,
+    filter,
+    box-shadow;
+}
+
+/* === SAFE ENTRY BLENDING (subtle) === */
+.sage-auto-init .sage-auto-enable.sage-ready-active {
+  opacity: 1;
+  filter: brightness(1.035);
+}
+
+/* === SAFE EXIT / RETURN TO NEUTRAL === */
+.sage-auto-init .sage-auto-enable.sage-stabilize-reset {
+  opacity: 0.95;
+  filter: brightness(0.98) saturate(0.92);
+}
+
+/* === RESERVED FOR CONTROLLED AUTONOMY (Phase 36+) === */
+.sage-auto-init.sage-auto-regulated {
+  /* Will allow system-paced activation later */
+}
+
