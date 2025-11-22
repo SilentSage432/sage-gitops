@@ -18,6 +18,7 @@
 @import "./styles/cohesionStyles.css";
 @import "./styles/consistencyLock.css";
 @import "./styles/spectralInteraction.css";
+@import "./styles/arcaneMotion.css";
 
 @tailwind base;
 @tailwind components;

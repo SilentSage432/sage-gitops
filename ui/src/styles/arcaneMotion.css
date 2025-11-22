@@ -1,0 +1,56 @@
+/**
+ * UI Renaissance — Phase 21
+ * Arcane Motion & Living UI
+ *
+ * PURPOSE:
+ *  - Introduce subtle, atmospheric motion
+ *  - Create a sense of quiet awareness
+ *  - Support future autonomous visual states
+ *
+ * SAFETY:
+ *  - No automatic activation
+ *  - No layout or spacing changes
+ *  - Purely optional classes
+ */
+
+/* === AMBIENT RESONANCE BREATH (manual only) === */
+.sage-breath {
+  animation: sageBreathPulse 9s ease-in-out infinite;
+  opacity: 0.96;
+}
+
+@keyframes sageBreathPulse {
+  0% { opacity: 0.96; }
+  50% { opacity: 1; }
+  100% { opacity: 0.96; }
+}
+
+/* === ARCANE EDGE GLIDE (hover-only, subtle) === */
+.sage-glide {
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.45s ease;
+}
+
+.sage-glide:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(155, 107, 255, 0.18);
+}
+
+/* === LIVING IDLE STATE (future autonomous use) === */
+.sage-living {
+  animation: sageLivingIdle 14s ease-in-out infinite;
+  opacity: 0.97;
+}
+
+@keyframes sageLivingIdle {
+  0% { filter: brightness(1); }
+  50% { filter: brightness(1.035); }
+  100% { filter: brightness(1); }
+}
+
+/* === RESERVED FOR PHASE 24+ AUTONOMOUS STATE === */
+.sage-arcane-awakened {
+  /* Will activate when SAGE triggers UI presence */
+}
+
