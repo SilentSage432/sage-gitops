@@ -1,0 +1,56 @@
+/**
+ * UI Renaissance — Phase 30
+ * Cognitive Readiness Linkage
+ *
+ * PURPOSE:
+ *  - Create a bridge between UI state and internal system cognition
+ *  - Introduce dormant cognitive-state visual hooks
+ *  - Enable future synchronization without forcing any changes now
+ *
+ * SAFETY:
+ *  - No automatic activation
+ *  - No layout or spacing changes
+ *  - Purely optional — dormant until applied
+ */
+
+/* === COGNITIVE-READY (baseline hook) === */
+.sage-cognitive-ready {
+  opacity: 0.98;
+  filter: brightness(1);
+  transition:
+    opacity 0.45s ease,
+    filter 0.45s ease;
+}
+
+/* === COGNITIVE-FOCUSED (future internal-use) === */
+.sage-cognitive-focused {
+  opacity: 1;
+  filter: brightness(1.05) saturate(1.08);
+  transition:
+    opacity 0.45s ease,
+    filter 0.45s ease;
+}
+
+/* === COGNITIVE-LOAD STATE (optional visual cue) === */
+.sage-cognitive-load {
+  filter: brightness(0.96) saturate(0.9);
+  opacity: 0.9;
+  transition:
+    opacity 0.45s ease,
+    filter 0.45s ease;
+}
+
+/* === COGNITIVE-STABLE (post-processing neutralization) === */
+.sage-cognitive-stable {
+  opacity: 1;
+  filter: brightness(1) saturate(1);
+  transition:
+    opacity 0.45s ease,
+    filter 0.45s ease;
+}
+
+/* === RESERVED FOR PHASE 36+ (true cognitive link) === */
+.sage-cognitive-awakened {
+  /* Will activate when UI syncs with internal SAGE cognition */
+}
+

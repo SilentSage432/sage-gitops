@@ -27,6 +27,7 @@
 @import "./styles/adaptiveModulation.css";
 @import "./styles/predictiveReadiness.css";
 @import "./styles/autonomicStabilization.css";
+@import "./styles/cognitiveLinkage.css";
 
 @tailwind base;
 @tailwind components;
