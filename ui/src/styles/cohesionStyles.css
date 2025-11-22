@@ -1,0 +1,54 @@
+/**
+ * UI Renaissance — Phase 18
+ * Global visual cohesion & rhythm tuning
+ *
+ * SAFETY:
+ *  - No layout or spacing changes
+ *  - No automatic visual overrides
+ *  - Subtle refinement only
+ */
+
+/* === GLOBAL CONTRAST SMOOTHING === */
+.sage-panel,
+.sage-card,
+.sage-terminal {
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+/* === TEXT RHYTHM CONSISTENCY === */
+p,
+.sage-text-block {
+  line-height: 1.55;
+  color: var(--sage-text-primary);
+  margin: 0;
+}
+
+/* === MUTED ELEMENT BALANCE === */
+.sage-muted,
+.sage-terminal-entry {
+  opacity: 0.88;
+  transition: opacity 0.25s ease;
+}
+
+.sage-terminal-entry:last-child {
+  opacity: 1;
+}
+
+/* === SOFT SURFACE BLENDING === */
+.sage-surface,
+.sage-panel-body,
+.sage-card-body {
+  background: var(--sage-surface-1);
+}
+
+/* === REDUCED VISUAL NOISE === */
+hr,
+.sage-divider {
+  opacity: 0.35;
+}
+
