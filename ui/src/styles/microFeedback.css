@@ -1,0 +1,52 @@
+/**
+ * UI Renaissance — Phase 26
+ * Contextual Micro-Feedback Framework
+ *
+ * PURPOSE:
+ *  - Introduce subtle feedback cues on interaction
+ *  - Enhance perception of responsiveness without animation
+ *  - Prepare for adaptive and cognitive UI behaviors
+ *
+ * SAFETY:
+ *  - No automatic activation
+ *  - No layout or spacing changes
+ *  - Purely optional and dormant
+ */
+
+/* === MICRO TOUCH RESPONSE (manual only) === */
+.sage-touch {
+  transition:
+    filter 0.2s ease,
+    transform 0.2s ease;
+}
+
+.sage-touch:active {
+  filter: brightness(0.96);
+  transform: scale(0.995);
+}
+
+/* === SOFT CONFIRMATION CUE (manual feedback) === */
+.sage-soft-confirm {
+  transition: box-shadow 0.35s ease;
+  box-shadow: 0 0 0 rgba(155, 107, 255, 0);
+}
+
+.sage-soft-confirm-active {
+  box-shadow: 0 0 10px rgba(155, 107, 255, 0.35);
+}
+
+/* === MICRO HIGHLIGHT ON FIRST INTERACTION (opt-in only) === */
+.sage-first-touch {
+  transition: opacity 0.35s ease;
+  opacity: 0.9;
+}
+
+.sage-first-touch-active {
+  opacity: 1;
+}
+
+/* === RESERVED FOR FUTURE ADAPTIVE BEHAVIOR === */
+.sage-feedback-awakened {
+  /* Will be controlled by interaction mapping Phase 32+ */
+}
+

@@ -23,6 +23,7 @@
 @import "./styles/sageIdentity.css";
 @import "./styles/autonomousPresence.css";
 @import "./styles/ambientHarmonization.css";
+@import "./styles/microFeedback.css";
 
 @tailwind base;
 @tailwind components;
