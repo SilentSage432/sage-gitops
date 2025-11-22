@@ -1,0 +1,53 @@
+/**
+ * UI Renaissance — Visual Phase V13
+ * Reactive Accent Intelligence
+ *
+ * PURPOSE:
+ *  - Introduce context-based visual awareness
+ *  - Allow the UI to subtly acknowledge activity states
+ *  - Maintain restraint and professionalism
+ *
+ * SAFETY:
+ *  - No functional changes
+ *  - No layout or spacing adjustments
+ *  - No high-intensity glow or pulsing
+ *
+ * ACTIVATION TRIGGERS (visual-only):
+ *  - .sage-active       = Whisperer input engaged
+ *  - .sage-receiving    = new log message rendered
+ *  - .sage-idle         = no interaction
+ */
+
+/* === DEFAULT / IDLE STATE — calm and neutral === */
+#whispererMessageLog.sage-idle {
+  box-shadow:
+    0 0 0 1px rgba(138, 125, 255, 0.04),
+    0 4px 14px rgba(0, 0, 0, 0.30);
+  opacity: 0.95;
+}
+
+/* === INPUT ACTIVE STATE — gentle accent lift === */
+#whispererMessageLog.sage-active {
+  box-shadow:
+    0 0 0 1px rgba(138, 125, 255, 0.10),
+    0 6px 18px rgba(0, 0, 0, 0.34);
+  opacity: 1;
+}
+
+/* === RECEIVING NEW MESSAGE — subtle light acknowledgment === */
+#whispererMessageLog.sage-receiving {
+  box-shadow:
+    0 0 0 1px rgba(138, 125, 255, 0.18),
+    0 8px 22px rgba(0, 0, 0, 0.36);
+  transition: box-shadow 380ms ease, opacity 380ms ease;
+  opacity: 1;
+}
+
+/* === INPUT BAR STATE MATCHING === */
+#whispererInputContainer.sage-active {
+  border-top-color: rgba(138, 125, 255, 0.42);
+  box-shadow:
+    0 0 12px rgba(138, 125, 255, 0.18) inset,
+    0 0 0 1px rgba(138, 125, 255, 0.26);
+}
+
