@@ -1,0 +1,45 @@
+/**
+ * UI Renaissance — Visual Phase V11
+ * Luminous Environmental Layer
+ *
+ * PURPOSE:
+ *  - Introduce soft ambient glow around the UI environment
+ *  - Enhance depth and presence without brightness
+ *  - Prepare for controlled cinematic motion in Phase V12
+ *
+ * SAFETY:
+ *  - No pulsing or reactive lighting
+ *  - No layout or functional changes
+ *  - Whisperer behavior untouched
+ */
+
+/* === GLOBAL ENVIRONMENTAL GLOW — extremely subtle === */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      circle at 50% 30%,
+      rgba(138, 125, 255, 0.06),
+      transparent 65%
+    );
+  opacity: 0.9;
+  z-index: -1;
+}
+
+/* === PANEL EDGE DIFFUSION — soft, controlled === */
+.sage-panel {
+  box-shadow:
+    0 0 0 1px rgba(138, 125, 255, 0.05),
+    0 8px 24px rgba(0, 0, 0, 0.36);
+}
+
+/* === WHISPERER ENVIRONMENT POLISH — still restrained === */
+#whispererMessageLog {
+  box-shadow:
+    0 0 0 1px rgba(138, 125, 255, 0.05),
+    0 4px 16px rgba(0, 0, 0, 0.32);
+}
+
