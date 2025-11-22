@@ -1,0 +1,58 @@
+/**
+ * UI Renaissance — Phase 43
+ * Adaptive Environmental Calibration Layer
+ *
+ * PURPOSE:
+ *  - Prepare the UI for smooth atmospheric adjustment
+ *  - Enable future adaptive environmental modulation
+ *  - Maintain full operator control and safety
+ *
+ * ACTIVATION REQUIREMENTS:
+ *  - .sage-auto-init
+ *  - .sage-auto-regulated
+ *  - .sage-auto-awakened
+ *  - .sage-atmos-identity
+ *  - .sage-tonal-seed
+ *  - .sage-tonal-awakened
+ *  - .sage-tonal-elevated
+ *  - .sage-atmos-elevated
+ *  - .sage-atmos-calibrated   (new)
+ *
+ * SAFETY:
+ *  - No automatic activation
+ *  - No visual change until enabled
+ *  - No layout or spacing changes
+ */
+
+/* === CALIBRATED ATMOSPHERIC STABILITY (manual only) === */
+.sage-auto-init.sage-auto-regulated.sage-auto-awakened
+  .sage-atmos-identity.sage-tonal-seed.sage-tonal-awakened.sage-tonal-elevated.sage-atmos-elevated.sage-atmos-calibrated {
+  opacity: 1;
+  filter:
+    brightness(1.035)
+    contrast(1.045)
+    saturate(1.04);
+  transition:
+    opacity 2.4s ease,
+    filter 2.4s ease;
+}
+
+/* === OPTIONAL ELEMENT-LEVEL CALIBRATION === */
+.sage-auto-init.sage-auto-regulated.sage-auto-awakened
+  .sage-atmos-identity.sage-tonal-seed.sage-tonal-awakened.sage-tonal-elevated.sage-atmos-elevated.sage-atmos-calibrated
+  .sage-atmos-layer {
+  opacity: 1;
+  filter:
+    brightness(1.05)
+    contrast(1.055)
+    saturate(1.048);
+  transition:
+    opacity 2.6s ease,
+    filter 2.6s ease;
+}
+
+/* === RESERVED FOR PHASE 45+ (adaptive atmospheric intelligence) === */
+.sage-atmos-intelligent {
+  /* Will enable dynamic environmental response later */
+}
+
