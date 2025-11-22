@@ -1,0 +1,46 @@
+/**
+ * UI Renaissance — Phase 36
+ * Controlled Partial Activation Layer
+ *
+ * PURPOSE:
+ *  - Allow the UI to enter its new visual state in a limited, safe form
+ *  - Begin subtle autonomous blending ONLY when explicitly enabled
+ *  - Maintain full operator sovereignty and stability
+ *
+ * ACTIVATION REQUIREMENTS:
+ *  - .sage-auto-init
+ *  - .sage-auto-regulated
+ *  - .sage-auto-awakened   (new)
+ *
+ * SAFETY:
+ *  - No automatic activation
+ *  - No layout or spacing changes
+ *  - Subtle visual shifts only
+ */
+
+/* === NEW STATE — CONTROLLED ENTRY (manual activation only) === */
+.sage-auto-init.sage-auto-regulated.sage-auto-awakened .sage-auto-enable {
+  transition-duration: 0.95s;
+  opacity: 0.985;
+  filter: brightness(1.015) saturate(1.015);
+}
+
+/* === LIMITED AUTONOMOUS ACTIVE SHIFT === */
+.sage-auto-init.sage-auto-regulated.sage-auto-awakened
+  .sage-auto-enable.sage-context-active {
+  opacity: 1;
+  filter: brightness(1.04) saturate(1.06);
+}
+
+/* === LIMITED AUTONOMOUS CALM SHIFT === */
+.sage-auto-init.sage-auto-regulated.sage-auto-awakened
+  .sage-auto-enable.sage-ambient-calm {
+  opacity: 0.95;
+  filter: brightness(0.99) saturate(0.94);
+}
+
+/* === RESERVED FOR PHASE 40+ (full-state transition) === */
+.sage-auto-init.sage-auto-regulated.sage-auto-awakened.sage-auto-elevated {
+  /* Will unlock deeper visual transformation later */
+}
+

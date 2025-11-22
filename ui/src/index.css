@@ -33,6 +33,7 @@
 @import "./styles/softActivation.css";
 @import "./styles/activationRules.css";
 @import "./styles/regulationGate.css";
+@import "./styles/partialActivation.css";
 
 @tailwind base;
 @tailwind components;
