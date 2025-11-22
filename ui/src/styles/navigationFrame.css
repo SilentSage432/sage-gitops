@@ -1,0 +1,53 @@
+/**
+ * UI Renaissance — Phase 6
+ * Navigation + frame visual refinement
+ *
+ * Zero layout or structural changes.
+ * Pure visual enhancement only.
+ */
+
+/* Top-level frame polish */
+.sage-frame {
+  background: var(--sage-surface-1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: var(--sage-elevation-0);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* Subtle hover polish if interactive */
+.sage-frame[data-interactive="true"]:hover {
+  border-color: rgba(255, 255, 255, 0.10);
+  box-shadow: var(--sage-elevation-1);
+}
+
+/* Navigation items — clean + modern */
+.sage-nav-item {
+  font-size: var(--sage-text-sm);
+  color: var(--sage-text-secondary);
+  padding: var(--sage-space-3) var(--sage-space-4);
+  cursor: pointer;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+/* Hover — subtle, non-flashy */
+.sage-nav-item:hover {
+  color: var(--sage-text-primary);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* Active state — not loud, just confident */
+.sage-nav-item-active {
+  color: var(--sage-accent-primary);
+  background: rgba(155, 107, 255, 0.10);
+  font-weight: 500;
+}
+
+/* Divider for structural clarity */
+.sage-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.05);
+  margin: 0;
+}
+

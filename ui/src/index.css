@@ -3,6 +3,7 @@
 @import "./styles/typography.css";
 @import "./styles/panelStyles.css";
 @import "./styles/interactiveElements.css";
+@import "./styles/navigationFrame.css";
 
 @tailwind base;
 @tailwind components;
