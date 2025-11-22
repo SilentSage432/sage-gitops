@@ -32,8 +32,16 @@ export function useWhispererStream() {
     }
 
     return () => {
-      if (ws && ws.readyState !== WebSocket.CLOSED) {
-        ws.close();
+      if (ws) {
+        try {
+          // WebSocket.CONNECTING = 0, WebSocket.OPEN = 1, WebSocket.CLOSING = 2, WebSocket.CLOSED = 3
+          if (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING) {
+            ws.close();
+          }
+        } catch (error) {
+          // Silently handle cleanup errors (e.g., WebSocket already closed)
+        }
+        ws = null;
       }
     };
   }, []);
