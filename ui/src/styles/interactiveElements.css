@@ -1,0 +1,76 @@
+/**
+ * UI Renaissance — Phase 5
+ * Interactive element modernization
+ *
+ * Safe guarantees:
+ *  - No layout shifts
+ *  - No spacing changes
+ *  - No JS modifications
+ */
+
+.sage-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sage-space-2) var(--sage-space-4);
+  font-size: var(--sage-text-sm);
+  font-weight: 500;
+  color: var(--sage-text-primary);
+  background: var(--sage-surface-2);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 6px;
+  cursor: pointer;
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+/* Hover — subtle, not flashy */
+.sage-button:hover {
+  background: var(--sage-surface-1);
+  border-color: rgba(255, 255, 255, 0.10);
+  box-shadow: var(--sage-elevation-1);
+}
+
+/* Active — controlled feedback */
+.sage-button:active {
+  background: var(--sage-surface-2);
+  box-shadow: var(--sage-elevation-0);
+}
+
+/* Focus — enterprise-grade accessibility */
+.sage-button:focus-visible {
+  outline: none;
+  border-color: var(--sage-accent-primary);
+  box-shadow: 0 0 0 2px rgba(155, 107, 255, 0.35);
+}
+
+/* Disabled — neutral and unobtrusive */
+.sage-button[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Accent variant for future critical actions */
+.sage-button-accent {
+  background: var(--sage-accent-primary);
+  color: #ffffff;
+  border-color: transparent;
+}
+
+.sage-button-accent:hover {
+  background: #a982ff;
+}
+
+/* Quiet variant for low-emphasis actions */
+.sage-button-quiet {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.04);
+}
+
+.sage-button-quiet:hover {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+

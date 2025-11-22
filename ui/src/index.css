@@ -2,6 +2,7 @@
 @import "./styles/globalSurfaces.css";
 @import "./styles/typography.css";
 @import "./styles/panelStyles.css";
+@import "./styles/interactiveElements.css";
 
 @tailwind base;
 @tailwind components;
