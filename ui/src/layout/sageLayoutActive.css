@@ -1,0 +1,45 @@
+/**
+ * UI Renaissance — Visual Phase V18
+ * Columnar Adaptive Activation
+ *
+ * PURPOSE:
+ *  - Activate dormant V16 grid layout
+ *  - Introduce two-zone adaptive structure
+ *  - Preserve Whisperer position and behavior
+ *
+ * SAFETY:
+ *  - No component repositioning logic
+ *  - No forced panel docking
+ *  - Smooth, non-breaking layout transition
+ */
+
+/* === ENABLE ROOT GRID — now active === */
+#sageRootLayout {
+  display: grid;
+  grid-template-columns: 1fr 380px; /* main area + secondary zone */
+  grid-template-rows: auto 1fr auto;
+  height: 100vh;
+  width: 100%;
+  gap: 18px;
+  padding: 18px;
+  overflow: hidden;
+}
+
+/* === PRIMARY WORKZONE (Whisperer stays here) === */
+.sage-zone-center {
+  grid-column: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* === SECONDARY PANEL ZONE — now visible === */
+.sage-zone-right {
+  grid-column: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  overflow-y: auto;
+  mask-image: linear-gradient(to bottom, transparent, black 22px, black calc(100% - 22px), transparent);
+}
+
