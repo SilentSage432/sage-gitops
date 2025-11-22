@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { CognitionEvent } from "./eventTypes";
 import { routeEvent, getPriority } from "./semanticRouter";
+import { escalateEvent } from "./escalationEngine";
 
 export function useCognitionStream() {
   const listeners = useRef<((e: CognitionEvent) => void)[]>([]);
@@ -15,6 +16,20 @@ export function useCognitionStream() {
 
   // semantic routing layer dispatch
   function dispatch(event: CognitionEvent) {
+    // autonomous escalation routing
+    escalateEvent(event, {
+      operatorNotify: (msg) =>
+        window.dispatchEvent(
+          new CustomEvent("SAGE_OPERATOR_ALERT", { detail: { msg } })
+        ),
+
+      systemFlag: (e) =>
+        window.dispatchEvent(
+          new CustomEvent("SAGE_SYSTEM_EVENT", { detail: { event: e } })
+        ),
+    });
+
+    // continue normal listener chain
     listeners.current.forEach((fn) => fn(event));
   }
 
