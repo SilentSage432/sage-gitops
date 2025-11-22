@@ -17,6 +17,7 @@
 @import "./styles/notificationStyles.css";
 @import "./styles/cohesionStyles.css";
 @import "./styles/consistencyLock.css";
+@import "./styles/spectralInteraction.css";
 
 @tailwind base;
 @tailwind components;

@@ -1,0 +1,54 @@
+/**
+ * UI Renaissance — Phase 20
+ * Spectral Interaction Layer
+ *
+ * PURPOSE:
+ *  - Introduce subtle, atmospheric interaction responses
+ *  - Create a sense of presence without animation noise
+ *  - Prepare for operator-linked awareness in later phases
+ *
+ * SAFETY:
+ *  - No automatic activation
+ *  - No layout or spacing changes
+ *  - Purely optional application
+ */
+
+/* === SPECTRAL HOVER AWARENESS (manual only) === */
+.sage-spectral-hover {
+  transition:
+    background 0.35s ease,
+    border-color 0.35s ease,
+    box-shadow 0.45s ease;
+}
+
+.sage-spectral-hover:hover {
+  border-color: rgba(155, 107, 255, 0.35);
+  box-shadow: 0 0 12px rgba(155, 107, 255, 0.18);
+}
+
+/* === PRESENCE-ACTIVE STATE (future operator-linked) === */
+.sage-presence-active {
+  box-shadow: 0 0 18px rgba(155, 107, 255, 0.28);
+  border-color: rgba(155, 107, 255, 0.45);
+  transition:
+    box-shadow 0.45s ease,
+    border-color 0.45s ease;
+}
+
+/* === SOFT FIELD REACTION (optional, restrained) === */
+.sage-field-reactive {
+  transition:
+    background 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.sage-field-reactive:focus-visible {
+  background: var(--sage-surface-2);
+  box-shadow: 0 0 10px rgba(155, 107, 255, 0.25);
+}
+
+/* === RESERVED FOR AUTONOMOUS REACTIONS === */
+.sage-spectral-awakened {
+  /* Will activate during Phase 24+ */
+}
+
