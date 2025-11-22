@@ -16,6 +16,7 @@ import { startKernelPulse } from "../sage/kernel/KernelPulse";
 import { subscribeKernel } from "../sage/kernel/KernelSignalBus";
 import useOperatorCortex from "../core/OperatorCortex";
 import useAutoSurface from "../core/AutoSurfaceEngine";
+import useAwarenessMatrix from "../core/awareness/AwarenessMatrix";
 import "../styles/ui-alerts.css";
 
 interface BridgeFrameProps {
@@ -35,6 +36,7 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
 }) => {
   const { state } = useOperatorEffect();
   const cortex = useOperatorCortex(selectedItem);
+  const awareness = useAwarenessMatrix();
   useAutoSurface(cortex.isOperatorActive);
   useHybridAutonomy();
   useUIAlertsBridge();
@@ -100,13 +102,15 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
     <div
       className={`
         relative flex h-screen w-screen bg-[#030304] text-white overflow-hidden flex-col
-        transition-all duration-300
+        transition-all duration-700
         ${state.flash ? "ring-4 ring-purple-500" : ""}
         ${alertClass}
         ${kernelPulse ? "ring-1 ring-purple-600/20" : ""}
         ${kernelWarning ? "bg-[#12030a]" : ""}
         ${reflexFlash ? `animate-[reflexFlash_0.8s_ease-out]` : ""}
         ${hb ? "animate-[uiPulse_1.2s_ease-in-out]" : ""}
+        ${awareness === "ELEVATED" ? "ring-2 ring-yellow-500" : ""}
+        ${awareness === "ALERT" ? "ring-4 ring-red-500" : ""}
       `}
     >
       <div className="flex flex-1 overflow-hidden min-h-0">
