@@ -1,0 +1,46 @@
+/**
+ * UI Renaissance — Visual Phase V19
+ * Secondary Panel Preparation
+ *
+ * PURPOSE:
+ *  - Stabilize the right-side zone introduced in V18
+ *  - Ensure panels render cleanly without overlap or clipping
+ *  - Prepare for future docking behavior (V20+)
+ *
+ * SAFETY:
+ *  - No repositioning of any existing elements
+ *  - No functional or behavioral changes
+ *  - Whisperer remains fully dominant and unchanged
+ */
+
+/* === SECONDARY ZONE POLISH — controlled containment === */
+.sage-zone-right {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+/* === PANEL SIZING RULES — prevents stretch/compression === */
+.sage-zone-right .sage-panel {
+  min-height: 140px;
+  max-height: 420px;
+  flex: 0 0 auto;
+}
+
+/* === SPACING REFINEMENT === */
+.sage-zone-right .sage-panel + .sage-panel {
+  margin-top: 12px;
+}
+
+/* === SMOOTHER SCROLL EDGE MASK === */
+.sage-zone-right {
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black 18px,
+    black calc(100% - 18px),
+    transparent
+  );
+}
+

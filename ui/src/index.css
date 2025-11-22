@@ -15,6 +15,7 @@
 @import "./styles/structuralIllumination.css";
 @import "./layout/sageLayout.css";
 @import "./layout/sageLayoutActive.css";
+@import "./styles/secondaryPanelPrep.css";
 @import "./styles/panelSpatialIdentity.css";
 @import "./styles/designTokens.css";
 @import "./styles/globalSurfaces.css";
