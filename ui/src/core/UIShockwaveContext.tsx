@@ -11,6 +11,7 @@ interface UIShockwaveContextProps {
   state: UIShockwaveState;
   triggerWarning: () => void;
   triggerCritical: () => void;
+  shockwaveMinor: () => void;
   reset: () => void;
 }
 
@@ -34,11 +35,16 @@ export const UIShockwaveProvider: React.FC<{ children: React.ReactNode }> = ({
     setTimeout(() => setState({ level: "none", burst: false }), 1500);
   };
 
+  const shockwaveMinor = () => {
+    setState({ level: "warning", burst: true });
+    setTimeout(() => setState({ level: "none", burst: false }), 600);
+  };
+
   const reset = () => setState({ level: "none", burst: false });
 
   return (
     <UIShockwaveContext.Provider
-      value={{ state, triggerWarning, triggerCritical, reset }}
+      value={{ state, triggerWarning, triggerCritical, shockwaveMinor, reset }}
     >
       {children}
     </UIShockwaveContext.Provider>

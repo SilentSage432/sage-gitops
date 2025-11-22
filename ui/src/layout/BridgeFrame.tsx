@@ -14,6 +14,7 @@ import { useReflex } from "../sage/kernel/useReflex";
 import { useHeartbeat } from "../sage/kernel/useHeartbeat";
 import { startKernelPulse } from "../sage/kernel/KernelPulse";
 import { subscribeKernel } from "../sage/kernel/KernelSignalBus";
+import { useENFL } from "../sage/enfl/useENFL";
 import useOperatorCortex from "../core/OperatorCortex";
 import useAutoSurface from "../core/AutoSurfaceEngine";
 import useAwarenessMatrix from "../core/awareness/AwarenessMatrix";
@@ -51,6 +52,7 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
   useUIAlertsBridge();
   useKernelHeartbeat();
   usePredictiveWS();
+  useENFL(); // enables emergent responsiveness
 
   useEffect(() => {
     startKernelPulse();

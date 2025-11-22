@@ -4,6 +4,7 @@ import { OperatorEffectProvider } from "../core/OperatorEffectContext";
 import { TelemetryFilterProvider } from "../core/filters/useTelemetryFilter";
 import { HybridModeProvider } from "../sage/hybrid/HybridModeContext";
 import { UIShockwaveProvider } from "../core/UIShockwaveContext";
+import { UIPulseProvider } from "../core/UIPulseContext";
 import { ArcThetaPanel } from '../features/arc/ArcThetaPanel';
 import { ArcSigmaPanel } from '../features/arc/ArcSigmaPanel';
 import { ArcOmegaPanel } from '../features/arc/ArcOmegaPanel';
@@ -85,11 +86,13 @@ export const App: React.FC = () => {
       <HybridModeProvider>
         <TelemetryFilterProvider>
           <UIShockwaveProvider>
-            <BridgeFrame
-              activeChamber={renderActiveChamber()}
-              selectedItem={selectedItem}
-              onSelectItem={setSelectedItem}
-            />
+            <UIPulseProvider>
+              <BridgeFrame
+                activeChamber={renderActiveChamber()}
+                selectedItem={selectedItem}
+                onSelectItem={setSelectedItem}
+              />
+            </UIPulseProvider>
           </UIShockwaveProvider>
         </TelemetryFilterProvider>
       </HybridModeProvider>
