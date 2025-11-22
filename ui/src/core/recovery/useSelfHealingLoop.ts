@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { dispatchUIAction } from "../UIActionBus";
+import { recordRecovery, detectRecurringPattern } from "./RecoveryMemory";
 
 export function useSelfHealingLoop(errorSignal: boolean) {
   const failureCount = useRef(0);
@@ -16,6 +17,20 @@ export function useSelfHealingLoop(errorSignal: boolean) {
     // Trigger recovery only on sustained failure
     if (failureCount.current >= 3 && !inRecovery.current) {
       inRecovery.current = true;
+
+      recordRecovery({
+        level: "SOFT",
+        reason: "repeated-failure",
+        timestamp: Date.now(),
+      });
+
+      if (detectRecurringPattern()) {
+        dispatchUIAction("ui.recovery.alert", {
+          severity: "ELEVATED",
+          message: "Repeated instability detected",
+          timestamp: Date.now(),
+        });
+      }
 
       dispatchUIAction("ui.recovery.start", {
         level: "SOFT",
