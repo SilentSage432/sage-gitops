@@ -1,0 +1,51 @@
+/**
+ * UI Renaissance — Visual Phase V4
+ * Precision Spacing & Rhythm
+ *
+ * PURPOSE:
+ *  - Establish consistent internal spacing scale
+ *  - Improve visual balance and readability
+ *  - Enhance professional polish without layout shifts
+ *
+ * SAFETY:
+ *  - No component repositioning
+ *  - No width/height changes
+ *  - No flex/grid adjustments
+ *  - Whisperer behavior unchanged
+ */
+
+/* === SPACING SCALE (based on 8px rhythm) === */
+:root {
+  --sage-space-1: 4px;
+  --sage-space-2: 8px;
+  --sage-space-3: 12px;
+  --sage-space-4: 16px;
+  --sage-space-5: 24px;
+  --sage-space-6: 32px;
+}
+
+/* === PANEL INTERNAL PADDING — no layout shift === */
+.sage-panel {
+  padding: var(--sage-space-4);
+}
+
+/* === WHISPERER LOG READING COMFORT === */
+#whispererMessageLog {
+  padding: var(--sage-space-4) var(--sage-space-4);
+  line-height: 1.45;
+}
+
+/* === INPUT BAR REFINEMENT (stays fixed, no movement) === */
+#whispererInputContainer {
+  padding: var(--sage-space-3) var(--sage-space-4);
+}
+
+/* === GENERIC ELEMENT POLISH — applied only if present === */
+.sage-section {
+  margin-bottom: var(--sage-space-5);
+}
+
+.sage-row {
+  margin-bottom: var(--sage-space-3);
+}
+
