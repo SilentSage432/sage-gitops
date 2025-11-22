@@ -1,0 +1,91 @@
+/**
+ * UI Renaissance — Phase 15
+ * Grid + alignment utility system
+ *
+ * SAFETY:
+ *  - No automatic layout changes
+ *  - No spacing overrides
+ *  - Purely optional utilities
+ */
+
+/* === FLEX UTILITIES === */
+
+.sage-flex {
+  display: flex;
+}
+
+.sage-flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sage-flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sage-flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+/* === GRID UTILITIES === */
+
+.sage-grid {
+  display: grid;
+  gap: var(--sage-space-4);
+}
+
+/* Manual column definitions (opt-in only) */
+.sage-grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.sage-grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.sage-grid-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* === ALIGNMENT HELPERS === */
+
+.sage-align-left {
+  text-align: left;
+}
+
+.sage-align-center {
+  text-align: center;
+}
+
+.sage-align-right {
+  text-align: right;
+}
+
+/* === WIDTH UTILITIES (safe, no forced layout) === */
+
+.sage-w-100 {
+  width: 100%;
+}
+
+.sage-w-auto {
+  width: auto;
+}
+
+/* === SPACING UTILITIES (opt-in only, no global impact) === */
+
+.sage-gap-sm {
+  gap: var(--sage-space-2);
+}
+
+.sage-gap-md {
+  gap: var(--sage-space-4);
+}
+
+.sage-gap-lg {
+  gap: var(--sage-space-6);
+}
+

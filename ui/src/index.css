@@ -12,6 +12,7 @@
 @import "./styles/adaptiveSurfaces.css";
 @import "./styles/inputStyles.css";
 @import "./styles/cardStyles.css";
+@import "./styles/layoutUtilities.css";
 
 @tailwind base;
 @tailwind components;
