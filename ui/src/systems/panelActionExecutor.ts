@@ -8,6 +8,8 @@
  * NO panels open yet.
  */
 
+import { panelAuthorityEngine } from "./panelAuthorityEngine";
+
 type PanelAction = "open_system_health" | "open_activity_monitor" | null;
 
 class PanelActionExecutor {
@@ -32,6 +34,12 @@ class PanelActionExecutor {
   execute(action: PanelAction): void {
     if (!action || !this.canExecute()) return;
 
+    // Phase 64 — Require Rho² authority before execution
+    if (!panelAuthorityEngine.isAuthorized(action)) {
+      console.debug("[SAGE] Execution BLOCKED — missing Rho² authority:", action);
+      return;
+    }
+
     this.isExecuting = true;
 
     switch (action) {
@@ -51,6 +59,9 @@ class PanelActionExecutor {
     if (this.rollbackManager) {
       this.rollbackManager.track(action);
     }
+
+    // Phase 64 — After execution completes, authority is consumed
+    panelAuthorityEngine.revoke(action);
 
     // Reset execution flag after a short delay
     setTimeout(() => {

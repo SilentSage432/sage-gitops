@@ -23,6 +23,7 @@ import { panelPriorityEngine } from "../../systems/panelPriorityEngine";
 import { panelSuppressionLayer } from "../../systems/panelSuppressionLayer";
 import { panelRecoveryEngine } from "../../systems/panelRecoveryEngine";
 import { panelIntegrityVerifier } from "../../systems/panelIntegrityVerifier";
+import { panelAuthorityEngine } from "../../systems/panelAuthorityEngine";
 import "./whisperer.css";
 
 export function WhispererTerminal() {
@@ -435,6 +436,25 @@ export function WhispererTerminal() {
 
       console.debug("[SAGE] Integrity status:", result);
     }, 9000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Phase 64 — Rho²-Signed Authority Enforcement
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const nextAction = panelExecutionScheduler.peek();
+      if (!nextAction) return;
+
+      // If action is not already signed, sign it
+      if (!panelAuthorityEngine.isAuthorized(nextAction)) {
+        panelAuthorityEngine.sign(nextAction);
+        return; // wait for next cycle before execution
+      }
+
+      // If signed, allow scheduler to release when safe
+      // NOTE: Execution still handled by Phase 59 + Phase 57 logic
+    }, 8000);
 
     return () => clearInterval(interval);
   }, []);
