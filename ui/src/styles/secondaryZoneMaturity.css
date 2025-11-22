@@ -1,0 +1,46 @@
+/**
+ * UI Renaissance — Visual Phase V21
+ * Secondary Zone Visual Maturity
+ *
+ * PURPOSE:
+ *  - Give the right-side column a refined, intentional visual presence
+ *  - Maintain Whisperer dominance through contrast and restraint
+ *  - Improve readability and panel separation
+ *
+ * SAFETY:
+ *  - No functional or layout changes
+ *  - No movement or resizing
+ *  - Whisperer remains primary focal surface
+ */
+
+/* === SECONDARY ZONE SURFACE POLISH === */
+.sage-zone-right {
+  background: rgba(6, 6, 10, 0.52);
+  border-radius: 14px;
+  padding: 14px;
+  backdrop-filter: blur(10px);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+    0 8px 22px rgba(0, 0, 0, 0.38);
+}
+
+/* === PANEL PRESENTATION — clean, subtle spacing === */
+.sage-zone-right .sage-panel {
+  background: rgba(14, 14, 18, 0.72);
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.03),
+    0 6px 18px rgba(0, 0, 0, 0.30);
+}
+
+/* === HEADER / LABEL POLISH (if present) === */
+.sage-zone-right h2,
+.sage-zone-right h3,
+.sage-zone-right .sage-panel-title {
+  color: rgba(230, 228, 255, 0.88);
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  margin-bottom: 8px;
+}
+
