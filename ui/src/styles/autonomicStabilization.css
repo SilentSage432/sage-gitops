@@ -1,0 +1,47 @@
+/**
+ * UI Renaissance — Phase 29
+ * Autonomic Stabilization Layer
+ *
+ * PURPOSE:
+ *  - Introduce self-regulation pathways for UI calm-down
+ *  - Prevent visual overstimulation in future autonomous phases
+ *  - Support graceful return-to-neutral states
+ *
+ * SAFETY:
+ *  - No automatic activation
+ *  - No visual changes unless manually applied
+ *  - No layout or spacing changes
+ */
+
+/* === RETURN-TO-NEUTRAL STATE (manual only) === */
+.sage-stabilize {
+  opacity: 0.96;
+  filter: brightness(1) saturate(0.96);
+  transition:
+    opacity 0.6s ease,
+    filter 0.6s ease;
+}
+
+/* === CALM-RESET (for post-alert settling) === */
+.sage-stabilize-reset {
+  opacity: 0.92;
+  filter: brightness(0.98) saturate(0.9);
+  transition:
+    opacity 0.8s ease,
+    filter 0.8s ease;
+}
+
+/* === HIGH-PRECISION NORMALIZATION (optional) === */
+.sage-stabilize-precision {
+  opacity: 1;
+  filter: brightness(1) saturate(1);
+  transition:
+    opacity 0.5s ease,
+    filter 0.5s ease;
+}
+
+/* === RESERVED FOR FUTURE AUTONOMIC CONTROL (Phase 35+) === */
+.sage-stabilize-awakened {
+  /* Will activate when SAGE self-regulates without operator input */
+}
+
