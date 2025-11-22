@@ -8,6 +8,7 @@ import { operatorMemory } from "../../systems/operatorMemory";
 import { contextPromptEngine } from "../../systems/contextPromptEngine";
 import { autonomousAssistEngine } from "../../systems/autonomousAssistEngine";
 import { predictiveModelEngine } from "../../systems/predictiveModelEngine";
+import { uxStateMachine } from "../../systems/uxStateMachine";
 import "./whisperer.css";
 
 export function WhispererTerminal() {
@@ -165,6 +166,28 @@ export function WhispererTerminal() {
           break;
       }
     }, 10000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Phase 50 — Federation-Ready UX State Machine
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const profile = operatorCognitiveSync.getProfile();
+      const trend = operatorMemory.getTrend();
+
+      const directive = contextPromptEngine.evaluate({
+        engagementLevel: profile.engagementLevel,
+        trend,
+      });
+
+      const projection = predictiveModelEngine.forecast({
+        engagementLevel: profile.engagementLevel,
+        trend,
+      });
+
+      uxStateMachine.evaluate({ directive, projection });
+    }, 7000);
 
     return () => clearInterval(interval);
   }, []);
