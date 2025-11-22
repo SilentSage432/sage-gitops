@@ -1,0 +1,59 @@
+/**
+ * UI Renaissance — Phase 13
+ * Input + field refinement
+ *
+ * SAFETY GUARANTEES:
+ *  - No layout or spacing changes
+ *  - No functional changes
+ *  - Whisperer input behavior untouched
+ */
+
+/* Base input styling */
+.sage-input {
+  width: 100%;
+  background: var(--sage-surface-2);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 6px;
+  padding: var(--sage-space-3);
+  color: var(--sage-text-primary);
+  font-size: var(--sage-text-sm);
+  font-family: var(--sage-font-main);
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+  outline: none;
+}
+
+/* Hover — subtle only */
+.sage-input:hover {
+  border-color: rgba(255, 255, 255, 0.10);
+}
+
+/* Focus — enterprise clarity */
+.sage-input:focus-visible {
+  border-color: var(--sage-accent-primary);
+  box-shadow: 0 0 0 2px rgba(155, 107, 255, 0.25);
+}
+
+/* Disabled — neutral & non-disruptive */
+.sage-input[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Input labels — clean + modern */
+.sage-input-label {
+  font-size: var(--sage-text-sm);
+  color: var(--sage-text-secondary);
+  margin-bottom: var(--sage-space-2);
+  display: block;
+}
+
+/* Optional helper text */
+.sage-input-help {
+  font-size: var(--sage-text-xs);
+  color: var(--sage-text-muted);
+  margin-top: var(--sage-space-2);
+}
+

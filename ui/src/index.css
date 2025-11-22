@@ -10,6 +10,7 @@
 @import "./styles/statusStyles.css";
 @import "./styles/resonanceStyles.css";
 @import "./styles/adaptiveSurfaces.css";
+@import "./styles/inputStyles.css";
 
 @tailwind base;
 @tailwind components;
