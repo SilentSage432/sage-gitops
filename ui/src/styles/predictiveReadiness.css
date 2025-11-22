@@ -1,0 +1,46 @@
+/**
+ * UI Renaissance — Phase 28
+ * Predictive Readiness Layer
+ *
+ * PURPOSE:
+ *  - Introduce pre-response visual states
+ *  - Enable anticipatory UI behavior (future-controlled)
+ *  - Support cognitive timing and readiness cues
+ *
+ * SAFETY:
+ *  - No automatic activation
+ *  - No layout or spacing changes
+ *  - Purely optional styling only
+ */
+
+/* === BASE READY STATE (manual only) === */
+.sage-ready {
+  opacity: 0.97;
+  transition:
+    opacity 0.4s ease,
+    filter 0.4s ease;
+}
+
+/* === HEIGHTENED ANTICIPATION (manual only) === */
+.sage-ready-active {
+  opacity: 1;
+  filter: brightness(1.04);
+  transition:
+    opacity 0.4s ease,
+    filter 0.4s ease;
+}
+
+/* === LOW-PRESSURE READINESS (optional passive) === */
+.sage-ready-soft {
+  opacity: 0.9;
+  filter: brightness(0.98);
+  transition:
+    opacity 0.45s ease,
+    filter 0.45s ease;
+}
+
+/* === PREDICTIVE SIGNAL HOOK (reserved) === */
+.sage-ready-signal {
+  /* Will activate when SAGE predicts state transitions (Phase 34+) */
+}
+
