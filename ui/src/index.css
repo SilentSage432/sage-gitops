@@ -59,6 +59,7 @@
 @import "./styles/stabilizationLayer.css";
 @import "./styles/overrideCheckpoint.css";
 @import "./styles/cooldownLayer.css";
+@import "./styles/restorationLock.css";
 
 @tailwind base;
 @tailwind components;
