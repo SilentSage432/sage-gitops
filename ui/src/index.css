@@ -34,6 +34,7 @@
 @import "./styles/activationRules.css";
 @import "./styles/regulationGate.css";
 @import "./styles/partialActivation.css";
+@import "./styles/microAtmosphere.css";
 
 @tailwind base;
 @tailwind components;

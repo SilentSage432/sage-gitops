@@ -1,0 +1,43 @@
+/**
+ * UI Renaissance — Phase 37
+ * Controlled Micro-Atmosphere Layer
+ *
+ * PURPOSE:
+ *  - Introduce subtle ambient depth when activation occurs
+ *  - Build atmospheric identity without visual disruption
+ *  - Remain dormant unless fully opt-in
+ *
+ * ACTIVATION REQUIREMENTS:
+ *  - .sage-auto-init
+ *  - .sage-auto-regulated
+ *  - .sage-auto-awakened
+ *
+ * SAFETY:
+ *  - No automatic activation
+ *  - No layout or spacing changes
+ *  - Subtle only — no dramatic visuals
+ */
+
+/* === BASE MICRO-AMBIENT PRESENCE (manual only) === */
+.sage-auto-init.sage-auto-regulated.sage-auto-awakened .sage-atmos-soft {
+  opacity: 0.985;
+  filter: brightness(1.008) contrast(1.01);
+  transition:
+    opacity 0.95s ease,
+    filter 0.95s ease;
+}
+
+/* === ELEVATED MICRO-DEPTH (future optional use) === */
+.sage-auto-init.sage-auto-regulated.sage-auto-awakened .sage-atmos-focus {
+  opacity: 1;
+  filter: brightness(1.02) contrast(1.015) saturate(1.03);
+  transition:
+    opacity 1s ease,
+    filter 1s ease;
+}
+
+/* === RESERVED FOR PHASE 40+ (full atmospheric identity) === */
+.sage-auto-init.sage-auto-regulated.sage-auto-awakened.sage-atmos-awakened {
+  /* Will unlock layered ambient presence later */
+}
+
