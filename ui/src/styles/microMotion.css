@@ -1,0 +1,60 @@
+/**
+ * UI Renaissance — Phase 8
+ * Atmospheric micro-motion
+ *
+ * SAFETY GUARANTEES:
+ *  - No layout changes
+ *  - No component movement
+ *  - No JS modification
+ *  - Performance-safe transitions only
+ */
+
+/* Global fade-in smoothing */
+.sage-fade-in {
+  opacity: 0;
+  animation: sageFadeIn 0.35s ease forwards;
+}
+
+@keyframes sageFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Panel presence transition */
+.sage-panel {
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.3s ease;
+}
+
+/* Terminal log appearance — subtle */
+.sage-terminal-entry {
+  opacity: 0.85;
+  transition: opacity 0.25s ease;
+}
+
+.sage-terminal-entry:last-child {
+  opacity: 1;
+}
+
+/* Hover soft-lift (not movement) */
+.sage-soft-hover {
+  transition: opacity 0.25s ease;
+}
+
+.sage-soft-hover:hover {
+  opacity: 0.92;
+}
+
+/* Accent pulse — extremely restrained */
+.sage-pulse {
+  animation: sagePulse 2.8s ease-in-out infinite;
+}
+
+@keyframes sagePulse {
+  0% { opacity: 0.92; }
+  50% { opacity: 1; }
+  100% { opacity: 0.92; }
+}
+
