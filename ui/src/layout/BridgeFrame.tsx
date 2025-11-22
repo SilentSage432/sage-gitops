@@ -15,6 +15,7 @@ import { useHeartbeat } from "../sage/kernel/useHeartbeat";
 import { startKernelPulse } from "../sage/kernel/KernelPulse";
 import { subscribeKernel } from "../sage/kernel/KernelSignalBus";
 import useOperatorCortex from "../core/OperatorCortex";
+import useAutoSurface from "../core/AutoSurfaceEngine";
 import "../styles/ui-alerts.css";
 
 interface BridgeFrameProps {
@@ -34,6 +35,7 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
 }) => {
   const { state } = useOperatorEffect();
   const cortex = useOperatorCortex(selectedItem);
+  useAutoSurface(cortex.isOperatorActive);
   useHybridAutonomy();
   useUIAlertsBridge();
   useKernelHeartbeat();
@@ -74,6 +76,10 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
       if (action === "ui.open.operator-terminal") {
         onSelectItem?.("operator-terminal");
         cortex.registerCommand();
+      }
+      if (action === "ui.surface.panel") {
+        const { panel } = payload;
+        onSelectItem?.(panel);
       }
     }
 
