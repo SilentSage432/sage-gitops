@@ -1,0 +1,67 @@
+/**
+ * UI Renaissance — Phase 7
+ * Whisperer Terminal visual refinement
+ *
+ * SAFETY GUARANTEES:
+ *  - No layout changes
+ *  - No resizing
+ *  - No repositioning
+ *  - Input remains bottom-locked
+ *  - Scroll behavior untouched
+ */
+
+/* Terminal container polish */
+.sage-terminal {
+  background: var(--sage-surface-1);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  box-shadow: var(--sage-elevation-1);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* Message log — improved readability */
+.sage-terminal-log {
+  color: var(--sage-text-primary);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: var(--sage-text-sm);
+  line-height: 1.45;
+  padding: var(--sage-space-4);
+  overflow-y: auto;
+}
+
+/* Individual log entries */
+.sage-terminal-entry {
+  margin-bottom: var(--sage-space-2);
+  color: var(--sage-text-secondary);
+  word-wrap: break-word;
+}
+
+/* Latest message emphasis — subtle, not flashy */
+.sage-terminal-entry:last-child {
+  color: var(--sage-text-primary);
+}
+
+/* Input bar — visual refinement ONLY */
+.sage-terminal-input {
+  background: var(--sage-surface-2);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding: var(--sage-space-3);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: var(--sage-text-sm);
+  color: var(--sage-text-primary);
+  outline: none;
+  transition: border-color 0.25s ease;
+}
+
+/* Focus state — enterprise subtle */
+.sage-terminal-input:focus-visible {
+  border-color: var(--sage-accent-primary);
+}
+
+/* Optional future accent for system events */
+.sage-terminal-event {
+  color: var(--sage-accent-secondary);
+}
+

@@ -4,6 +4,7 @@
 @import "./styles/panelStyles.css";
 @import "./styles/interactiveElements.css";
 @import "./styles/navigationFrame.css";
+@import "./styles/terminalStyles.css";
 
 @tailwind base;
 @tailwind components;
