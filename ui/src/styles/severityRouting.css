@@ -1,0 +1,39 @@
+/**
+ * Autonomous Action Layer — Phase 53
+ * Severity-Based Routing (Gated, Non-Autonomous)
+ *
+ * PURPOSE:
+ *  - Determine which panel is ELIGIBLE based on severity
+ *  - Establish priority routing WITHOUT triggering actions
+ *  - Maintain strict operator gating and non-autonomous behavior
+ *
+ * SAFETY:
+ *  - No automatic execution
+ *  - No UI movement, layout, or visual changes
+ *  - Logic-only — fully inert without explicit activation
+ *
+ * ACTIVATION REQUIREMENTS (manual only):
+ *  - .sage-auto-init
+ *  - .sage-auto-regulated
+ *  - .sage-auto-awakened
+ *  - .sage-auto-governed
+ *  - .sage-governor-elevated
+ *  - .sage-state-shift-ready
+ *  - .sage-state-shift-authorized
+ *  - .sage-panel-route       (now functional but non-executing)
+ */
+
+/* === SEVERITY ROUTING LOGIC (inert, invisible) === */
+.sage-auto-init.sage-auto-regulated.sage-auto-awakened
+.sage-auto-governed.sage-governor-elevated.sage-state-shift-ready
+.sage-state-shift-authorized.sage-panel-route {
+  isolation: isolate;
+  pointer-events: auto;
+  /* No visual output — routing logic only */
+}
+
+/* === RESERVED FOR PHASE 54 (safety-gated activation pathway) === */
+.sage-panel-eligible {
+  /* Will mark a panel as eligible — NOT auto-open */
+}
+
