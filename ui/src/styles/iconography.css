@@ -1,0 +1,65 @@
+/**
+ * UI Renaissance — Phase 16
+ * Iconography & Spectral Symbol System
+ *
+ * SAFE:
+ *  - No automatic UI changes
+ *  - No layout or spacing changes
+ *  - Purely optional visual application
+ *
+ * NOTE:
+ *  Icons are referenced via frameworks or SVGs —
+ *  this phase only standardizes styling + structure.
+ */
+
+/* === BASE ICON STANDARD === */
+.sage-icon {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  color: var(--sage-text-secondary);
+  transition: color 0.25s ease, opacity 0.25s ease;
+  opacity: 0.85;
+}
+
+/* Hover — subtle clarity */
+.sage-icon-hover:hover {
+  color: var(--sage-text-primary);
+  opacity: 1;
+}
+
+/* === SIZE VARIANTS === */
+.sage-icon-sm {
+  width: 16px;
+  height: 16px;
+}
+
+.sage-icon-md {
+  width: 20px;
+  height: 20px;
+}
+
+.sage-icon-lg {
+  width: 28px;
+  height: 28px;
+}
+
+/* === SPECTRAL ACCENT VARIANTS === */
+.sage-icon-accent {
+  color: var(--sage-accent-primary);
+}
+
+.sage-icon-secondary {
+  color: var(--sage-accent-secondary);
+}
+
+/* === OPTIONAL RESONANCE EFFECT (manually applied) === */
+.sage-icon-resonant {
+  filter: drop-shadow(0 0 4px rgba(155, 107, 255, 0.35));
+}
+
+/* === FUTURE AUTONOMOUS STATE HOOK === */
+.sage-icon-awakened {
+  /* Reserved for cognitive UI phases */
+}
+

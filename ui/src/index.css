@@ -13,6 +13,7 @@
 @import "./styles/inputStyles.css";
 @import "./styles/cardStyles.css";
 @import "./styles/layoutUtilities.css";
+@import "./styles/iconography.css";
 
 @tailwind base;
 @tailwind components;
