@@ -14,6 +14,13 @@ import { panelAutoTriggerEngine } from "../../systems/panelAutoTriggerEngine";
 import { panelAutoOpenEngine } from "../../systems/panelAutoOpenEngine";
 import { panelSafetyGate } from "../../systems/panelSafetyGate";
 import { panelReconfirmBuffer } from "../../systems/panelReconfirmBuffer";
+import { panelEligibilityEngine } from "../../systems/panelEligibilityEngine";
+import { panelExecutionHandshake } from "../../systems/panelExecutionHandshake";
+import { panelActionExecutor } from "../../systems/panelActionExecutor";
+import { panelRollbackManager } from "../../systems/panelRollbackManager";
+import { panelExecutionScheduler } from "../../systems/panelExecutionScheduler";
+import { panelPriorityEngine } from "../../systems/panelPriorityEngine";
+import { panelSuppressionLayer } from "../../systems/panelSuppressionLayer";
 import "./whisperer.css";
 
 export function WhispererTerminal() {
@@ -257,6 +264,156 @@ export function WhispererTerminal() {
       // Phase 54 DOES NOT execute any actions.
       // Phase 55+ will consume "confirmed" signals.
     }, 8000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Phase 55 — Action Eligibility Layer
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const trigger = panelAutoTriggerEngine.getPendingAction();
+      const safety = panelSafetyGate.evaluateTrigger(trigger);
+      const reconfirm = panelReconfirmBuffer.update(trigger, safety);
+
+      const eligible = panelEligibilityEngine.update(reconfirm, trigger);
+
+      console.debug("[SAGE] Eligibility status:", eligible ?? "none");
+
+      // NOTE:
+      // Phase 55 STILL performs NO autonomous UI execution.
+      // Later phases (56+) will consume eligibility.
+    }, 7000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Phase 56 — Controlled Execution Handshake
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const eligible = panelEligibilityEngine.getEligible();
+      const approval = panelExecutionHandshake.approve(eligible);
+
+      console.debug("[SAGE] Execution handshake status:", eligible, "→", approval);
+
+      // NOTE:
+      // Phase 56 DOES NOT execute any UI action.
+      // Phase 57+ will consume "approved" signals for controlled execution.
+    }, 9000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Phase 57 — Controlled Autonomous Execution (Internal Only)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const eligible = panelEligibilityEngine.getEligible();
+      const approval = panelExecutionHandshake.approve(eligible);
+
+      if (approval === "approved" && eligible) {
+        panelActionExecutor.execute(eligible);
+        panelEligibilityEngine.clear(); // prevents repeats
+      }
+
+      // NOTE:
+      // This phase executes actions ONLY internally.
+      // Visual auto-opening begins in future phases.
+    }, 8000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Phase 59 — Autonomous Execution Scheduling
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const eligible = panelEligibilityEngine.getEligible();
+      const approval = panelExecutionHandshake.approve(eligible);
+
+      // If approved, enqueue instead of executing immediately
+      if (approval === "approved" && eligible) {
+        panelExecutionScheduler.enqueue(eligible);
+        panelEligibilityEngine.clear();
+      }
+
+      // Release next scheduled action when safe
+      const nextAction = panelExecutionScheduler.next();
+
+      if (nextAction) {
+        panelActionExecutor.execute(nextAction);
+        panelRollbackManager.track(nextAction);
+
+        // Once execution is handled, scheduler unlocks
+        setTimeout(() => panelExecutionScheduler.complete(), 1000);
+      }
+    }, 8000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Phase 60 — Priority & Escalation Hierarchy
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const nextAction = panelExecutionScheduler.peek(); // peek only
+      if (!nextAction) return;
+
+      const currentState = uxStateMachine.getState();
+      const priority = panelPriorityEngine.getPriority(nextAction);
+      const escalate = panelPriorityEngine.shouldEscalate(nextAction, currentState);
+
+      console.debug("[SAGE] Priority check:", nextAction, "→", priority);
+      console.debug("[SAGE] Escalation status:", escalate ? "ESCALATE" : "normal");
+
+      // NOTE:
+      // Phase 60 does NOT execute escalation yet.
+      // Future phases (61–63) will consume escalation signals.
+    }, 9000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Phase 61 — Autonomous Suppression Layer
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const nextAction = panelExecutionScheduler.peek(); // peek
+      if (!nextAction) return;
+
+      const currentState = uxStateMachine.getState();
+      const priority = panelPriorityEngine.getPriority(nextAction);
+
+      const suppressed = panelSuppressionLayer.shouldSuppress(
+        nextAction,
+        currentState,
+        priority
+      );
+
+      console.debug(
+        "[SAGE] Suppression status:",
+        suppressed ? "BLOCKED" : "clear"
+      );
+
+      // NOTE:
+      // Phase 61 does NOT remove actions from queue.
+      // It only prevents execution until safe.
+    }, 8000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Phase 58 — Rollback & Persistence Safety
+  useEffect(() => {
+    // Wire rollback manager into executor
+    panelActionExecutor.setRollbackManager(panelRollbackManager);
+
+    const interval = setInterval(() => {
+      const currentState = uxStateMachine.getState();
+
+      const result = panelRollbackManager.evaluate(currentState);
+
+      console.debug("[SAGE] Rollback monitor:", result ?? "inactive");
+
+      // NOTE:
+      // This DOES NOT reverse UI — internal logic only.
+      // Later phases may extend rollback into visible behavior.
+    }, 9000);
 
     return () => clearInterval(interval);
   }, []);
