@@ -38,6 +38,7 @@
 @import "./styles/ambientIdentity.css";
 @import "./styles/tonalSeeding.css";
 @import "./styles/tonalShift.css";
+@import "./styles/tonalEnhancement.css";
 
 @tailwind base;
 @tailwind components;

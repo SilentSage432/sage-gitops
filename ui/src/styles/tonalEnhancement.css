@@ -1,0 +1,56 @@
+/**
+ * UI Renaissance — Phase 41
+ * Progressive Tonal Enhancement Layer
+ *
+ * PURPOSE:
+ *  - Deepen the tonal evolution introduced in Phase 40
+ *  - Add a second refinement layer for subtle visual richness
+ *  - Maintain professional restraint and operator control
+ *
+ * ACTIVATION REQUIREMENTS:
+ *  - .sage-auto-init
+ *  - .sage-auto-regulated
+ *  - .sage-auto-awakened
+ *  - .sage-atmos-identity
+ *  - .sage-tonal-seed
+ *  - .sage-tonal-awakened
+ *  - .sage-tonal-elevated   (new)
+ *
+ * SAFETY:
+ *  - No automatic activation
+ *  - No layout or spacing changes
+ *  - Subtle, controlled, and reversible
+ */
+
+/* === SECOND-STAGE TONAL REFINEMENT === */
+.sage-auto-init.sage-auto-regulated.sage-auto-awakened
+  .sage-atmos-identity.sage-tonal-seed.sage-tonal-awakened.sage-tonal-elevated {
+  opacity: 1;
+  filter:
+    brightness(1.025)
+    contrast(1.035)
+    saturate(1.03);
+  transition:
+    opacity 1.8s ease,
+    filter 1.8s ease;
+}
+
+/* === OPTIONAL ELEMENT-LEVEL ENHANCEMENT === */
+.sage-auto-init.sage-auto-regulated.sage-auto-awakened
+  .sage-atmos-identity.sage-tonal-seed.sage-tonal-awakened.sage-tonal-elevated
+  .sage-tone-layer {
+  opacity: 1;
+  filter:
+    brightness(1.03)
+    contrast(1.045)
+    saturate(1.04);
+  transition:
+    opacity 2s ease,
+    filter 2s ease;
+}
+
+/* === RESERVED FOR PHASE 43+ (full atmospheric evolution) === */
+.sage-tonal-transcendent {
+  /* Will unlock higher-order ambient transformation later */
+}
+
