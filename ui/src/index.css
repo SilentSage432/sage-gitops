@@ -35,6 +35,7 @@
 @import "./styles/regulationGate.css";
 @import "./styles/partialActivation.css";
 @import "./styles/microAtmosphere.css";
+@import "./styles/ambientIdentity.css";
 
 @tailwind base;
 @tailwind components;
