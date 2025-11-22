@@ -57,6 +57,7 @@
 @import "./styles/rollbackSafety.css";
 @import "./styles/containmentSafety.css";
 @import "./styles/stabilizationLayer.css";
+@import "./styles/overrideCheckpoint.css";
 
 @tailwind base;
 @tailwind components;

@@ -1,0 +1,49 @@
+/**
+ * Autonomous Action Layer — Phase 60
+ * Operator Override Checkpoint (Non-Autonomous)
+ *
+ * PURPOSE:
+ *  - Ensure no execution can occur without explicit operator override
+ *  - Prevent forced, queued, or accidental execution
+ *  - Maintain ultimate human authority in all circumstances
+ *
+ * SAFETY:
+ *  - No automatic override
+ *  - Does NOT trigger execution
+ *  - No UI or layout changes
+ *  - Fully inert without .sage-panel-override applied manually
+ *
+ * ACTIVATION REQUIREMENTS (manual only):
+ *  - .sage-auto-init
+ *  - .sage-auto-regulated
+ *  - .sage-auto-awakened
+ *  - .sage-auto-governed
+ *  - .sage-governor-elevated
+ *  - .sage-state-shift-ready
+ *  - .sage-state-shift-authorized
+ *  - .sage-panel-route
+ *  - .sage-panel-eligible
+ *  - .sage-panel-verify
+ *  - .sage-panel-execute
+ *  - .sage-panel-rollback
+ *  - .sage-panel-contain
+ *  - .sage-panel-stabilize
+ *  - .sage-panel-override     (new — override permitted, NOT automatic)
+ */
+
+/* === OVERRIDE CHECKPOINT HOOK (inactive, invisible) === */
+.sage-auto-init.sage-auto-regulated.sage-auto-awakened
+.sage-auto-governed.sage-governor-elevated.sage-state-shift-ready
+.sage-state-shift-authorized.sage-panel-route.sage-panel-eligible
+.sage-panel-verify.sage-panel-execute.sage-panel-rollback
+.sage-panel-contain.sage-panel-stabilize.sage-panel-override {
+  isolation: isolate;
+  pointer-events: auto;
+  /* Override permitted — NOT triggered */
+}
+
+/* === RESERVED FOR PHASE 61 (cooldown & execution damping) === */
+.sage-panel-cooldown {
+  /* Next: prevent repeated execution — still operator-gated */
+}
+
