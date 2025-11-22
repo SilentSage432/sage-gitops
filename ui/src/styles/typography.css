@@ -1,0 +1,58 @@
+/**
+ * UI Renaissance — Phase 3
+ * Typography + visual hierarchy refinement
+ *
+ * Zero layout changes
+ * Zero spacing changes
+ * No component restructuring
+ */
+
+body {
+  font-size: var(--sage-text-md);
+  line-height: 1.55;
+}
+
+/* Headings — subtle, not loud */
+h1, .sage-h1 {
+  font-size: var(--sage-text-xl);
+  font-weight: 600;
+  color: var(--sage-text-primary);
+  letter-spacing: -0.5px;
+}
+
+h2, .sage-h2 {
+  font-size: var(--sage-text-lg);
+  font-weight: 500;
+  color: var(--sage-text-primary);
+  letter-spacing: -0.25px;
+}
+
+h3, .sage-h3 {
+  font-size: var(--sage-text-md);
+  font-weight: 500;
+  color: var(--sage-text-secondary);
+}
+
+/* Terminal + log refinement */
+.sage-mono {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: var(--sage-text-sm);
+  color: var(--sage-text-primary);
+}
+
+/* Subtle emphasis without screaming */
+.sage-emphasis {
+  color: var(--sage-accent-primary);
+  font-weight: 500;
+}
+
+/* Muted text stays muted but cleaner */
+.sage-muted {
+  color: var(--sage-text-muted);
+}
+
+/* Prevents harsh jumps when resizing */
+* {
+  text-rendering: optimizeLegibility;
+}
+

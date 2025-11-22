@@ -1,5 +1,6 @@
 @import "./styles/designTokens.css";
 @import "./styles/globalSurfaces.css";
+@import "./styles/typography.css";
 
 @tailwind base;
 @tailwind components;
