@@ -5,6 +5,7 @@ import { useWhispererStream } from "./useWhispererStream";
 import { processCognitiveHooks } from "../../sage/cognition/whispererCognition";
 import { operatorCognitiveSync } from "../../systems/operatorCognitiveSync";
 import { operatorMemory } from "../../systems/operatorMemory";
+import { contextPromptEngine } from "../../systems/contextPromptEngine";
 import "./whisperer.css";
 
 export function WhispererTerminal() {
@@ -87,6 +88,35 @@ export function WhispererTerminal() {
           break;
       }
     }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Phase 47 — Contextual System Prompts (internal only)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const profile = operatorCognitiveSync.getProfile();
+      const trend = operatorMemory.getTrend();
+
+      const result = contextPromptEngine.evaluate({
+        engagementLevel: profile.engagementLevel,
+        trend,
+      });
+
+      switch (result) {
+        case "stabilize":
+          console.debug("[SAGE] Internal directive: stabilize output cadence.");
+          break;
+
+        case "optimize":
+          console.debug("[SAGE] Internal directive: optimize responsiveness.");
+          break;
+
+        default:
+          // no action — remain silent
+          break;
+      }
+    }, 8000);
 
     return () => clearInterval(interval);
   }, []);
