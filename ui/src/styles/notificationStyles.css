@@ -1,0 +1,69 @@
+/**
+ * UI Renaissance — Phase 17
+ * Notification & Toast Framework
+ *
+ * SAFETY GUARANTEES:
+ *  - No automatic activation
+ *  - No layout or spacing changes
+ *  - Purely optional visual usage
+ *
+ * NOTE:
+ *  This phase does NOT handle positioning or JS logic —
+ *  only the visual styling foundation.
+ */
+
+/* === BASE TOAST CONTAINER (opt-in only) === */
+.sage-toast {
+  background: var(--sage-surface-2);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: var(--sage-text-primary);
+  padding: var(--sage-space-3) var(--sage-space-4);
+  border-radius: 6px;
+  box-shadow: var(--sage-elevation-2);
+  font-size: var(--sage-text-sm);
+  font-family: var(--sage-font-main);
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease;
+}
+
+/* === Visible state (manual only) === */
+.sage-toast-active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* === STATUS VARIANTS — using Phase 9 tokens === */
+.sage-toast-success {
+  border-color: var(--sage-border-success);
+  background: var(--sage-surface-success);
+}
+
+.sage-toast-warning {
+  border-color: var(--sage-border-warning);
+  background: var(--sage-surface-warning);
+}
+
+.sage-toast-critical {
+  border-color: var(--sage-border-critical);
+  background: var(--sage-surface-critical);
+}
+
+/* === OPTIONAL CLOSE BUTTON STYLE (opt-in) === */
+.sage-toast-close {
+  background: transparent;
+  border: none;
+  color: var(--sage-text-muted);
+  cursor: pointer;
+  font-size: var(--sage-text-sm);
+  padding: 0;
+  margin-left: var(--sage-space-3);
+  transition: color 0.25s ease;
+}
+
+.sage-toast-close:hover {
+  color: var(--sage-text-primary);
+}
+
