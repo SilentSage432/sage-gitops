@@ -1,0 +1,38 @@
+/**
+ * Autonomous Action Layer — Phase 52
+ * Panel Auto-Opening Ruleset (Gated)
+ *
+ * PURPOSE:
+ *  - Define allowed panel actions WITHOUT executing them
+ *  - Prepare for controlled auto-open behavior in future phases
+ *  - Maintain strict operator-level gating
+ *
+ * SAFETY:
+ *  - No automatic activation
+ *  - Does NOT open panels
+ *  - No layout or visual changes
+ *  - Fully inert without explicit class application
+ *
+ * ACTIVATION REQUIREMENTS (manual only):
+ *  - .sage-auto-init
+ *  - .sage-auto-regulated
+ *  - .sage-auto-awakened
+ *  - .sage-auto-governed
+ *  - .sage-governor-elevated
+ *  - .sage-state-shift-ready
+ *  - .sage-state-shift-authorized   (new — allows action, not execution)
+ */
+
+/* === PANEL ACTION AUTHORIZATION (inactive, invisible) === */
+.sage-auto-init.sage-auto-regulated.sage-auto-awakened
+.sage-auto-governed.sage-governor-elevated.sage-state-shift-ready.sage-state-shift-authorized {
+  isolation: isolate;
+  pointer-events: auto;
+  /* Structural only — no visual output */
+}
+
+/* === RESERVED FOR PHASE 53 (severity-based routing, still gated) === */
+.sage-panel-route {
+  /* Will determine which panel is eligible — NOT auto-open */
+}
+

@@ -49,6 +49,7 @@
 @import "./styles/preAutonomousSafeguard.css";
 @import "./styles/stateMachineFoundation.css";
 @import "./styles/stateShiftInit.css";
+@import "./styles/panelActionRuleset.css";
 
 @tailwind base;
 @tailwind components;
