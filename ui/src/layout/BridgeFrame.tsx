@@ -17,6 +17,7 @@ import { subscribeKernel } from "../sage/kernel/KernelSignalBus";
 import useOperatorCortex from "../core/OperatorCortex";
 import useAutoSurface from "../core/AutoSurfaceEngine";
 import useAwarenessMatrix from "../core/awareness/AwarenessMatrix";
+import useAutonomicSafeguard from "../core/safeguards/useAutonomicSafeguard";
 import "../styles/ui-alerts.css";
 
 interface BridgeFrameProps {
@@ -37,6 +38,7 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
   const { state } = useOperatorEffect();
   const cortex = useOperatorCortex(selectedItem);
   const awareness = useAwarenessMatrix();
+  useAutonomicSafeguard(awareness);
   useAutoSurface(cortex.isOperatorActive);
   useHybridAutonomy();
   useUIAlertsBridge();
