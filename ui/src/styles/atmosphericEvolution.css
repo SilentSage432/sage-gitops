@@ -1,0 +1,57 @@
+/**
+ * UI Renaissance — Phase 42
+ * Controlled Atmospheric Evolution Layer
+ *
+ * PURPOSE:
+ *  - Introduce subtle environmental presence to the UI
+ *  - Begin shaping the "feel" of the interface when permitted
+ *  - Maintain restraint and enterprise-grade visual tone
+ *
+ * ACTIVATION REQUIREMENTS:
+ *  - .sage-auto-init
+ *  - .sage-auto-regulated
+ *  - .sage-auto-awakened
+ *  - .sage-atmos-identity
+ *  - .sage-tonal-seed
+ *  - .sage-tonal-awakened
+ *  - .sage-tonal-elevated
+ *  - .sage-atmos-elevated   (new)
+ *
+ * SAFETY:
+ *  - No automatic activation
+ *  - No layout or spacing changes
+ *  - Subtle and reversible
+ */
+
+/* === FIRST ENVIRONMENTAL PRESENCE (controlled + soft) === */
+.sage-auto-init.sage-auto-regulated.sage-auto-awakened
+  .sage-atmos-identity.sage-tonal-seed.sage-tonal-awakened.sage-tonal-elevated.sage-atmos-elevated {
+  opacity: 1;
+  filter:
+    brightness(1.03)
+    contrast(1.04)
+    saturate(1.035);
+  transition:
+    opacity 2s ease,
+    filter 2s ease;
+}
+
+/* === OPTIONAL DEPTH LAYERING (element-level) === */
+.sage-auto-init.sage-auto-regulated.sage-auto-awakened
+  .sage-atmos-identity.sage-tonal-seed.sage-tonal-awakened.sage-tonal-elevated.sage-atmos-elevated
+  .sage-atmos-layer {
+  opacity: 1;
+  filter:
+    brightness(1.04)
+    contrast(1.05)
+    saturate(1.045);
+  transition:
+    opacity 2.2s ease,
+    filter 2.2s ease;
+}
+
+/* === RESERVED FOR PHASE 45+ (true atmospheric intelligence) === */
+.sage-atmos-transcendent {
+  /* Will enable adaptive environmental behavior later */
+}
+

@@ -39,6 +39,7 @@
 @import "./styles/tonalSeeding.css";
 @import "./styles/tonalShift.css";
 @import "./styles/tonalEnhancement.css";
+@import "./styles/atmosphericEvolution.css";
 
 @tailwind base;
 @tailwind components;
