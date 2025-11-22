@@ -52,6 +52,7 @@
 @import "./styles/panelActionRuleset.css";
 @import "./styles/severityRouting.css";
 @import "./styles/activationPathway.css";
+@import "./styles/executionVerification.css";
 
 @tailwind base;
 @tailwind components;
