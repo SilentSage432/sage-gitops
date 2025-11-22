@@ -21,6 +21,7 @@
 @import "./styles/arcaneMotion.css";
 @import "./styles/cinematicTransitions.css";
 @import "./styles/sageIdentity.css";
+@import "./styles/autonomousPresence.css";
 
 @tailwind base;
 @tailwind components;

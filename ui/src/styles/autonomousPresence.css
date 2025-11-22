@@ -1,0 +1,56 @@
+/**
+ * UI Renaissance — Phase 24
+ * Autonomous Visual Presence Hooks
+ *
+ * PURPOSE:
+ *  - Prepare UI for SAGE-driven awareness states
+ *  - Enable silent, atmospheric signaling
+ *  - No automatic activation — future-controlled only
+ *
+ * SAFETY:
+ *  - No layout or spacing changes
+ *  - No visual changes unless classes are manually applied
+ *  - No behavior attached — styling only
+ */
+
+/* === SYSTEM IDLE PRESENCE (dormant baseline) === */
+.sage-presence-idle {
+  filter: brightness(1);
+  opacity: 0.98;
+  transition:
+    opacity 0.45s ease,
+    filter 0.45s ease;
+}
+
+/* === SYSTEM ATTENTION (manual or future-triggered) === */
+.sage-presence-attentive {
+  filter: brightness(1.035);
+  opacity: 1;
+  transition:
+    opacity 0.45s ease,
+    filter 0.45s ease;
+}
+
+/* === SYSTEM WARNING STATE (optional only) === */
+.sage-presence-warning {
+  box-shadow: 0 0 14px rgba(255, 185, 56, 0.25);
+  border-color: rgba(255, 185, 56, 0.35);
+  transition:
+    box-shadow 0.45s ease,
+    border-color 0.45s ease;
+}
+
+/* === SYSTEM CRITICAL STATE (optional only) === */
+.sage-presence-critical {
+  box-shadow: 0 0 18px rgba(255, 80, 80, 0.30);
+  border-color: rgba(255, 80, 80, 0.45);
+  transition:
+    box-shadow 0.45s ease,
+    border-color 0.45s ease;
+}
+
+/* === RESERVED FOR FUTURE AUTONOMOUS ACTIVATION === */
+.sage-presence-awakened {
+  /* Will be controlled by cognitive autonomy in Phase 30+ */
+}
+
