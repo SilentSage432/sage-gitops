@@ -105,15 +105,15 @@ export default function OperatorTerminal() {
         ))}
       </div>
 
-      <div className="sage-command-bar terminal-input-bar">
+      <div className="sage-command-bar flex items-center gap-3">
         <input
-          className="terminal-input"
+          className="flex-1 bg-black/20 border border-white/10 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500/50 placeholder-white/30 text-white"
           value={input}
           placeholder="Issue command..."
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleSend()}
         />
-        <button className="terminal-send" onClick={handleSend}>
+        <button className="bg-purple-600 hover:bg-purple-500 rounded-xl px-4 py-2 text-white transition-colors" onClick={handleSend}>
           Send
         </button>
       </div>
