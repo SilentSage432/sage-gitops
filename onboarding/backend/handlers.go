@@ -17,53 +17,104 @@ import (
 func handleWebAuthnChallenge(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	// Check if operator key already exists (only one allowed)
-	var exists bool
-	err := dbPool.QueryRow(ctx, "SELECT EXISTS(SELECT 1 FROM public.operator_keys)").Scan(&exists)
-	if err != nil {
-		http.Error(w, "Database error", http.StatusInternalServerError)
-		return
-	}
-
-	var user *WebAuthnUser
-	if exists {
-		// Load existing user for authentication
-		user = &WebAuthnUser{
-			ID:          []byte("tyson-only"),
-			Name:        "tyson",
-			DisplayName: "Tyson Zaugg",
-		}
-	} else {
-		// New registration
-		user = &WebAuthnUser{
-			ID:          []byte("tyson-only"),
-			Name:        "tyson",
-			DisplayName: "Tyson Zaugg",
-		}
-	}
-
-	options, session, err := webAuthn.BeginRegistration(user)
-	if err != nil {
-		http.Error(w, fmt.Sprintf("Failed to begin registration: %v", err), http.StatusInternalServerError)
-		return
-	}
-
-	// Store session in database
-	sessionJSON, _ := json.Marshal(session)
-	_, err = dbPool.Exec(ctx,
-		"INSERT INTO public.operator_keys (id, user_id, session_data, created_at) VALUES ($1, $2, $3, $4) ON CONFLICT (user_id) DO UPDATE SET session_data = $3, updated_at = $4",
-		uuid.New().String(),
+	// Check if operator key already exists and has credentials
+	var hasCredential bool
+	err := dbPool.QueryRow(ctx, 
+		"SELECT EXISTS(SELECT 1 FROM public.operator_keys WHERE user_id = $1 AND credential_data IS NOT NULL)",
 		"tyson",
-		sessionJSON,
-		time.Now(),
-	)
+	).Scan(&hasCredential)
+	
 	if err != nil {
-		http.Error(w, "Failed to store session", http.StatusInternalServerError)
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"error": "Database error",
+		})
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(options)
+	user := &WebAuthnUser{
+		ID:          []byte("tyson-only"),
+		Name:        "tyson",
+		DisplayName: "Tyson Zaugg",
+		userID:      "tyson",
+	}
+
+	// Load credentials from database if they exist (for authentication)
+	if hasCredential {
+		var credentialBytes []byte
+		err = dbPool.QueryRow(ctx,
+			"SELECT credential_data FROM public.operator_keys WHERE user_id = $1 AND credential_data IS NOT NULL ORDER BY created_at DESC LIMIT 1",
+			"tyson",
+		).Scan(&credentialBytes)
+		
+		if err == nil {
+			var cred webauthn.Credential
+			if err := json.Unmarshal(credentialBytes, &cred); err == nil {
+				user.credentials = []webauthn.Credential{cred}
+			}
+		}
+
+		// Begin authentication flow
+		options, session, err := webAuthn.BeginLogin(user)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(map[string]interface{}{
+				"error": fmt.Sprintf("Failed to begin login: %v", err),
+			})
+			return
+		}
+
+		// Store session in database
+		sessionJSON, _ := json.Marshal(session)
+		_, err = dbPool.Exec(ctx,
+			"UPDATE public.operator_keys SET session_data = $1, updated_at = $2 WHERE user_id = $3",
+			sessionJSON,
+			time.Now(),
+			"tyson",
+		)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(map[string]interface{}{
+				"error": "Failed to store session",
+			})
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(options)
+	} else {
+		// Begin registration flow
+		options, session, err := webAuthn.BeginRegistration(user)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(map[string]interface{}{
+				"error": fmt.Sprintf("Failed to begin registration: %v", err),
+			})
+			return
+		}
+
+		// Store session in database
+		sessionJSON, _ := json.Marshal(session)
+		_, err = dbPool.Exec(ctx,
+			"INSERT INTO public.operator_keys (id, user_id, session_data, created_at) VALUES ($1, $2, $3, $4) ON CONFLICT (user_id) DO UPDATE SET session_data = $3, updated_at = $4",
+			uuid.New().String(),
+			"tyson",
+			sessionJSON,
+			time.Now(),
+		)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(map[string]interface{}{
+				"error": "Failed to store session",
+			})
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(options)
+	}
 }
 
 // WebAuthn Verify Handler
@@ -99,17 +150,46 @@ func handleWebAuthnVerify(w http.ResponseWriter, r *http.Request) {
 		"tyson",
 	).Scan(&hasCredential)
 
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"error": "Database error",
+		})
+		return
+	}
+
 	user := &WebAuthnUser{
 		ID:          []byte("tyson-only"),
 		Name:        "tyson",
 		DisplayName: "Tyson Zaugg",
+		userID:      "tyson",
+	}
+
+	// Load credentials from database if they exist
+	if hasCredential {
+		var credentialBytes []byte
+		err = dbPool.QueryRow(ctx,
+			"SELECT credential_data FROM public.operator_keys WHERE user_id = $1 AND credential_data IS NOT NULL ORDER BY created_at DESC LIMIT 1",
+			"tyson",
+		).Scan(&credentialBytes)
+		
+		if err == nil {
+			var cred webauthn.Credential
+			if err := json.Unmarshal(credentialBytes, &cred); err == nil {
+				user.credentials = []webauthn.Credential{cred}
+			}
+		}
 	}
 
 	if hasCredential {
 		// Authentication flow
 		_, err := webAuthn.FinishLogin(user, session, r)
 		if err != nil {
-			http.Error(w, fmt.Sprintf("Authentication failed: %v", err), http.StatusUnauthorized)
+			w.WriteHeader(http.StatusUnauthorized)
+			json.NewEncoder(w).Encode(map[string]interface{}{
+				"success": false,
+				"error":   fmt.Sprintf("Authentication failed: %v", err),
+			})
 			return
 		}
 
@@ -125,7 +205,11 @@ func handleWebAuthnVerify(w http.ResponseWriter, r *http.Request) {
 		// Registration flow
 		credentialData, err := webAuthn.FinishRegistration(user, session, r)
 		if err != nil {
-			http.Error(w, fmt.Sprintf("Registration failed: %v", err), http.StatusUnauthorized)
+			w.WriteHeader(http.StatusUnauthorized)
+			json.NewEncoder(w).Encode(map[string]interface{}{
+				"success": false,
+				"error":   fmt.Sprintf("Registration failed: %v", err),
+			})
 			return
 		}
 
@@ -138,7 +222,11 @@ func handleWebAuthnVerify(w http.ResponseWriter, r *http.Request) {
 			"tyson",
 		)
 		if err != nil {
-			http.Error(w, "Failed to store credential", http.StatusInternalServerError)
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(map[string]interface{}{
+				"success": false,
+				"error":   "Failed to store credential",
+			})
 			return
 		}
 
@@ -153,6 +241,7 @@ func handleWebAuthnVerify(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(map[string]interface{}{
 		"success":    true,
 		"deviceName": "YubiKey",
@@ -464,6 +553,8 @@ type WebAuthnUser struct {
 	ID          []byte
 	Name        string
 	DisplayName string
+	userID      string
+	credentials []webauthn.Credential
 }
 
 func (u *WebAuthnUser) WebAuthnID() []byte {
@@ -479,7 +570,10 @@ func (u *WebAuthnUser) WebAuthnDisplayName() string {
 }
 
 func (u *WebAuthnUser) WebAuthnCredentials() []webauthn.Credential {
-	return []webauthn.Credential{}
+	if u.credentials == nil {
+		return []webauthn.Credential{}
+	}
+	return u.credentials
 }
 
 func (u *WebAuthnUser) WebAuthnIcon() string {
