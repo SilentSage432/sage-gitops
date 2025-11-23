@@ -14,7 +14,7 @@ export function YubiKeyGate() {
   // DEV BYPASS: allows UI development without hardware
   useEffect(() => {
     if (process.env.NEXT_PUBLIC_BYPASS_YUBIKEY === "true") {
-      // Auto-issue OCT and redirect (OCTGuard will also bypass)
+      // Auto-issue OCT and redirect to onboarding (OCTGuard will also bypass)
       const bypassAuth = async () => {
         try {
           const octResponse = await issueOCT();
@@ -27,7 +27,7 @@ export function YubiKeyGate() {
           // Backend may not be available - OCTGuard bypass will handle access
           console.warn('Bypass: OCT issuance failed (backend may be unavailable)');
         }
-        router.push('/initiator');
+        router.push('/onboarding/company');
       };
       bypassAuth();
     }

@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/go-webauthn/webauthn/webauthn"
@@ -252,7 +253,47 @@ func handleWebAuthnVerify(w http.ResponseWriter, r *http.Request) {
 func handleIssueOCT(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	// Verify that user is authenticated (has credential in database)
+	// DEV BYPASS: Generate mock OCT token when BYPASS_YUBIKEY=true
+	if os.Getenv("BYPASS_YUBIKEY") == "true" {
+		now := time.Now()
+		expiresAt := now.Add(10 * time.Minute)
+
+		claims := jwt.MapClaims{
+			"sub":    "dev-operator",
+			"iat":    now.Unix(),
+			"exp":    expiresAt.Unix(),
+			"scopes": []string{"tenant.create", "agent.plan.create", "bootstrap.sign"},
+			"type":   "oct",
+			"jti":    uuid.New().String(),
+		}
+
+		token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
+		tokenString, err := token.SignedString(privateKey)
+		if err != nil {
+			http.Error(w, "Failed to sign token", http.StatusInternalServerError)
+			return
+		}
+
+		// Store token in database for consistency
+		_, _ = dbPool.Exec(ctx,
+			"INSERT INTO public.capability_tokens (token_id, user_id, scopes, expires_at, created_at) VALUES ($1, $2, $3, $4, $5)",
+			claims["jti"],
+			"dev-operator",
+			[]string{"tenant.create", "agent.plan.create", "bootstrap.sign"},
+			expiresAt,
+			now,
+		)
+
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"token":     tokenString,
+			"expiresAt": expiresAt.Unix() * 1000, // JavaScript timestamp
+			"scopes":    []string{"tenant.create", "agent.plan.create", "bootstrap.sign"},
+		})
+		return
+	}
+
+	// Normal flow: Verify that user is authenticated (has credential in database)
 	var hasCredential bool
 	err := dbPool.QueryRow(ctx,
 		"SELECT EXISTS(SELECT 1 FROM public.operator_keys WHERE user_id = $1 AND credential_data IS NOT NULL)",
