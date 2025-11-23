@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./app/App";
 import { OperatorMemoryProvider } from "./core/OperatorMemoryContext";
 import "./index.css";
+import "./styles/federationLayout.css";
 import "./styles/sageSurface.css";
 import "./sage/kernel/animations.css";
 import "./sage/kernel/reflexAnimations.css";
