@@ -8,6 +8,11 @@ export function OCTGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [valid, setValid] = useState<boolean | null>(null);
 
+  // DEV BYPASS: allows UI development without hardware
+  if (process.env.NEXT_PUBLIC_BYPASS_YUBIKEY === "true") {
+    return <>{children}</>;
+  }
+
   useEffect(() => {
     const checkOCT = () => {
       const valid = isOCTValid();

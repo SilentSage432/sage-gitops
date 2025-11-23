@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { performWebAuthnRegistration, performWebAuthnAuthentication, issueOCT } from '@/lib/api/auth';
 import { storeOCT } from '@/lib/api/oct';
 import { useRouter } from 'next/navigation';
@@ -10,6 +10,28 @@ export function YubiKeyGate() {
   const [deviceName, setDeviceName] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+
+  // DEV BYPASS: allows UI development without hardware
+  useEffect(() => {
+    if (process.env.NEXT_PUBLIC_BYPASS_YUBIKEY === "true") {
+      // Auto-issue OCT and redirect (OCTGuard will also bypass)
+      const bypassAuth = async () => {
+        try {
+          const octResponse = await issueOCT();
+          storeOCT({
+            token: octResponse.token,
+            expiresAt: octResponse.expiresAt,
+            scopes: octResponse.scopes,
+          });
+        } catch (err) {
+          // Backend may not be available - OCTGuard bypass will handle access
+          console.warn('Bypass: OCT issuance failed (backend may be unavailable)');
+        }
+        router.push('/initiator');
+      };
+      bypassAuth();
+    }
+  }, [router]);
 
   const handleRegister = async () => {
     setStatus('registering');
@@ -83,6 +105,11 @@ export function YubiKeyGate() {
       setStatus('error');
     }
   };
+
+  // DEV BYPASS: Skip rendering gate UI if bypass is enabled
+  if (process.env.NEXT_PUBLIC_BYPASS_YUBIKEY === "true") {
+    return null;
+  }
 
   return (
     <div className="bg-[#111317] border border-white/10 p-8 max-w-md mx-auto rounded-[14px]">
