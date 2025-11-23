@@ -60,7 +60,7 @@ export const WhispererInput: React.FC<WhispererInputProps> = ({ onSend }) => {
   }, [value, adjustHeight]);
 
   return (
-    <div className="sage-command-bar whisperer-input flex items-end gap-3">
+    <div className="federation-input-dock sage-command-bar whisperer-input flex items-end gap-3">
       <textarea
         ref={textareaRef}
         className="whisperer-input-area flex-1 resize-none rounded-xl border bg-[#050506] p-3 text-sm text-slate-100 placeholder:text-slate-500 transition"

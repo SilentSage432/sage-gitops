@@ -125,20 +125,20 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
       `}
     >
       <div className="sage-surface flex flex-1 overflow-hidden min-h-0">
-        {/* Left Sidebar: Federation Navigator */}
-        <div className="w-64 border-r border-slate-800 flex-shrink-0 overflow-y-auto">
+        {/* Left Panel: Federation Navigation */}
+        <div className="federation-left-nav w-64 border-r border-slate-800 flex-shrink-0 overflow-y-auto">
           <SidebarNavigator selectedItem={selectedItem} onSelectItem={onSelectItem} />
         </div>
 
-        {/* Center: Whisperer Terminal */}
-        <div className="sage-main-console flex-1 flex flex-col overflow-hidden min-h-0">
+        {/* Center Panel: Command Core */}
+        <div className="federation-command-core sage-main-console flex-1 flex flex-col overflow-hidden min-h-0">
           <WhispererTerminal />
         </div>
 
-        {/* Right Panel: Active Chamber / Detail Panel */}
+        {/* Right Panel: Telemetry & Control */}
         {activeChamber && (
           <div
-            className="sage-right-panel
+            className="federation-intel-stack sage-right-panel
               w-96 border-l border-slate-800 flex-shrink-0
               flex flex-col min-h-0
             "

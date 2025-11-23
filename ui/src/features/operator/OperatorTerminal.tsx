@@ -82,11 +82,11 @@ export default function OperatorTerminal() {
   }, [activeFilter, log]);
 
   return (
-    <div className="operator-terminal-container flex flex-col h-full overflow-hidden">
+    <div className="federation-intel-stack operator-terminal-container flex flex-col h-full overflow-hidden">
       {/* SAGE Federation Header */}
       <div className="sage-operator-header px-4 py-3">
         <h2 className="text-sm tracking-wide uppercase opacity-80">
-          SAGE Federation
+          Telemetry & Control
         </h2>
       </div>
 
