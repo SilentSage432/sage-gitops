@@ -1,5 +1,24 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Environment Variables
+
+Create a `.env.local` file in the frontend directory with the following variables:
+
+```bash
+# Development Bypass
+# Set to "true" to skip WebAuthn/YubiKey authentication in development
+# NEVER set this to "true" in production
+NEXT_PUBLIC_BYPASS_YUBIKEY=false
+
+# API Configuration
+NEXT_PUBLIC_API_URL=http://localhost:8080
+
+# Onboarding URL (for callback URLs)
+NEXT_PUBLIC_ONBOARDING_URL=http://localhost:3000
+```
+
+**Note**: When `NEXT_PUBLIC_BYPASS_YUBIKEY=true`, the frontend will skip WebAuthn authentication and the backend (when `BYPASS_YUBIKEY=true`) will generate mock OCT tokens for development purposes only.
+
 ## Getting Started
 
 First, run the development server:
