@@ -33,7 +33,7 @@ export default function OperatorTerminal() {
 
   const [input, setInput] = useState("");
   const [log, setLog] = useState<
-    { text: string; category: LogCategory; ts: number }[]
+    { text?: string; message?: string; category: LogCategory; ts: number }[]
   >([]);
 
   const logRef = useRef<HTMLDivElement>(null);
@@ -75,7 +75,7 @@ export default function OperatorTerminal() {
     const response = await routeCommand(inputValue);
     setLog((prev) => [
       ...prev,
-      { text: response.message, category: "WHISPERER", ts: response.timestamp },
+      { message: response.message, category: "WHISPERER", ts: response.timestamp },
     ]);
   };
 
@@ -112,7 +112,7 @@ export default function OperatorTerminal() {
       <div className="command-bridge-log flex-1 overflow-y-auto px-4 py-4 sage-terminal-log" ref={logRef}>
         {filteredLog.map((entry, idx) => (
           <div key={idx} className={`text-sm mb-1 whitespace-pre-wrap opacity-90 terminal-line cat-${entry.category.toLowerCase()}`}>
-            {entry.text}
+            {entry.message || entry.text}
           </div>
         ))}
       </div>
