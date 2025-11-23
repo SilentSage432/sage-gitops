@@ -192,3 +192,21 @@ nav a.active,
   backdrop-filter: blur(4px);
   transition: background 0.35s ease, box-shadow 0.35s ease;
 }
+
+:root {
+  --sage-font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --sage-font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  --sage-text-primary: #e8ecf7;
+  --sage-text-secondary: rgba(232, 236, 247, 0.6);
+  --sage-text-dim: rgba(232, 236, 247, 0.38);
+}
+
+body, #root {
+  font-family: var(--sage-font-main);
+  color: var(--sage-text-primary);
+}
+
+.sage-mono {
+  font-family: var(--sage-font-mono);
+}
