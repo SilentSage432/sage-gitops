@@ -3,8 +3,12 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 
 export interface CompanyData {
   name: string;
-  domain: string;
-  region: string;
+  industry?: 'Healthcare' | 'Finance' | 'Retail' | 'Manufacturing' | 'Other';
+  size?: '1-10' | '11-50' | '51-200' | '200+';
+  email: string;
+  // Legacy fields for backward compatibility
+  domain?: string;
+  region?: string;
 }
 
 export interface DataRegion {
