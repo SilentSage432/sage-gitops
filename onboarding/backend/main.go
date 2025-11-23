@@ -15,6 +15,7 @@ import (
 	"github.com/go-webauthn/webauthn/webauthn"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/joho/godotenv"
 )
 
 var (
@@ -24,6 +25,8 @@ var (
 )
 
 func main() {
+	godotenv.Load()
+
 	ctx := context.Background()
 
 	// Initialize database connection
