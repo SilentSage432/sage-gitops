@@ -17,6 +17,12 @@ export interface DataRegion {
   selected: boolean;
 }
 
+export interface DataRegionsConfig {
+  sensitivity?: 'None' | 'PCI' | 'PHI / HIPAA' | 'High Confidential';
+  selectedRegions: string[];
+  residencyRequired: boolean;
+}
+
 export interface AgentPlan {
   plan: 'starter' | 'growth' | 'enterprise' | null;
   agentCount: number;
@@ -35,12 +41,14 @@ export interface OnboardingProgress {
 interface OnboardingState {
   company: CompanyData | null;
   dataRegions: DataRegion[];
+  dataRegionsConfig: DataRegionsConfig | null;
   agentPlan: AgentPlan | null;
   accessModel: AccessModel | null;
   progress: OnboardingProgress;
   
   setCompany: (company: CompanyData) => void;
   setDataRegions: (regions: DataRegion[]) => void;
+  setDataRegionsConfig: (config: DataRegionsConfig) => void;
   setAgentPlan: (plan: AgentPlan) => void;
   setAccessModel: (model: AccessModel) => void;
   setProgress: (progress: OnboardingProgress) => void;
@@ -51,6 +59,7 @@ interface OnboardingState {
 const defaultState = {
   company: null,
   dataRegions: [],
+  dataRegionsConfig: null,
   agentPlan: null,
   accessModel: null,
   progress: {
@@ -67,6 +76,8 @@ export const useOnboardingStore = create<OnboardingState>()(
       setCompany: (company) => set({ company }),
       
       setDataRegions: (regions) => set({ dataRegions: regions }),
+      
+      setDataRegionsConfig: (config) => set({ dataRegionsConfig: config }),
       
       setAgentPlan: (plan) => set({ agentPlan: plan }),
       
@@ -87,6 +98,7 @@ export const useOnboardingStore = create<OnboardingState>()(
       partialize: (state) => ({
         company: state.company,
         dataRegions: state.dataRegions,
+        dataRegionsConfig: state.dataRegionsConfig,
         agentPlan: state.agentPlan,
         accessModel: state.accessModel,
         progress: state.progress,
