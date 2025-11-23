@@ -43,6 +43,19 @@ export interface AccessModel {
   description: string;
 }
 
+export interface AccessConfig {
+  authMethod: 'local' | 'sso';
+  scimEnabled?: boolean;
+  // SSO fields
+  identityProvider?: 'Okta' | 'Azure AD' | 'Google Workspace' | 'OneLogin' | 'Other';
+  clientId?: string;
+  clientSecret?: string;
+  callbackUrl?: string;
+  // Local account fields
+  adminEmail?: string;
+  tempPassword?: string;
+}
+
 export interface OnboardingProgress {
   currentStep: number;
   completed: boolean;
@@ -55,6 +68,7 @@ interface OnboardingState {
   agentPlan: AgentPlan | null;
   agentSelection: AgentSelection | null;
   accessModel: AccessModel | null;
+  accessConfig: AccessConfig | null;
   progress: OnboardingProgress;
   
   setCompany: (company: CompanyData) => void;
@@ -63,6 +77,7 @@ interface OnboardingState {
   setAgentPlan: (plan: AgentPlan) => void;
   setAgentSelection: (selection: AgentSelection) => void;
   setAccessModel: (model: AccessModel) => void;
+  setAccessConfig: (config: AccessConfig) => void;
   setProgress: (progress: OnboardingProgress) => void;
   saveProgress: () => void;
   reset: () => void;
@@ -75,6 +90,7 @@ const defaultState = {
   agentPlan: null,
   agentSelection: null,
   accessModel: null,
+  accessConfig: null,
   progress: {
     currentStep: 0,
     completed: false,
@@ -98,6 +114,8 @@ export const useOnboardingStore = create<OnboardingState>()(
       
       setAccessModel: (model) => set({ accessModel: model }),
       
+      setAccessConfig: (config) => set({ accessConfig: config }),
+      
       setProgress: (progress) => set({ progress }),
       
       saveProgress: () => {
@@ -117,6 +135,7 @@ export const useOnboardingStore = create<OnboardingState>()(
         agentPlan: state.agentPlan,
         agentSelection: state.agentSelection,
         accessModel: state.accessModel,
+        accessConfig: state.accessConfig,
         progress: state.progress,
       }),
     }
