@@ -105,7 +105,16 @@ export default function OperatorTerminal() {
         ))}
       </div>
 
-      {/* Command Bar (Top Docked) */}
+      {/* Log Output (Scrollable Feed) */}
+      <div className="command-bridge-log flex-1 overflow-y-auto px-4 py-4 sage-terminal-log" ref={logRef}>
+        {filteredLog.map((entry, idx) => (
+          <div key={idx} className={`text-sm mb-1 whitespace-pre-wrap opacity-90 terminal-line cat-${entry.category.toLowerCase()}`}>
+            {entry.text}
+          </div>
+        ))}
+      </div>
+
+      {/* Command Bar (Bottom Anchored) */}
       <div className="sage-command-bar flex items-center gap-3 px-4 py-3">
         <input
           className="flex-1 bg-transparent border border-white/10 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500/50 placeholder-white/40 text-white"
@@ -120,15 +129,6 @@ export default function OperatorTerminal() {
         >
           Send
         </button>
-      </div>
-
-      {/* Log Output (Fills Remaining Space) */}
-      <div className="flex-1 overflow-y-auto px-4 py-4 sage-terminal-log" ref={logRef}>
-        {filteredLog.map((entry, idx) => (
-          <div key={idx} className={`text-sm mb-1 whitespace-pre-wrap opacity-90 terminal-line cat-${entry.category.toLowerCase()}`}>
-            {entry.text}
-          </div>
-        ))}
       </div>
     </div>
   );
