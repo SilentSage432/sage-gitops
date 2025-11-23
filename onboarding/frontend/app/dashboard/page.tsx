@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -8,6 +9,11 @@ import { OCTGuard } from '@/components/OCTGuard';
 import { CheckCircle2, Clock, Building2, MapPin, Calendar } from 'lucide-react';
 
 export default function DashboardPage() {
+  // Loading states
+  const [isGeneratingKit, setIsGeneratingKit] = useState(false);
+  const [isViewingPlans, setIsViewingPlans] = useState(false);
+  const [activityVisible, setActivityVisible] = useState<boolean[]>([]);
+
   // Mock data
   const tenantName = 'Acme Industries';
   const region = 'US-West';
@@ -26,6 +32,39 @@ export default function DashboardPage() {
     { action: 'Bootstrap kit generated', timestamp: `${onboardingDate} at ${currentTime}` },
     { action: 'Operator verified identity', timestamp: `${onboardingDate} at ${currentTime}` },
   ];
+
+  // Stagger activity feed items on mount
+  useEffect(() => {
+    // Initialize with correct length
+    const itemCount = activityItems.length;
+    setActivityVisible(new Array(itemCount).fill(false));
+    
+    // Stagger visibility
+    activityItems.forEach((_, index) => {
+      setTimeout(() => {
+        setActivityVisible((prev) => {
+          const newState = [...prev];
+          newState[index] = true;
+          return newState;
+        });
+      }, index * 100);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleGenerateKit = () => {
+    setIsGeneratingKit(true);
+    setTimeout(() => {
+      setIsGeneratingKit(false);
+    }, 800);
+  };
+
+  const handleViewPlans = () => {
+    setIsViewingPlans(true);
+    setTimeout(() => {
+      setIsViewingPlans(false);
+    }, 800);
+  };
 
   return (
     <OCTGuard>
@@ -91,7 +130,7 @@ export default function DashboardPage() {
               transition={{ duration: 0.5, delay: 0.3 }}
               className="grid grid-cols-1 sm:grid-cols-3 gap-4"
             >
-              <Card className="border-white/10 bg-[#111317]">
+              <Card className="border-white/10 bg-[#111317] hover:border-violet-400/30 hover:scale-[1.01] transition-transform focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:outline-none">
                 <CardContent className="pt-6">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm text-white/60 flex items-center gap-2">
@@ -106,7 +145,7 @@ export default function DashboardPage() {
                 </CardContent>
               </Card>
 
-              <Card className="border-white/10 bg-[#111317]">
+              <Card className="border-white/10 bg-[#111317] hover:border-violet-400/30 hover:scale-[1.01] transition-transform focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:outline-none">
                 <CardContent className="pt-6">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm text-white/60 flex items-center gap-2">
@@ -121,7 +160,7 @@ export default function DashboardPage() {
                 </CardContent>
               </Card>
 
-              <Card className="border-white/10 bg-[#111317]">
+              <Card className="border-white/10 bg-[#111317] hover:border-violet-400/30 hover:scale-[1.01] transition-transform focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:outline-none">
                 <CardContent className="pt-6">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm text-white/60 flex items-center gap-2">
@@ -148,19 +187,23 @@ export default function DashboardPage() {
                 <CardContent>
                   <div className="space-y-3">
                     <Button
-                      className="w-full justify-start"
+                      className="w-full justify-start hover:bg-violet-600 active:bg-violet-700 transition-colors focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:outline-none"
                       variant="default"
+                      onClick={handleGenerateKit}
+                      disabled={isGeneratingKit}
                     >
-                      Generate New Bootstrap Kit
+                      {isGeneratingKit ? 'Generating…' : 'Generate New Bootstrap Kit'}
                     </Button>
                     <Button
-                      className="w-full justify-start"
+                      className="w-full justify-start hover:bg-neutral-800 active:bg-neutral-900 transition-colors focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:outline-none"
                       variant="outline"
+                      onClick={handleViewPlans}
+                      disabled={isViewingPlans}
                     >
-                      View Agent Plans
+                      {isViewingPlans ? 'Loading…' : 'View Agent Plans'}
                     </Button>
                     <Button
-                      className="w-full justify-start opacity-40 cursor-not-allowed"
+                      className="w-full justify-start opacity-40 cursor-not-allowed focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:outline-none"
                       variant="outline"
                       disabled
                     >
@@ -184,7 +227,12 @@ export default function DashboardPage() {
                 <CardContent>
                   <ul className="space-y-3">
                     {activityItems.map((item, index) => (
-                      <li key={index} className="border-l border-white/10 pl-4">
+                      <li
+                        key={index}
+                        className={`border-l border-white/10 pl-4 ${
+                          activityVisible[index] ? 'animate-in fade-in duration-200' : 'opacity-0'
+                        }`}
+                      >
                         <span className="text-sm text-neutral-300 block">{item.action}</span>
                         <span className="text-xs text-neutral-500 block mt-1">{item.timestamp}</span>
                       </li>
