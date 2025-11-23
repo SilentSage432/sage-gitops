@@ -37,15 +37,15 @@ export function InitiatorBadge() {
   if (!oct) return null;
 
   return (
-    <div className="glass p-4 mb-6">
+    <div className="bg-[#111317] border border-white/10 p-4 mb-6 rounded-[14px]">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-sm font-semibold mb-1">Operator Capability Token (OCT)</h3>
+          <h3 className="text-sm font-semibold mb-1 text-[#e2e6ee]">Operator Capability Token (OCT)</h3>
           <div className="flex flex-wrap gap-2 mt-2">
             {oct.scopes.map((scope, idx) => (
               <span
                 key={idx}
-                className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full"
+                className="px-2 py-1 bg-[#1a1d22] text-[#6366f1] text-xs rounded-full border border-white/10"
               >
                 {scope}
               </span>
@@ -53,8 +53,8 @@ export function InitiatorBadge() {
           </div>
         </div>
         <div className="text-right">
-          <div className="text-xs text-gray-600 mb-1">Time Remaining</div>
-          <div className="text-lg font-mono font-semibold text-blue-600">
+          <div className="text-xs text-white/60 mb-1">Time Remaining</div>
+          <div className="text-lg font-mono font-semibold text-[#6366f1]">
             {formatTime(timeRemaining)}
           </div>
         </div>

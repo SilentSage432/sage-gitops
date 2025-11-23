@@ -49,17 +49,17 @@ export function WizardActions({ currentStep, onNext, onBack, onSubmit, canProcee
   };
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 glass p-4 border-t border-white/20">
+    <div className="fixed bottom-0 left-0 right-0 bg-[#111317] border-t border-white/10 p-4">
       <div className="max-w-4xl mx-auto flex items-center justify-between">
         <button
           onClick={handleBack}
           disabled={isFirstStep}
-          className="px-6 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="px-6 py-2 bg-[#1a1d22] text-white/60 hover:text-white border border-white/10 rounded-[14px] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           Back
         </button>
         
-        <div className="text-sm text-gray-600">
+        <div className="text-sm text-white/60">
           Step {currentStep + 1} of {stepPaths.length}
         </div>
 
@@ -67,7 +67,7 @@ export function WizardActions({ currentStep, onNext, onBack, onSubmit, canProcee
           <button
             onClick={handleSubmit}
             disabled={!canProceed}
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="px-6 py-2 bg-[#6366f1] text-white rounded-[14px] hover:bg-[#585ae8] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             Complete Onboarding
           </button>
@@ -75,7 +75,7 @@ export function WizardActions({ currentStep, onNext, onBack, onSubmit, canProcee
           <button
             onClick={handleNext}
             disabled={!canProceed}
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="px-6 py-2 bg-[#6366f1] text-white rounded-[14px] hover:bg-[#585ae8] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             Next
           </button>

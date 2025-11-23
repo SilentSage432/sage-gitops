@@ -85,25 +85,25 @@ export function YubiKeyGate() {
   };
 
   return (
-    <div className="glass p-8 max-w-md mx-auto">
+    <div className="bg-[#111317] border border-white/10 p-8 max-w-md mx-auto rounded-[14px]">
       <div className="text-center mb-6">
-        <h2 className="text-2xl font-semibold mb-2">Hardware Authentication Required</h2>
-        <p className="text-sm text-gray-600">
+        <h2 className="text-2xl font-semibold mb-2 text-[#e2e6ee]">Hardware Authentication Required</h2>
+        <p className="text-sm text-white/60">
           Connect your YubiKey to continue
         </p>
       </div>
 
       {status === 'success' && deviceName && (
-        <div className="mb-4 p-4 bg-green-50 rounded-lg border border-green-200">
-          <p className="text-sm text-green-800">
+        <div className="mb-4 p-4 bg-[#1a1d22] rounded-[14px] border border-white/10">
+          <p className="text-sm text-white/80">
             ✅ Authenticated with {deviceName}
           </p>
         </div>
       )}
 
       {error && (
-        <div className="mb-4 p-4 bg-red-50 rounded-lg border border-red-200">
-          <p className="text-sm text-red-800">{error}</p>
+        <div className="mb-4 p-4 bg-[#1a1d22] rounded-[14px] border border-white/10">
+          <p className="text-sm text-white/80">{error}</p>
         </div>
       )}
 
@@ -113,14 +113,14 @@ export function YubiKeyGate() {
             <button
               onClick={handleRegister}
               disabled={status !== 'idle'}
-              className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="w-full px-4 py-3 bg-[#6366f1] hover:bg-[#585ae8] text-white rounded-[14px] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               Register YubiKey
             </button>
             <button
               onClick={handleAuthenticate}
               disabled={status !== 'idle'}
-              className="w-full px-4 py-3 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="w-full px-4 py-3 bg-[#1a1d22] text-white/60 hover:text-white border border-white/10 rounded-[14px] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               Authenticate with YubiKey
             </button>
@@ -129,8 +129,8 @@ export function YubiKeyGate() {
 
         {(status === 'registering' || status === 'authenticating' || status === 'checking') && (
           <div className="text-center py-4">
-            <div className="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
-            <p className="mt-2 text-sm text-gray-600">
+            <div className="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-[#6366f1]"></div>
+            <p className="mt-2 text-sm text-white/60">
               {status === 'registering' && 'Registering device...'}
               {status === 'authenticating' && 'Authenticating...'}
               {status === 'checking' && 'Checking device...'}

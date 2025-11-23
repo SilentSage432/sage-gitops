@@ -29,48 +29,48 @@ export default function CompanyPage() {
 
   return (
     <OCTGuard>
-      <div className="min-h-screen p-8 pb-24">
+      <div className="min-h-screen bg-[#0b0c0f] text-white p-8 pb-24">
         <div className="max-w-4xl mx-auto">
           <WizardStepper currentStep={0} />
           
-          <div className="glass p-8">
-            <h2 className="text-2xl font-semibold mb-6">Company Information</h2>
+          <div className="bg-[#111317] border border-white/10 p-8 rounded-[14px]">
+            <h2 className="text-2xl font-semibold mb-6 text-[#e2e6ee]">Company Information</h2>
             
             <div className="space-y-6">
               <div>
-                <label className="block text-sm font-medium mb-2">Company Name</label>
+                <label className="block text-sm font-medium mb-2 text-[#e2e6ee]">Company Name</label>
                 <input
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 bg-[#1a1d22] border border-white/10 text-white rounded-[14px] focus:border-[#6366f1] focus:outline-none placeholder:text-white/40"
                   placeholder="Enter company name"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">Domain</label>
+                <label className="block text-sm font-medium mb-2 text-[#e2e6ee]">Domain</label>
                 <input
                   type="text"
                   value={formData.domain}
                   onChange={(e) => setFormData({ ...formData, domain: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 bg-[#1a1d22] border border-white/10 text-white rounded-[14px] focus:border-[#6366f1] focus:outline-none placeholder:text-white/40"
                   placeholder="example.com"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">Primary Region</label>
+                <label className="block text-sm font-medium mb-2 text-[#e2e6ee]">Primary Region</label>
                 <select
                   value={formData.region}
                   onChange={(e) => setFormData({ ...formData, region: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 bg-[#1a1d22] border border-white/10 text-white rounded-[14px] focus:border-[#6366f1] focus:outline-none"
                 >
-                  <option value="">Select region</option>
-                  <option value="us-east-1">US East (N. Virginia)</option>
-                  <option value="us-west-2">US West (Oregon)</option>
-                  <option value="eu-west-1">Europe (Ireland)</option>
-                  <option value="ap-southeast-1">Asia Pacific (Singapore)</option>
+                  <option value="" className="bg-[#1a1d22]">Select region</option>
+                  <option value="us-east-1" className="bg-[#1a1d22]">US East (N. Virginia)</option>
+                  <option value="us-west-2" className="bg-[#1a1d22]">US West (Oregon)</option>
+                  <option value="eu-west-1" className="bg-[#1a1d22]">Europe (Ireland)</option>
+                  <option value="ap-southeast-1" className="bg-[#1a1d22]">Asia Pacific (Singapore)</option>
                 </select>
               </div>
             </div>

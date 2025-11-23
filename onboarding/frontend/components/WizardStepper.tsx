@@ -18,7 +18,7 @@ const steps: Step[] = [
 
 export function WizardStepper({ currentStep }: { currentStep: number }) {
   return (
-    <div className="glass p-6 mb-8">
+    <div className="bg-[#111317] border border-white/10 p-6 mb-8 rounded-[14px]">
       <div className="flex items-center justify-between">
         {steps.map((step, index) => (
           <div key={step.id} className="flex items-center flex-1">
@@ -26,17 +26,17 @@ export function WizardStepper({ currentStep }: { currentStep: number }) {
               <div
                 className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-colors ${
                   index < currentStep
-                    ? 'bg-green-500 text-white'
+                    ? 'bg-[#10b981] text-white'
                     : index === currentStep
-                    ? 'bg-blue-600 text-white ring-4 ring-blue-200'
-                    : 'bg-gray-200 text-gray-600'
+                    ? 'bg-[#6366f1] text-white border-2 border-[#6366f1]'
+                    : 'bg-[#1a1d22] text-white/40 border border-white/10'
                 }`}
               >
                 {index < currentStep ? '✓' : step.id + 1}
               </div>
               <div
                 className={`mt-2 text-xs font-medium text-center ${
-                  index === currentStep ? 'text-blue-600' : 'text-gray-600'
+                  index === currentStep ? 'text-[#6366f1]' : 'text-white/60'
                 }`}
               >
                 {step.label}
@@ -45,7 +45,7 @@ export function WizardStepper({ currentStep }: { currentStep: number }) {
             {index < steps.length - 1 && (
               <div
                 className={`h-0.5 flex-1 mx-2 transition-colors ${
-                  index < currentStep ? 'bg-green-500' : 'bg-gray-200'
+                  index < currentStep ? 'bg-[#10b981]' : 'bg-white/10'
                 }`}
               />
             )}

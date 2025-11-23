@@ -44,28 +44,30 @@ export default function DataPage() {
 
   return (
     <OCTGuard>
-      <div className="min-h-screen p-8 pb-24">
+      <div className="min-h-screen bg-[#0b0c0f] text-white p-8 pb-24">
         <div className="max-w-4xl mx-auto">
           <WizardStepper currentStep={1} />
           
-          <div className="glass p-8">
-            <h2 className="text-2xl font-semibold mb-6">Data Regions</h2>
-            <p className="text-gray-600 mb-6">Select one or more regions where your data will be stored and processed.</p>
+          <div className="bg-[#111317] border border-white/10 p-8 rounded-[14px]">
+            <h2 className="text-2xl font-semibold mb-6 text-[#e2e6ee]">Data Regions</h2>
+            <p className="text-white/60 mb-6">Select one or more regions where your data will be stored and processed.</p>
             
             <div className="space-y-3">
               {selectedRegions.map((region) => (
                 <label
                   key={region.id}
-                  className="flex items-center p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
+                  className={`flex items-center p-4 border border-white/10 rounded-[14px] cursor-pointer transition-colors ${
+                    region.selected ? 'bg-[#1a1d22] border-[#6366f1]' : 'bg-[#1a1d22] hover:bg-[#111317]'
+                  }`}
                 >
                   <input
                     type="checkbox"
                     checked={region.selected}
                     onChange={() => toggleRegion(region.id)}
-                    className="w-5 h-5 text-blue-600 rounded focus:ring-blue-500"
+                    className="w-5 h-5 text-[#6366f1] rounded focus:ring-[#6366f1] bg-[#0b0c0f] border-white/10"
                   />
-                  <span className="ml-3 text-sm font-medium">{region.name}</span>
-                  <span className="ml-auto text-xs text-gray-500">{region.id}</span>
+                  <span className="ml-3 text-sm font-medium text-[#e2e6ee]">{region.name}</span>
+                  <span className="ml-auto text-xs text-white/40">{region.id}</span>
                 </label>
               ))}
             </div>
@@ -77,4 +79,3 @@ export default function DataPage() {
     </OCTGuard>
   );
 }
-

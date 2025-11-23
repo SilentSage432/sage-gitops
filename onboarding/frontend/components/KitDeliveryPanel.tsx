@@ -67,41 +67,41 @@ export function KitDeliveryPanel() {
   };
 
   return (
-    <div className="glass p-8 max-w-2xl mx-auto">
-      <h2 className="text-2xl font-semibold mb-6">Bootstrap Kit Delivery</h2>
+    <div className="bg-[#111317] border border-white/10 p-8 max-w-2xl mx-auto rounded-[14px]">
+      <h2 className="text-2xl font-semibold mb-6 text-[#e2e6ee]">Bootstrap Kit Delivery</h2>
       
       <div className="space-y-6">
         <div>
           <button
             onClick={handleDownloadKit}
             disabled={downloading}
-            className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="w-full px-6 py-3 bg-[#6366f1] text-white rounded-[14px] hover:bg-[#585ae8] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {downloading ? 'Downloading...' : 'Download bootstrap.zip'}
           </button>
         </div>
 
         {fingerprint && (
-          <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
-            <h3 className="text-sm font-semibold mb-2">Package Fingerprint</h3>
-            <code className="text-xs font-mono text-gray-800 break-all">
+          <div className="p-4 bg-[#1a1d22] rounded-[14px] border border-white/10">
+            <h3 className="text-sm font-semibold mb-2 text-[#e2e6ee]">Package Fingerprint</h3>
+            <code className="text-xs font-mono text-white/80 break-all">
               {fingerprint}
             </code>
           </div>
         )}
 
         {verifyCommand && (
-          <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+          <div className="p-4 bg-[#1a1d22] rounded-[14px] border border-white/10">
             <div className="flex items-center justify-between mb-2">
-              <h3 className="text-sm font-semibold">Verify Command</h3>
+              <h3 className="text-sm font-semibold text-[#e2e6ee]">Verify Command</h3>
               <button
                 onClick={copyVerifyCommand}
-                className="text-xs px-3 py-1 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition-colors"
+                className="text-xs px-3 py-1 bg-[#1a1d22] text-white/60 hover:text-white border border-white/10 rounded-[14px] hover:bg-[#111317] transition-colors"
               >
                 Copy
               </button>
             </div>
-            <code className="text-xs font-mono text-gray-800 block break-all">
+            <code className="text-xs font-mono text-white/80 block break-all">
               {verifyCommand}
             </code>
           </div>

@@ -62,52 +62,52 @@ export default function ReviewPage() {
 
   return (
     <OCTGuard>
-      <div className="min-h-screen p-8 pb-24">
+      <div className="min-h-screen bg-[#0b0c0f] text-white p-8 pb-24">
         <div className="max-w-4xl mx-auto">
           <WizardStepper currentStep={4} />
           
-          <div className="glass p-8">
-            <h2 className="text-2xl font-semibold mb-6">Review Your Configuration</h2>
+          <div className="bg-[#111317] border border-white/10 p-8 rounded-[14px]">
+            <h2 className="text-2xl font-semibold mb-6 text-[#e2e6ee]">Review Your Configuration</h2>
             
             <div className="space-y-6">
               <div>
-                <h3 className="font-semibold mb-2">Company Information</h3>
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <p><span className="font-medium">Name:</span> {company.name}</p>
-                  <p><span className="font-medium">Domain:</span> {company.domain}</p>
-                  <p><span className="font-medium">Region:</span> {company.region}</p>
+                <h3 className="font-semibold mb-2 text-[#e2e6ee]">Company Information</h3>
+                <div className="bg-[#1a1d22] p-4 rounded-[14px] border border-white/10">
+                  <p className="text-white/80"><span className="font-medium">Name:</span> {company.name}</p>
+                  <p className="text-white/80"><span className="font-medium">Domain:</span> {company.domain}</p>
+                  <p className="text-white/80"><span className="font-medium">Region:</span> {company.region}</p>
                 </div>
               </div>
 
               <div>
-                <h3 className="font-semibold mb-2">Data Regions</h3>
-                <div className="bg-gray-50 p-4 rounded-lg">
+                <h3 className="font-semibold mb-2 text-[#e2e6ee]">Data Regions</h3>
+                <div className="bg-[#1a1d22] p-4 rounded-[14px] border border-white/10">
                   {dataRegions.filter((r) => r.selected).length > 0 ? (
-                    <ul className="list-disc list-inside">
+                    <ul className="list-disc list-inside text-white/80">
                       {dataRegions.filter((r) => r.selected).map((region) => (
                         <li key={region.id}>{region.name}</li>
                       ))}
                     </ul>
                   ) : (
-                    <p className="text-gray-600">No regions selected</p>
+                    <p className="text-white/60">No regions selected</p>
                   )}
                 </div>
               </div>
 
               <div>
-                <h3 className="font-semibold mb-2">Agent Plan</h3>
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <p><span className="font-medium">Plan:</span> {agentPlan.plan}</p>
-                  <p><span className="font-medium">Agent Count:</span> {agentPlan.agentCount}</p>
+                <h3 className="font-semibold mb-2 text-[#e2e6ee]">Agent Plan</h3>
+                <div className="bg-[#1a1d22] p-4 rounded-[14px] border border-white/10">
+                  <p className="text-white/80"><span className="font-medium">Plan:</span> {agentPlan.plan}</p>
+                  <p className="text-white/80"><span className="font-medium">Agent Count:</span> {agentPlan.agentCount}</p>
                 </div>
               </div>
 
               <div>
-                <h3 className="font-semibold mb-2">Access Model</h3>
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <p><span className="font-medium">Model:</span> {accessModel.model}</p>
+                <h3 className="font-semibold mb-2 text-[#e2e6ee]">Access Model</h3>
+                <div className="bg-[#1a1d22] p-4 rounded-[14px] border border-white/10">
+                  <p className="text-white/80"><span className="font-medium">Model:</span> {accessModel.model}</p>
                   {accessModel.description && (
-                    <p className="mt-1">{accessModel.description}</p>
+                    <p className="mt-1 text-white/80">{accessModel.description}</p>
                   )}
                 </div>
               </div>
