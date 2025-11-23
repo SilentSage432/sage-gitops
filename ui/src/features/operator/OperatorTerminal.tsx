@@ -6,6 +6,7 @@ import {
   useTelemetryFilter,
 } from "../../core/filters/useTelemetryFilter";
 import { useOperatorMemory } from "../../core/OperatorMemoryContext";
+import { routeCommand } from "../../sage/commandRouter";
 
 type LogCategory = Exclude<TelemetryFilter, "ALL">;
 
@@ -65,16 +66,18 @@ export default function OperatorTerminal() {
     return "SYSTEM";
   }
 
-  function handleSend() {
+  const handleSend = async () => {
     if (!input.trim()) return;
+    const inputValue = input.trim();
+    setInput("");
+    remember(inputValue, "operator");
+    
+    const response = await routeCommand(inputValue);
     setLog((prev) => [
       ...prev,
-      { text: `> ${input}`, category: "WHISPERER", ts: Date.now() },
-      ...recallRecent(1).map(m => ({ text: `⟲ ${m.text}`, category: "WHISPERER" as LogCategory, ts: Date.now() })),
+      { text: response.message, category: "WHISPERER", ts: response.timestamp },
     ]);
-    remember(input, "operator");
-    setInput("");
-  }
+  };
 
   const filteredLog = useMemo(() => {
     if (activeFilter === "ALL") return log;
