@@ -251,6 +251,18 @@ func handleWebAuthnVerify(w http.ResponseWriter, r *http.Request) {
 
 // Issue OCT Handler
 func handleIssueOCT(w http.ResponseWriter, r *http.Request) {
+	// Force bypass for development - return immediately before any DB checks
+	if os.Getenv("BYPASS_OCT") == "true" {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"token":     "mock-oct-token",
+			"expiresAt": time.Now().Add(10 * time.Minute).Unix() * 1000, // JavaScript timestamp
+			"scopes":    []string{"tenant.create", "agent.plan.create", "bootstrap.sign"},
+		})
+		return
+	}
+
 	ctx := r.Context()
 
 	// DEV BYPASS: Generate mock OCT token when BYPASS_YUBIKEY=true
@@ -358,6 +370,16 @@ func handleIssueOCT(w http.ResponseWriter, r *http.Request) {
 
 // Verify OCT Handler
 func handleVerifyOCT(w http.ResponseWriter, r *http.Request) {
+	// Force bypass for development
+	if os.Getenv("BYPASS_OCT") == "true" {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"valid": true,
+		})
+		return
+	}
+
 	ctx := r.Context()
 
 	var req struct {
@@ -420,6 +442,17 @@ func handleVerifyOCT(w http.ResponseWriter, r *http.Request) {
 
 // Create Tenant Handler
 func handleCreateTenant(w http.ResponseWriter, r *http.Request) {
+	// Force bypass for development
+	if os.Getenv("BYPASS_OCT") == "true" {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"success":  true,
+			"tenantID": "mock-tenant-id",
+		})
+		return
+	}
+
 	ctx := r.Context()
 
 	// Verify OCT token
@@ -510,6 +543,15 @@ func handleCreateTenant(w http.ResponseWriter, r *http.Request) {
 
 // Bootstrap Kit Handler
 func handleBootstrapKit(w http.ResponseWriter, r *http.Request) {
+	// Force bypass for development
+	if os.Getenv("BYPASS_OCT") == "true" {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"fingerprint": "sha256:mock-fingerprint-" + uuid.New().String()[:16],
+		})
+		return
+	}
 
 	// Verify OCT token
 	authHeader := r.Header.Get("Authorization")
