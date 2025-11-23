@@ -10,7 +10,8 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { OCTGuard } from '@/components/OCTGuard';
-import { CheckCircle2, Copy, Check } from 'lucide-react';
+import { CheckCircle2, Copy, Check, QrCode, ChevronDown, ChevronUp } from 'lucide-react';
+import { QRCodeSVG } from 'qrcode.react';
 
 const agentNameMap: Record<string, string> = {
   'researcher': 'Researcher Agent',
@@ -40,6 +41,9 @@ export default function ReviewPage() {
   const [kitFingerprint, setKitFingerprint] = useState<string>('');
   const [fingerprintCopied, setFingerprintCopied] = useState(false);
   const [commandCopied, setCommandCopied] = useState(false);
+  const [timeRemaining, setTimeRemaining] = useState<number>(15 * 60); // 15 minutes in seconds
+  const [isExpired, setIsExpired] = useState(false);
+  const [showQR, setShowQR] = useState(false);
 
   // Validate required data and redirect if missing
   useEffect(() => {
@@ -61,6 +65,37 @@ export default function ReviewPage() {
     }
   }, [company, dataRegionsConfig, agentSelection, accessConfig, router]);
 
+  // Countdown timer
+  useEffect(() => {
+    if (!isSuccess || isExpired) return;
+
+    const interval = setInterval(() => {
+      setTimeRemaining((prev) => {
+        if (prev <= 1) {
+          setIsExpired(true);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [isSuccess, isExpired]);
+
+  // Format time remaining as MM:SS
+  const formatTime = (seconds: number): string => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  // Get countdown color based on time remaining
+  const getCountdownColor = (seconds: number): string => {
+    if (seconds <= 60) return 'text-red-500';
+    if (seconds <= 300) return 'text-yellow-500';
+    return 'text-white/80';
+  };
+
   const handleBack = () => {
     router.push('/onboarding/access');
   };
@@ -80,6 +115,8 @@ export default function ReviewPage() {
           .join('');
         setKitFingerprint(`sha256:${hashHex}`);
         setIsSuccess(true);
+        setTimeRemaining(15 * 60); // Reset timer on success
+        setIsExpired(false);
       } else {
         // Call actual API endpoint (stub for now)
         const response = await fetch('/api/bootstrap/kit', {
@@ -99,6 +136,8 @@ export default function ReviewPage() {
           const data = await response.json();
           setKitFingerprint(data.fingerprint || '');
           setIsSuccess(true);
+          setTimeRemaining(15 * 60); // Reset timer on success
+          setIsExpired(false);
         } else {
           throw new Error('Failed to generate kit');
         }
@@ -201,14 +240,72 @@ export default function ReviewPage() {
                 </div>
               )}
 
+              {/* Countdown Timer */}
+              {isSuccess && !isExpired && (
+                <div className="mb-8 p-4 bg-[#1a1d22] border border-white/10 rounded-[14px] text-center">
+                  <p className="text-sm font-medium text-white/60 mb-2">Expires in:</p>
+                  <p className={`text-2xl font-mono font-semibold ${getCountdownColor(timeRemaining)}`}>
+                    {formatTime(timeRemaining)}
+                  </p>
+                </div>
+              )}
+
+              {isExpired && (
+                <div className="mb-8 p-4 bg-[#1a1d22] border border-red-500/30 rounded-[14px] text-center">
+                  <p className="text-sm font-medium text-red-500 mb-2">Kit Expired</p>
+                  <p className="text-xs text-white/60">This bootstrap kit has expired and is no longer valid.</p>
+                </div>
+              )}
+
+              {/* Optional QR Code */}
+              {kitFingerprint && (
+                <div className="mb-8">
+                  <Button
+                    onClick={() => setShowQR(!showQR)}
+                    variant="ghost"
+                    className="w-full justify-between text-sm text-white/60 hover:text-white"
+                  >
+                    <span className="flex items-center gap-2">
+                      <QrCode className="w-4 h-4" />
+                      QR Code Handoff
+                    </span>
+                    {showQR ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                  </Button>
+                  {showQR && (
+                    <div className="mt-4 p-4 bg-[#1a1d22] border border-white/10 rounded-[14px] flex flex-col items-center">
+                      <QRCodeSVG
+                        value={`https://bootstrap.example/activate/DEMO123`}
+                        size={200}
+                        level="M"
+                        includeMargin={true}
+                        className="bg-white p-2 rounded"
+                      />
+                      <p className="text-xs text-white/60 mt-4 text-center font-mono">
+                        https://bootstrap.example/activate/DEMO123
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+
               <div className="space-y-3">
                 <Button
-                  disabled
+                  disabled={isExpired}
                   className="w-full px-6"
                   variant="outline"
                 >
-                  Download Kit (Coming Soon)
+                  {isExpired ? 'Download Kit (Expired)' : 'Download Kit (Coming Soon)'}
                 </Button>
+
+                {isExpired && (
+                  <Button
+                    disabled
+                    className="w-full px-6 opacity-50"
+                    variant="outline"
+                  >
+                    Regenerate Kit (Coming Soon)
+                  </Button>
+                )}
                 
                 {kitFingerprint && (
                   <Button
@@ -432,3 +529,4 @@ export default function ReviewPage() {
     </OCTGuard>
   );
 }
+

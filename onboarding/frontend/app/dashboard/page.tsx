@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { OCTGuard } from '@/components/OCTGuard';
 import { CheckCircle2, Clock, Building2, MapPin, Calendar } from 'lucide-react';
+import { BootstrapStatusCard } from '@/components/BootstrapStatusCard';
 
 export default function DashboardPage() {
   // Loading states
@@ -91,6 +92,15 @@ export default function DashboardPage() {
           </motion.div>
 
           <div className="space-y-6">
+            {/* Bootstrap Status Card */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.15 }}
+            >
+              <BootstrapStatusCard />
+            </motion.div>
+
             {/* Tenant Overview Card */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
