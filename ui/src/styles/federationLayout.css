@@ -1,0 +1,45 @@
+/* === SAGE FEDERATION LAYOUT STYLING === */
+
+.federation-left-nav {
+  background: rgba(10, 12, 18, 0.9);
+  border-right: 1px solid rgba(120, 86, 255, 0.12);
+  backdrop-filter: blur(12px);
+  box-shadow:
+    inset -2px 0 18px rgba(120, 86, 255, 0.08),
+    0 0 22px rgba(0, 0, 0, 0.45);
+  border-radius: 14px;
+}
+
+.federation-command-core {
+  background: rgba(8, 10, 16, 0.85);
+  border-radius: 16px;
+  border: 1px solid rgba(120, 86, 255, 0.14);
+  box-shadow:
+    0 0 26px rgba(120, 86, 255, 0.10),
+    inset 0 0 22px rgba(120, 86, 255, 0.05);
+  backdrop-filter: blur(14px);
+}
+
+.federation-intel-stack {
+  background: rgba(9, 11, 17, 0.92);
+  border-left: 1px solid rgba(120, 86, 255, 0.12);
+  border-radius: 14px;
+  box-shadow:
+    inset 2px 0 18px rgba(120, 86, 255, 0.06),
+    0 0 22px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(10px);
+}
+
+.federation-input-dock {
+  background: rgba(10, 12, 19, 0.9);
+  border-top: 1px solid rgba(120, 86, 255, 0.15);
+  border-radius: 12px;
+  box-shadow:
+    0 0 16px rgba(120, 86, 255, 0.10),
+    inset 0 0 14px rgba(120, 86, 255, 0.05);
+  backdrop-filter: blur(8px);
+}
+
+/* Do not modify or remove this comment.
+   Styling only — no logic changes. */
+
