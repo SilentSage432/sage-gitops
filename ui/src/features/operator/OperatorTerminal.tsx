@@ -72,16 +72,29 @@ export default function OperatorTerminal() {
     setInput("");
     remember(inputValue, "operator");
     
-    const response = await routeCommand(inputValue);
-    setLog((prev) => [
-      ...prev,
-      { message: response.message, category: "WHISPERER", ts: response.timestamp },
-    ]);
+    try {
+      const response = await routeCommand(inputValue);
+      // Auto-switch to WHISPERER filter to show command response
+      setActiveFilter("WHISPERER");
+      setLog((prev) => {
+        const newEntry = { message: response.message, category: "WHISPERER" as LogCategory, ts: response.timestamp };
+        return [...prev, newEntry];
+      });
+    } catch (error) {
+      console.error("Command routing error:", error);
+      setLog((prev) => [
+        ...prev,
+        { message: `Error: ${error instanceof Error ? error.message : "Failed to execute command"}`, category: "ERROR" as LogCategory, ts: Date.now() },
+      ]);
+    }
   };
 
   const filteredLog = useMemo(() => {
-    if (activeFilter === "ALL") return log;
-    return log.filter((entry) => entry.category === activeFilter);
+    const filtered = activeFilter === "ALL" 
+      ? log 
+      : log.filter((entry) => entry.category === activeFilter);
+    console.log("Filtered log:", { activeFilter, totalLog: log.length, filteredCount: filtered.length, filtered });
+    return filtered;
   }, [activeFilter, log]);
 
   return (
@@ -127,8 +140,12 @@ export default function OperatorTerminal() {
           onKeyDown={(e) => e.key === 'Enter' && handleSend()}
         />
         <button
+          type="button"
           className="sage-command-send bg-purple-600 hover:bg-purple-500 rounded-xl px-4 py-2 text-white transition-all"
-          onClick={handleSend}
+          onClick={(e) => {
+            e.preventDefault();
+            handleSend();
+          }}
         >
           Send
         </button>
