@@ -105,7 +105,7 @@ export default function OperatorTerminal() {
         ))}
       </div>
 
-      <div className="sage-command-bar flex items-center gap-3">
+      <div className="sage-command-bar flex items-end gap-3">
         <input
           className="flex-1 bg-black/20 border border-white/10 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500/50 placeholder-white/30 text-white"
           value={input}
