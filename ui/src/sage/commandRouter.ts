@@ -1,25 +1,52 @@
-import { commandRegistry } from "./commandRegistry";
 import { createResponse, CommandResponse } from "./commandResponse";
+import { commandRegistry } from "./commandRegistry";
 
 export const routeCommand = async (
-  input: string
-): Promise<CommandResponse> => {
+  input: string,
+  emit: (r: CommandResponse) => void
+): Promise<void> => {
   const [command] = input.trim().split(" ");
+  emit(createResponse(command, "received", "Command received."));
+
+  await new Promise((res) => setTimeout(res, 300));
+
+  // Check for unknown commands
   const match = commandRegistry.find((c) => c.name === command);
-
   if (!match) {
-    return createResponse(command, "failed", "Unknown command.");
+    emit(createResponse(command, "failed", "Unknown command."));
+    return;
   }
 
-  // Phase-ready for future federation routing
-  if (match.execution === "federated") {
-    return createResponse(command, "processing", "Routing to federation...");
+  // Federation-ready hook
+  if (command === "telemetry") {
+    emit(createResponse(command, "processing", "Routing to federation..."));
+    await new Promise((res) => setTimeout(res, 600));
+    emit(
+      createResponse(
+        command,
+        "completed",
+        "Federation link ready (placeholder)."
+      )
+    );
+    return;
   }
 
-  return createResponse(
-    command,
-    "completed",
-    "Command executed locally (placeholder)."
+  emit(
+    createResponse(
+      command,
+      "processing",
+      "Executing locally (placeholder)..."
+    )
+  );
+
+  await new Promise((res) => setTimeout(res, 500));
+
+  emit(
+    createResponse(
+      command,
+      "completed",
+      "Local execution completed (placeholder)."
+    )
   );
 };
 

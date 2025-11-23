@@ -68,25 +68,19 @@ export default function OperatorTerminal() {
 
   const handleSend = async () => {
     if (!input.trim()) return;
-    const inputValue = input.trim();
+    const command = input;
     setInput("");
-    remember(inputValue, "operator");
-    
-    try {
-      const response = await routeCommand(inputValue);
-      // Auto-switch to WHISPERER filter to show command response
-      setActiveFilter("WHISPERER");
-      setLog((prev) => {
-        const newEntry = { message: response.message, category: "WHISPERER" as LogCategory, ts: response.timestamp };
-        return [...prev, newEntry];
-      });
-    } catch (error) {
-      console.error("Command routing error:", error);
+    remember(command, "operator");
+    await routeCommand(command, (response) => {
       setLog((prev) => [
         ...prev,
-        { message: `Error: ${error instanceof Error ? error.message : "Failed to execute command"}`, category: "ERROR" as LogCategory, ts: Date.now() },
+        {
+          message: response.message,
+          category: (response.status === "failed" ? "ERROR" : "WHISPERER") as LogCategory,
+          ts: response.timestamp,
+        },
       ]);
-    }
+    });
   };
 
   const filteredLog = useMemo(() => {
