@@ -112,7 +112,7 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
   return (
     <div
       className={`
-        relative flex h-screen w-screen bg-[#030304] text-white overflow-hidden flex-col
+        relative flex h-screen w-screen sage-ui-surface text-white overflow-hidden flex-col
         transition-all duration-700
         ${state.flash ? "ring-4 ring-purple-500" : ""}
         ${alertClass}

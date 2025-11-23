@@ -157,3 +157,7 @@ nav a.active,
   font-size: 15px !important;
   line-height: 1.55 !important;
 }
+
+.sage-ui-surface {
+  background: #0b0c10 !important;
+}
