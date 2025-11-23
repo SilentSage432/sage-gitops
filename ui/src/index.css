@@ -90,6 +90,7 @@
 @import "./styles/supervisedMode.css";
 @import "./styles/autonomousCompletion.css";
 @import "./styles/obsidianOverhaul.css";
+@import "./styles/sageTheme.css";
 
 @tailwind base;
 @tailwind components;
@@ -155,5 +156,3 @@ nav a.active,
   font-size: 15px !important;
   line-height: 1.55 !important;
 }
-
-@import "./styles/sageTheme.css";
