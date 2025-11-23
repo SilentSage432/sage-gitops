@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useOnboardingStore } from '@/lib/store/onboarding-store';
@@ -13,6 +13,7 @@ import { OCTGuard } from '@/components/OCTGuard';
 export default function CompletePage() {
   const { company, dataRegionsConfig, agentSelection, accessConfig } = useOnboardingStore();
   const router = useRouter();
+  const [isRedirecting, setIsRedirecting] = useState(false);
 
   // Redirect if store is empty (user accessed /complete directly)
   useEffect(() => {
@@ -28,7 +29,18 @@ export default function CompletePage() {
 
     if (!hasRequiredData) {
       router.push('/onboarding/company');
+      return;
     }
+
+    // Auto-redirect to dashboard after 800ms
+    setIsRedirecting(true);
+    const redirectTimer = setTimeout(() => {
+      router.push('/dashboard');
+    }, 800);
+
+    return () => {
+      clearTimeout(redirectTimer);
+    };
   }, [company, dataRegionsConfig, agentSelection, accessConfig, router]);
 
   const handleGoToDashboard = () => {
@@ -81,9 +93,16 @@ export default function CompletePage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.4 }}
-                  className="text-white/60 mb-8"
+                  className="text-white/60 mb-8 flex items-center justify-center gap-2"
                 >
-                  The new tenant has been initialized and is ready for activation.
+                  {isRedirecting ? (
+                    <>
+                      <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white/80 rounded-full animate-spin"></span>
+                      Finalizing setup…
+                    </>
+                  ) : (
+                    'The new tenant has been initialized and is ready for activation.'
+                  )}
                 </motion.p>
 
                 <Separator className="my-6 bg-white/10" />
