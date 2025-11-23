@@ -18,6 +18,13 @@ export default function ReviewPage() {
   const handleSubmit = async () => {
     setSubmitting(true);
     try {
+      // Bypass mode: skip API call and just redirect
+      if (process.env.NEXT_PUBLIC_BYPASS_YUBIKEY === 'true') {
+        useOnboardingStore.getState().setProgress({ currentStep: 4, completed: true });
+        router.push('/wizard/complete');
+        return;
+      }
+
       const token = localStorage.getItem('oct-storage');
       if (!token) {
         throw new Error('No access token available');

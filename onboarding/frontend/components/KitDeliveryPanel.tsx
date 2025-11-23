@@ -13,6 +13,15 @@ export function KitDeliveryPanel() {
   const handleDownloadKit = async () => {
     setDownloading(true);
     try {
+      // Bypass mode: skip API call
+      if (process.env.NEXT_PUBLIC_BYPASS_YUBIKEY === 'true') {
+        setFingerprint('sha256:mock-fingerprint-bypass-mode');
+        setVerifyCommand('sage verify-kit --fingerprint "sha256:mock-fingerprint-bypass-mode"');
+        setDownloading(false);
+        alert('Bypass mode: Download disabled. Bootstrap kit generation skipped.');
+        return;
+      }
+
       const token = localStorage.getItem('oct-storage');
       if (!token) {
         throw new Error('No access token available');

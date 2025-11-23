@@ -24,8 +24,14 @@ export function YubiKeyGate() {
             scopes: octResponse.scopes,
           });
         } catch (err) {
-          // Backend may not be available - OCTGuard bypass will handle access
-          console.warn('Bypass: OCT issuance failed (backend may be unavailable)');
+          // Backend may not be available - store mock token for bypass mode
+          console.warn('Bypass: OCT issuance failed (backend may be unavailable), using mock token');
+          const mockExpiresAt = Date.now() + (10 * 60 * 1000); // 10 minutes from now
+          storeOCT({
+            token: "mock-oct-token",
+            expiresAt: mockExpiresAt,
+            scopes: ["tenant.create", "agent.plan.create", "bootstrap.sign"],
+          });
         }
         router.push('/onboarding/company');
       };
