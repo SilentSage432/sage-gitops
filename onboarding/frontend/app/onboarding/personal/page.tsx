@@ -1,55 +1,279 @@
 'use client';
 
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { OCTGuard } from '@/components/OCTGuard';
-import { ArrowLeft } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { RadioGroup } from '@/components/ui/radio-group';
+import { ArrowLeft, ArrowRight, CheckCircle2 } from 'lucide-react';
+
+type Step = 1 | 2 | 3;
+
+interface PersonalData {
+  fullName: string;
+  email: string;
+  callsign: string;
+  intent: string;
+}
 
 export default function PersonalOnboardingPage() {
   const router = useRouter();
+  const [step, setStep] = useState<Step>(1);
+  const [formData, setFormData] = useState<PersonalData>({
+    fullName: '',
+    email: '',
+    callsign: '',
+    intent: '',
+  });
+  const [errors, setErrors] = useState<{ fullName?: string; email?: string }>({});
+
+  const validateStep1 = (): boolean => {
+    const newErrors: { fullName?: string; email?: string } = {};
+    
+    if (!formData.fullName.trim()) {
+      newErrors.fullName = 'Full name is required';
+    }
+    
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = 'Please enter a valid email address';
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleNext = () => {
+    if (step === 1) {
+      if (validateStep1()) {
+        setStep(2);
+      }
+    } else if (step === 2) {
+      if (formData.intent) {
+        setStep(3);
+      }
+    }
+  };
+
+  const handleBack = () => {
+    if (step === 1) {
+      router.push('/onboarding/select');
+    } else {
+      setStep((step - 1) as Step);
+    }
+  };
+
+  const handleSubmit = () => {
+    // Store completion flag
+    localStorage.setItem('personalOnboardingComplete', 'true');
+    localStorage.setItem('personalOnboardingData', JSON.stringify(formData));
+    
+    // Redirect to personal dashboard
+    router.push('/dashboard/personal');
+  };
+
+  const intentOptions = [
+    { value: 'learn', label: 'Learn & Explore' },
+    { value: 'operator', label: 'Become an Operator' },
+    { value: 'federation', label: 'Future Federation Member' },
+  ];
 
   return (
-    <OCTGuard>
-      <div className="min-h-screen bg-[#0b0c0f] text-white flex items-center justify-center p-4">
-        <div className="max-w-md w-full">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <Card className="border-white/10 bg-[#111317]">
-              <CardHeader>
+    <div className="min-h-screen bg-[#0b0c0f] text-white flex items-center justify-center p-4">
+      <div className="max-w-2xl w-full">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <Card className="border-white/10 bg-[#111317] rounded-3xl">
+            <CardHeader>
+              <div className="flex items-center justify-between">
                 <CardTitle className="flex items-center gap-2">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => router.push('/onboarding/select')}
-                    className="mr-2"
-                  >
-                    <ArrowLeft className="w-4 h-4" />
-                  </Button>
-                  Individual Onboarding
+                  {step > 1 && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={handleBack}
+                      className="mr-2"
+                    >
+                      <ArrowLeft className="w-4 h-4" />
+                    </Button>
+                  )}
+                  Personal Onboarding
                 </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-white/60 text-center py-8">
-                  Personal onboarding coming soon
-                </p>
+                <div className="text-sm text-white/60">
+                  Step {step} of 3
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {/* Step 1: Identity */}
+              {step === 1 && (
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="space-y-4"
+                >
+                  <div>
+                    <h2 className="text-xl font-semibold mb-4 text-[#e2e6ee]">Identity</h2>
+                    <p className="text-sm text-white/60 mb-6">
+                      Tell us about yourself
+                    </p>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="fullName" className="text-white/80">
+                        Full Name <span className="text-red-400">*</span>
+                      </Label>
+                      <Input
+                        id="fullName"
+                        type="text"
+                        value={formData.fullName}
+                        onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                        placeholder="Enter your full name"
+                        className={errors.fullName ? 'border-red-500' : ''}
+                      />
+                      {errors.fullName && (
+                        <p className="text-sm text-red-400 mt-1">{errors.fullName}</p>
+                      )}
+                    </div>
+
+                    <div>
+                      <Label htmlFor="email" className="text-white/80">
+                        Email <span className="text-red-400">*</span>
+                      </Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        placeholder="your.email@example.com"
+                        className={errors.email ? 'border-red-500' : ''}
+                      />
+                      {errors.email && (
+                        <p className="text-sm text-red-400 mt-1">{errors.email}</p>
+                      )}
+                    </div>
+
+                    <div>
+                      <Label htmlFor="callsign" className="text-white/80">
+                        Callsign / Username <span className="text-white/40 text-xs">(optional)</span>
+                      </Label>
+                      <Input
+                        id="callsign"
+                        type="text"
+                        value={formData.callsign}
+                        onChange={(e) => setFormData({ ...formData, callsign: e.target.value })}
+                        placeholder="Choose a callsign"
+                      />
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+              {/* Step 2: Intent Selection */}
+              {step === 2 && (
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="space-y-4"
+                >
+                  <div>
+                    <h2 className="text-xl font-semibold mb-4 text-[#e2e6ee]">Intent</h2>
+                    <p className="text-sm text-white/60 mb-6">
+                      What brings you to SAGE?
+                    </p>
+                  </div>
+
+                  <RadioGroup
+                    options={intentOptions}
+                    value={formData.intent}
+                    onValueChange={(value) => setFormData({ ...formData, intent: value })}
+                  />
+                </motion.div>
+              )}
+
+              {/* Step 3: Confirmation */}
+              {step === 3 && (
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="space-y-4"
+                >
+                  <div className="flex justify-center mb-6">
+                    <div className="w-16 h-16 rounded-full bg-[#10b981]/20 flex items-center justify-center">
+                      <CheckCircle2 className="w-8 h-8 text-[#10b981]" />
+                    </div>
+                  </div>
+
+                  <div>
+                    <h2 className="text-xl font-semibold mb-4 text-[#e2e6ee] text-center">
+                      Review Your Information
+                    </h2>
+                  </div>
+
+                  <div className="space-y-4 p-4 bg-[#1a1d22] rounded-[14px] border border-white/10">
+                    <div>
+                      <p className="text-sm text-white/60">Full Name</p>
+                      <p className="text-sm font-medium text-[#e2e6ee]">{formData.fullName}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-white/60">Email</p>
+                      <p className="text-sm font-medium text-[#e2e6ee]">{formData.email}</p>
+                    </div>
+                    {formData.callsign && (
+                      <div>
+                        <p className="text-sm text-white/60">Callsign</p>
+                        <p className="text-sm font-medium text-[#e2e6ee]">{formData.callsign}</p>
+                      </div>
+                    )}
+                    <div>
+                      <p className="text-sm text-white/60">Intent</p>
+                      <p className="text-sm font-medium text-[#e2e6ee]">
+                        {intentOptions.find(opt => opt.value === formData.intent)?.label}
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+              {/* Navigation Buttons */}
+              <div className="flex justify-between pt-4 border-t border-white/10">
                 <Button
                   variant="outline"
-                  className="w-full"
-                  onClick={() => router.push('/onboarding/select')}
+                  onClick={handleBack}
                 >
-                  Back to Selection
+                  {step === 1 ? 'Cancel' : 'Back'}
                 </Button>
-              </CardContent>
-            </Card>
-          </motion.div>
-        </div>
+                {step < 3 ? (
+                  <Button
+                    onClick={handleNext}
+                    disabled={step === 2 && !formData.intent}
+                  >
+                    Next
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={handleSubmit}
+                  >
+                    Activate Access
+                  </Button>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
       </div>
-    </OCTGuard>
+    </div>
   );
 }
-
