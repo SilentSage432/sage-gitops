@@ -1,0 +1,117 @@
+/**
+ * SAGE — OBSIDIAN CONSOLE OVERHAUL
+ * Immediate, visible UI transformation
+ * No functional changes — visual only
+ */
+
+/* === GLOBAL RESET — remove flat black void === */
+body {
+  background: radial-gradient(
+      circle at 50% 0%,
+      rgba(22, 22, 28, 0.9),
+      rgba(6, 6, 10, 1)
+    ),
+    #000;
+  color: rgba(230, 230, 245, 0.92);
+  font-family: 'Inter', 'SF Pro Display', system-ui, sans-serif;
+  letter-spacing: 0.25px;
+}
+
+/* === CINEMATIC VIGNETTE === */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at 50% 120%,
+    rgba(138, 125, 255, 0.08),
+    transparent 60%
+  );
+  z-index: -1;
+}
+
+/* === LEFT NAV — transform from flat → obsidian glass === */
+nav,
+.sidebar,
+.sage-nav {
+  background: rgba(10, 10, 16, 0.6);
+  backdrop-filter: blur(16px) saturate(140%);
+  border-right: 1px solid rgba(138, 125, 255, 0.06);
+  padding-top: 16px;
+}
+
+nav a,
+.sage-nav-item {
+  color: rgba(200, 200, 225, 0.82);
+}
+
+nav a.active,
+.sage-nav-item.active {
+  color: rgba(156, 145, 255, 1);
+  background: rgba(156, 145, 255, 0.12);
+  border-radius: 8px;
+}
+
+/* === PRIMARY CONSOLE — WHISPERER TRANSFORMATION === */
+#whispererContainer {
+  background: rgba(14, 14, 22, 0.72);
+  backdrop-filter: blur(22px) saturate(150%);
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow:
+    0 0 48px rgba(138, 125, 255, 0.12),
+    0 12px 38px rgba(0, 0, 0, 0.6),
+    inset 0 0 0 1px rgba(138, 125, 255, 0.14);
+}
+
+/* === MESSAGE LOG SURFACE === */
+#whispererMessageLog {
+  background: rgba(6, 6, 12, 0.82);
+  border-radius: 12px;
+  padding: 14px;
+  box-shadow:
+    inset 0 0 22px rgba(0, 0, 0, 0.42),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  color: rgba(225, 225, 240, 0.9);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* === INPUT BAR — clean, futuristic, intentional === */
+#whispererInputContainer {
+  background: rgba(10, 10, 18, 0.92);
+  border-top: 1px solid rgba(138, 125, 255, 0.22);
+  padding: 12px;
+  border-radius: 0 0 14px 14px;
+}
+
+/* === BUTTONS — premium, no neon junk === */
+button,
+.sage-action {
+  background: rgba(138, 125, 255, 0.14);
+  border: 1px solid rgba(138, 125, 255, 0.28);
+  border-radius: 8px;
+  color: rgba(230, 228, 255, 0.92);
+  padding: 8px 14px;
+  font-size: 14px;
+  transition: 160ms ease;
+}
+
+button:hover,
+.sage-action:hover {
+  background: rgba(138, 125, 255, 0.22);
+  border-color: rgba(138, 125, 255, 0.42);
+}
+
+/* === RIGHT PANEL ZONE — clean glass chamber === */
+.sage-zone-right {
+  background: rgba(12, 12, 20, 0.58);
+  backdrop-filter: blur(14px) saturate(140%);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+    0 8px 28px rgba(0, 0, 0, 0.42);
+}
+

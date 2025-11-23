@@ -89,6 +89,7 @@
 @import "./styles/autonomyHardSeal.css";
 @import "./styles/supervisedMode.css";
 @import "./styles/autonomousCompletion.css";
+@import "./styles/obsidianOverhaul.css";
 
 @tailwind base;
 @tailwind components;
