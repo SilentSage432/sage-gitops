@@ -82,7 +82,15 @@ export default function OperatorTerminal() {
   }, [activeFilter, log]);
 
   return (
-    <div className="terminal-wrapper">
+    <div className="operator-terminal-container flex flex-col h-full overflow-hidden">
+      {/* SAGE Federation Header */}
+      <div className="sage-operator-header px-4 py-3">
+        <h2 className="text-sm tracking-wide uppercase opacity-80">
+          SAGE Federation
+        </h2>
+      </div>
+
+      {/* Filter Bar */}
       <div className="terminal-filter-bar">
         {FILTERS.map((cat) => (
           <button
@@ -97,25 +105,30 @@ export default function OperatorTerminal() {
         ))}
       </div>
 
-      <div className="terminal-log" ref={logRef}>
-        {filteredLog.map((entry, idx) => (
-          <div key={idx} className={`terminal-line cat-${entry.category.toLowerCase()}`}>
-            {entry.text}
-          </div>
-        ))}
-      </div>
-
-      <div className="sage-command-bar flex items-end gap-3">
+      {/* Command Bar (Top Docked) */}
+      <div className="sage-command-bar flex items-center gap-3 px-4 py-3">
         <input
-          className="flex-1 bg-black/20 border border-white/10 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500/50 placeholder-white/30 text-white"
+          className="flex-1 bg-transparent border border-white/10 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500/50 placeholder-white/40 text-white"
           value={input}
           placeholder="Issue command..."
           onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && handleSend()}
+          onKeyDown={(e) => e.key === 'Enter' && handleSend()}
         />
-        <button className="bg-purple-600 hover:bg-purple-500 rounded-xl px-4 py-2 text-white transition-colors" onClick={handleSend}>
+        <button
+          className="sage-command-send bg-purple-600 hover:bg-purple-500 rounded-xl px-4 py-2 text-white transition-all"
+          onClick={handleSend}
+        >
           Send
         </button>
+      </div>
+
+      {/* Log Output (Fills Remaining Space) */}
+      <div className="flex-1 overflow-y-auto px-4 py-4 sage-terminal-log" ref={logRef}>
+        {filteredLog.map((entry, idx) => (
+          <div key={idx} className={`text-sm mb-1 whitespace-pre-wrap opacity-90 terminal-line cat-${entry.category.toLowerCase()}`}>
+            {entry.text}
+          </div>
+        ))}
       </div>
     </div>
   );

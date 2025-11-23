@@ -242,3 +242,37 @@ nav a.active,
 .sage-command-bar button:hover {
   background: #9d7dff !important;
 }
+
+/* Operator Terminal Redesign */
+
+.operator-terminal-container {
+  background: #0a0d14 !important;
+}
+
+.sage-operator-header {
+  border-bottom: 1px solid rgba(120, 86, 255, 0.15);
+  background: #0c0f17;
+}
+
+.sage-command-bar {
+  background: #090c13 !important;
+  border-bottom: 1px solid rgba(120, 86, 255, 0.15);
+  box-shadow:
+    0 0 18px rgba(120, 86, 255, 0.12),
+    inset 0 0 18px rgba(120, 86, 255, 0.05);
+  backdrop-filter: blur(6px);
+  transition: all 0.3s ease;
+}
+
+.sage-command-send {
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.sage-command-send:hover {
+  transform: translateY(-1px);
+}
+
+.sage-terminal-log {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(120, 86, 255, 0.3) transparent;
+}
