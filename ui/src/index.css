@@ -181,3 +181,14 @@ nav a.active,
   backdrop-filter: blur(6px);
   transition: background 0.4s ease, box-shadow 0.4s ease;
 }
+
+.sage-right-panel {
+  background: #0a0d14 !important;
+  border-left: 1px solid rgba(120, 86, 255, 0.12) !important;
+  border-radius: 12px !important;
+  box-shadow:
+    inset 2px 0 12px rgba(120, 86, 255, 0.05),
+    0 0 18px rgba(0,0,0,0.35);
+  backdrop-filter: blur(4px);
+  transition: background 0.35s ease, box-shadow 0.35s ease;
+}

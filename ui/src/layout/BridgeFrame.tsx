@@ -138,7 +138,7 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
         {/* Right Panel: Active Chamber / Detail Panel */}
         {activeChamber && (
           <div
-            className="
+            className="sage-right-panel
               w-96 border-l border-slate-800 flex-shrink-0
               flex flex-col min-h-0
             "
