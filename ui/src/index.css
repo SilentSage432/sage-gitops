@@ -171,3 +171,13 @@ nav a.active,
     inset 0 0 18px rgba(120, 86, 255, 0.06) !important;
   transition: background 0.4s ease, box-shadow 0.4s ease;
 }
+
+.sage-sidebar {
+  background: #0a0c12 !important;
+  border-right: 1px solid rgba(120, 86, 255, 0.14) !important;
+  box-shadow:
+    inset -2px 0 12px rgba(120, 86, 255, 0.06),
+    inset 0 0 22px rgba(0,0,0,0.45);
+  backdrop-filter: blur(6px);
+  transition: background 0.4s ease, box-shadow 0.4s ease;
+}

@@ -70,7 +70,7 @@ export const SidebarNavigator: React.FC<SidebarNavigatorProps> = ({
   };
 
   return (
-    <aside className="h-full bg-[#0d0d12] border-r border-slate-800 p-4 flex flex-col gap-6 overflow-y-auto">
+    <aside className="sage-sidebar h-full bg-[#0d0d12] border-r border-slate-800 p-4 flex flex-col gap-6 overflow-y-auto">
       <div className="mb-4">
         <h1 className="text-xl font-bold tracking-wide text-slate-100">
           SAGE
