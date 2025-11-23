@@ -1,0 +1,104 @@
+/* === GLOBAL OBSIDIAN CONSOLE FOUNDATION === */
+
+body {
+  background: radial-gradient(
+      circle at 50% 0%,
+      #1a1b22,
+      #0d0e13 70%,
+      #050508
+    );
+  color: #e8e9f5;
+  font-family: 'Inter', 'SF Pro Display', system-ui, sans-serif;
+  letter-spacing: 0.3px;
+  overflow: hidden;
+}
+
+/* === GLOBAL PANEL SURFACES — REAL GLASS DEPTH === */
+
+.sage-panel,
+#whispererContainer,
+.sage-zone-right {
+  background: rgba(22, 23, 32, 0.72);
+  backdrop-filter: blur(18px) saturate(160%);
+  border-radius: 16px;
+  box-shadow:
+    0 0 0 1px rgba(156, 145, 255, 0.14),
+    0 12px 42px rgba(0, 0, 0, 0.65),
+    0 0 64px rgba(156, 145, 255, 0.08);
+  padding: 18px;
+}
+
+/* === LEFT NAVIGATION — VISIBLE, MODERN, LEGIBLE === */
+
+nav,
+.sidebar,
+.sage-nav {
+  background: rgba(12, 13, 18, 0.82);
+  backdrop-filter: blur(24px) saturate(170%);
+  border-right: 1px solid rgba(156, 145, 255, 0.12);
+  padding: 24px 18px;
+}
+
+nav a,
+.sage-nav-item {
+  display: block;
+  padding: 10px 12px;
+  margin-bottom: 6px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(220, 220, 245, 0.88);
+}
+
+nav a.active,
+.sage-nav-item.active {
+  background: rgba(156, 145, 255, 0.22);
+  color: white;
+  border: 1px solid rgba(156, 145, 255, 0.6);
+}
+
+/* === WHISPERER PRIMARY CONSOLE === */
+
+#whispererContainer {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+}
+
+/* === MESSAGE LOG === */
+
+#whispererMessageLog {
+  background: rgba(10, 10, 16, 0.92);
+  border-radius: 14px;
+  padding: 16px;
+  height: 100%;
+  overflow-y: auto;
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+/* === INPUT BAR === */
+
+#whispererInputContainer {
+  background: rgba(14, 14, 22, 0.95);
+  border-top: 1px solid rgba(156, 145, 255, 0.28);
+  padding: 14px;
+  border-radius: 0 0 16px 16px;
+}
+
+/* === BUTTONS — CLEAN & FUTURISTIC === */
+
+button,
+.sage-action {
+  background: rgba(156, 145, 255, 0.22);
+  border: 1px solid rgba(156, 145, 255, 0.44);
+  border-radius: 8px;
+  color: white;
+  padding: 10px 16px;
+  transition: 120ms ease;
+}
+
+button:hover,
+.sage-action:hover {
+  background: rgba(156, 145, 255, 0.36);
+  border-color: rgba(156, 145, 255, 0.66);
+}
+
