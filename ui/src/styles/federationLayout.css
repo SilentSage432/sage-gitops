@@ -1,5 +1,9 @@
 /* === SAGE FEDERATION LAYOUT STYLING === */
 
+:root {
+  --sage-state-color: rgba(120, 65, 255, 0.10);
+}
+
 .federation-left-nav {
   background: rgba(10, 10, 16, 0.50);
   border: 1px solid rgba(180, 160, 255, 0.05);
@@ -80,9 +84,10 @@
 }
 
 .federation-intel-stack.busy {
+  --sage-state-color: rgba(255, 170, 90, 0.22);
   box-shadow:
-    0 0 22px rgba(255, 140, 85, 0.22),
-    inset 0 0 10px rgba(255, 140, 85, 0.18);
+    0 0 28px var(--sage-state-color),
+    inset 0 0 14px rgba(255, 170, 90, 0.18);
 }
 
 .federation-intel-stack button.active {
@@ -102,6 +107,24 @@
   0% { box-shadow: 0 0 18px rgba(120, 65, 255, 0.06); }
   50% { box-shadow: 0 0 32px rgba(120, 65, 255, 0.12); }
   100% { box-shadow: 0 0 18px rgba(120, 65, 255, 0.06); }
+}
+
+/* Phase 6: Autonomous Calm / Alert States */
+.federation-command-core,
+.federation-left-nav,
+.federation-intel-stack {
+  box-shadow:
+    0 0 22px var(--sage-state-color),
+    inset 0 0 10px rgba(120, 65, 255, 0.06);
+  transition: box-shadow 360ms ease, background 360ms ease;
+}
+
+.federation-command-core.active,
+.federation-left-nav.active {
+  --sage-state-color: rgba(150, 90, 255, 0.18);
+  box-shadow:
+    0 0 32px var(--sage-state-color),
+    inset 0 0 14px rgba(150, 90, 255, 0.12);
 }
 
 /* Do not modify or remove this comment.
