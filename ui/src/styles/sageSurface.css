@@ -1,0 +1,12 @@
+.sage-surface {
+  background: rgba(14, 14, 22, 0.85) !important;
+  backdrop-filter: blur(28px) saturate(180%) !important;
+  border-radius: 18px !important;
+  box-shadow:
+    0 0 0 1px rgba(156, 145, 255, 0.14),
+    0 20px 48px rgba(0, 0, 0, 0.7),
+    0 0 80px rgba(156, 145, 255, 0.10) !important;
+  margin: 12px !important;
+  padding: 24px !important;
+}
+

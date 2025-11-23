@@ -91,6 +91,7 @@
 @import "./styles/autonomousCompletion.css";
 @import "./styles/obsidianOverhaul.css";
 @import "./styles/sageTheme.css";
+@import "./styles/sageSurface.css";
 
 @tailwind base;
 @tailwind components;
