@@ -33,7 +33,7 @@ export function YubiKeyGate() {
             scopes: ["tenant.create", "agent.plan.create", "bootstrap.sign"],
           });
         }
-        router.push('/onboarding/company');
+        router.push('/onboarding/select');
       };
       bypassAuth();
     }
