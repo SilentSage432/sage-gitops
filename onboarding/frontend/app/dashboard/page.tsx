@@ -33,20 +33,20 @@ export default function DashboardPage() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="min-h-screen bg-[#0b0c0f] text-white"
+        className="min-h-screen bg-[#0b0c0f] text-white animate-in fade-in duration-300 ease-out"
       >
-        <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           {/* Header Bar */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="mb-8"
+            className="mb-6 border-b border-white/5 pb-4"
           >
-            <h1 className="text-3xl font-semibold mb-2 text-[#e2e6ee]">
+            <h1 className="text-2xl font-semibold tracking-tight mb-2 text-[#e2e6ee]">
               SAGE Onboarding Dashboard
             </h1>
-            <p className="text-white/60">
+            <p className="text-sm text-neutral-400">
               Tenant successfully initialized
             </p>
           </motion.div>
@@ -58,14 +58,14 @@ export default function DashboardPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              <Card className="border-white/10 bg-[#111317] shadow-lg shadow-purple-500/5">
-                <CardHeader>
+              <Card className="rounded-xl bg-neutral-900/40 border border-white/5 backdrop-blur hover:border-violet-500/30 transition-all p-6">
+                <CardHeader className="p-0 pb-4">
                   <CardTitle className="flex items-center gap-2">
                     <Building2 className="w-5 h-5 text-[#6366f1]" />
                     Tenant Overview
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="space-y-4 p-0">
                   <div className="flex items-center gap-2">
                     <span className="text-sm text-white/60">Tenant Name:</span>
                     <span className="text-sm font-medium text-[#e2e6ee]">{tenantName}</span>
@@ -89,12 +89,15 @@ export default function DashboardPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="grid grid-cols-1 md:grid-cols-3 gap-4"
+              className="grid grid-cols-1 sm:grid-cols-3 gap-4"
             >
               <Card className="border-white/10 bg-[#111317]">
                 <CardContent className="pt-6">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm text-white/60">Bootstrap Status</span>
+                    <span className="text-sm text-white/60 flex items-center gap-2">
+                      <span className="block w-2 h-2 rounded-full bg-[#10b981]"></span>
+                      Bootstrap Status
+                    </span>
                     <CheckCircle2 className="w-5 h-5 text-[#10b981]" />
                   </div>
                   <Badge variant="default" className="bg-[#10b981]/20 text-[#10b981] border-[#10b981]/30">
@@ -106,7 +109,10 @@ export default function DashboardPage() {
               <Card className="border-white/10 bg-[#111317]">
                 <CardContent className="pt-6">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm text-white/60">OCT Status</span>
+                    <span className="text-sm text-white/60 flex items-center gap-2">
+                      <span className="block w-2 h-2 rounded-full bg-[#10b981]"></span>
+                      OCT Status
+                    </span>
                     <CheckCircle2 className="w-5 h-5 text-[#10b981]" />
                   </div>
                   <Badge variant="default" className="bg-[#10b981]/20 text-[#10b981] border-[#10b981]/30">
@@ -118,7 +124,10 @@ export default function DashboardPage() {
               <Card className="border-white/10 bg-[#111317]">
                 <CardContent className="pt-6">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm text-white/60">Next Rotation</span>
+                    <span className="text-sm text-white/60 flex items-center gap-2">
+                      <span className="block w-2 h-2 rounded-full bg-neutral-500"></span>
+                      Next Rotation
+                    </span>
                     <Clock className="w-5 h-5 text-white/40" />
                   </div>
                   <Badge variant="secondary">Pending</Badge>
@@ -140,7 +149,7 @@ export default function DashboardPage() {
                   <div className="space-y-3">
                     <Button
                       className="w-full justify-start"
-                      variant="outline"
+                      variant="default"
                     >
                       Generate New Bootstrap Kit
                     </Button>
@@ -151,7 +160,7 @@ export default function DashboardPage() {
                       View Agent Plans
                     </Button>
                     <Button
-                      className="w-full justify-start"
+                      className="w-full justify-start opacity-40 cursor-not-allowed"
                       variant="outline"
                       disabled
                     >
@@ -173,11 +182,11 @@ export default function DashboardPage() {
                   <CardTitle>Recent Activity</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <ul className="space-y-4">
+                  <ul className="space-y-3">
                     {activityItems.map((item, index) => (
-                      <li key={index} className="flex flex-col gap-1 pb-4 border-b border-white/5 last:border-0 last:pb-0">
-                        <span className="text-sm text-[#e2e6ee]">{item.action}</span>
-                        <span className="text-xs text-white/40">{item.timestamp}</span>
+                      <li key={index} className="border-l border-white/10 pl-4">
+                        <span className="text-sm text-neutral-300 block">{item.action}</span>
+                        <span className="text-xs text-neutral-500 block mt-1">{item.timestamp}</span>
                       </li>
                     ))}
                   </ul>
