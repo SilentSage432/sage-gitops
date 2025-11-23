@@ -28,6 +28,16 @@ export interface AgentPlan {
   agentCount: number;
 }
 
+export interface Agent {
+  id: string;
+  name: string;
+  description: string;
+}
+
+export interface AgentSelection {
+  selectedAgents: string[];
+}
+
 export interface AccessModel {
   model: 'rbac' | 'abac' | 'hybrid' | null;
   description: string;
@@ -43,6 +53,7 @@ interface OnboardingState {
   dataRegions: DataRegion[];
   dataRegionsConfig: DataRegionsConfig | null;
   agentPlan: AgentPlan | null;
+  agentSelection: AgentSelection | null;
   accessModel: AccessModel | null;
   progress: OnboardingProgress;
   
@@ -50,6 +61,7 @@ interface OnboardingState {
   setDataRegions: (regions: DataRegion[]) => void;
   setDataRegionsConfig: (config: DataRegionsConfig) => void;
   setAgentPlan: (plan: AgentPlan) => void;
+  setAgentSelection: (selection: AgentSelection) => void;
   setAccessModel: (model: AccessModel) => void;
   setProgress: (progress: OnboardingProgress) => void;
   saveProgress: () => void;
@@ -61,6 +73,7 @@ const defaultState = {
   dataRegions: [],
   dataRegionsConfig: null,
   agentPlan: null,
+  agentSelection: null,
   accessModel: null,
   progress: {
     currentStep: 0,
@@ -81,6 +94,8 @@ export const useOnboardingStore = create<OnboardingState>()(
       
       setAgentPlan: (plan) => set({ agentPlan: plan }),
       
+      setAgentSelection: (selection) => set({ agentSelection: selection }),
+      
       setAccessModel: (model) => set({ accessModel: model }),
       
       setProgress: (progress) => set({ progress }),
@@ -100,6 +115,7 @@ export const useOnboardingStore = create<OnboardingState>()(
         dataRegions: state.dataRegions,
         dataRegionsConfig: state.dataRegionsConfig,
         agentPlan: state.agentPlan,
+        agentSelection: state.agentSelection,
         accessModel: state.accessModel,
         progress: state.progress,
       }),
