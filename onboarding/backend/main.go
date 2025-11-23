@@ -29,7 +29,9 @@ func main() {
 	// Initialize database connection
 	dbURL := os.Getenv("DATABASE_URL")
 	if dbURL == "" {
-		dbURL = "postgres://postgres:postgres@localhost:5432/sage_os?search_path=public"
+		// Default connection - uses current user (silentsage) or sage_user
+		// Override with DATABASE_URL env var if needed
+		dbURL = "postgres://silentsage@localhost:5432/sage_os?search_path=public"
 	}
 
 	var err error

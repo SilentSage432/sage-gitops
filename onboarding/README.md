@@ -55,13 +55,19 @@ go mod download
 
 3. Set environment variables:
 ```bash
-export DATABASE_URL="postgres://postgres:postgres@localhost:5432/sage_os?search_path=public"
+# Default connection uses current PostgreSQL user (silentsage)
+# Override with DATABASE_URL if using different credentials
+export DATABASE_URL="postgres://silentsage@localhost:5432/sage_os?search_path=public"
 export PORT=8080
 export JWT_PRIVATE_KEY=""  # Optional: base64-encoded RSA private key
 ```
 
 4. Run the service:
 ```bash
+# Option 1: Run all .go files in the package (recommended)
+go run .
+
+# Option 2: Specify both files explicitly
 go run main.go handlers.go
 ```
 
