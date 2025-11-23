@@ -20,12 +20,17 @@
   backdrop-filter: blur(22px) saturate(140%);
   -webkit-backdrop-filter: blur(22px) saturate(140%);
   box-shadow:
-    inset 0 0 18px rgba(0, 0, 0, 0.45),
-    inset 0 0 32px rgba(0, 0, 0, 0.55),
-    0 0 18px rgba(120, 90, 255, 0.08);
+    0 0 18px rgba(120, 65, 255, 0.06),
+    inset 0 0 6px rgba(120, 65, 255, 0.05);
   border-radius: 18px;
-  transition: all 240ms ease;
+  transition: box-shadow 280ms ease;
   animation: sage-breath 7s ease-in-out infinite;
+}
+
+.federation-command-core.active {
+  box-shadow:
+    0 0 26px rgba(168, 94, 255, 0.16),
+    inset 0 0 10px rgba(168, 94, 255, 0.14);
 }
 
 .federation-intel-stack {
@@ -55,9 +60,9 @@
 
 .federation-input-dock:focus-within {
   box-shadow:
-    0 0 22px rgba(168, 94, 255, 0.28),
-    inset 0 0 12px rgba(168, 94, 255, 0.18);
-  transition: box-shadow 220ms ease;
+    0 0 32px rgba(180, 110, 255, 0.32),
+    inset 0 0 14px rgba(180, 110, 255, 0.22);
+  transition: box-shadow 220ms ease-out;
 }
 
 .federation-left-nav:hover {
@@ -72,6 +77,12 @@
     inset 0 0 22px rgba(0, 0, 0, 0.55),
     0 0 22px rgba(150, 110, 255, 0.12);
   background: rgba(12, 12, 20, 0.56);
+}
+
+.federation-intel-stack.busy {
+  box-shadow:
+    0 0 22px rgba(255, 140, 85, 0.22),
+    inset 0 0 10px rgba(255, 140, 85, 0.18);
 }
 
 .federation-intel-stack button.active {
