@@ -105,7 +105,7 @@ export default function OperatorTerminal() {
         ))}
       </div>
 
-      <div className="terminal-input-bar sage-command-bar">
+      <div className="sage-command-bar terminal-input-bar">
         <input
           className="terminal-input"
           value={input}
