@@ -4,34 +4,116 @@ import { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Copy, Check, Download } from 'lucide-react';
+import { Copy, Check, Download, CheckCircle2 } from 'lucide-react';
 
 interface BootstrapStatusCardProps {
   fingerprint?: string;
 }
 
+type ActivationStatus = 'pending activation' | 'awaiting first check-in' | 'active' | 'expired';
+
+const STORAGE_KEY = 'bootstrap-status';
+const STORAGE_FINGERPRINT_KEY = 'bootstrap-fingerprint';
+const STORAGE_TIMER_KEY = 'bootstrap-timer-start';
+
 export function BootstrapStatusCard({ fingerprint }: BootstrapStatusCardProps) {
-  const [status, setStatus] = useState<'pending' | 'activated' | 'expired'>('pending');
+  // Initialize from localStorage or defaults
+  const getInitialStatus = (): ActivationStatus => {
+    if (typeof window === 'undefined') return 'pending activation';
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored && ['pending activation', 'awaiting first check-in', 'active', 'expired'].includes(stored)) {
+      return stored as ActivationStatus;
+    }
+    // If no stored status, initialize as pending
+    localStorage.setItem(STORAGE_KEY, 'pending activation');
+    return 'pending activation';
+  };
+
+  const [status, setStatus] = useState<ActivationStatus>(() => {
+    if (typeof window === 'undefined') return 'pending activation';
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored && ['pending activation', 'awaiting first check-in', 'active', 'expired'].includes(stored)) {
+      return stored as ActivationStatus;
+    }
+    // If no stored status, initialize as pending
+    localStorage.setItem(STORAGE_KEY, 'pending activation');
+    return 'pending activation';
+  });
   const [timeRemaining, setTimeRemaining] = useState<number>(15 * 60); // 15 minutes in seconds
   const [fingerprintCopied, setFingerprintCopied] = useState(false);
   const [commandCopied, setCommandCopied] = useState(false);
+  const [displayFingerprint, setDisplayFingerprint] = useState<string>('');
 
-  // Mock fingerprint if not provided
-  const displayFingerprint = fingerprint || 'sha256:' + Array.from(crypto.getRandomValues(new Uint8Array(32)))
-    .map(b => b.toString(16).padStart(2, '0'))
-    .join('');
+  // Initialize fingerprint from localStorage or generate new
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
+    const stored = localStorage.getItem(STORAGE_FINGERPRINT_KEY);
+    if (stored) {
+      setDisplayFingerprint(stored);
+      return;
+    }
+    
+    const generated = fingerprint || 'sha256:' + Array.from(crypto.getRandomValues(new Uint8Array(32)))
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
+    
+    localStorage.setItem(STORAGE_FINGERPRINT_KEY, generated);
+    setDisplayFingerprint(generated);
+  }, [fingerprint]);
 
-  // Mock expiry timestamp (15 minutes from now)
-  const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
+  // Initialize timer from localStorage or start new
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (status === 'active' || status === 'expired') return;
+    
+    const timerStart = localStorage.getItem(STORAGE_TIMER_KEY);
+    if (timerStart) {
+      const elapsed = Math.floor((Date.now() - parseInt(timerStart)) / 1000);
+      const remaining = Math.max(0, 15 * 60 - elapsed);
+      setTimeRemaining(remaining);
+      
+      if (remaining === 0) {
+        setStatus('expired');
+        localStorage.setItem(STORAGE_KEY, 'expired');
+      }
+    } else {
+      localStorage.setItem(STORAGE_TIMER_KEY, Date.now().toString());
+    }
+  }, [status]);
+
+  // Auto-transition: pending → awaiting after 5 seconds (only if still in pending state)
+  useEffect(() => {
+    if (status !== 'pending activation') return;
+    
+    // Check if we've already transitioned (stored in localStorage)
+    const storedStatus = localStorage.getItem(STORAGE_KEY);
+    if (storedStatus === 'awaiting first check-in' || storedStatus === 'active' || storedStatus === 'expired') {
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setStatus((currentStatus) => {
+        if (currentStatus === 'pending activation') {
+          localStorage.setItem(STORAGE_KEY, 'awaiting first check-in');
+          return 'awaiting first check-in';
+        }
+        return currentStatus;
+      });
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [status]);
 
   // Countdown timer
   useEffect(() => {
-    if (status === 'expired') return;
+    if (status === 'expired' || status === 'active') return;
 
     const interval = setInterval(() => {
       setTimeRemaining((prev) => {
         if (prev <= 1) {
           setStatus('expired');
+          localStorage.setItem(STORAGE_KEY, 'expired');
           return 0;
         }
         return prev - 1;
@@ -51,13 +133,37 @@ export function BootstrapStatusCard({ fingerprint }: BootstrapStatusCardProps) {
   // Get status badge variant and color
   const getStatusBadge = () => {
     switch (status) {
-      case 'activated':
-        return <Badge variant="default" className="bg-[#10b981]/20 text-[#10b981] border-[#10b981]/30">Activated</Badge>;
+      case 'active':
+        return <Badge variant="default" className="bg-[#10b981]/20 text-[#10b981] border-[#10b981]/30">Active</Badge>;
       case 'expired':
         return <Badge variant="secondary" className="bg-red-500/20 text-red-500 border-red-500/30">Expired</Badge>;
+      case 'awaiting first check-in':
+        return <Badge variant="secondary" className="bg-yellow-500/20 text-yellow-500 border-yellow-500/30">Awaiting Check-in</Badge>;
       default:
         return <Badge variant="secondary" className="bg-yellow-500/20 text-yellow-500 border-yellow-500/30">Pending Activation</Badge>;
     }
+  };
+
+  // Get status description text
+  const getStatusDescription = (): string => {
+    switch (status) {
+      case 'pending activation':
+        return 'Kit generated and awaiting delivery';
+      case 'awaiting first check-in':
+        return 'Bootstrap detected — waiting for first agent signal';
+      case 'active':
+        return 'Tenant successfully initialized';
+      case 'expired':
+        return 'Bootstrap expired — regenerate required';
+      default:
+        return '';
+    }
+  };
+
+  // Handle manual activation
+  const handleMarkAsActivated = () => {
+    setStatus('active');
+    localStorage.setItem(STORAGE_KEY, 'active');
   };
 
   const handleCopyFingerprint = async () => {
@@ -90,6 +196,10 @@ export function BootstrapStatusCard({ fingerprint }: BootstrapStatusCardProps) {
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
+        {/* Status Description */}
+        <div>
+          <p className="text-sm text-white/60">{getStatusDescription()}</p>
+        </div>
         {/* Fingerprint */}
         <div>
           <div className="flex items-center justify-between mb-2">
@@ -119,7 +229,7 @@ export function BootstrapStatusCard({ fingerprint }: BootstrapStatusCardProps) {
         </div>
 
         {/* Expiry Countdown */}
-        {status !== 'expired' && (
+        {status !== 'expired' && status !== 'active' && (
           <div>
             <p className="text-sm text-white/60 mb-1">Expires in:</p>
             <p className="text-lg font-mono font-semibold text-white/80">
@@ -130,14 +240,29 @@ export function BootstrapStatusCard({ fingerprint }: BootstrapStatusCardProps) {
 
         {/* Actions */}
         <div className="space-y-2 pt-2 border-t border-white/5">
-          <Button
-            variant="outline"
-            className="w-full justify-start"
-            disabled={status === 'expired'}
-          >
-            <Download className="w-4 h-4 mr-2" />
-            Download Kit
-          </Button>
+          {/* Download Kit Button */}
+          {status === 'expired' ? (
+            <Button
+              variant="outline"
+              className="w-full justify-start opacity-50"
+              disabled
+            >
+              <Download className="w-4 h-4 mr-2" />
+              Download Kit
+            </Button>
+          ) : (
+            (status === 'pending activation' || status === 'awaiting first check-in') && (
+              <Button
+                variant="outline"
+                className="w-full justify-start"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Download Kit
+              </Button>
+            )
+          )}
+
+          {/* Copy Verify Command - Always available */}
           <Button
             variant="outline"
             className="w-full justify-start"
@@ -155,13 +280,27 @@ export function BootstrapStatusCard({ fingerprint }: BootstrapStatusCardProps) {
               </>
             )}
           </Button>
+
+          {/* Mark as Activated Button - Only show when awaiting */}
+          {status === 'awaiting first check-in' && (
+            <Button
+              variant="default"
+              className="w-full justify-start"
+              onClick={handleMarkAsActivated}
+            >
+              <CheckCircle2 className="w-4 h-4 mr-2" />
+              Mark as Activated
+            </Button>
+          )}
+
+          {/* Regenerate Button - Only show when expired */}
           {status === 'expired' && (
             <Button
               variant="outline"
               className="w-full justify-start opacity-50"
               disabled
             >
-              Regenerate Kit (Coming Soon)
+              Regenerate (future)
             </Button>
           )}
         </div>
