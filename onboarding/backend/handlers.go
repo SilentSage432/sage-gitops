@@ -1,14 +1,12 @@
 package main
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
 	"time"
 
-	"github.com/go-webauthn/webauthn/protocol"
 	"github.com/go-webauthn/webauthn/webauthn"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
@@ -72,16 +70,6 @@ func handleWebAuthnChallenge(w http.ResponseWriter, r *http.Request) {
 func handleWebAuthnVerify(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	var req struct {
-		Credential interface{} `json:"credential"`
-		Challenge  string      `json:"challenge"`
-	}
-
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		http.Error(w, "Invalid request", http.StatusBadRequest)
-		return
-	}
-
 	// Load session from database
 	var sessionData []byte
 	err := dbPool.QueryRow(ctx,
@@ -104,54 +92,43 @@ func handleWebAuthnVerify(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Check if user has credentials (for authentication) or not (for registration)
+	var hasCredential bool
+	err = dbPool.QueryRow(ctx,
+		"SELECT EXISTS(SELECT 1 FROM public.operator_keys WHERE user_id = $1 AND credential_data IS NOT NULL)",
+		"tyson",
+	).Scan(&hasCredential)
+
 	user := &WebAuthnUser{
 		ID:          []byte("tyson-only"),
 		Name:        "tyson",
 		DisplayName: "Tyson Zaugg",
 	}
 
-	// Parse credential response
-	credentialJSON, _ := json.Marshal(req.Credential)
-	var credential protocol.CredentialCreationResponse
-	if err := json.Unmarshal(credentialJSON, &credential); err != nil {
-		http.Error(w, "Invalid credential", http.StatusBadRequest)
-		return
-	}
-
-	// Verify registration
-	credentialData, err := webAuthn.FinishRegistration(user, session, &credential)
-	if err != nil {
-		// Try authentication instead
-		var authCredential protocol.CredentialAssertionResponse
-		if err := json.Unmarshal(credentialJSON, &authCredential); err != nil {
-			http.Error(w, fmt.Sprintf("Verification failed: %v", err), http.StatusUnauthorized)
-			return
-		}
-
-		// Load credential from database
-		var credentialBytes []byte
-		err = dbPool.QueryRow(ctx,
-			"SELECT credential_data FROM public.operator_keys WHERE user_id = $1 ORDER BY created_at DESC LIMIT 1",
-			"tyson",
-		).Scan(&credentialBytes)
-
-		if err != nil {
-			http.Error(w, "Credential not found", http.StatusUnauthorized)
-			return
-		}
-
-		var storedCredential webauthn.Credential
-		if err := json.Unmarshal(credentialBytes, &storedCredential); err != nil {
-			http.Error(w, "Invalid stored credential", http.StatusInternalServerError)
-			return
-		}
-
-		_, err = webAuthn.FinishLogin(user, session, &authCredential)
+	if hasCredential {
+		// Authentication flow
+		_, err := webAuthn.FinishLogin(user, session, r)
 		if err != nil {
 			http.Error(w, fmt.Sprintf("Authentication failed: %v", err), http.StatusUnauthorized)
 			return
 		}
+
+		// Log audit event
+		_, _ = dbPool.Exec(ctx,
+			"INSERT INTO public.audit_log (event_type, user_id, details, created_at) VALUES ($1, $2, $3, $4)",
+			"webauthn_success",
+			"tyson",
+			`{"action": "authentication", "device": "yubikey"}`,
+			time.Now(),
+		)
 	} else {
+		// Registration flow
+		credentialData, err := webAuthn.FinishRegistration(user, session, r)
+		if err != nil {
+			http.Error(w, fmt.Sprintf("Registration failed: %v", err), http.StatusUnauthorized)
+			return
+		}
+
 		// Store credential for future authentication
 		credentialJSON, _ := json.Marshal(credentialData)
 		_, err = dbPool.Exec(ctx,
@@ -164,16 +141,16 @@ func handleWebAuthnVerify(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Failed to store credential", http.StatusInternalServerError)
 			return
 		}
-	}
 
-	// Log audit event
-	_, _ = dbPool.Exec(ctx,
-		"INSERT INTO public.audit_log (event_type, user_id, details, created_at) VALUES ($1, $2, $3, $4)",
-		"webauthn_success",
-		"tyson",
-		`{"action": "authentication", "device": "yubikey"}`,
-		time.Now(),
-	)
+		// Log audit event
+		_, _ = dbPool.Exec(ctx,
+			"INSERT INTO public.audit_log (event_type, user_id, details, created_at) VALUES ($1, $2, $3, $4)",
+			"webauthn_registered",
+			"tyson",
+			`{"action": "registration", "device": "yubikey"}`,
+			time.Now(),
+		)
+	}
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]interface{}{
@@ -403,7 +380,6 @@ func handleCreateTenant(w http.ResponseWriter, r *http.Request) {
 
 // Bootstrap Kit Handler
 func handleBootstrapKit(w http.ResponseWriter, r *http.Request) {
-	ctx := r.Context()
 
 	// Verify OCT token
 	authHeader := r.Header.Get("Authorization")
@@ -454,7 +430,6 @@ func handleBootstrapKit(w http.ResponseWriter, r *http.Request) {
 
 // Bootstrap Meta Handler
 func handleBootstrapMeta(w http.ResponseWriter, r *http.Request) {
-	ctx := r.Context()
 
 	// Verify OCT token
 	authHeader := r.Header.Get("Authorization")

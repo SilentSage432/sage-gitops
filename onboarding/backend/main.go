@@ -5,19 +5,15 @@ import (
 	"crypto/rand"
 	"crypto/rsa"
 	"encoding/base64"
-	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
-	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
 	"github.com/go-webauthn/webauthn/webauthn"
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -48,28 +44,11 @@ func main() {
 		log.Fatalf("Failed to ping database: %v", err)
 	}
 
-	// Initialize WebAuthn
+	// Initialize WebAuthn with v1 API
 	webAuthnConfig := &webauthn.Config{
 		RPDisplayName: "SAGE Onboarding",
 		RPID:          "localhost",
 		RPOrigins:     []string{"http://localhost:3000", "https://localhost:3000"},
-		Timeouts: webauthn.TimeoutsConfig{
-			Login: webauthn.TimeoutConfig{
-				Enforce:    true,
-				Timeout:    time.Second * 60,
-				TimeoutUVI: time.Second * 0,
-			},
-			Registration: webauthn.TimeoutConfig{
-				Enforce:    true,
-				Timeout:    time.Second * 60,
-				TimeoutUVI: time.Second * 0,
-			},
-		},
-		AuthenticatorSelection: webauthn.AuthenticatorSelection{
-			AuthenticatorAttachment: webauthn.CrossPlatform,
-			UserVerification:        webauthn.VerificationRequired,
-			RequireResidentKey:      false,
-		},
 	}
 
 	webAuthn, err = webauthn.New(webAuthnConfig)
