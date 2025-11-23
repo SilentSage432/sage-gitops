@@ -1,0 +1,14 @@
+/* === SAGE MAIN CONSOLE — guaranteed to apply === */
+
+.sage-main-console {
+  background: rgba(14, 14, 22, 0.72) !important;
+  backdrop-filter: blur(22px) saturate(160%) !important;
+  border-radius: 18px !important;
+  box-shadow:
+    0 0 0 1px rgba(156, 145, 255, 0.14),
+    0 12px 42px rgba(0, 0, 0, 0.6),
+    0 0 64px rgba(156, 145, 255, 0.08) !important;
+  padding: 24px !important;
+  margin: 12px !important;
+}
+
