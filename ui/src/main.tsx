@@ -9,6 +9,7 @@ import "./sage/kernel/animations.css";
 import "./sage/kernel/reflexAnimations.css";
 import "./sage/kernel/heartbeatAnimations.css";
 import "./sage/cognition/defaultPatterns";
+import "./styles/sageVisualOverride.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

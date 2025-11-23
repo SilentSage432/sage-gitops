@@ -1,0 +1,52 @@
+/* === GLOBAL OBSIDIAN CONSOLE applied to real root === */
+
+body#sageRootLayout {
+  background: radial-gradient(
+      circle at 50% 0%,
+      #1a1b22,
+      #0d0e13 70%,
+      #050508
+    ) !important;
+  color: #e8e9f5 !important;
+  font-family: 'Inter', 'SF Pro Display', system-ui, sans-serif;
+  letter-spacing: 0.3px;
+}
+
+/* === MAIN CONSOLE SURFACE — applied to real container === */
+
+body#sageRootLayout > div.flex-1.flex.flex-col.overflow-hidden.min-h-0 {
+  background: rgba(14, 14, 22, 0.72) !important;
+  backdrop-filter: blur(22px) saturate(160%) !important;
+  border-radius: 18px !important;
+  box-shadow:
+    0 0 0 1px rgba(156, 145, 255, 0.14),
+    0 12px 42px rgba(0, 0, 0, 0.6),
+    0 0 64px rgba(156, 145, 255, 0.08) !important;
+  padding: 24px !important;
+  margin: 12px !important;
+}
+
+/* === SIDEBAR — applied to REAL sidebar container === */
+
+body#sageRootLayout nav {
+  background: rgba(12, 13, 18, 0.82) !important;
+  backdrop-filter: blur(24px) saturate(170%) !important;
+  border-right: 1px solid rgba(156, 145, 255, 0.12) !important;
+  padding: 24px 18px !important;
+}
+
+body#sageRootLayout nav a {
+  display: block;
+  padding: 10px 12px !important;
+  margin-bottom: 6px !important;
+  border-radius: 10px !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  color: rgba(220, 220, 245, 0.88) !important;
+}
+
+body#sageRootLayout nav a.active {
+  background: rgba(156, 145, 255, 0.22) !important;
+  color: white !important;
+  border: 1px solid rgba(156, 145, 255, 0.6) !important;
+}
+
