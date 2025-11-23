@@ -11,6 +11,7 @@
     0 0 18px rgba(120, 90, 255, 0.08);
   border-radius: 18px;
   transition: all 240ms ease;
+  animation: sage-breath 7s ease-in-out infinite;
 }
 
 .federation-command-core {
@@ -24,6 +25,7 @@
     0 0 18px rgba(120, 90, 255, 0.08);
   border-radius: 18px;
   transition: all 240ms ease;
+  animation: sage-breath 7s ease-in-out infinite;
 }
 
 .federation-intel-stack {
@@ -37,6 +39,7 @@
     0 0 18px rgba(120, 90, 255, 0.08);
   border-radius: 18px;
   transition: all 240ms ease;
+  animation: sage-breath 7s ease-in-out infinite;
 }
 
 .federation-input-dock {
@@ -48,6 +51,13 @@
     inset 0 0 14px rgba(120, 86, 255, 0.05);
   backdrop-filter: blur(8px);
   transition: all 260ms ease;
+}
+
+.federation-input-dock:focus-within {
+  box-shadow:
+    0 0 22px rgba(168, 94, 255, 0.28),
+    inset 0 0 12px rgba(168, 94, 255, 0.18);
+  transition: box-shadow 220ms ease;
 }
 
 .federation-left-nav:hover {
@@ -62,6 +72,25 @@
     inset 0 0 22px rgba(0, 0, 0, 0.55),
     0 0 22px rgba(150, 110, 255, 0.12);
   background: rgba(12, 12, 20, 0.56);
+}
+
+.federation-intel-stack button.active {
+  background: rgba(168, 94, 255, 0.22);
+  box-shadow:
+    0 0 12px rgba(168, 94, 255, 0.32),
+    inset 0 0 8px rgba(168, 94, 255, 0.22);
+  transition: all 180ms ease;
+}
+
+.federation-intel-stack button:hover {
+  transform: translateY(-1px);
+  transition: transform 160ms ease;
+}
+
+@keyframes sage-breath {
+  0% { box-shadow: 0 0 18px rgba(120, 65, 255, 0.06); }
+  50% { box-shadow: 0 0 32px rgba(120, 65, 255, 0.12); }
+  100% { box-shadow: 0 0 18px rgba(120, 65, 255, 0.06); }
 }
 
 /* Do not modify or remove this comment.
