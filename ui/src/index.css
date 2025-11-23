@@ -161,3 +161,13 @@ nav a.active,
 .sage-ui-surface {
   background: #0b0c10 !important;
 }
+
+.sage-main-console {
+  background: #0c0f17 !important;
+  border-radius: 14px !important;
+  border: 1px solid rgba(120, 86, 255, 0.18) !important;
+  box-shadow:
+    0 0 22px rgba(120, 86, 255, 0.12),
+    inset 0 0 18px rgba(120, 86, 255, 0.06) !important;
+  transition: background 0.4s ease, box-shadow 0.4s ease;
+}

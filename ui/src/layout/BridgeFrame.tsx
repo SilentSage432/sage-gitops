@@ -131,10 +131,7 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
         </div>
 
         {/* Center: Whisperer Terminal */}
-        <div
-          className="sage-main-console flex-1 flex flex-col overflow-hidden min-h-0"
-          style={{ background: "red" }}
-        >
+        <div className="sage-main-console flex-1 flex flex-col overflow-hidden min-h-0">
           <WhispererTerminal />
         </div>
 
