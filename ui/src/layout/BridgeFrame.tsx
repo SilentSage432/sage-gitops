@@ -124,7 +124,7 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
         ${awareness === "ALERT" ? "ring-4 ring-red-500" : ""}
       `}
     >
-      <div className="flex flex-1 overflow-hidden min-h-0">
+      <div className="sage-surface flex flex-1 overflow-hidden min-h-0">
         {/* Left Sidebar: Federation Navigator */}
         <div className="w-64 border-r border-slate-800 flex-shrink-0 overflow-y-auto">
           <SidebarNavigator selectedItem={selectedItem} onSelectItem={onSelectItem} />
