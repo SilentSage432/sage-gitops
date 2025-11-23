@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { OCTGuard } from '@/components/OCTGuard';
-import { CheckCircle2 } from 'lucide-react';
+import { CheckCircle2, Copy, Check } from 'lucide-react';
 
 const agentNameMap: Record<string, string> = {
   'researcher': 'Researcher Agent',
@@ -38,6 +38,8 @@ export default function ReviewPage() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [kitFingerprint, setKitFingerprint] = useState<string>('');
+  const [fingerprintCopied, setFingerprintCopied] = useState(false);
+  const [commandCopied, setCommandCopied] = useState(false);
 
   // Validate required data and redirect if missing
   useEffect(() => {
@@ -71,10 +73,12 @@ export default function ReviewPage() {
       if (process.env.NEXT_PUBLIC_BYPASS_YUBIKEY === 'true') {
         // Simulate API call delay
         await new Promise((resolve) => setTimeout(resolve, 1500));
-        setKitFingerprint('sha256:' + Array.from(crypto.getRandomValues(new Uint8Array(32)))
+        // Generate a proper SHA-256-like fingerprint
+        const hashBytes = crypto.getRandomValues(new Uint8Array(32));
+        const hashHex = Array.from(hashBytes)
           .map(b => b.toString(16).padStart(2, '0'))
-          .join('')
-          .substring(0, 64));
+          .join('');
+        setKitFingerprint(`sha256:${hashHex}`);
         setIsSuccess(true);
       } else {
         // Call actual API endpoint (stub for now)
@@ -107,10 +111,25 @@ export default function ReviewPage() {
     }
   };
 
-  const handleCopyVerificationCommand = () => {
+  const handleCopyFingerprint = async () => {
+    try {
+      await navigator.clipboard.writeText(kitFingerprint);
+      setFingerprintCopied(true);
+      setTimeout(() => setFingerprintCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy fingerprint:', err);
+    }
+  };
+
+  const handleCopyVerificationCommand = async () => {
     const command = `sage verify-kit --fingerprint "${kitFingerprint}"`;
-    navigator.clipboard.writeText(command);
-    // Could show a toast here
+    try {
+      await navigator.clipboard.writeText(command);
+      setCommandCopied(true);
+      setTimeout(() => setCommandCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy command:', err);
+    }
   };
 
   const handleFinish = () => {
@@ -155,8 +174,30 @@ export default function ReviewPage() {
 
               {kitFingerprint && (
                 <div className="mb-8 p-4 bg-[#1a1d22] border border-white/10 rounded-[14px] text-left">
-                  <p className="text-sm font-medium text-white/60 mb-2">Kit Fingerprint:</p>
-                  <p className="text-sm font-mono text-[#e2e6ee] break-all">{kitFingerprint}</p>
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-sm font-medium text-white/60">SHA-256 Fingerprint:</p>
+                    <Button
+                      onClick={handleCopyFingerprint}
+                      variant="ghost"
+                      size="sm"
+                      className="h-8 px-3 text-xs"
+                    >
+                      {fingerprintCopied ? (
+                        <>
+                          <Check className="w-3 h-3 mr-1.5 text-[#10b981]" />
+                          Copied
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-3 h-3 mr-1.5" />
+                          Copy
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                  <code className="text-xs font-mono text-[#e2e6ee] break-all block bg-[#0b0c0f] p-2 rounded border border-white/5">
+                    {kitFingerprint}
+                  </code>
                 </div>
               )}
 
@@ -175,7 +216,17 @@ export default function ReviewPage() {
                     variant="outline"
                     className="w-full px-6"
                   >
-                    Copy Verification Command
+                    {commandCopied ? (
+                      <>
+                        <Check className="w-4 h-4 mr-2 text-[#10b981]" />
+                        Command Copied
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-4 h-4 mr-2" />
+                        Copy Verification Command
+                      </>
+                    )}
                   </Button>
                 )}
 
