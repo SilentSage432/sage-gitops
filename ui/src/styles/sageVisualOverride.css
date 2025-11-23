@@ -14,7 +14,7 @@ body#sageRootLayout {
 
 /* === MAIN CONSOLE SURFACE — applied to real container === */
 
-body#sageRootLayout > div.flex-1.flex.flex-col.overflow-hidden.min-h-0 {
+.sage-main-console {
   background: rgba(14, 14, 22, 0.72) !important;
   backdrop-filter: blur(22px) saturate(160%) !important;
   border-radius: 18px !important;

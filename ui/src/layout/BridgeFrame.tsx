@@ -131,7 +131,7 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
         </div>
 
         {/* Center: Whisperer Terminal */}
-        <div className="flex-1 flex flex-col overflow-hidden min-h-0">
+        <div className="sage-main-console flex-1 flex flex-col overflow-hidden min-h-0">
           <WhispererTerminal />
         </div>
 
