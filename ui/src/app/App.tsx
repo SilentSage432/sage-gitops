@@ -17,6 +17,7 @@ import { NodesView } from '../features/federation/NodesView';
 import { FederationHealthCore } from '../features/federation/FederationHealthCore';
 import { FederationHealthMatrix } from '../features/federation/FederationHealthMatrix';
 import { MeshTelemetrySurface } from '../features/federation/MeshTelemetrySurface';
+import { SignalHistoryPanel } from '../features/federation/SignalHistoryPanel';
 import { AgentsOverview } from '../features/agents/AgentsOverview';
 import { AgentDetails } from '../features/agents/AgentDetails';
 import OperatorTerminal from "../features/operator/OperatorTerminal";
@@ -58,6 +59,8 @@ export const App: React.FC = () => {
         return <FederationHealthMatrix />;
       case "mesh-telemetry":
         return <MeshTelemetrySurface />;
+      case 'signal-history':
+        return <SignalHistoryPanel />;
       
       // Agents panels
       case 'agents':

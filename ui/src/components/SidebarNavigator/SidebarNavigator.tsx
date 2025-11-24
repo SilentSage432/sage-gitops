@@ -49,7 +49,8 @@ export const SidebarNavigator: React.FC<SidebarNavigatorProps> = ({
         { id: 'onboarding-nexus', label: 'Onboarding Nexus' },
         { id: 'nodes', label: 'Nodes' },
         { id: 'federation-health', label: 'Federation Health' },
-        { id: 'mesh-telemetry', label: 'Mesh Telemetry' }
+        { id: 'mesh-telemetry', label: 'Mesh Telemetry' },
+        { id: 'signal-history', label: 'Signal History' }
       ]
     },
     {
