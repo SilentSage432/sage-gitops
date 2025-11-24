@@ -35,21 +35,80 @@ export default function OperatorTerminal() {
   const [log, setLog] = useState<
     { text?: string; message?: string; category: LogCategory; ts: number; isCommand?: boolean }[]
   >([]);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [isIdle, setIsIdle] = useState(false);
+  const [isJustActivated, setIsJustActivated] = useState(false);
+  const [lastMessageTime, setLastMessageTime] = useState(Date.now());
 
   const logRef = useRef<HTMLDivElement>(null);
+  const userScrolledRef = useRef(false);
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Check if user has manually scrolled up
   useEffect(() => {
-    if (logRef.current) {
-      logRef.current.scrollTop = logRef.current.scrollHeight;
+    const handleScroll = () => {
+      if (!logRef.current) return;
+      const { scrollTop, scrollHeight, clientHeight } = logRef.current;
+      const isNearBottom = scrollHeight - scrollTop - clientHeight < 100;
+      userScrolledRef.current = !isNearBottom;
+    };
+
+    const logElement = logRef.current;
+    if (logElement) {
+      logElement.addEventListener("scroll", handleScroll);
+      return () => logElement.removeEventListener("scroll", handleScroll);
     }
+  }, []);
+
+  // Auto-scroll to bottom when new entries arrive (only if user hasn't scrolled up)
+  useEffect(() => {
+    if (logRef.current && !userScrolledRef.current) {
+      // Clear any pending scroll
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+      // Smooth scroll after a brief delay to ensure DOM is updated
+      scrollTimeoutRef.current = setTimeout(() => {
+        if (logRef.current && !userScrolledRef.current) {
+          logRef.current.scrollTo({
+            top: logRef.current.scrollHeight,
+            behavior: "smooth",
+          });
+        }
+      }, 50);
+    }
+    return () => {
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
   }, [log]);
+
+  // Track idle state (12 seconds without messages)
+  useEffect(() => {
+    const checkIdle = () => {
+      const timeSinceLastMessage = Date.now() - lastMessageTime;
+      setIsIdle(timeSinceLastMessage > 12000);
+    };
+
+    const interval = setInterval(checkIdle, 1000);
+    checkIdle(); // Initial check
+
+    return () => clearInterval(interval);
+  }, [lastMessageTime]);
 
   useEffect(() => {
     const handler = (e: CustomEvent) => {
       const { text, category = "SYSTEM" } = e.detail || {};
       const normalized = normalizeCategory(category);
+      const now = Date.now();
 
-      setLog((prev) => [...prev, { text, category: normalized, ts: Date.now() }]);
+      setLog((prev) => [...prev, { text, category: normalized, ts: now }]);
+      setLastMessageTime(now);
+      setIsIdle(false);
+      setIsJustActivated(true);
+      // Reset activation state after 900ms
+      setTimeout(() => setIsJustActivated(false), 900);
     };
 
     window.addEventListener("SAGE_TERMINAL_LOG", handler as EventListener);
@@ -71,26 +130,41 @@ export default function OperatorTerminal() {
     const command = input;
     setInput("");
     remember(command, "operator");
+    setIsProcessing(true);
+    const now = Date.now();
+      setLastMessageTime(now);
+      setIsIdle(false);
+      setIsJustActivated(true);
+      setTimeout(() => setIsJustActivated(false), 900);
+    
     // Add command to log for visual feedback
     setLog((prev) => [
       ...prev,
       {
         text: command,
         category: "SYSTEM" as LogCategory,
-        ts: Date.now(),
+        ts: now,
         isCommand: true,
       },
     ]);
+    
     await routeCommand(command, (response) => {
+      const responseTime = response.timestamp || Date.now();
       setLog((prev) => [
         ...prev,
         {
           message: response.message,
           category: (response.status === "failed" ? "ERROR" : "WHISPERER") as LogCategory,
-          ts: response.timestamp,
+          ts: responseTime,
         },
       ]);
+      setLastMessageTime(responseTime);
+      setIsIdle(false);
+      setIsJustActivated(true);
+      setTimeout(() => setIsJustActivated(false), 900);
     });
+    
+    setIsProcessing(false);
   };
 
   const filteredLog = useMemo(() => {
@@ -102,7 +176,7 @@ export default function OperatorTerminal() {
   }, [activeFilter, log]);
 
   return (
-    <div className="prime-terminal-aura prime-terminal-panel">
+    <div className={`prime-terminal-aura prime-terminal-panel ${isIdle ? "prime-terminal-idle" : isJustActivated ? "prime-terminal-activated" : "prime-terminal-active"}`}>
       {/* Filter Bar */}
       <div className="terminal-filter-bar">
         {FILTERS.map((cat) => (
@@ -126,7 +200,7 @@ export default function OperatorTerminal() {
             className={
               entry.isCommand
                 ? "prime-terminal-line prime-terminal-line-command text-sm mb-1 whitespace-pre-wrap terminal-line"
-                : `prime-terminal-line text-sm mb-1 whitespace-pre-wrap opacity-90 terminal-line cat-${entry.category.toLowerCase()}`
+                : `prime-terminal-line prime-terminal-line-${entry.category.toLowerCase()} text-sm mb-1 whitespace-pre-wrap opacity-90 terminal-line cat-${entry.category.toLowerCase()}`
             }
           >
             {entry.message || entry.text}
@@ -135,7 +209,7 @@ export default function OperatorTerminal() {
       </div>
 
       {/* Command Bar (Bottom Anchored) */}
-      <div className="prime-terminal-input">
+      <div className={`prime-terminal-input ${isProcessing ? "prime-terminal-processing" : ""}`}>
         <div className="flex items-center gap-3">
           <input
             className="flex-1 bg-transparent border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500/50 placeholder-white/40 text-white text-base"

@@ -404,6 +404,89 @@
   }
 }
 
+/* === Phase P-4: PRIME Reactive Stream Layer === */
+
+/* Signal-based visual grouping */
+.prime-terminal-line-system {
+  border-left: 2px solid rgba(100, 150, 255, 0.25);
+  padding-left: 8px;
+}
+
+.prime-terminal-line-arc {
+  border-left: 2px solid rgba(100, 255, 255, 0.3);
+  padding-left: 8px;
+}
+
+.prime-terminal-line-rho2 {
+  border-left: 2px solid rgba(180, 120, 255, 0.35);
+  padding-left: 8px;
+}
+
+.prime-terminal-line-error {
+  border-left: 2px solid rgba(255, 100, 120, 0.4);
+  padding-left: 8px;
+}
+
+.prime-terminal-line-heartbeat {
+  opacity: 0.6;
+  animation: heartbeatPulse 2s ease-in-out infinite;
+}
+
+@keyframes heartbeatPulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 0.85; }
+}
+
+/* Idle → active reactive glow */
+.prime-terminal-idle {
+  filter: brightness(0.88) saturate(0.92);
+  transition: filter 0.6s ease;
+}
+
+.prime-terminal-active {
+  filter: brightness(1) saturate(1);
+  transition: filter 0.9s ease;
+}
+
+.prime-terminal-activated {
+  filter: brightness(1.08) saturate(1.06);
+  transition: filter 0.2s ease;
+}
+
+/* Processing pulse underline */
+.prime-terminal-processing::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  max-width: 500px;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(155, 122, 255, 0.35) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: processingPulse 2.8s linear infinite;
+  border-radius: 1px;
+}
+
+@keyframes processingPulse {
+  0% {
+    background-position: -100% 0;
+  }
+  100% {
+    background-position: 100% 0;
+  }
+}
+
+.prime-terminal-input {
+  position: relative;
+}
+
 /* Do not modify or remove this comment.
    Styling only — no logic changes. */
 
