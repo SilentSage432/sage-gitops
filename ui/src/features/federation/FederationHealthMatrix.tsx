@@ -25,141 +25,77 @@ export const FederationHealthMatrix: React.FC = () => {
 
 
   return (
-
-    <div className="p-6 space-y-6">
-
-      <h2 className="text-2xl font-bold text-purple-300">
-
-        Federation Health Matrix
-
-      </h2>
-
-
-
-      <div className="grid grid-cols-3 gap-6">
-
-        {/* PI CLUSTER */}
-
-        <div className="p-4 bg-slate-900/60 rounded border border-slate-800">
-
-          <p className="text-sm text-slate-500 mb-1">Pi Cluster</p>
-
-          <p className="text-xl font-semibold text-purple-300">
-
-            {latest ? "ONLINE" : "STANDBY"}
-
-          </p>
-
-        </div>
-
-
-
-        {/* NODES */}
-
-        <div className="p-4 bg-slate-900/60 rounded border border-slate-800">
-
-          <p className="text-sm text-slate-500 mb-1">Federation Nodes</p>
-
-          <p className="text-xl font-semibold text-blue-300">
-
-            {latest ? "DISCOVERED" : "NONE"}
-
-          </p>
-
-        </div>
-
-
-
-        {/* KERNEL */}
-
-        <div className="p-4 bg-slate-900/60 rounded border border-slate-800">
-
-          <p className="text-sm text-slate-500 mb-1">Kernel Status</p>
-
-          <p
-
-            className={`text-xl font-semibold ${
-
-              kernelWarning ? "text-red-400" : "text-green-300"
-
-            }`}
-
-          >
-
-            {kernelWarning ? "WARN" : "STABLE"}
-
-          </p>
-
-        </div>
-
-
-
-        {/* ARC SYSTEM */}
-
-        <div className="p-4 bg-slate-900/60 rounded border border-slate-800">
-
-          <p className="text-sm text-slate-500 mb-1">Arc System</p>
-
-          <p className="text-xl font-semibold text-yellow-300">
-
-            READY
-
-          </p>
-
-        </div>
-
-
-
-        {/* RHO² SECURITY */}
-
-        <div className="p-4 bg-slate-900/60 rounded border border-slate-800">
-
-          <p className="text-sm text-slate-500 mb-1">Rho² Security</p>
-
-          <p className="text-xl font-semibold text-cyan-300">
-
-            SEALED
-
-          </p>
-
-        </div>
-
-
-
-        {/* OVERALL HEALTH */}
-
-        <div className="p-4 bg-slate-900/60 rounded border border-slate-800">
-
-          <p className="text-sm text-slate-500 mb-1">Overall Health</p>
-
-          <p
-
-            className={`text-xl font-semibold ${
-
-              forecast.state === "stable"
-
-                ? "text-green-300"
-
-                : forecast.state === "uncertain"
-
-                ? "text-yellow-300"
-
-                : "text-red-400"
-
-            }`}
-
-          >
-
-            {forecast.state.toUpperCase()}
-
-          </p>
-
-        </div>
-
+    <div className="h-full flex flex-col overflow-hidden w-full">
+      {/* HEADER */}
+      <div className="p-6 border-b border-slate-800 flex-shrink-0">
+        <h2 className="text-2xl font-bold tracking-wide text-purple-300 mb-2">
+          Federation Health Matrix
+        </h2>
       </div>
 
-    </div>
+      {/* SCROLLABLE CONTENT */}
+      <div className="flex-1 overflow-y-auto min-w-0">
+        <div className="p-6 min-w-0">
+          <div className="grid grid-cols-3 gap-4 min-w-0">
+            {/* PI CLUSTER */}
+            <div className="p-4 bg-slate-900/60 rounded border border-slate-800 min-w-0 overflow-hidden">
+              <p className="text-sm text-slate-500 mb-1 truncate">Pi Cluster</p>
+              <p className="text-xl font-semibold text-purple-300 truncate">
+                {latest ? "ONLINE" : "STANDBY"}
+              </p>
+            </div>
 
+            {/* NODES */}
+            <div className="p-4 bg-slate-900/60 rounded border border-slate-800 min-w-0 overflow-hidden">
+              <p className="text-sm text-slate-500 mb-1 truncate">Federation Nodes</p>
+              <p className="text-xl font-semibold text-blue-300 truncate">
+                {latest ? "DISCOVERED" : "NONE"}
+              </p>
+            </div>
+
+            {/* KERNEL */}
+            <div className="p-4 bg-slate-900/60 rounded border border-slate-800 min-w-0 overflow-hidden">
+              <p className="text-sm text-slate-500 mb-1 truncate">Kernel Status</p>
+              <p className={`text-xl font-semibold truncate ${
+                kernelWarning ? "text-red-400" : "text-green-300"
+              }`}>
+                {kernelWarning ? "WARN" : "STABLE"}
+              </p>
+            </div>
+
+            {/* ARC SYSTEM */}
+            <div className="p-4 bg-slate-900/60 rounded border border-slate-800 min-w-0 overflow-hidden">
+              <p className="text-sm text-slate-500 mb-1 truncate">Arc System</p>
+              <p className="text-xl font-semibold text-yellow-300 truncate">
+                READY
+              </p>
+            </div>
+
+            {/* RHO² SECURITY */}
+            <div className="p-4 bg-slate-900/60 rounded border border-slate-800 min-w-0 overflow-hidden">
+              <p className="text-sm text-slate-500 mb-1 truncate">Rho² Security</p>
+              <p className="text-xl font-semibold text-cyan-300 truncate">
+                SEALED
+              </p>
+            </div>
+
+            {/* OVERALL HEALTH */}
+            <div className="p-4 bg-slate-900/60 rounded border border-slate-800 min-w-0 overflow-hidden">
+              <p className="text-sm text-slate-500 mb-1 truncate">Overall Health</p>
+              <p className={`text-xl font-semibold truncate ${
+                forecast.state === "stable"
+                  ? "text-green-300"
+                  : forecast.state === "uncertain"
+                  ? "text-yellow-300"
+                  : "text-red-400"
+              }`}>
+                {forecast.state.toUpperCase()}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 
 };
