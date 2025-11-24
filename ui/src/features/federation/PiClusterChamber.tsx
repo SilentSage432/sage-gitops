@@ -1,18 +1,22 @@
 import React from "react";
 import { Server, Plus, AlertCircle } from "lucide-react";
 import { useMeshTelemetry } from "../../sage/telemetry/useMeshTelemetry";
+import { useFederationNodes } from "./useFederationNodes";
+import { NodeGrid } from "./NodeGrid";
 
 interface PiClusterChamberProps {
   onSelect?: (nodeId: string) => void;
 }
 
 export const PiClusterChamber: React.FC<PiClusterChamberProps> = ({ onSelect }) => {
-  // Static counts - all zero for empty state
-  const offlineCount = 0;
-  const pendingCount = 0;
-  const readyCount = 0;
-
   const telemetry = useMeshTelemetry();
+  const nodes = useFederationNodes();
+
+  // Calculate counts from live nodes
+  const offlineCount = nodes.filter(n => n.status === "offline").length;
+  const degradedCount = nodes.filter(n => n.status === "degraded").length;
+  const onlineCount = nodes.filter(n => n.status === "online").length;
+  const totalNodes = nodes.length;
 
   return (
     <div className="h-full flex flex-col overflow-hidden">
@@ -22,7 +26,7 @@ export const PiClusterChamber: React.FC<PiClusterChamberProps> = ({ onSelect }) 
           Pi Kluster Chamber
         </h2>
         <p className="text-sm text-slate-400">
-          Federated compute cluster — awaiting first node
+          Federated compute cluster — {totalNodes > 0 ? `${totalNodes} node${totalNodes !== 1 ? 's' : ''} registered` : 'awaiting first node'}
         </p>
       </div>
 
@@ -41,30 +45,32 @@ export const PiClusterChamber: React.FC<PiClusterChamberProps> = ({ onSelect }) 
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-slate-500"></div>
-                <span className="text-xs text-slate-500">No nodes offline</span>
+                <span className="text-xs text-slate-500">
+                  {offlineCount === 0 ? "No nodes offline" : `${offlineCount} node${offlineCount !== 1 ? 's' : ''} offline`}
+                </span>
               </div>
             </div>
 
-            {/* PENDING */}
+            {/* DEGRADED */}
             <div className="p-4 bg-slate-900/60 rounded-lg border border-slate-800">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-amber-400">PENDING</span>
+                <span className="text-sm text-amber-400">DEGRADED</span>
                 <span className="px-2 py-1 rounded text-xs font-medium text-amber-400 bg-amber-400/10">
-                  {pendingCount}
+                  {degradedCount}
                 </span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></div>
-                <span className="text-xs text-amber-500/70">Awaiting activation</span>
+                <span className="text-xs text-amber-500/70">Degraded nodes</span>
               </div>
             </div>
 
-            {/* READY */}
+            {/* ONLINE */}
             <div className="p-4 bg-slate-900/60 rounded-lg border border-slate-800">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-emerald-400">READY</span>
+                <span className="text-sm text-emerald-400">ONLINE</span>
                 <span className="px-2 py-1 rounded text-xs font-medium text-emerald-400 bg-emerald-400/10">
-                  {readyCount}
+                  {onlineCount}
                 </span>
               </div>
               <div className="flex items-center gap-2">
@@ -74,15 +80,13 @@ export const PiClusterChamber: React.FC<PiClusterChamberProps> = ({ onSelect }) 
             </div>
           </div>
 
-          {/* NODE LIST TABLE */}
-          <div className="bg-slate-900/60 rounded-lg border border-slate-800 overflow-hidden">
-            <div className="p-4 border-b border-slate-800">
-              <h3 className="text-lg font-semibold text-slate-200">Node List</h3>
+          {/* NODE GRID */}
+          <div className="bg-slate-900/60 rounded-lg border border-slate-800 p-4 overflow-hidden min-w-0">
+            <div className="mb-4">
+              <h3 className="text-lg font-semibold text-slate-200">Live Node Grid</h3>
+              <p className="text-xs text-slate-500 mt-1">Click a node to view details</p>
             </div>
-            <div className="p-8 text-center">
-              <Server className="w-12 h-12 mx-auto mb-3 text-slate-600" />
-              <p className="text-sm text-slate-400">No Pi nodes detected</p>
-            </div>
+            <NodeGrid nodes={nodes} onSelectNode={(nodeId) => onSelect?.(nodeId)} />
           </div>
 
           {/* CAPACITY PANEL */}
@@ -91,7 +95,7 @@ export const PiClusterChamber: React.FC<PiClusterChamberProps> = ({ onSelect }) 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1">
                 <p className="text-xs text-slate-400">Total Nodes</p>
-                <p className="text-2xl font-semibold text-slate-300">0</p>
+                <p className="text-2xl font-semibold text-slate-300">{totalNodes}</p>
               </div>
               <div className="space-y-1">
                 <p className="text-xs text-slate-400">Available</p>
