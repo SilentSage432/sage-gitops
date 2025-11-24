@@ -92,7 +92,7 @@ export default function OperatorTerminal() {
   }, [activeFilter, log]);
 
   return (
-    <div className="prime-terminal-panel">
+    <div className="prime-terminal-aura prime-terminal-panel">
       {/* Filter Bar */}
       <div className="terminal-filter-bar">
         {FILTERS.map((cat) => (

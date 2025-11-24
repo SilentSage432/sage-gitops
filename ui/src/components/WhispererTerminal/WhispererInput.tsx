@@ -60,7 +60,7 @@ export const WhispererInput: React.FC<WhispererInputProps> = ({ onSend }) => {
   }, [value, adjustHeight]);
 
   return (
-    <div className="prime-terminal-input">
+    <div className="prime-terminal-input prime-terminal-input-focus">
       <div className="flex items-end gap-3">
         <textarea
           ref={textareaRef}

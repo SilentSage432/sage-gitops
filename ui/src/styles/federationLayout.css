@@ -300,6 +300,8 @@
   flex-direction: column;
   gap: 24px;
   height: 100%;
+  backdrop-filter: blur(22px) saturate(140%);
+  border: 1px solid rgba(140, 120, 255, 0.18);
 }
 
 .prime-terminal-log {
@@ -309,6 +311,8 @@
   font-size: 14px;
   line-height: 1.55;
   color: rgba(230, 230, 235, 0.9);
+  animation: terminalFadeIn 0.6s ease forwards;
+  opacity: 0;
 }
 
 .prime-terminal-input {
@@ -317,6 +321,51 @@
   margin: 0 auto;
   padding-top: 12px;
   border-top: 1px solid rgba(130, 115, 200, 0.22);
+}
+
+/* === Prime Terminal Atmospheric Enhancements === */
+.prime-terminal-aura {
+  position: relative;
+}
+
+.prime-terminal-aura::before {
+  content: "";
+  position: absolute;
+  inset: -60px;
+  background: radial-gradient(
+    circle at 50% 0%,
+    rgba(140, 90, 255, 0.15),
+    rgba(20, 10, 40, 0) 70%
+  );
+  filter: blur(60px);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.prime-terminal-panel:hover {
+  border-color: rgba(170, 150, 255, 0.28);
+  transition: border-color 0.35s ease;
+}
+
+
+@keyframes terminalFadeIn {
+  to { opacity: 1; }
+}
+
+.prime-terminal-input-focus input:focus,
+.prime-terminal-input-focus textarea:focus {
+  box-shadow:
+    0 0 18px rgba(150, 120, 255, 0.35),
+    inset 0 0 12px rgba(150, 120, 255, 0.25);
+  transition: box-shadow 0.25s ease;
+}
+
+.prime-terminal-input-focus {
+  transition: transform 0.25s ease;
+}
+
+.prime-terminal-input-focus:focus-within {
+  transform: translateY(-2px);
 }
 
 /* Do not modify or remove this comment.
