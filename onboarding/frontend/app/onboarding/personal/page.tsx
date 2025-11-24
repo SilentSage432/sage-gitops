@@ -83,7 +83,7 @@ export default function PersonalOnboardingPage() {
 
   return (
       <div className="min-h-screen bg-[#0b0c0f] text-white flex items-center justify-center p-4">
-        <div className="max-w-3xl mx-auto py-10 px-4 fade-in">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10 space-y-8 fade-in">
           <div>
             <Card className="rounded-3xl">
             <CardHeader>
@@ -227,10 +227,11 @@ export default function PersonalOnboardingPage() {
               )}
 
               {/* Navigation Buttons */}
-              <div className="flex justify-between pt-4 border-t border-white/10">
+              <div className="flex flex-col sm:flex-row justify-between gap-3 pt-4 border-t border-white/10">
                 <Button
                   variant="outline"
                   onClick={handleBack}
+                  className="w-full sm:w-auto"
                 >
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   {step === 1 ? 'Cancel' : 'Back'}
@@ -239,6 +240,7 @@ export default function PersonalOnboardingPage() {
                   <Button
                     onClick={handleNext}
                     disabled={step === 2 && !formData.intent}
+                    className="w-full sm:w-auto"
                   >
                     <ArrowRight className="h-4 w-4 mr-2" />
                     Next
@@ -246,6 +248,7 @@ export default function PersonalOnboardingPage() {
                 ) : (
                   <Button
                     onClick={handleSubmit}
+                    className="w-full sm:w-auto"
                   >
                     <ArrowRight className="h-4 w-4 mr-2" />
                     Activate Access

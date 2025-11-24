@@ -74,7 +74,7 @@ export default function AgentsPage() {
   return (
     <OCTGuard>
       <div className="min-h-screen bg-[#0b0c0f] text-white pb-24">
-        <div className="max-w-3xl mx-auto py-10 px-4 fade-in">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10 space-y-8 fade-in">
           <div>
             <div className="mb-6">
               <h2 className="text-3xl font-semibold tracking-tight text-[#e2e6ee]">
@@ -134,24 +134,24 @@ export default function AgentsPage() {
 
         {/* Sticky Bottom Action Bar */}
         <div className="fixed bottom-0 left-0 right-0 bg-[#111317] border-t border-white/10 p-4">
-          <div className="max-w-3xl mx-auto px-4 flex items-center justify-between">
+          <div className="max-w-3xl mx-auto px-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-0">
             <Button
               variant="outline"
               onClick={handleBack}
-              className="px-6"
+              className="w-full sm:w-auto px-6"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back
             </Button>
             
-            <div className="text-sm text-white/60">
+            <div className="text-sm text-white/60 hidden sm:block">
               Step 3
             </div>
 
             <Button
               onClick={handleNext}
               disabled={!isFormValid}
-              className="px-6"
+              className="w-full sm:w-auto px-6"
             >
               <ArrowRight className="h-4 w-4 mr-2" />
               Next

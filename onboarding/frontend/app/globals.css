@@ -51,3 +51,19 @@ body {
     transform: translateY(0);
   }
 }
+
+/* Prevent horizontal scroll */
+html, body {
+  overflow-x: hidden;
+}
+
+/* Safe area support */
+:root {
+  --safe-top: env(safe-area-inset-top, 0);
+  --safe-bottom: env(safe-area-inset-bottom, 0);
+}
+
+.safe-container {
+  padding-top: var(--safe-top);
+  padding-bottom: var(--safe-bottom);
+}

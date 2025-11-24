@@ -69,9 +69,9 @@ export default function DashboardPage() {
   return (
     <OCTGuard>
       <div className="min-h-screen bg-[#0b0c0f] text-white">
-        <div className="max-w-4xl mx-auto py-10 px-4">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 space-y-8">
           {/* Header Bar */}
-          <div className="border-b border-white/5 pb-4 mb-6">
+          <div className="border-b border-white/5 pb-4">
             <h1 className="text-3xl font-semibold tracking-tight text-[#e2e6ee]">
               SAGE Onboarding Dashboard
             </h1>
@@ -220,7 +220,7 @@ export default function DashboardPage() {
                   <CardTitle>Quick Tools</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                     <Button
                       variant="outline"
                       className="w-full justify-start"
