@@ -18,6 +18,7 @@ import { FederationHealthCore } from '../features/federation/FederationHealthCor
 import { FederationHealthMatrix } from '../features/federation/FederationHealthMatrix';
 import { MeshTelemetrySurface } from '../features/federation/MeshTelemetrySurface';
 import { SignalHistoryPanel } from '../features/federation/SignalHistoryPanel';
+import { NodeDetailsPanel } from '../features/federation/NodeDetailsPanel';
 import { AgentsOverview } from '../features/agents/AgentsOverview';
 import { AgentDetails } from '../features/agents/AgentDetails';
 import OperatorTerminal from "../features/operator/OperatorTerminal";
@@ -50,7 +51,7 @@ export const App: React.FC = () => {
       
       // Federation panels
       case 'pi-kluster':
-        return <PiClusterChamber key="pi-kluster" />;
+        return <PiClusterChamber key="pi-kluster" onSelect={(nodeId) => setSelectedItem(`node:${nodeId}`)} />;
       case 'onboarding-nexus':
         return <OnboardingNexus />;
       case 'nodes':
@@ -86,7 +87,11 @@ export const App: React.FC = () => {
       case "cognition":
         return <CognitionPanel />;
       
+      // Node details - handle node: prefix
       default:
+        if (selectedItem?.startsWith('node:')) {
+          return <NodeDetailsPanel nodeId={selectedItem.replace('node:', '')} />;
+        }
         return null;
     }
   };

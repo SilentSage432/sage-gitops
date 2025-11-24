@@ -2,7 +2,11 @@ import React from "react";
 import { Server, Plus, AlertCircle } from "lucide-react";
 import { useMeshTelemetry } from "../../sage/telemetry/useMeshTelemetry";
 
-export const PiClusterChamber = () => {
+interface PiClusterChamberProps {
+  onSelect?: (nodeId: string) => void;
+}
+
+export const PiClusterChamber: React.FC<PiClusterChamberProps> = ({ onSelect }) => {
   // Static counts - all zero for empty state
   const offlineCount = 0;
   const pendingCount = 0;
@@ -112,7 +116,11 @@ export const PiClusterChamber = () => {
             </div>
             <div className="space-y-4 mt-6">
               {telemetry.slice(-5).map((pkt, i) => (
-                <div key={i} className="p-4 bg-slate-900/60 rounded border border-slate-800">
+                <button
+                  key={i}
+                  onClick={() => onSelect?.(pkt.node)}
+                  className="w-full p-4 bg-slate-900/60 rounded border border-slate-800 hover:bg-slate-800/60 transition text-left"
+                >
                   <div className="flex justify-between text-sm text-slate-400">
                     <span>{pkt.node}</span>
                     <span>{new Date(pkt.timestamp).toLocaleTimeString()}</span>
@@ -143,7 +151,7 @@ export const PiClusterChamber = () => {
                       <p className="text-xs text-slate-500">Latency</p>
                     </div>
                   </div>
-                </div>
+                </button>
               ))}
             </div>
           </div>
