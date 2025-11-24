@@ -254,7 +254,7 @@ export default function PersonalOnboardingPage() {
               </div>
             </CardContent>
           </Card>
-        </motion.div>
+        </div>
       </div>
     </div>
   );
