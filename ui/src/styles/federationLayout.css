@@ -18,6 +18,7 @@
 }
 
 .federation-command-core {
+  position: relative;
   background: radial-gradient(
       circle at 50% 0%,
       rgba(140, 60, 255, 0.06),
@@ -70,7 +71,13 @@
   transition: box-shadow 220ms ease-out;
 }
 
-.federation-left-nav:hover,
+.federation-left-nav:hover {
+  box-shadow:
+    0 0 22px var(--sage-holo-primary),
+    inset 0 0 18px rgba(0, 0, 0, 0.5);
+  transition: box-shadow 220ms ease;
+}
+
 .federation-intel-stack:hover {
   border-color: rgba(200, 120, 255, 0.32);
   box-shadow:
@@ -116,6 +123,49 @@
   0% { box-shadow: 0 0 18px rgba(120, 65, 255, 0.06); }
   50% { box-shadow: 0 0 32px rgba(120, 65, 255, 0.12); }
   100% { box-shadow: 0 0 18px rgba(120, 65, 255, 0.06); }
+}
+
+@keyframes sage-holo-edge {
+  0%   { opacity: 0; }
+  35%  { opacity: 0.65; }
+  100% { opacity: 0; }
+}
+
+.federation-command-core::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at 50% 0%,
+    var(--sage-holo-pulse),
+    transparent 70%
+  );
+  opacity: 0;
+  animation: sage-holo-edge 6s ease-out infinite;
+}
+
+@keyframes sage-scanline {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(200%); }
+}
+
+.federation-command-core::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 120%;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--sage-holo-scan),
+    transparent
+  );
+  animation: sage-scanline 9s linear infinite;
+  opacity: 0.08;
+  pointer-events: none;
 }
 
 /* Phase 6: Autonomous Calm / Alert States */

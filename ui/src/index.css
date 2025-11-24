@@ -308,3 +308,10 @@ body#sageRootLayout {
   font-weight: 400;
   color: var(--sage-text-secondary);
 }
+
+:root {
+  --sage-holo-primary: rgba(170, 90, 255, 0.22);
+  --sage-holo-secondary: rgba(90, 200, 255, 0.18);
+  --sage-holo-pulse: rgba(200, 120, 255, 0.32);
+  --sage-holo-scan: rgba(255, 255, 255, 0.07);
+}
