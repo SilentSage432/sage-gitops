@@ -46,3 +46,15 @@
   100% { transform: translateY(-18px); opacity: 0.45; }
 }
 
+/* NEON FADE GLOW */
+
+.neon-fade {
+  animation: primeGlow 4.5s ease-in-out infinite;
+}
+
+@keyframes primeGlow {
+  0% { opacity: 0.65; filter: drop-shadow(0 0 6px rgba(141,0,255,0.25)); }
+  50% { opacity: 1;   filter: drop-shadow(0 0 14px rgba(141,0,255,0.55)); }
+  100% { opacity: 0.65; filter: drop-shadow(0 0 6px rgba(141,0,255,0.25)); }
+}
+

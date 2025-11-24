@@ -144,8 +144,15 @@ export function OperatorTerminal() {
 
   return (
     <div className="onboarding-terminal-frame h-full flex flex-col overflow-hidden">
-      <div className="onboarding-terminal-header">
-        <h2 className="onboarding-terminal-title">Operator Terminal</h2>
+      <div className="w-full text-center select-none pt-2 pb-4">
+        <h1 className="
+          text-3xl font-semibold tracking-[0.2em]
+          text-[#b388ff]
+          drop-shadow-[0_0_12px_rgba(141,0,255,0.45)]
+          neon-fade
+        ">
+          S A G E  P R I M E
+        </h1>
       </div>
       <div className="flex-1 overflow-auto px-6 py-4 pr-2 font-mono text-sm" ref={scrollRef}>
         {logs.length === 0 ? (
