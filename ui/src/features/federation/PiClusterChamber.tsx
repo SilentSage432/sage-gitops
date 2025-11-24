@@ -1,142 +1,148 @@
-import React, { useState, useEffect } from "react";
-import { Server, Cpu, Wifi, Activity } from "lucide-react";
-import { createSimulatedNode, SimNodeMetrics } from "@/simulated/simTelemetry";
-
-const mockPiNodes = [
-  {
-    id: "pi-alpha",
-    label: "Pi-Alpha",
-    status: "ONLINE",
-    ip: "192.168.10.21",
-  },
-  {
-    id: "pi-beta",
-    label: "Pi-Beta",
-    status: "BOOTING",
-    ip: "pending…",
-  },
-  {
-    id: "pi-gamma",
-    label: "Pi-Gamma",
-    status: "OFFLINE",
-    ip: "unreachable",
-  },
-];
-
-const statusColors: Record<string, string> = {
-  ONLINE: "text-green-400 bg-green-400/10",
-  BOOTING: "text-yellow-400 bg-yellow-400/10",
-  OFFLINE: "text-red-400 bg-red-400/10",
-  UNKNOWN: "text-slate-400 bg-slate-400/10",
-};
-
-interface NodeWithMetrics {
-  id: string;
-  label: string;
-  status: string;
-  ip: string;
-  metrics?: SimNodeMetrics;
-}
+import React from "react";
+import { Server, Plus, AlertCircle } from "lucide-react";
 
 export const PiClusterChamber = () => {
-  const [selectedNode, setSelectedNode] = useState<string | null>(null);
-  const [nodesWithMetrics, setNodesWithMetrics] = useState<NodeWithMetrics[]>([]);
-
-  useEffect(() => {
-    const generators = mockPiNodes.map(() => createSimulatedNode());
-    
-    const updateMetrics = () => {
-      setNodesWithMetrics(
-        mockPiNodes.map((node, idx) => ({
-          ...node,
-          metrics: generators[idx](),
-        }))
-      );
-    };
-
-    updateMetrics();
-    const interval = setInterval(updateMetrics, 3000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const active = nodesWithMetrics.find((n) => n.id === selectedNode);
+  // Static counts - all zero for empty state
+  const offlineCount = 0;
+  const pendingCount = 0;
+  const readyCount = 0;
 
   return (
-    <div className="p-6 space-y-6">
-      <h2 className="text-2xl font-bold tracking-wide text-purple-300">
-        Pi Kluster
-      </h2>
-      <p className="text-sm text-slate-400">Cluster readiness pending federation ignition.</p>
-      {/* NODE GRID */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {nodesWithMetrics.map((node) => (
-          <button
-            key={node.id}
-            onClick={() => setSelectedNode(node.id)}
-            className="p-4 bg-slate-900/60 border border-slate-800 rounded-xl
-            hover:border-purple-500/60 hover:shadow-lg hover:shadow-purple-500/10
-            transition flex flex-col gap-3 text-left"
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Server className="w-4 h-4 text-purple-300" />
-                <span className="text-slate-200 font-medium">{node.label}</span>
-              </div>
-              <span
-                className={`px-2 py-1 rounded text-xs font-medium
-                ${statusColors[node.status]}`}
-              >
-                {node.status}
-              </span>
-            </div>
-            <div className="flex flex-wrap gap-3 text-xs text-slate-400 mt-2 whitespace-normal break-all">
-              <Cpu className="w-3 h-3" /> {node.metrics ? `${node.metrics.cpu}%` : "—"}
-              <Activity className="w-3 h-3" /> {node.metrics ? `${node.metrics.temp}°C` : "—"}
-              <Wifi className="w-3 h-3" /> {node.ip}
-            </div>
-          </button>
-        ))}
+    <div className="h-full flex flex-col overflow-hidden">
+      {/* HEADER */}
+      <div className="p-6 border-b border-slate-800">
+        <h2 className="text-2xl font-bold tracking-wide text-purple-300 mb-2">
+          Pi Kluster Chamber
+        </h2>
+        <p className="text-sm text-slate-400">
+          Federated compute cluster — awaiting first node
+        </p>
       </div>
-      {/* RIGHT-SIDE DETAILS DRAWER */}
-      {active && (
-        <div className="fixed right-0 top-0 bottom-0 w-96 bg-[#0b0b12]/95 backdrop-blur-xl
-        border-l border-slate-800 shadow-2xl p-6 animate-in fade-in duration-300 overflow-y-auto">
-          <h3 className="text-xl font-semibold text-purple-300 mb-4">
-            {active.label}
-          </h3>
-          <div className="space-y-4">
-            <div className="p-4 bg-slate-900/60 rounded border border-slate-800">
-              <p className="text-sm text-slate-400">Status</p>
-              <span className={`text-sm ${statusColors[active.status]}`}>
-                {active.status}
-              </span>
-            </div>
-            <div className="p-4 bg-slate-900/60 rounded border border-slate-800 space-y-2">
-              <p className="text-sm text-slate-400">CPU</p>
-              <p className="text-slate-200">{active.metrics ? `${active.metrics.cpu}%` : "—"}</p>
-            </div>
-            <div className="p-4 bg-slate-900/60 rounded border border-slate-800 space-y-2">
-              <p className="text-sm text-slate-400">Temperature</p>
-              <p className="text-slate-200">{active.metrics ? `${active.metrics.temp}°C` : "—"}</p>
-            </div>
-            {active.metrics && (
-              <div className="p-4 bg-slate-900/60 rounded border border-slate-800 space-y-2">
-                <p className="text-sm text-slate-400">Latency</p>
-                <p className="text-slate-200">{active.metrics.latency}ms</p>
+
+      {/* SCROLLABLE CONTENT */}
+      <div className="flex-1 overflow-y-auto">
+        <div className="p-6 space-y-6">
+          {/* THREE-TIER STATUS SHELL */}
+          <div className="grid grid-cols-3 gap-4">
+            {/* OFFLINE */}
+            <div className="p-4 bg-slate-900/60 rounded-lg border border-slate-800">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm text-slate-400">OFFLINE</span>
+                <span className="px-2 py-1 rounded text-xs font-medium text-slate-400 bg-slate-400/10">
+                  {offlineCount}
+                </span>
               </div>
-            )}
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-slate-500"></div>
+                <span className="text-xs text-slate-500">No nodes offline</span>
+              </div>
+            </div>
+
+            {/* PENDING */}
+            <div className="p-4 bg-slate-900/60 rounded-lg border border-slate-800">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm text-amber-400">PENDING</span>
+                <span className="px-2 py-1 rounded text-xs font-medium text-amber-400 bg-amber-400/10">
+                  {pendingCount}
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></div>
+                <span className="text-xs text-amber-500/70">Awaiting activation</span>
+              </div>
+            </div>
+
+            {/* READY */}
+            <div className="p-4 bg-slate-900/60 rounded-lg border border-slate-800">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm text-emerald-400">READY</span>
+                <span className="px-2 py-1 rounded text-xs font-medium text-emerald-400 bg-emerald-400/10">
+                  {readyCount}
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+                <span className="text-xs text-emerald-500/70">Operational nodes</span>
+              </div>
+            </div>
           </div>
-          <button
-            onClick={() => setSelectedNode(null)}
-            className="mt-8 w-full py-2 rounded-md bg-slate-800 hover:bg-slate-700
-            border border-slate-700 text-slate-300 transition"
-          >
-            Close
-          </button>
+
+          {/* NODE LIST TABLE */}
+          <div className="bg-slate-900/60 rounded-lg border border-slate-800 overflow-hidden">
+            <div className="p-4 border-b border-slate-800">
+              <h3 className="text-lg font-semibold text-slate-200">Node List</h3>
+            </div>
+            <div className="p-8 text-center">
+              <Server className="w-12 h-12 mx-auto mb-3 text-slate-600" />
+              <p className="text-sm text-slate-400">No Pi nodes detected</p>
+            </div>
+          </div>
+
+          {/* CAPACITY PANEL */}
+          <div className="bg-slate-900/60 rounded-lg border border-slate-800 p-4">
+            <h3 className="text-lg font-semibold text-slate-200 mb-4">Cluster Capacity</h3>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-1">
+                <p className="text-xs text-slate-400">Total Nodes</p>
+                <p className="text-2xl font-semibold text-slate-300">0</p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-xs text-slate-400">Available</p>
+                <p className="text-2xl font-semibold text-slate-300">0</p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-xs text-slate-400">CPU Cores</p>
+                <p className="text-2xl font-semibold text-slate-300">0</p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-xs text-slate-400">Memory</p>
+                <p className="text-2xl font-semibold text-slate-300">0 GB</p>
+              </div>
+            </div>
+          </div>
+
+          {/* TELEMETRY BLOCK */}
+          <div className="bg-slate-900/60 rounded-lg border border-slate-800 p-4 opacity-50">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-slate-400">Telemetry</h3>
+              <AlertCircle className="w-4 h-4 text-slate-500" />
+            </div>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-slate-500">CPU Usage</span>
+                <span className="text-slate-600">—</span>
+              </div>
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-slate-500">Temperature</span>
+                <span className="text-slate-600">—</span>
+              </div>
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-slate-500">Network Latency</span>
+                <span className="text-slate-600">—</span>
+              </div>
+            </div>
+            <p className="text-xs text-slate-600 mt-4 italic">Telemetry inactive — no nodes available</p>
+          </div>
+
+          {/* ADD FIRST NODE BUTTON */}
+          <div className="pt-2">
+            <button
+              className="w-full py-3 px-4 bg-purple-600/20 hover:bg-purple-600/30
+              border border-purple-500/30 hover:border-purple-500/50
+              rounded-lg text-purple-300 font-medium
+              transition flex items-center justify-center gap-2
+              disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled
+            >
+              <Plus className="w-4 h-4" />
+              Add first node
+            </button>
+            <p className="text-xs text-slate-500 text-center mt-2">
+              Node provisioning will be available once federation is initialized
+            </p>
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };
-
