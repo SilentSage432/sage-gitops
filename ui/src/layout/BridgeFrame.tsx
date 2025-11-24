@@ -31,8 +31,11 @@ export const BridgeFrame: React.FC = () => {
       >
         {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
       </button>
-      <div className="flex flex-1 items-center justify-center px-8 pt-12 pb-24 w-full min-w-0 transition-all duration-300">
-        <OperatorTerminal />
+      {/* PRIME Terminal — fixed center layout */}
+      <div className="flex-1 flex items-start justify-center overflow-hidden">
+        <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <OperatorTerminal />
+        </div>
       </div>
       <OperatorInput />
       <AnimatePresence>
@@ -46,9 +49,14 @@ export const BridgeFrame: React.FC = () => {
               onClick={handleToggleSidebar}
             />
             <motion.aside
-              className="fixed inset-y-0 left-0 w-80 max-w-sm bg-[#0d0d12] border-r border-slate-800 z-50 shadow-2xl"
+              className="
+                fixed top-0 left-0 h-full w-72
+                bg-[#0b0b12] z-50
+                border-r border-slate-800
+                overflow-y-auto
+              "
               initial={{ x: "-100%" }}
-              animate={{ x: 0 }}
+              animate={{ x: sidebarOpen ? 0 : "-100%" }}
               exit={{ x: "-100%" }}
               transition={{ type: "spring", stiffness: 260, damping: 30 }}
             >
