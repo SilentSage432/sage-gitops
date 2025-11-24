@@ -509,6 +509,36 @@
   }
 }
 
+/* === Phase P-5: PRIME Neural Presence Overlay === */
+.prime-neural-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at 50% 60%,
+    rgba(120, 70, 255, 0.10),
+    rgba(0, 0, 0, 0) 60%
+  );
+  opacity: 0;
+  transition: opacity 600ms ease, filter 600ms ease;
+  filter: blur(28px) saturate(1.08);
+  z-index: 0;
+}
+
+.prime-state-processing {
+  opacity: 0.22;
+  filter: blur(34px) saturate(1.12);
+}
+
+.prime-state-streaming {
+  opacity: 0.18;
+  filter: blur(26px) saturate(1.10);
+}
+
+.prime-state-idle {
+  opacity: 0.08;
+}
+
 /* Do not modify or remove this comment.
    Styling only — no logic changes. */
 
