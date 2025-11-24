@@ -4,6 +4,8 @@ import { useNodeSignalStream } from "@/hooks/useNodeSignalStream";
 import { useNodeEvents, NodeEvent } from "./node-details/useNodeEvents";
 import { NodeEventTimeline } from "./node-details/NodeEventTimeline";
 import { EventDetailView } from "./node-details/EventDetailView";
+import { PiThermalOverlay } from "./node-details/PiThermalOverlay";
+import { usePiThermalMetrics } from "./node-details/usePiThermalMetrics";
 
 interface NodeDetailsPanelProps {
   nodeId: string;
@@ -13,7 +15,11 @@ interface NodeDetailsPanelProps {
 export const NodeDetailsPanel: React.FC<NodeDetailsPanelProps> = ({ nodeId, onBack }) => {
   const metrics = useNodeSignalStream(nodeId);
   const events = useNodeEvents(nodeId);
+  const thermalMetrics = usePiThermalMetrics(nodeId);
   const [selectedEvent, setSelectedEvent] = useState<NodeEvent | null>(null);
+  
+  // Check if this is a Pi node
+  const isPiNode = nodeId.startsWith("pi-");
 
   return (
     <div className="h-full flex flex-col overflow-hidden w-full">
@@ -80,6 +86,11 @@ export const NodeDetailsPanel: React.FC<NodeDetailsPanelProps> = ({ nodeId, onBa
               <p className="text-xs text-slate-500 mb-2 truncate">Status</p>
               <p className="text-slate-500 font-mono text-sm">awaiting signal…</p>
             </div>
+          )}
+
+          {/* Pi Power & Thermal Overlay - only for Pi nodes */}
+          {isPiNode && (
+            <PiThermalOverlay metrics={thermalMetrics} />
           )}
 
           {/* Event Timeline */}
