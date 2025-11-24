@@ -487,6 +487,28 @@
   position: relative;
 }
 
+/* === Phase S-Prime-4: PRIME Command-Response Micro-Animations === */
+.prime-ripple {
+  backdrop-filter: brightness(1.12) saturate(1.08);
+  transition: all 280ms ease;
+}
+
+/* Streaming mode animation (for incrementally appended text) */
+.prime-terminal-streaming {
+  animation: primeStreamFade 0.08s linear;
+}
+
+@keyframes primeStreamFade {
+  0% {
+    opacity: 0;
+    transform: translateX(1px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 /* Do not modify or remove this comment.
    Styling only — no logic changes. */
 

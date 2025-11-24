@@ -45,6 +45,7 @@ export default function OperatorTerminal() {
   const [isJustActivated, setIsJustActivated] = useState(false);
   const [lastMessageTime, setLastMessageTime] = useState(Date.now());
   const [isInputFocused, setIsInputFocused] = useState(false);
+  const [hasRipple, setHasRipple] = useState(false);
 
   const logRef = useRef<HTMLDivElement>(null);
   const userScrolledRef = useRef(false);
@@ -143,6 +144,10 @@ export default function OperatorTerminal() {
       setIsJustActivated(true);
       setTimeout(() => setIsJustActivated(false), 900);
     
+    // Trigger ripple effect
+    setHasRipple(true);
+    setTimeout(() => setHasRipple(false), 300);
+    
     // Add command to log for visual feedback
     setLog((prev) => [
       ...prev,
@@ -201,23 +206,26 @@ export default function OperatorTerminal() {
 
       {/* Log Output (Scrollable Feed) */}
       <motion.div
-        className="prime-terminal-log"
+        className={`prime-terminal-log ${hasRipple ? "prime-ripple" : ""}`}
         ref={logRef}
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.35, ease: "easeOut" }}
       >
         {filteredLog.map((entry, idx) => (
-          <div
-            key={idx}
+          <motion.div
+            key={`${entry.ts}-${idx}`}
             className={
               entry.isCommand
                 ? "prime-terminal-line prime-terminal-line-command text-sm mb-1 whitespace-pre-wrap terminal-line"
                 : `prime-terminal-line prime-terminal-line-${entry.category.toLowerCase()} text-sm mb-1 whitespace-pre-wrap opacity-90 terminal-line cat-${entry.category.toLowerCase()}`
             }
+            initial={{ opacity: 0, y: 2 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.12, ease: "easeOut" }}
           >
             {entry.message || entry.text}
-          </div>
+          </motion.div>
         ))}
       </motion.div>
 
