@@ -323,6 +323,35 @@
   border-top: 1px solid rgba(130, 115, 200, 0.22);
 }
 
+.telemetry-mode-toggle {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 0 12px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.telemetry-mode-toggle::-webkit-scrollbar {
+  display: none;
+}
+
+.global-command-bar {
+  background: rgba(17, 19, 23, 0.95);
+  backdrop-filter: blur(12px) saturate(180%);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* Ensure main layout has padding for global command bar */
+.sage-surface {
+  padding-bottom: 80px;
+}
+
 /* === Prime Terminal Atmospheric Enhancements === */
 .prime-terminal-aura {
   position: relative;

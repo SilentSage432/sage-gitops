@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { SidebarNavigator } from "../components/SidebarNavigator/SidebarNavigator";
 import { WhispererTerminal } from "../components/WhispererTerminal/WhispererTerminal";
 import { StatusBar } from "../components/StatusBar/StatusBar";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Send } from "lucide-react";
 import { useOperatorEffect } from "../core/OperatorEffectContext";
 import { useHybridAutonomy } from "../sage/hybrid/useHybridAutonomy";
 import { useUIAlertsBridge } from "../core/useUIAlertsBridge";
@@ -131,6 +134,7 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
         ${awareness === "ELEVATED" ? "ring-2 ring-yellow-500" : ""}
         ${awareness === "ALERT" ? "ring-4 ring-red-500" : ""}
       `}
+      style={{ paddingBottom: "80px" }}
     >
       <div className="sage-surface flex flex-1 overflow-hidden min-h-0">
         {/* Left Panel: Federation Navigation */}
@@ -185,6 +189,57 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
       </div>
 
       <ForecastHUD />
+
+      {/* Global Command Input Bar */}
+      <GlobalCommandBar />
+    </div>
+  );
+};
+
+// Global Command Input Bar Component
+const GlobalCommandBar: React.FC = () => {
+  const [input, setInput] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const command = input.trim();
+    if (!command) return;
+
+    // Dispatch command to OperatorTerminal
+    window.dispatchEvent(new CustomEvent("OPERATOR_COMMAND", {
+      detail: { command }
+    }));
+
+    setInput("");
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit(e);
+    }
+  };
+
+  return (
+    <div className="fixed bottom-0 left-0 right-0 z-50 global-command-bar">
+      <div className="max-w-5xl mx-auto px-4 py-3">
+        <form onSubmit={handleSubmit} className="flex gap-2">
+          <Input
+            ref={inputRef}
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="Enter command... (Shift+Enter for newline)"
+            className="flex-1 font-mono text-sm bg-slate-900/80 backdrop-blur-md border-slate-700"
+          />
+          <Button type="submit" variant="default" size="default" className="shrink-0">
+            <Send className="w-4 h-4 mr-2" />
+            Send
+          </Button>
+        </form>
+      </div>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { motion } from "framer-motion";
 
 import "./OperatorTerminal.css";
@@ -9,9 +9,9 @@ import {
 import { useOperatorMemory } from "../../core/OperatorMemoryContext";
 import { routeCommand } from "../../sage/commandRouter";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import { RawEvent, shouldShowInSignalStream, transformToSignalMessage } from "../../lib/stream/transformers";
 
 type LogCategory = Exclude<TelemetryFilter, "ALL">;
 
@@ -32,22 +32,20 @@ const CATEGORY_SET = new Set<LogCategory>(
   FILTERS.filter((f) => f !== "ALL") as LogCategory[]
 );
 
+const MAX_RAW_EVENTS = 150;
+
+type ViewMode = "RAW" | "SIGNAL" | "HYBRID";
+
 export default function OperatorTerminal() {
   const { activeFilter, setActiveFilter } = useTelemetryFilter();
   const { remember, recallRecent } = useOperatorMemory();
 
-  const [input, setInput] = useState("");
-  const [suggestion, setSuggestion] = useState("");
-  const [commandList] = useState([
-    "help",
-    "clear",
-    "status",
-    "rho2.status",
-    "arc.list",
-    "agents.list",
-    "mesh.uptime",
-    "node.info"
-  ]);
+  const [viewMode, setViewMode] = useState<ViewMode>("HYBRID");
+  
+  // Raw events with full JSON (capped at 150)
+  const [rawEvents, setRawEvents] = useState<RawEvent[]>([]);
+  
+  // Legacy log for commands and responses
   const [log, setLog] = useState<
     { text?: string; message?: string; category: LogCategory; ts: number; isCommand?: boolean }[]
   >([]);
@@ -55,7 +53,6 @@ export default function OperatorTerminal() {
   const [isIdle, setIsIdle] = useState(false);
   const [isJustActivated, setIsJustActivated] = useState(false);
   const [lastMessageTime, setLastMessageTime] = useState(Date.now());
-  const [isInputFocused, setIsInputFocused] = useState(false);
   const [hasRipple, setHasRipple] = useState(false);
   const [neuralState, setNeuralState] = useState<"processing" | "streaming" | "idle" | null>(null);
   const [lastInputTime, setLastInputTime] = useState(Date.now());
@@ -191,45 +188,83 @@ export default function OperatorTerminal() {
       window.removeEventListener("SAGE_TERMINAL_LOG", handler as EventListener);
   }, []);
 
-  // Mock event stream for live telemetry
+  // Mock event stream for live telemetry - Phase P-10: Generate raw events with full JSON
   useEffect(() => {
     const eventTypes = [
-      { signal: "HEARTBEAT_TICK", category: "HEARTBEAT" as LogCategory, source: "arc-bridge-local" },
-      { signal: "AGENT_STATUS", category: "AGENT" as LogCategory, source: "agent-orchestrator" },
-      { signal: "ARC_EVENT", category: "ARC" as LogCategory, source: "arc-core" },
-      { signal: "RHO2_SIGNAL", category: "RHO2" as LogCategory, source: "rho2-bus" },
-      { signal: "CONNECTED", category: "FEDERATION" as LogCategory, source: "federation-gateway" },
+      { signal: "HEARTBEAT_TICK", type: "FEDERATION_EVENT", source: "arc-bridge-local" },
+      { signal: "AGENT_STATUS", type: "FEDERATION_EVENT", source: "agent-orchestrator" },
+      { signal: "ARC_EVENT", type: "FEDERATION_EVENT", source: "arc-core" },
+      { signal: "ARC_SYNC", type: "FEDERATION_EVENT", source: "arc-core" },
+      { signal: "RHO2_SIGNAL", type: "FEDERATION_EVENT", source: "rho2-bus" },
+      { signal: "CONNECTED", type: "FEDERATION_EVENT", source: "federation-gateway" },
+      { signal: "STATUS_TRANSITION", type: "FEDERATION_EVENT", source: "system" },
     ];
 
     const generateEvent = () => {
       const eventType = eventTypes[Math.floor(Math.random() * eventTypes.length)];
       const now = Date.now();
-      const timestamp = new Date(now).toLocaleTimeString();
       
-      let message = "";
+      // Create full JSON event
+      const rawEvent: RawEvent = {
+        type: eventType.type,
+        signal: eventType.signal,
+        source: eventType.source,
+        timestamp: now,
+        payload: {},
+      };
+      
+      // Add payload based on signal type
       switch (eventType.signal) {
         case "HEARTBEAT_TICK":
-          message = `[${timestamp}] ♥ HEARTBEAT_TICK | ${eventType.source} | load: ${(Math.random() * 100).toFixed(1)}% | uptime: ${(performance.now() / 1000).toFixed(1)}s`;
+          rawEvent.payload = {
+            load: Math.random() * 100,
+            uptime: performance.now() / 1000,
+          };
           break;
         case "AGENT_STATUS":
           const agents = ["alpha", "beta", "gamma"];
           const agent = agents[Math.floor(Math.random() * agents.length)];
-          message = `[${timestamp}] 🤖 AGENT_STATUS | ${agent} | state: ${Math.random() > 0.5 ? "active" : "idle"}`;
+          rawEvent.payload = {
+            agent,
+            state: Math.random() > 0.5 ? "active" : "idle",
+          };
           break;
         case "ARC_EVENT":
-          message = `[${timestamp}] ⚡ ARC_EVENT | ${eventType.source} | signal: ${Math.random() > 0.5 ? "pulse" : "sync"}`;
+        case "ARC_SYNC":
+          rawEvent.payload = {
+            type: Math.random() > 0.5 ? "pulse" : "sync",
+          };
           break;
         case "RHO2_SIGNAL":
-          message = `[${timestamp}] 🌊 RHO2_SIGNAL | ${eventType.source} | freq: ${(Math.random() * 1000).toFixed(0)}Hz`;
+          rawEvent.payload = {
+            type: "signal",
+            freq: Math.random() * 1000,
+            anomaly: Math.random() > 0.9, // 10% chance of anomaly
+          };
           break;
         case "CONNECTED":
-          message = `[${timestamp}] 🔗 CONNECTED | ${eventType.source} | handshake complete`;
+          rawEvent.payload = {
+            handshake: "complete",
+          };
           break;
-        default:
-          message = `[${timestamp}] ${eventType.signal} | ${eventType.source}`;
+        case "STATUS_TRANSITION":
+          rawEvent.payload = {
+            from: "idle",
+            to: "active",
+          };
+          break;
       }
 
-      setLog((prev) => [...prev, { text: message, category: eventType.category, ts: now }]);
+      // Add to raw events with buffer cap
+      setRawEvents((prev) => {
+        const updated = [...prev, rawEvent];
+        // Auto-trim when limit reached
+        if (updated.length > MAX_RAW_EVENTS) {
+          return updated.slice(-MAX_RAW_EVENTS);
+        }
+        return updated;
+      });
+      
       setLastMessageTime(now);
       setIsIdle(false);
       setIsJustActivated(true);
@@ -260,6 +295,25 @@ export default function OperatorTerminal() {
       }
     };
   }, []);
+  
+  // Process raw events into signal stream
+  const signalMessages = useMemo(() => {
+    return rawEvents
+      .filter(shouldShowInSignalStream)
+      .map(transformToSignalMessage);
+  }, [rawEvents]);
+  
+  // Create map of signal message IDs to raw events for HYBRID mode
+  const signalToRawMap = useMemo(() => {
+    const map = new Map<string, RawEvent>();
+    rawEvents.forEach(event => {
+      if (shouldShowInSignalStream(event)) {
+        const signal = transformToSignalMessage(event);
+        map.set(signal.id, event);
+      }
+    });
+    return map;
+  }, [rawEvents]);
 
   function normalizeCategory(value?: string): LogCategory {
     const upper = (value || "SYSTEM").toUpperCase() as TelemetryFilter;
@@ -270,10 +324,8 @@ export default function OperatorTerminal() {
     return "SYSTEM";
   }
 
-  const handleSend = async () => {
-    if (!input.trim()) return;
-    const command = input;
-    setInput("");
+  const handleSend = useCallback(async (command: string) => {
+    if (!command.trim()) return;
     remember(command, "operator");
     setIsProcessing(true);
     const now = Date.now();
@@ -329,7 +381,7 @@ export default function OperatorTerminal() {
     });
     
     setIsProcessing(false);
-  };
+  }, [remember]);
 
   const filteredLog = useMemo(() => {
     const filtered = activeFilter === "ALL" 
@@ -338,13 +390,60 @@ export default function OperatorTerminal() {
     console.log("Filtered log:", { activeFilter, totalLog: log.length, filteredCount: filtered.length, filtered });
     return filtered;
   }, [activeFilter, log]);
+  
+  // Listen for global command events
+  useEffect(() => {
+    const handleGlobalCommand = async (e: Event) => {
+      const customEvent = e as CustomEvent;
+      const { command } = customEvent.detail || {};
+      if (command) {
+        await handleSend(command);
+      }
+    };
+
+    window.addEventListener("OPERATOR_COMMAND", handleGlobalCommand);
+    return () => window.removeEventListener("OPERATOR_COMMAND", handleGlobalCommand);
+  }, [handleSend]);
+
+  // Auto-scroll for telemetry viewport (all modes)
+  useEffect(() => {
+    if (logRef.current && !userScrolledRef.current) {
+      setTimeout(() => {
+        if (logRef.current && !userScrolledRef.current) {
+          logRef.current.scrollTo({
+            top: logRef.current.scrollHeight,
+            behavior: "smooth",
+          });
+        }
+      }, 50);
+    }
+  }, [rawEvents, signalMessages, viewMode]);
 
   return (
-    <Card className={`prime-terminal-aura prime-terminal-panel ${isIdle ? "prime-terminal-idle" : isJustActivated ? "prime-terminal-activated" : "prime-terminal-active"} ${isSilentIdle ? "prime-silent-idle" : ""} ${isPreResponse ? "prime-pre-response" : ""}`} style={{ position: "relative" }}>
+    <Card id="operator-terminal" className={`prime-terminal-aura prime-terminal-panel ${isIdle ? "prime-terminal-idle" : isJustActivated ? "prime-terminal-activated" : "prime-terminal-active"} ${isSilentIdle ? "prime-silent-idle" : ""} ${isPreResponse ? "prime-pre-response" : ""}`} style={{ position: "relative" }}>
       {/* Neural Presence Overlay */}
       <div className={`prime-neural-overlay ${neuralState ? `prime-state-${neuralState}` : ""}`} />
       
-      {/* Filter Bar */}
+      {/* View Mode Filter Bar - Phase P-10 */}
+      <div className="terminal-filter-bar mb-2" style={{ position: "relative", zIndex: 10 }}>
+        <div className="telemetry-mode-toggle">
+          <span className="text-xs text-slate-400 whitespace-nowrap">View:</span>
+          {(["RAW", "SIGNAL", "HYBRID"] as ViewMode[]).map((mode) => (
+            <Badge
+              key={mode}
+              variant={viewMode === mode ? "default" : "outline"}
+              className={`cursor-pointer whitespace-nowrap ${
+                viewMode === mode ? "bg-purple-600" : ""
+              }`}
+              onClick={() => setViewMode(mode)}
+            >
+              {mode}
+            </Badge>
+          ))}
+        </div>
+      </div>
+      
+      {/* Legacy Filter Bar (for commands/responses) */}
       <div className="terminal-filter-bar" style={{ position: "relative", zIndex: 10 }}>
         {FILTERS.map((cat) => (
           <Badge
@@ -360,36 +459,179 @@ export default function OperatorTerminal() {
         ))}
       </div>
 
-      {/* Log Output (Scrollable Feed) */}
+      {/* Single Telemetry Viewport - Phase P-10 (View Mode Switch) */}
       <motion.div
-        className={`prime-terminal-log ${hasRipple ? "prime-ripple" : ""}`}
+        key={viewMode}
         ref={logRef}
+        className={`prime-terminal-log ${hasRipple ? "prime-ripple" : ""}`}
         style={{ position: "relative", zIndex: 10 }}
-        initial={{ opacity: 0, y: 8 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.15 }}
+      >
+        {viewMode === "RAW" && (
+          <div className="p-4 font-mono text-xs">
+            {rawEvents.length === 0 ? (
+              <div className="text-slate-500 text-center py-8">No raw events</div>
+            ) : (
+              rawEvents.map((event, idx) => (
+                <motion.div
+                  key={`${event.timestamp}-${idx}`}
+                  className="mb-2 p-2 bg-slate-900/30 rounded border-l border-slate-700"
+                  initial={{ opacity: 0, y: 2 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.15 }}
+                >
+                  <pre className="text-slate-300 whitespace-pre-wrap break-all">
+                    {JSON.stringify(event, null, 2)}
+                  </pre>
+                </motion.div>
+              ))
+            )}
+          </div>
+        )}
+
+        {viewMode === "SIGNAL" && (
+          <div className="p-4 font-mono text-sm">
+            {signalMessages.length === 0 ? (
+              <div className="text-slate-500 text-center py-8">No signal intelligence available</div>
+            ) : (
+              signalMessages.map((signal) => (
+                <motion.div
+                  key={signal.id}
+                  className={`mb-2 p-2 rounded-lg border-l-2 ${
+                    signal.isSignificant
+                      ? "bg-slate-900/50 border-purple-500"
+                      : "bg-slate-900/30 border-slate-700"
+                  }`}
+                  initial={{ opacity: 0, x: -8 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <div className="flex items-start gap-2">
+                    <span className="text-lg">{signal.icon}</span>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className={`text-xs ${signal.color} font-semibold`}>
+                          {signal.signal}
+                        </span>
+                        <span className="text-xs text-slate-500">
+                          {new Date(signal.timestamp).toLocaleTimeString()}
+                        </span>
+                        {signal.isSignificant && (
+                          <span className="text-xs bg-purple-500/20 text-purple-300 px-1.5 py-0.5 rounded">
+                            SIGNIFICANT
+                          </span>
+                        )}
+                      </div>
+                      <div className={`${signal.color} text-sm`}>
+                        {signal.message}
+                      </div>
+                      <div className="text-xs text-slate-500 mt-1">
+                        {signal.source}
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              ))
+            )}
+          </div>
+        )}
+
+        {viewMode === "HYBRID" && (
+          <div className="p-4 font-mono text-sm">
+            {signalMessages.length === 0 ? (
+              <div className="text-slate-500 text-center py-8">No signal intelligence available</div>
+            ) : (
+              signalMessages.map((signal) => {
+                // Find corresponding raw event using the map
+                const rawEvent = signalToRawMap.get(signal.id);
+                
+                return (
+                  <motion.div
+                    key={signal.id}
+                    className={`mb-3 p-3 rounded-lg border-l-2 relative ${
+                      signal.isSignificant
+                        ? "bg-slate-900/50 border-purple-500"
+                        : "bg-slate-900/30 border-slate-700"
+                    }`}
+                    initial={{ opacity: 0, x: -8 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    {/* Signal message (primary) */}
+                    <div className="flex items-start gap-2 relative z-10">
+                      <span className="text-lg">{signal.icon}</span>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className={`text-xs ${signal.color} font-semibold`}>
+                            {signal.signal}
+                          </span>
+                          <span className="text-xs text-slate-500">
+                            {new Date(signal.timestamp).toLocaleTimeString()}
+                          </span>
+                          {signal.isSignificant && (
+                            <span className="text-xs bg-purple-500/20 text-purple-300 px-1.5 py-0.5 rounded">
+                              SIGNIFICANT
+                            </span>
+                          )}
+                        </div>
+                        <div className={`${signal.color} text-sm`}>
+                          {signal.message}
+                        </div>
+                        <div className="text-xs text-slate-500 mt-1">
+                          {signal.source}
+                        </div>
+                      </div>
+                    </div>
+                    {/* Raw JSON metadata overlay (low opacity) */}
+                    {rawEvent && (
+                      <div className="mt-2 pt-2 border-t border-slate-700/30 opacity-20 hover:opacity-40 transition-opacity">
+                        <pre className="text-slate-400 text-xs whitespace-pre-wrap break-all">
+                          {JSON.stringify(rawEvent, null, 2)}
+                        </pre>
+                      </div>
+                    )}
+                  </motion.div>
+                );
+              })
+            )}
+          </div>
+        )}
+      </motion.div>
+
+      {/* Command/Response Log (Separate from telemetry) */}
+      {filteredLog.length > 0 && (
+        <motion.div
+          className={`max-h-32 overflow-y-auto border-t border-slate-800 mt-2 pt-2`}
+          style={{ position: "relative", zIndex: 10 }}
+          initial={{ opacity: 0, y: 4 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.35, ease: "easeOut" }}
+          transition={{ duration: 0.25, ease: "easeOut" }}
       >
         {filteredLog.map((entry, idx) => (
           <motion.div
             key={`${entry.ts}-${idx}`}
             className={
               entry.isCommand
-                ? "prime-terminal-line prime-terminal-line-command text-sm mb-1 whitespace-pre-wrap terminal-line"
-                : `prime-terminal-line prime-terminal-line-${entry.category.toLowerCase()} text-sm mb-1 whitespace-pre-wrap opacity-90 terminal-line cat-${entry.category.toLowerCase()}`
+                  ? "prime-terminal-line prime-terminal-line-command text-sm mb-1 whitespace-pre-wrap terminal-line px-4"
+                  : `prime-terminal-line prime-terminal-line-${entry.category.toLowerCase()} text-sm mb-1 whitespace-pre-wrap opacity-90 terminal-line cat-${entry.category.toLowerCase()} px-4`
             }
-            initial={{ opacity: 0, y: 4 }}
+              initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
           >
             {entry.message || entry.text}
           </motion.div>
         ))}
       </motion.div>
+      )}
 
       {/* Jump to Live Button */}
       {showJumpToLive && (
-        <motion.div
-          className="absolute bottom-20 right-8 z-30"
+      <motion.div
+          className="absolute bottom-4 right-8 z-30"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.9 }}
@@ -410,73 +652,9 @@ export default function OperatorTerminal() {
           >
             Jump to Live
           </Button>
-        </motion.div>
-      )}
-
-      {/* Command Bar (Bottom Anchored) */}
-      <motion.div
-        className={`prime-terminal-input ${isProcessing ? "prime-terminal-processing" : ""}`}
-        style={{ position: "relative", zIndex: 10 }}
-        animate={{
-          boxShadow: isInputFocused
-            ? "0 0 18px rgba(128, 90, 213, 0.35)"
-            : "0 0 0px rgba(128, 90, 213, 0)",
-        }}
-        transition={{ duration: 0.3, ease: "easeInOut" }}
-      >
-        <div className="flex items-center gap-3">
-          <div className="relative w-full">
-            {suggestion && (
-              <span className="absolute left-3 top-2 text-white/20 pointer-events-none select-none">
-                {suggestion}
-              </span>
-            )}
-            <Input
-              className={`flex-1 text-base ${isSilentIdle ? "prime-input-silent" : ""}`}
-              value={input}
-              placeholder="Issue command..."
-              onChange={(e) => {
-                const value = e.target.value;
-                setInput(value);
-                if (value.startsWith("/")) {
-                  const match = commandList.find(cmd =>
-                    cmd.startsWith(value.slice(1))
-                  );
-                  setSuggestion(match ? `/${match}` : "");
-                } else {
-                  setSuggestion("");
-                }
-                const now = Date.now();
-                setLastInputTime(now);
-                setIsSilentIdle(false);
-                setNeuralState((current) => current === "idle" ? null : current);
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "Tab" && suggestion) {
-                  e.preventDefault();
-                  setInput(suggestion);
-                  setSuggestion("");
-                }
-                if (e.key === "Enter") {
-                  handleSend();
-                  setSuggestion("");
-                }
-              }}
-              onFocus={() => setIsInputFocused(true)}
-              onBlur={() => setIsInputFocused(false)}
-            />
-          </div>
-          <Button
-            className="sage-command-send text-base px-5 py-3"
-            onClick={(e) => {
-              e.preventDefault();
-              handleSend();
-            }}
-          >
-            Send
-          </Button>
-        </div>
       </motion.div>
+      )}
     </Card>
   );
 }
+
