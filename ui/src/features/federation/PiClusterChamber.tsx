@@ -1,29 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Server, Cpu, Wifi, Activity } from "lucide-react";
+import { createSimulatedNode, SimNodeMetrics } from "@/simulated/simTelemetry";
 
 const mockPiNodes = [
   {
     id: "pi-alpha",
     label: "Pi-Alpha",
     status: "ONLINE",
-    cpu: "12%",
-    temp: "47°C",
     ip: "192.168.10.21",
   },
   {
     id: "pi-beta",
     label: "Pi-Beta",
     status: "BOOTING",
-    cpu: "—",
-    temp: "—",
     ip: "pending…",
   },
   {
     id: "pi-gamma",
     label: "Pi-Gamma",
     status: "OFFLINE",
-    cpu: "—",
-    temp: "—",
     ip: "unreachable",
   },
 ];
@@ -35,9 +30,37 @@ const statusColors: Record<string, string> = {
   UNKNOWN: "text-slate-400 bg-slate-400/10",
 };
 
+interface NodeWithMetrics {
+  id: string;
+  label: string;
+  status: string;
+  ip: string;
+  metrics?: SimNodeMetrics;
+}
+
 export const PiClusterChamber = () => {
   const [selectedNode, setSelectedNode] = useState<string | null>(null);
-  const active = mockPiNodes.find((n) => n.id === selectedNode);
+  const [nodesWithMetrics, setNodesWithMetrics] = useState<NodeWithMetrics[]>([]);
+
+  useEffect(() => {
+    const generators = mockPiNodes.map(() => createSimulatedNode());
+    
+    const updateMetrics = () => {
+      setNodesWithMetrics(
+        mockPiNodes.map((node, idx) => ({
+          ...node,
+          metrics: generators[idx](),
+        }))
+      );
+    };
+
+    updateMetrics();
+    const interval = setInterval(updateMetrics, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const active = nodesWithMetrics.find((n) => n.id === selectedNode);
 
   return (
     <div className="p-6 space-y-6">
@@ -47,7 +70,7 @@ export const PiClusterChamber = () => {
       <p className="text-sm text-slate-400">Cluster readiness pending federation ignition.</p>
       {/* NODE GRID */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {mockPiNodes.map((node) => (
+        {nodesWithMetrics.map((node) => (
           <button
             key={node.id}
             onClick={() => setSelectedNode(node.id)}
@@ -67,9 +90,9 @@ export const PiClusterChamber = () => {
                 {node.status}
               </span>
             </div>
-            <div className="flex items-center gap-3 text-xs text-slate-400">
-              <Cpu className="w-3 h-3" /> {node.cpu}
-              <Activity className="w-3 h-3" /> {node.temp}
+            <div className="flex flex-wrap gap-3 text-xs text-slate-400 mt-2 whitespace-normal break-all">
+              <Cpu className="w-3 h-3" /> {node.metrics ? `${node.metrics.cpu}%` : "—"}
+              <Activity className="w-3 h-3" /> {node.metrics ? `${node.metrics.temp}°C` : "—"}
               <Wifi className="w-3 h-3" /> {node.ip}
             </div>
           </button>
@@ -91,12 +114,18 @@ export const PiClusterChamber = () => {
             </div>
             <div className="p-4 bg-slate-900/60 rounded border border-slate-800 space-y-2">
               <p className="text-sm text-slate-400">CPU</p>
-              <p className="text-slate-200">{active.cpu}</p>
+              <p className="text-slate-200">{active.metrics ? `${active.metrics.cpu}%` : "—"}</p>
             </div>
             <div className="p-4 bg-slate-900/60 rounded border border-slate-800 space-y-2">
               <p className="text-sm text-slate-400">Temperature</p>
-              <p className="text-slate-200">{active.temp}</p>
+              <p className="text-slate-200">{active.metrics ? `${active.metrics.temp}°C` : "—"}</p>
             </div>
+            {active.metrics && (
+              <div className="p-4 bg-slate-900/60 rounded border border-slate-800 space-y-2">
+                <p className="text-sm text-slate-400">Latency</p>
+                <p className="text-slate-200">{active.metrics.latency}ms</p>
+              </div>
+            )}
           </div>
           <button
             onClick={() => setSelectedNode(null)}

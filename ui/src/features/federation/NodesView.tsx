@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Globe } from "lucide-react";
+import { createSimulatedNode, SimNodeMetrics } from "@/simulated/simTelemetry";
 
 const mockFederationNodes = [
   {
@@ -25,16 +26,45 @@ const statusColors = {
   OFFLINE: "text-red-400 bg-red-400/10",
 };
 
+interface NodeWithMetrics {
+  id: string;
+  location: string;
+  status: string;
+  metrics?: SimNodeMetrics;
+}
+
 export const NodesView = () => {
   const [selected, setSelected] = useState<string | null>(null);
-  const active = mockFederationNodes.find((n) => n.id === selected);
+  const [nodesWithMetrics, setNodesWithMetrics] = useState<NodeWithMetrics[]>([]);
+
+  useEffect(() => {
+    const generators = Array.from({ length: mockFederationNodes.length }).map(() =>
+      createSimulatedNode()
+    );
+
+    const updateMetrics = () => {
+      setNodesWithMetrics(
+        mockFederationNodes.map((node, idx) => ({
+          ...node,
+          metrics: generators[idx](),
+        }))
+      );
+    };
+
+    updateMetrics();
+    const interval = setInterval(updateMetrics, 4000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const active = nodesWithMetrics.find((n) => n.id === selected);
 
   return (
     <div className="p-6 space-y-6">
       <h2 className="text-2xl font-bold text-purple-300">Federation Nodes</h2>
       <p className="text-sm text-slate-400">Awaiting multi-region federation expansion.</p>
       <div className="space-y-3">
-        {mockFederationNodes.map((node) => (
+        {nodesWithMetrics.map((node) => (
           <button
             key={node.id}
             onClick={() => setSelected(node.id)}
@@ -46,9 +76,20 @@ export const NodesView = () => {
               <Globe className="w-4 h-4 text-purple-300" />
               <span className="text-slate-200 font-medium">{node.id}</span>
             </div>
-            <span className={`px-2 py-1 rounded text-xs ${statusColors[node.status]}`}>
-              {node.status}
-            </span>
+            <div className="flex items-center gap-4">
+              {node.metrics && (
+                <div className="flex gap-4 text-xs text-slate-400">
+                  <span>CPU: {node.metrics.cpu}%</span>
+                  <span>Latency: {node.metrics.latency}ms</span>
+                  <span className={node.metrics.heartbeat ? "text-green-400" : "text-red-400"}>
+                    ●
+                  </span>
+                </div>
+              )}
+              <span className={`px-2 py-1 rounded text-xs ${statusColors[node.status]}`}>
+                {node.status}
+              </span>
+            </div>
           </button>
         ))}
       </div>
@@ -63,6 +104,24 @@ export const NodesView = () => {
               <p className="text-sm text-slate-400">Location</p>
               <p className="text-slate-200">{active.location}</p>
             </div>
+            {active.metrics && (
+              <>
+                <div className="p-4 bg-slate-900/60 rounded border border-slate-800 space-y-2">
+                  <p className="text-sm text-slate-400">CPU</p>
+                  <p className="text-slate-200">{active.metrics.cpu}%</p>
+                </div>
+                <div className="p-4 bg-slate-900/60 rounded border border-slate-800 space-y-2">
+                  <p className="text-sm text-slate-400">Latency</p>
+                  <p className="text-slate-200">{active.metrics.latency}ms</p>
+                </div>
+                <div className="p-4 bg-slate-900/60 rounded border border-slate-800 space-y-2">
+                  <p className="text-sm text-slate-400">Heartbeat</p>
+                  <p className={active.metrics.heartbeat ? "text-green-400" : "text-red-400"}>
+                    {active.metrics.heartbeat ? "Active" : "Inactive"}
+                  </p>
+                </div>
+              </>
+            )}
           </div>
           <button
             onClick={() => setSelected(null)}
