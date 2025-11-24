@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
+import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { useOnboardingStore } from '@/lib/store/onboarding-store';
 import { RadioGroup } from '@/components/ui/radio-group';
 import { Switch } from '@/components/ui/switch';
@@ -72,12 +72,8 @@ export default function DataRegionsPage() {
   return (
     <OCTGuard>
       <div className="min-h-screen bg-[#0b0c0f] text-white pb-24">
-        <div className="max-w-3xl mx-auto py-10 px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
+        <div className="max-w-3xl mx-auto py-10 px-4 fade-in">
+          <div>
             <div className="bg-[#111317] border border-white/10 p-6 rounded-[14px]">
               <h2 className="text-xl font-medium mb-4 text-[#e2e6ee]">
                 Data & Regions
@@ -146,7 +142,7 @@ export default function DataRegionsPage() {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
 
         {/* Sticky Bottom Action Bar */}
@@ -157,7 +153,8 @@ export default function DataRegionsPage() {
               onClick={handleBack}
               className="px-6"
             >
-              &lt; Back
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back
             </Button>
             
             <div className="text-sm text-white/60">
@@ -169,7 +166,8 @@ export default function DataRegionsPage() {
               disabled={!isFormValid}
               className="px-6"
             >
-              Next &gt;
+              <ArrowRight className="h-4 w-4 mr-2" />
+              Next
             </Button>
           </div>
         </div>

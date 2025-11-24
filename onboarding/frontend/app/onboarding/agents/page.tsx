@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
+import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { useOnboardingStore, Agent } from '@/lib/store/onboarding-store';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -74,12 +74,8 @@ export default function AgentsPage() {
   return (
     <OCTGuard>
       <div className="min-h-screen bg-[#0b0c0f] text-white pb-24">
-        <div className="max-w-3xl mx-auto py-10 px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
+        <div className="max-w-3xl mx-auto py-10 px-4 fade-in">
+          <div>
             <div className="mb-6">
               <h2 className="text-3xl font-semibold tracking-tight text-[#e2e6ee]">
                 Agent Selection
@@ -93,11 +89,8 @@ export default function AgentsPage() {
               {availableAgents.map((agent, index) => {
                 const isSelected = selectedAgents.includes(agent.id);
                 return (
-                  <motion.div
+                  <div
                     key={agent.id}
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.3, delay: index * 0.1 }}
                   >
                     <Card
                       className={`cursor-pointer transition-all ${
@@ -124,23 +117,19 @@ export default function AgentsPage() {
                         </div>
                       </CardHeader>
                     </Card>
-                  </motion.div>
+                  </div>
                 );
               })}
             </div>
 
             {selectedAgents.length === 0 && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="mt-6 p-4 bg-[#1a1d22] border border-red-400/30 rounded-[14px]"
-              >
+              <div className="mt-6 p-4 bg-[#1a1d22] border border-red-400/30 rounded-[14px]">
                 <p className="text-sm text-red-400">
                   Please select at least one agent to continue
                 </p>
-              </motion.div>
+              </div>
             )}
-          </motion.div>
+          </div>
         </div>
 
         {/* Sticky Bottom Action Bar */}
@@ -151,7 +140,8 @@ export default function AgentsPage() {
               onClick={handleBack}
               className="px-6"
             >
-              &lt; Back
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back
             </Button>
             
             <div className="text-sm text-white/60">
@@ -163,7 +153,8 @@ export default function AgentsPage() {
               disabled={!isFormValid}
               className="px-6"
             >
-              Next &gt;
+              <ArrowRight className="h-4 w-4 mr-2" />
+              Next
             </Button>
           </div>
         </div>

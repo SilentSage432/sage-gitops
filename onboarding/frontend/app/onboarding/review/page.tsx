@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
+import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { useOnboardingStore } from '@/lib/store/onboarding-store';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
@@ -195,12 +195,7 @@ export default function ReviewPage() {
       <OCTGuard>
         <div className="min-h-screen bg-[#0b0c0f] text-white pb-24">
           <div className="max-w-3xl mx-auto py-10 px-4">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5 }}
-              className="bg-[#111317] border border-white/10 p-6 rounded-[14px] text-center"
-            >
+            <div className="bg-[#111317] border border-white/10 p-6 rounded-[14px] text-center">
               <div className="flex justify-center mb-6">
                 <CheckCircle2 className="w-16 h-16 text-[#10b981]" />
               </div>
@@ -331,10 +326,11 @@ export default function ReviewPage() {
                   onClick={handleFinish}
                   className="w-full px-6"
                 >
+                  <ArrowRight className="h-4 w-4 mr-2" />
                   Finish
                 </Button>
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </OCTGuard>
@@ -348,12 +344,8 @@ export default function ReviewPage() {
   return (
     <OCTGuard>
       <div className="min-h-screen bg-[#0b0c0f] text-white pb-24">
-        <div className="max-w-3xl mx-auto py-10 px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
+        <div className="max-w-3xl mx-auto py-10 px-4 fade-in">
+          <div>
             <div className="mb-6">
               <h2 className="text-3xl font-semibold tracking-tight text-[#e2e6ee]">
                 Review Configuration
@@ -501,10 +493,11 @@ export default function ReviewPage() {
                 className="px-8 py-3 text-lg"
                 size="lg"
               >
+                <ArrowRight className="h-4 w-4 mr-2" />
                 {isGenerating ? 'Generating Kit...' : 'Generate Bootstrap Kit'}
               </Button>
             </div>
-          </motion.div>
+          </div>
         </div>
 
         {/* Sticky Bottom Action Bar */}
@@ -515,7 +508,8 @@ export default function ReviewPage() {
               onClick={handleBack}
               className="px-6"
             >
-              &lt; Back
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back
             </Button>
             
             <div className="text-sm text-white/60">

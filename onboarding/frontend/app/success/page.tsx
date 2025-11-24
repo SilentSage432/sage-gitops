@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { CheckCircle2, QrCode, X } from 'lucide-react';
+import { CheckCircle2, QrCode, X, LayoutDashboard } from 'lucide-react';
 import { OCTGuard } from '@/components/OCTGuard';
 
 export default function SuccessPage() {
@@ -25,8 +25,8 @@ export default function SuccessPage() {
 
   return (
     <OCTGuard>
-      <div className="min-h-screen bg-[#0b0c0f] text-white flex items-center justify-center px-4 animate-in fade-in duration-700">
-        <div className="max-w-3xl mx-auto py-10 px-4 text-center">
+      <div className="min-h-screen bg-[#0b0c0f] text-white flex items-center justify-center px-4">
+        <div className="max-w-3xl mx-auto py-10 px-4 text-center fade-in slide-up">
           <Card className="bg-[#0e0e12]/70 border border-white/15 backdrop-blur-2xl rounded-2xl shadow-[0_0_32px_-12px_rgba(0,0,0,0.85)]">
             <CardContent className="p-6 space-y-4">
               {/* Success Icon */}
@@ -49,6 +49,7 @@ export default function SuccessPage() {
                   className="w-full px-6 py-3 text-base"
                   size="lg"
                 >
+                  <LayoutDashboard className="h-4 w-4 mr-2" />
                   Enter Dashboard
                 </Button>
 

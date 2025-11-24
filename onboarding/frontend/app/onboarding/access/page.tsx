@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
+import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { useOnboardingStore } from '@/lib/store/onboarding-store';
 import { RadioGroup } from '@/components/ui/radio-group';
 import { Select, SelectOption } from '@/components/ui/select';
@@ -139,12 +139,8 @@ export default function AccessPage() {
   return (
     <OCTGuard>
       <div className="min-h-screen bg-[#0b0c0f] text-white pb-24">
-        <div className="max-w-3xl mx-auto py-10 px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
+        <div className="max-w-3xl mx-auto py-10 px-4 fade-in">
+          <div>
             <div className="bg-[#111317] border border-white/10 p-6 rounded-[14px]">
               <h2 className="text-xl font-medium mb-4 text-[#e2e6ee]">
                 Access & Authentication
@@ -175,13 +171,7 @@ export default function AccessPage() {
 
                 {/* Local Account Fields */}
                 {formData.authMethod === 'local' && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="space-y-6"
-                  >
+                  <div className="space-y-6">
                     <div className="space-y-2">
                       <Label htmlFor="adminEmail">
                         Admin Email <span className="text-red-400">*</span>
@@ -212,18 +202,12 @@ export default function AccessPage() {
                         This password will be used for the initial admin login. User must change it on first login.
                       </p>
                     </div>
-                  </motion.div>
+                  </div>
                 )}
 
                 {/* SSO Fields */}
                 {formData.authMethod === 'sso' && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="space-y-6"
-                  >
+                  <div className="space-y-6">
                     <div className="space-y-2">
                       <Label htmlFor="identityProvider">Identity Provider</Label>
                       <Select
@@ -304,11 +288,11 @@ export default function AccessPage() {
                         onCheckedChange={(checked) => setFormData({ ...formData, scimEnabled: checked })}
                       />
                     </div>
-                  </motion.div>
+                  </div>
                 )}
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
 
         {/* Sticky Bottom Action Bar */}
@@ -319,7 +303,8 @@ export default function AccessPage() {
               onClick={handleBack}
               className="px-6"
             >
-              &lt; Back
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back
             </Button>
             
             <div className="text-sm text-white/60">
@@ -331,7 +316,8 @@ export default function AccessPage() {
               disabled={!isFormValid()}
               className="px-6"
             >
-              Next &gt;
+              <ArrowRight className="h-4 w-4 mr-2" />
+              Next
             </Button>
           </div>
         </div>

@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -69,44 +68,26 @@ export default function DashboardPage() {
 
   return (
     <OCTGuard>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        className="min-h-screen bg-[#0b0c0f] text-white animate-in fade-in duration-300 ease-out"
-      >
+      <div className="min-h-screen bg-[#0b0c0f] text-white">
         <div className="max-w-4xl mx-auto py-10 px-4">
           {/* Header Bar */}
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="border-b border-white/5 pb-4 mb-6"
-          >
+          <div className="border-b border-white/5 pb-4 mb-6">
             <h1 className="text-3xl font-semibold tracking-tight text-[#e2e6ee]">
               SAGE Onboarding Dashboard
             </h1>
             <p className="text-sm text-white/60 mt-2">
               Tenant successfully initialized
             </p>
-          </motion.div>
+          </div>
 
           <div className="space-y-6">
             {/* Bootstrap Status Card */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.15 }}
-            >
+            <div className="slide-up" style={{ animationDelay: "0.05s" }}>
               <BootstrapStatusCard />
-            </motion.div>
+            </div>
 
             {/* Tenant Summary Card */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
+            <div className="slide-up" style={{ animationDelay: "0.1s" }}>
               <Card>
                 <CardHeader>
                   <CardTitle>Tenant Overview</CardTitle>
@@ -126,14 +107,10 @@ export default function DashboardPage() {
                   </div>
                 </CardContent>
               </Card>
-            </motion.div>
+            </div>
 
             {/* Onboarding Status Card */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.25 }}
-            >
+            <div className="slide-up" style={{ animationDelay: "0.15s" }}>
               <Card>
                 <CardHeader>
                   <CardTitle>Onboarding Status</CardTitle>
@@ -154,15 +131,10 @@ export default function DashboardPage() {
                   </div>
                 </CardContent>
               </Card>
-            </motion.div>
+            </div>
 
             {/* Status Indicators Row */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="grid grid-cols-1 sm:grid-cols-3 gap-4"
-            >
+            <div className="slide-up grid grid-cols-1 sm:grid-cols-3 gap-4" style={{ animationDelay: "0.2s" }}>
               <Card className="hover:border-white/20 hover:shadow-[0_0_28px_-14px_rgba(0,0,0,0.9)] focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:outline-none">
                 <CardContent className="pt-6">
                   <div className="flex items-center justify-between mb-2">
@@ -205,14 +177,10 @@ export default function DashboardPage() {
                   <Badge variant="secondary">Pending</Badge>
                 </CardContent>
               </Card>
-            </motion.div>
+            </div>
 
             {/* Next Steps Panel */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-            >
+            <div className="slide-up" style={{ animationDelay: "0.25s" }}>
               <Card>
                 <CardHeader>
                   <CardTitle>Next Actions</CardTitle>
@@ -243,14 +211,10 @@ export default function DashboardPage() {
                   </div>
                 </CardContent>
               </Card>
-            </motion.div>
+            </div>
 
             {/* Quick Tools */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.35 }}
-            >
+            <div className="slide-up" style={{ animationDelay: "0.3s" }}>
               <Card>
                 <CardHeader>
                   <CardTitle>Quick Tools</CardTitle>
@@ -291,14 +255,10 @@ export default function DashboardPage() {
                   </div>
                 </CardContent>
               </Card>
-            </motion.div>
+            </div>
 
             {/* Activity Feed Placeholder */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.5 }}
-            >
+            <div className="slide-up" style={{ animationDelay: "0.35s" }}>
               <Card>
                 <CardHeader>
                   <CardTitle>Recent Activity</CardTitle>
@@ -319,10 +279,10 @@ export default function DashboardPage() {
                   </ul>
                 </CardContent>
               </Card>
-            </motion.div>
+            </div>
           </div>
         </div>
-      </motion.div>
+      </div>
     </OCTGuard>
   );
 }

@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -83,14 +82,10 @@ export default function PersonalOnboardingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0b0c0f] text-white flex items-center justify-center p-4">
-      <div className="max-w-3xl mx-auto py-10 px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <Card className="rounded-3xl">
+      <div className="min-h-screen bg-[#0b0c0f] text-white flex items-center justify-center p-4">
+        <div className="max-w-3xl mx-auto py-10 px-4 fade-in">
+          <div>
+            <Card className="rounded-3xl">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle className="flex items-center gap-2 text-xl font-medium">
@@ -114,12 +109,7 @@ export default function PersonalOnboardingPage() {
             <CardContent className="p-6 space-y-4">
               {/* Step 1: Identity */}
               {step === 1 && (
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="space-y-4"
-                >
+                <div className="space-y-4">
                   <div>
                     <h2 className="text-xl font-medium text-[#e2e6ee]">Identity</h2>
                     <p className="text-sm text-white/60 mt-2">
@@ -175,17 +165,12 @@ export default function PersonalOnboardingPage() {
                       />
                     </div>
                   </div>
-                </motion.div>
+                </div>
               )}
 
               {/* Step 2: Intent Selection */}
               {step === 2 && (
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="space-y-4"
-                >
+                <div className="space-y-4">
                   <div>
                     <h2 className="text-xl font-medium text-[#e2e6ee]">Intent</h2>
                     <p className="text-sm text-white/60 mt-2">
@@ -198,17 +183,12 @@ export default function PersonalOnboardingPage() {
                     value={formData.intent}
                     onValueChange={(value) => setFormData({ ...formData, intent: value })}
                   />
-                </motion.div>
+                </div>
               )}
 
               {/* Step 3: Confirmation */}
               {step === 3 && (
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="space-y-4"
-                >
+                <div className="space-y-4">
                   <div className="flex justify-center mb-6">
                     <div className="w-16 h-16 rounded-full bg-[#10b981]/20 flex items-center justify-center">
                       <CheckCircle2 className="w-8 h-8 text-[#10b981]" />
@@ -252,6 +232,7 @@ export default function PersonalOnboardingPage() {
                   variant="outline"
                   onClick={handleBack}
                 >
+                  <ArrowLeft className="h-4 w-4 mr-2" />
                   {step === 1 ? 'Cancel' : 'Back'}
                 </Button>
                 {step < 3 ? (
@@ -259,13 +240,14 @@ export default function PersonalOnboardingPage() {
                     onClick={handleNext}
                     disabled={step === 2 && !formData.intent}
                   >
+                    <ArrowRight className="h-4 w-4 mr-2" />
                     Next
-                    <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
                 ) : (
                   <Button
                     onClick={handleSubmit}
                   >
+                    <ArrowRight className="h-4 w-4 mr-2" />
                     Activate Access
                   </Button>
                 )}
