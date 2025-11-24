@@ -14,11 +14,13 @@ import OnboardingNexusPanel from "../panels/OnboardingNexusPanel";
 interface BridgeFrameProps {
   selectedItem?: string;
   onSelectItem?: (item?: string) => void;
+  activeChamber?: React.ReactNode;
 }
 
 export const BridgeFrame: React.FC<BridgeFrameProps> = ({
   selectedItem,
   onSelectItem,
+  activeChamber,
 }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const alertState = useUIShockwave().state;
@@ -117,13 +119,13 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
           </div>
 
           {/* RIGHT: ACTIVE PANEL — ALWAYS VISIBLE WHEN SET */}
-          {activePanel && (
+          {(activePanel || activeChamber) && (
             <div
               key={selectedItem}
               className="w-[420px] flex-shrink-0 h-full border-l border-slate-800 bg-[#0c0c13]/95
               backdrop-blur-xl shadow-2xl overflow-y-auto"
             >
-              {activePanel}
+              {activePanel || activeChamber}
             </div>
           )}
         </div>
