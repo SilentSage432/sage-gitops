@@ -139,18 +139,18 @@ export default function AccessPage() {
   return (
     <OCTGuard>
       <div className="min-h-screen bg-[#0b0c0f] text-white pb-24">
-        <div className="max-w-xl mx-auto px-4 py-10">
+        <div className="max-w-3xl mx-auto py-10 px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <div className="bg-[#111317] border border-white/10 p-8 rounded-[14px]">
-              <h2 className="text-2xl font-semibold mb-6 text-[#e2e6ee]">
+            <div className="bg-[#111317] border border-white/10 p-6 rounded-[14px]">
+              <h2 className="text-xl font-medium mb-4 text-[#e2e6ee]">
                 Access & Authentication
               </h2>
               
-              <div className="space-y-6">
+              <div className="space-y-4">
                 {/* Authentication Method */}
                 <div className="space-y-3">
                   <Label>Authentication Method</Label>

@@ -75,18 +75,18 @@ export default function DashboardPage() {
         transition={{ duration: 0.5 }}
         className="min-h-screen bg-[#0b0c0f] text-white animate-in fade-in duration-300 ease-out"
       >
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="max-w-4xl mx-auto py-10 px-4">
           {/* Header Bar */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="mb-6 border-b border-white/5 pb-4"
+            className="border-b border-white/5 pb-4 mb-6"
           >
-            <h1 className="text-2xl font-semibold tracking-tight mb-2 text-[#e2e6ee]">
+            <h1 className="text-3xl font-semibold tracking-tight text-[#e2e6ee]">
               SAGE Onboarding Dashboard
             </h1>
-            <p className="text-sm text-neutral-400">
+            <p className="text-sm text-white/60 mt-2">
               Tenant successfully initialized
             </p>
           </motion.div>
@@ -111,7 +111,7 @@ export default function DashboardPage() {
                 <CardHeader>
                   <CardTitle>Tenant Overview</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-3">
+                <CardContent className="space-y-4">
                   <div>
                     <span className="text-sm text-white/60">Tenant Name:</span>
                     <p className="text-sm font-medium text-[#e2e6ee]">Example Tenant</p>

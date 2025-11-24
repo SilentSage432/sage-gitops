@@ -59,14 +59,14 @@ export default function CompletePage() {
   return (
     <OCTGuard>
       <div className="min-h-screen bg-[#0b0c0f] text-white flex items-center justify-center px-4">
-        <div className="max-w-md w-full text-center space-y-6">
+        <div className="max-w-3xl mx-auto py-10 px-4 text-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
           >
             <Card className="border-white/10 bg-[#111317] shadow-xl shadow-purple-500/10">
-              <CardContent className="pt-8 pb-8 px-8">
+              <CardContent className="p-6 space-y-4">
                 <motion.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
@@ -84,7 +84,7 @@ export default function CompletePage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.3 }}
-                  className="text-3xl font-semibold mb-3 text-[#e2e6ee]"
+                  className="text-3xl font-semibold tracking-tight text-[#e2e6ee]"
                 >
                   Onboarding Complete
                 </motion.h1>
@@ -93,7 +93,7 @@ export default function CompletePage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.4 }}
-                  className="text-white/60 mb-8 flex items-center justify-center gap-2"
+                  className="text-base leading-relaxed text-white/60 flex items-center justify-center gap-2"
                 >
                   {isRedirecting ? (
                     <>

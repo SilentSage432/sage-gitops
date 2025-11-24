@@ -24,8 +24,8 @@ export function OnboardingEntry() {
           transition={{ duration: 0.5 }}
           className="text-center mb-12"
         >
-          <h1 className="text-4xl font-bold mb-2 text-[#e2e6ee]">SAGE Onboarding</h1>
-          <p className="text-white/60 text-lg">Choose your onboarding path</p>
+          <h1 className="text-3xl font-semibold tracking-tight text-[#e2e6ee]">SAGE Onboarding</h1>
+          <p className="text-base leading-relaxed text-white/60 mt-2">Choose your onboarding path</p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
@@ -43,8 +43,8 @@ export function OnboardingEntry() {
                 <div className="w-16 h-16 rounded-full bg-violet-500/20 flex items-center justify-center group-hover:bg-violet-500/30 transition-colors">
                   <User className="w-8 h-8 text-violet-400" />
                 </div>
-                <h2 className="text-2xl font-semibold text-[#e2e6ee]">Individual Onboarding</h2>
-                <p className="text-white/60 text-sm">
+                <h2 className="text-xl font-medium text-[#e2e6ee]">Individual Onboarding</h2>
+                <p className="text-sm text-white/60">
                   Set up your personal SAGE instance
                 </p>
               </div>
@@ -65,8 +65,8 @@ export function OnboardingEntry() {
                 <div className="w-16 h-16 rounded-full bg-violet-500/20 flex items-center justify-center group-hover:bg-violet-500/30 transition-colors">
                   <Building2 className="w-8 h-8 text-violet-400" />
                 </div>
-                <h2 className="text-2xl font-semibold text-[#e2e6ee]">Organization Onboarding</h2>
-                <p className="text-white/60 text-sm">
+                <h2 className="text-xl font-medium text-[#e2e6ee]">Organization Onboarding</h2>
+                <p className="text-sm text-white/60">
                   Configure SAGE for your organization
                 </p>
               </div>

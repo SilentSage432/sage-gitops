@@ -84,7 +84,7 @@ export default function PersonalOnboardingPage() {
 
   return (
     <div className="min-h-screen bg-[#0b0c0f] text-white flex items-center justify-center p-4">
-      <div className="max-w-2xl w-full">
+      <div className="max-w-3xl mx-auto py-10 px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -93,7 +93,7 @@ export default function PersonalOnboardingPage() {
           <Card className="border-white/10 bg-[#111317] rounded-3xl">
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 text-xl font-medium">
                   {step > 1 && (
                     <Button
                       variant="ghost"
@@ -111,7 +111,7 @@ export default function PersonalOnboardingPage() {
                 </div>
               </div>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="p-6 space-y-4">
               {/* Step 1: Identity */}
               {step === 1 && (
                 <motion.div
@@ -121,8 +121,8 @@ export default function PersonalOnboardingPage() {
                   className="space-y-4"
                 >
                   <div>
-                    <h2 className="text-xl font-semibold mb-4 text-[#e2e6ee]">Identity</h2>
-                    <p className="text-sm text-white/60 mb-6">
+                    <h2 className="text-xl font-medium text-[#e2e6ee]">Identity</h2>
+                    <p className="text-sm text-white/60 mt-2">
                       Tell us about yourself
                     </p>
                   </div>
@@ -187,8 +187,8 @@ export default function PersonalOnboardingPage() {
                   className="space-y-4"
                 >
                   <div>
-                    <h2 className="text-xl font-semibold mb-4 text-[#e2e6ee]">Intent</h2>
-                    <p className="text-sm text-white/60 mb-6">
+                    <h2 className="text-xl font-medium text-[#e2e6ee]">Intent</h2>
+                    <p className="text-sm text-white/60 mt-2">
                       What brings you to SAGE?
                     </p>
                   </div>
@@ -216,7 +216,7 @@ export default function PersonalOnboardingPage() {
                   </div>
 
                   <div>
-                    <h2 className="text-xl font-semibold mb-4 text-[#e2e6ee] text-center">
+                    <h2 className="text-xl font-medium text-[#e2e6ee] text-center">
                       Review Your Information
                     </h2>
                   </div>

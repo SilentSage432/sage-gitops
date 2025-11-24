@@ -26,19 +26,19 @@ export default function SuccessPage() {
   return (
     <OCTGuard>
       <div className="min-h-screen bg-[#0b0c0f] text-white flex items-center justify-center px-4 animate-in fade-in duration-700">
-        <div className="max-w-lg mx-auto text-center space-y-6">
+        <div className="max-w-3xl mx-auto py-10 px-4 text-center">
           <Card className="border-white/10 bg-[#111317]">
-            <CardContent className="pt-8 pb-8 px-8">
+            <CardContent className="p-6 space-y-4">
               {/* Success Icon */}
-              <div className="flex justify-center mb-6">
+              <div className="flex justify-center">
                 <CheckCircle2 className="h-12 w-12 text-emerald-400" />
               </div>
 
               {/* Hero Message */}
-              <h1 className="text-3xl font-semibold mb-3 text-[#e2e6ee]">
+              <h1 className="text-3xl font-semibold tracking-tight text-[#e2e6ee]">
                 Welcome to SAGE Federation
               </h1>
-              <p className="text-white/60 mb-8">
+              <p className="text-base leading-relaxed text-white/60">
                 Your environment has been successfully initialized.
               </p>
 
@@ -76,9 +76,9 @@ export default function SuccessPage() {
             className="border-white/10 bg-[#111317] max-w-md w-full"
             onClick={(e) => e.stopPropagation()}
           >
-            <CardContent className="pt-6 pb-6 px-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-semibold text-[#e2e6ee]">QR Handoff</h2>
+            <CardContent className="p-6 space-y-4">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-medium text-[#e2e6ee]">QR Handoff</h2>
                 <Button
                   variant="ghost"
                   size="sm"
@@ -88,7 +88,7 @@ export default function SuccessPage() {
                   <X className="w-4 h-4" />
                 </Button>
               </div>
-              <p className="text-white/60 text-center py-8">
+              <p className="text-base leading-relaxed text-white/60 text-center">
                 QR delivery will be available after bootstrap activation.
               </p>
               <Button

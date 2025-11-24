@@ -74,17 +74,17 @@ export default function AgentsPage() {
   return (
     <OCTGuard>
       <div className="min-h-screen bg-[#0b0c0f] text-white pb-24">
-        <div className="max-w-3xl mx-auto px-4 py-10">
+        <div className="max-w-3xl mx-auto py-10 px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <div className="mb-8">
-              <h2 className="text-2xl font-semibold mb-2 text-[#e2e6ee]">
+            <div className="mb-6">
+              <h2 className="text-3xl font-semibold tracking-tight text-[#e2e6ee]">
                 Agent Selection
               </h2>
-              <p className="text-white/60">
+              <p className="text-sm text-white/60 mt-2">
                 Select the agents you want to enable for your organization
               </p>
             </div>
