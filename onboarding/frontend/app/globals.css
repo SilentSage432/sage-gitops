@@ -67,3 +67,8 @@ html, body {
   padding-top: var(--safe-top);
   padding-bottom: var(--safe-bottom);
 }
+
+/* Prevent iOS input zoom */
+input, textarea {
+  font-size: 16px;
+}

@@ -71,10 +71,11 @@ export default function DataRegionsPage() {
 
   return (
     <OCTGuard>
-      <div className="min-h-screen bg-[#0b0c0f] text-white pb-24">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10 space-y-8 fade-in">
-          <div>
-            <div className="bg-[#111317] border border-white/10 p-6 rounded-[14px]">
+      <div className="min-h-[100svh] flex flex-col bg-[#0b0c0f] text-white">
+        <div className="flex-1 overflow-y-auto px-4 py-6">
+          <div className="max-w-3xl mx-auto space-y-8 fade-in">
+            <div>
+              <div className="bg-[#111317] border border-white/10 p-6 rounded-[14px]">
               <h2 className="text-xl font-medium mb-4 text-[#e2e6ee]">
                 Data & Regions
               </h2>
@@ -146,8 +147,8 @@ export default function DataRegionsPage() {
         </div>
 
         {/* Sticky Bottom Action Bar */}
-        <div className="fixed bottom-0 left-0 right-0 bg-[#111317] border-t border-white/10 p-4">
-          <div className="max-w-xl mx-auto px-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-0">
+        <div className="sticky bottom-0 z-50 bg-[#111317]/80 backdrop-blur-md border-t border-white/10 px-4 py-3 pb-[env(safe-area-inset-bottom)]">
+          <div className="max-w-xl mx-auto flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-0">
             <Button
               variant="outline"
               onClick={handleBack}

@@ -193,9 +193,10 @@ export default function ReviewPage() {
   if (isSuccess) {
     return (
       <OCTGuard>
-        <div className="min-h-screen bg-[#0b0c0f] text-white pb-24">
-          <div className="max-w-3xl mx-auto py-10 px-4">
-            <div className="bg-[#111317] border border-white/10 p-6 rounded-[14px] text-center">
+        <div className="min-h-[100svh] flex flex-col bg-[#0b0c0f] text-white">
+          <div className="flex-1 overflow-y-auto px-4 py-6">
+            <div className="max-w-3xl mx-auto">
+              <div className="bg-[#111317] border border-white/10 p-6 rounded-[14px] text-center">
               <div className="flex justify-center mb-6">
                 <CheckCircle2 className="w-16 h-16 text-[#10b981]" />
               </div>
@@ -343,10 +344,11 @@ export default function ReviewPage() {
 
   return (
     <OCTGuard>
-      <div className="min-h-screen bg-[#0b0c0f] text-white pb-24">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10 space-y-8 fade-in">
-          <div>
-            <div className="mb-6">
+      <div className="min-h-[100svh] flex flex-col bg-[#0b0c0f] text-white">
+        <div className="flex-1 overflow-y-auto px-4 py-6">
+          <div className="max-w-3xl mx-auto space-y-8 fade-in">
+            <div>
+              <div className="mb-6">
               <h2 className="text-3xl font-semibold tracking-tight text-[#e2e6ee]">
                 Review Configuration
               </h2>
