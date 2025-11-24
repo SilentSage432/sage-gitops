@@ -1,31 +1,22 @@
-import React, { ReactNode, useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu } from "lucide-react";
 import { OperatorTerminal } from "../components/OperatorTerminal";
 import { OperatorInput } from "../components/OperatorInput";
 import { SidebarNavigator } from "../components/SidebarNavigator/SidebarNavigator";
 import { useUIShockwave } from "../core/UIShockwaveContext";
-
-const PANEL_REGISTRY: Record<string, React.ReactNode> = {
-  "arc-theta": <div>Theta Console TODO</div>,
-  "arc-sigma": <div>Sigma Console TODO</div>,
-  "arc-omega": <div>Omega Console TODO</div>,
-  "arc-rho2": <div>Rho² Console TODO</div>,
-  "arc-lambda": <div>Lambda Console TODO</div>,
-  "arc-chi": <div>Chi Console TODO</div>,
-  nodes: <div>Nodes Console TODO</div>,
-  agents: <div>Agents Overview TODO</div>,
-  cognition: <div>Cognition Stream TODO</div>,
-};
+import Rho2Panel from "../panels/Rho2Panel";
+import NodesPanel from "../panels/NodesPanel";
+import AgentsPanel from "../panels/AgentsPanel";
+import CognitionPanel from "../panels/CognitionPanel";
+import OnboardingNexusPanel from "../panels/OnboardingNexusPanel";
 
 interface BridgeFrameProps {
-  activeChamber?: ReactNode;
   selectedItem?: string;
   onSelectItem?: (item?: string) => void;
 }
 
 export const BridgeFrame: React.FC<BridgeFrameProps> = ({
-  activeChamber,
   selectedItem,
   onSelectItem,
 }) => {
@@ -42,13 +33,13 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
   // ✅ ESC closes right panel
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && activeChamber) {
+      if (e.key === "Escape" && selectedItem) {
         onSelectItem?.();
       }
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [activeChamber, onSelectItem]);
+  }, [selectedItem, onSelectItem]);
 
   const handleToggleSidebar = useCallback(() => {
     setSidebarOpen(true);
@@ -59,7 +50,15 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
     setSidebarOpen(false);
   }, [onSelectItem]);
 
-  const ActivePanel = selectedItem ? PANEL_REGISTRY[selectedItem] : null;
+  const panelRegistry: Record<string, React.ReactNode> = {
+    "arc-rho2": <Rho2Panel />,
+    nodes: <NodesPanel />,
+    agents: <AgentsPanel />,
+    cognition: <CognitionPanel />,
+    "onboarding-nexus": <OnboardingNexusPanel />,
+  };
+
+  const activePanel = selectedItem ? panelRegistry[selectedItem] : null;
 
   return (
     <div
@@ -116,13 +115,13 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
           </div>
 
           {/* RIGHT: ACTIVE PANEL — ALWAYS VISIBLE WHEN SET */}
-          {ActivePanel && (
+          {activePanel && (
             <div
               key={selectedItem}
               className="w-[420px] flex-shrink-0 h-full border-l border-slate-800 bg-[#0c0c13]/95
               backdrop-blur-xl shadow-2xl overflow-y-auto"
             >
-              {ActivePanel}
+              {activePanel}
             </div>
           )}
         </div>
