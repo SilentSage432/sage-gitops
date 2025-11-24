@@ -22,6 +22,7 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
 }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const alertState = useUIShockwave().state;
+  console.log("🎯 ACTIVE SELECTED ITEM:", selectedItem);
 
   const alertClass =
     alertState.level === "critical"
@@ -46,6 +47,7 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
   }, []);
 
   const handleSelectItem = useCallback((itemId: string) => {
+    console.log("✅ SIDEBAR CLICK FIRED:", itemId);
     onSelectItem?.(itemId);
     setSidebarOpen(false);
   }, [onSelectItem]);
