@@ -5,19 +5,31 @@
 }
 
 .federation-left-nav {
+  position: relative;
   background: var(--sage-bg-panel);
   border: 1px solid var(--sage-border-glow);
   border-radius: 18px;
   backdrop-filter: blur(18px) saturate(160%);
+  box-shadow:
+    inset 0 0 22px rgba(180, 80, 255, 0.05),
+    0 0 28px rgba(0, 0, 0, 0.45);
   transition: all 240ms ease;
   animation: sage-breath 7s ease-in-out infinite;
 }
 
 .federation-command-core {
-  background: var(--sage-bg-panel);
-  border: 1px solid var(--sage-border-glow);
+  background: radial-gradient(
+      circle at 50% 0%,
+      rgba(140, 60, 255, 0.06),
+      transparent 65%
+    ),
+    var(--sage-bg-panel);
+  border: 1px solid rgba(180, 80, 255, 0.18);
   border-radius: 18px;
   backdrop-filter: blur(18px) saturate(160%);
+  box-shadow:
+    inset 0 0 22px rgba(180, 80, 255, 0.05),
+    0 0 28px rgba(0, 0, 0, 0.45);
   transition: all 240ms ease;
   animation: sage-breath 7s ease-in-out infinite;
 }
@@ -33,6 +45,9 @@
   border: 1px solid var(--sage-border-glow);
   border-radius: 18px;
   backdrop-filter: blur(18px) saturate(160%);
+  box-shadow:
+    inset 0 0 22px rgba(180, 80, 255, 0.05),
+    0 0 28px rgba(0, 0, 0, 0.45);
   transition: all 240ms ease;
   animation: sage-breath 7s ease-in-out infinite;
 }
@@ -58,7 +73,23 @@
 .federation-left-nav:hover,
 .federation-intel-stack:hover {
   border-color: rgba(200, 120, 255, 0.32);
-  box-shadow: 0 0 22px rgba(200, 120, 255, 0.08);
+  box-shadow:
+    inset 0 0 22px rgba(180, 80, 255, 0.05),
+    0 0 28px rgba(0, 0, 0, 0.45),
+    0 0 22px rgba(200, 120, 255, 0.08);
+}
+
+.federation-left-nav::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(200, 120, 255, 0.08),
+    transparent
+  );
 }
 
 .federation-intel-stack.busy {

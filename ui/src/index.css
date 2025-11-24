@@ -98,9 +98,10 @@
   --sage-font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --sage-font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 
-  --sage-text-primary: #e8ecf7;
-  --sage-text-secondary: rgba(232, 236, 247, 0.6);
+  --sage-text-primary: #ececff;
+  --sage-text-secondary: #9e9bb5;
   --sage-text-dim: rgba(232, 236, 247, 0.38);
+  --sage-header-glow: rgba(200, 140, 255, 0.18);
 
   --sage-bg-base: #050508;
   --sage-bg-panel: rgba(10, 10, 15, 0.6);
@@ -292,4 +293,18 @@ body#sageRootLayout {
   color: #e8e8f2;
   -webkit-font-smoothing: antialiased;
   font-family: 'Inter', system-ui, sans-serif;
+}
+
+.sage-panel-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: var(--sage-text-primary);
+  text-shadow: 0 0 8px var(--sage-header-glow);
+}
+
+.sage-panel-subtitle {
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--sage-text-secondary);
 }
