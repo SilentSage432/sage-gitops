@@ -10,7 +10,7 @@ import { useMeshTelemetry } from "../../sage/telemetry/useMeshTelemetry";
 
 export const FederationHealthMatrix: React.FC = () => {
 
-  const forecast = useStabilityForecast();
+  const forecast = useStabilityForecast() || { state: "stable" };
 
   const kernelWarning = useKernelSignal("kernel.warning");
 
