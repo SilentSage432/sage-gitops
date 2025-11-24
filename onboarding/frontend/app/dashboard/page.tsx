@@ -8,53 +8,16 @@ import { OCTGuard } from '@/components/OCTGuard';
 import { CheckCircle2, Clock, Building2, MapPin, Calendar, UserPlus, Download, Bot, KeyRound, ScrollText } from 'lucide-react';
 import { BootstrapStatusCard } from '@/components/BootstrapStatusCard';
 import { useFakeTelemetry } from '@/lib/useFakeTelemetry';
+import { useActivityStream } from '@/lib/useActivityStream';
 
 export default function DashboardPage() {
   // Loading states
   const [isGeneratingKit, setIsGeneratingKit] = useState(false);
   const [isViewingPlans, setIsViewingPlans] = useState(false);
-  const [activityVisible, setActivityVisible] = useState<boolean[]>([]);
   
   // Live telemetry
   const telemetry = useFakeTelemetry();
-
-  // Mock data
-  const tenantName = 'Acme Industries';
-  const region = 'US-West';
-  const onboardingDate = new Date().toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-  const currentTime = new Date().toLocaleTimeString('en-US', {
-    hour: '2-digit',
-    minute: '2-digit',
-  });
-
-  const activityItems = [
-    { action: 'Tenant created', timestamp: `${onboardingDate} at ${currentTime}` },
-    { action: 'Bootstrap kit generated', timestamp: `${onboardingDate} at ${currentTime}` },
-    { action: 'Operator verified identity', timestamp: `${onboardingDate} at ${currentTime}` },
-  ];
-
-  // Stagger activity feed items on mount
-  useEffect(() => {
-    // Initialize with correct length
-    const itemCount = activityItems.length;
-    setActivityVisible(new Array(itemCount).fill(false));
-    
-    // Stagger visibility
-    activityItems.forEach((_, index) => {
-      setTimeout(() => {
-        setActivityVisible((prev) => {
-          const newState = [...prev];
-          newState[index] = true;
-          return newState;
-        });
-      }, index * 100);
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const activity = useActivityStream();
 
   const handleGenerateKit = () => {
     setIsGeneratingKit(true);
@@ -282,16 +245,10 @@ export default function DashboardPage() {
                   <CardTitle>Recent Activity</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <ul className="space-y-3">
-                    {activityItems.map((item, index) => (
-                      <li
-                        key={index}
-                        className={`border-l border-white/10 pl-4 ${
-                          activityVisible[index] ? 'animate-in fade-in duration-200' : 'opacity-0'
-                        }`}
-                      >
-                        <span className="text-sm text-neutral-300 block">{item.action}</span>
-                        <span className="text-xs text-neutral-500 block mt-1">{item.timestamp}</span>
+                  <ul className="space-y-1 font-mono text-sm text-white/80">
+                    {activity.map((line, i) => (
+                      <li key={i} className="animate-[fadeIn_300ms_ease]">
+                        {line}
                       </li>
                     ))}
                   </ul>
