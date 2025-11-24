@@ -71,10 +71,12 @@ export const WhispererInput: React.FC<WhispererInputProps> = ({ onSend }) => {
           value={value}
           onChange={(event) => setValue(event.target.value)}
           onKeyDown={handleKeyDown}
+          style={{ minHeight: "calc(1.5rem + 8px)", height: "auto" }}
         />
         <Button
           onClick={handleSend}
-          className="whisperer-send-btn px-5 py-3 text-base font-semibold tracking-wide uppercase"
+          className="whisperer-send-btn px-5 text-base font-semibold tracking-wide uppercase"
+          style={{ paddingTop: "8px", paddingBottom: "8px" }}
         >
           Send
         </Button>

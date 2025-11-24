@@ -425,7 +425,7 @@ export default function OperatorTerminal() {
       <div className={`prime-neural-overlay ${neuralState ? `prime-state-${neuralState}` : ""}`} />
       
       {/* View Mode Filter Bar - Phase P-10 */}
-      <div className="terminal-filter-bar mb-2" style={{ position: "relative", zIndex: 10 }}>
+      <div className="terminal-filter-bar mb-2" style={{ position: "relative", zIndex: 10, paddingTop: "12px", paddingLeft: "12px", paddingRight: "12px" }}>
         <div className="telemetry-mode-toggle">
           <span className="text-xs text-slate-400 whitespace-nowrap">View:</span>
           {(["RAW", "SIGNAL", "HYBRID"] as ViewMode[]).map((mode) => (
@@ -444,12 +444,12 @@ export default function OperatorTerminal() {
       </div>
       
       {/* Legacy Filter Bar (for commands/responses) */}
-      <div className="terminal-filter-bar" style={{ position: "relative", zIndex: 10 }}>
+      <div className="terminal-filter-bar" style={{ position: "relative", zIndex: 10, paddingLeft: "12px", paddingRight: "12px", paddingBottom: "8px", display: "flex", flexWrap: "wrap", gap: "6px", overflowX: "auto" }}>
         {FILTERS.map((cat) => (
           <Badge
             key={cat}
             variant={activeFilter === cat ? "default" : "outline"}
-            className={`terminal-filter-btn cursor-pointer ${
+            className={`terminal-filter-btn cursor-pointer whitespace-nowrap ${
               activeFilter === cat ? "on" : "off"
             }`}
             onClick={() => setActiveFilter(cat)}
@@ -471,82 +471,105 @@ export default function OperatorTerminal() {
         transition={{ duration: 0.15 }}
       >
         {viewMode === "RAW" && (
-          <div className="p-4 font-mono text-xs">
+          <div className="font-mono text-xs">
             {rawEvents.length === 0 ? (
               <div className="text-slate-500 text-center py-8">No raw events</div>
             ) : (
-              rawEvents.map((event, idx) => (
-                <motion.div
-                  key={`${event.timestamp}-${idx}`}
-                  className="mb-2 p-2 bg-slate-900/30 rounded border-l border-slate-700"
-                  initial={{ opacity: 0, y: 2 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.15 }}
-                >
-                  <pre className="text-slate-300 whitespace-pre-wrap break-all">
-                    {JSON.stringify(event, null, 2)}
-                  </pre>
-                </motion.div>
-              ))
+              rawEvents.map((event, idx) => {
+                const totalEvents = rawEvents.length;
+                const ageIndex = totalEvents - idx - 1;
+                let opacity = 0.9;
+                if (ageIndex >= 2) opacity = 0.6;
+                if (ageIndex >= 4) opacity = 0.35;
+                
+                return (
+                  <motion.div
+                    key={`${event.timestamp}-${idx}`}
+                    className="mb-2 p-2 bg-slate-900/30 rounded border-l border-slate-700"
+                    style={{ opacity }}
+                    initial={{ opacity: 0, y: 2 }}
+                    animate={{ opacity, y: 0 }}
+                    transition={{ duration: 0.15 }}
+                  >
+                    <pre className="text-slate-300 whitespace-pre-wrap break-words">
+                      {JSON.stringify(event, null, 2)}
+                    </pre>
+                  </motion.div>
+                );
+              })
             )}
           </div>
         )}
 
         {viewMode === "SIGNAL" && (
-          <div className="p-4 font-mono text-sm">
+          <div className="font-mono text-sm">
             {signalMessages.length === 0 ? (
               <div className="text-slate-500 text-center py-8">No signal intelligence available</div>
             ) : (
-              signalMessages.map((signal) => (
-                <motion.div
-                  key={signal.id}
-                  className={`mb-2 p-2 rounded-lg border-l-2 ${
-                    signal.isSignificant
-                      ? "bg-slate-900/50 border-purple-500"
-                      : "bg-slate-900/30 border-slate-700"
-                  }`}
-                  initial={{ opacity: 0, x: -8 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <div className="flex items-start gap-2">
-                    <span className="text-lg">{signal.icon}</span>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className={`text-xs ${signal.color} font-semibold`}>
-                          {signal.signal}
-                        </span>
-                        <span className="text-xs text-slate-500">
-                          {new Date(signal.timestamp).toLocaleTimeString()}
-                        </span>
-                        {signal.isSignificant && (
-                          <span className="text-xs bg-purple-500/20 text-purple-300 px-1.5 py-0.5 rounded">
-                            SIGNIFICANT
+              signalMessages.map((signal, idx) => {
+                const totalMessages = signalMessages.length;
+                const ageIndex = totalMessages - idx - 1;
+                let opacity = 0.9;
+                if (ageIndex >= 2) opacity = 0.6;
+                if (ageIndex >= 4) opacity = 0.35;
+                
+                return (
+                  <motion.div
+                    key={signal.id}
+                    className={`mb-2 p-2 rounded-lg border-l-2 ${
+                      signal.isSignificant
+                        ? "bg-slate-900/50 border-purple-500"
+                        : "bg-slate-900/30 border-slate-700"
+                    }`}
+                    style={{ opacity }}
+                    initial={{ opacity: 0, x: -8 }}
+                    animate={{ opacity, x: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div className="flex items-start gap-2">
+                      <span className="text-lg">{signal.icon}</span>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className={`text-xs ${signal.color} font-semibold`}>
+                            {signal.signal}
                           </span>
-                        )}
-                      </div>
-                      <div className={`${signal.color} text-sm`}>
-                        {signal.message}
-                      </div>
-                      <div className="text-xs text-slate-500 mt-1">
-                        {signal.source}
+                          <span className="text-xs text-slate-500">
+                            {new Date(signal.timestamp).toLocaleTimeString()}
+                          </span>
+                          {signal.isSignificant && (
+                            <span className="text-xs bg-purple-500/20 text-purple-300 px-1.5 py-0.5 rounded">
+                              SIGNIFICANT
+                            </span>
+                          )}
+                        </div>
+                        <div className={`${signal.color} text-sm break-words`}>
+                          {signal.message}
+                        </div>
+                        <div className="text-xs text-slate-500 mt-1">
+                          {signal.source}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </motion.div>
-              ))
+                  </motion.div>
+                );
+              })
             )}
           </div>
         )}
 
         {viewMode === "HYBRID" && (
-          <div className="p-4 font-mono text-sm">
+          <div className="font-mono text-sm">
             {signalMessages.length === 0 ? (
               <div className="text-slate-500 text-center py-8">No signal intelligence available</div>
             ) : (
-              signalMessages.map((signal) => {
+              signalMessages.map((signal, idx) => {
                 // Find corresponding raw event using the map
                 const rawEvent = signalToRawMap.get(signal.id);
+                const totalMessages = signalMessages.length;
+                const ageIndex = totalMessages - idx - 1;
+                let opacity = 0.9;
+                if (ageIndex >= 2) opacity = 0.6;
+                if (ageIndex >= 4) opacity = 0.35;
                 
                 return (
                   <motion.div
@@ -556,8 +579,9 @@ export default function OperatorTerminal() {
                         ? "bg-slate-900/50 border-purple-500"
                         : "bg-slate-900/30 border-slate-700"
                     }`}
+                    style={{ opacity }}
                     initial={{ opacity: 0, x: -8 }}
-                    animate={{ opacity: 1, x: 0 }}
+                    animate={{ opacity, x: 0 }}
                     transition={{ duration: 0.2 }}
                   >
                     {/* Signal message (primary) */}
@@ -577,7 +601,7 @@ export default function OperatorTerminal() {
                             </span>
                           )}
                         </div>
-                        <div className={`${signal.color} text-sm`}>
+                        <div className={`${signal.color} text-sm break-words`}>
                           {signal.message}
                         </div>
                         <div className="text-xs text-slate-500 mt-1">
@@ -588,7 +612,7 @@ export default function OperatorTerminal() {
                     {/* Raw JSON metadata overlay (low opacity) */}
                     {rawEvent && (
                       <div className="mt-2 pt-2 border-t border-slate-700/30 opacity-20 hover:opacity-40 transition-opacity">
-                        <pre className="text-slate-400 text-xs whitespace-pre-wrap break-all">
+                        <pre className="text-slate-400 text-xs whitespace-pre-wrap break-words">
                           {JSON.stringify(rawEvent, null, 2)}
                         </pre>
                       </div>

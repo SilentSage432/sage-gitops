@@ -174,6 +174,7 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
           >
             <div
               className="flex-1 overflow-y-auto p-6 min-h-0"
+              style={{ paddingTop: "12px" }}
             >
               {activeChamber}
             </div>
@@ -223,7 +224,7 @@ const GlobalCommandBar: React.FC = () => {
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 global-command-bar">
-      <div className="max-w-5xl mx-auto px-4 py-3">
+      <div className="max-w-5xl mx-auto px-4" style={{ paddingTop: "8px", paddingBottom: "8px" }}>
         <form onSubmit={handleSubmit} className="flex gap-2">
           <Input
             ref={inputRef}
@@ -233,8 +234,9 @@ const GlobalCommandBar: React.FC = () => {
             onKeyDown={handleKeyDown}
             placeholder="Enter command... (Shift+Enter for newline)"
             className="flex-1 font-mono text-sm bg-slate-900/80 backdrop-blur-md border-slate-700"
+            style={{ height: "calc(1.5rem + 8px)" }}
           />
-          <Button type="submit" variant="default" size="default" className="shrink-0">
+          <Button type="submit" variant="default" size="default" className="shrink-0" style={{ height: "calc(1.5rem + 8px)" }}>
             <Send className="w-4 h-4 mr-2" />
             Send
           </Button>
