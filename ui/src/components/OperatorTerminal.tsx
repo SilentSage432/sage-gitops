@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import { routeCommand } from "@/features/operator/commandRouter";
 
 interface LogEntry {
   id: string;
   timestamp: Date;
-  type: "command" | "output" | "error";
+  type: "command" | "output" | "error" | "hint" | "info";
   content: string;
   isStreaming?: boolean;
 }
@@ -96,13 +97,25 @@ export function OperatorTerminal() {
       const cmd = command.trim();
       if (!cmd) return;
 
-      if (cmd === "clear") {
-        setLogs([]);
-        return;
-      }
-
       // Add command to log
       addLog({ type: "command", content: cmd });
+
+      // Route command through E3 interpreter
+      const responses = await routeCommand(cmd);
+
+      // Handle responses
+      for (const response of responses) {
+        if (response.type === "clear") {
+          setLogs([]);
+          return;
+        } else if (response.type === "error") {
+          addLog({ type: "error", content: response.message || "Unknown error" });
+        } else if (response.type === "hint") {
+          addLog({ type: "hint", content: response.message || "" });
+        } else if (response.type === "info") {
+          addLog({ type: "info", content: response.message || "" });
+        }
+      }
 
       // Dispatch to federation system
       window.dispatchEvent(
@@ -110,13 +123,8 @@ export function OperatorTerminal() {
           detail: { command: cmd },
         })
       );
-
-      // Simulate response (replace with actual federation routing)
-      setTimeout(() => {
-        addStreamingOutput(`Command received: ${cmd}`);
-      }, 300);
     },
-    [addLog, addStreamingOutput]
+    [addLog]
   );
 
   // Expose methods via window object for input component to access
@@ -169,6 +177,8 @@ export function OperatorTerminal() {
                     ? "text-violet-400"
                     : log.type === "error"
                     ? "text-red-400"
+                    : log.type === "hint"
+                    ? "text-purple-300"
                     : "text-white/80"
                 }`}
               >
@@ -176,7 +186,7 @@ export function OperatorTerminal() {
                   {formatTime(log.timestamp)}
                 </span>
                 <span className="flex-shrink-0">
-                  {log.type === "command" ? "$" : log.type === "error" ? "!" : ">"}
+                  {log.type === "command" ? "$" : log.type === "error" ? "!" : log.type === "hint" ? "⌁" : ">"}
                 </span>
                 <span className={log.isStreaming ? "animate-pulse" : ""}>
                   {log.content}
