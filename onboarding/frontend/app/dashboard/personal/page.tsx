@@ -8,6 +8,8 @@ import { Badge } from '@/components/ui/badge';
 import { BookOpen, Target, GraduationCap, Terminal, Users, BarChart3 } from 'lucide-react';
 import { PersonalMeshNode, LiveStatusPanel, generateUUID } from '@/components/PersonalMeshNode';
 import { EventFeed } from '@/components/EventFeed';
+import { PersonalCommandLog } from '@/components/PersonalCommandLog';
+import { PersonalCommandBar } from '@/components/PersonalCommandBar';
 
 interface PersonalData {
   fullName: string;
@@ -21,6 +23,7 @@ export default function PersonalDashboardPage() {
   const [personalData, setPersonalData] = useState<PersonalData | null>(null);
   const [nodeId, setNodeId] = useState<string>('');
   const [isActivating, setIsActivating] = useState(true);
+  const [lastPulse, setLastPulse] = useState<Date>(new Date());
 
   useEffect(() => {
     // Check if onboarding is complete
@@ -54,6 +57,13 @@ export default function PersonalDashboardPage() {
     setTimeout(() => {
       setIsActivating(false);
     }, 1800);
+
+    // Update pulse timestamp every 5 seconds (for status command)
+    const pulseInterval = setInterval(() => {
+      setLastPulse(new Date());
+    }, 5000);
+
+    return () => clearInterval(pulseInterval);
   }, [router]);
 
   if (!personalData || !nodeId) {
@@ -241,7 +251,7 @@ export default function PersonalDashboardPage() {
       </AnimatePresence>
 
       {/* Main Dashboard Content */}
-      <div className="animate-in fade-in duration-300 ease-out">
+      <div className="animate-in fade-in duration-300 ease-out pb-24">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           {/* Header with Status Badges */}
           <motion.div
@@ -309,6 +319,15 @@ export default function PersonalDashboardPage() {
               <EventFeed />
             </motion.div>
 
+            {/* Command Terminal */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.35 }}
+            >
+              <PersonalCommandLog />
+            </motion.div>
+
             {/* Intent-based Modules */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {renderIntentModules()}
@@ -316,6 +335,20 @@ export default function PersonalDashboardPage() {
           </div>
         </div>
       </div>
+
+      {/* Command Bar - Fixed at bottom */}
+      {!isActivating && personalData && nodeId && (
+        <PersonalCommandBar
+          nodeId={nodeId}
+          callsign={personalData.callsign}
+          onStatusRequest={() => ({
+            meshReachability: 'OK',
+            heartbeatSync: 'Active',
+            cognitiveLink: 'Initializing',
+            lastPulse,
+          })}
+        />
+      )}
     </div>
   );
 }
