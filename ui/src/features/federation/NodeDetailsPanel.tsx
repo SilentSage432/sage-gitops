@@ -1,16 +1,27 @@
 import React from "react";
-
-
+import { useNodeSignalStream } from "@/hooks/useNodeSignalStream";
 
 interface NodeDetailsPanelProps {
-
   nodeId: string;
-
 }
 
-
-
 export const NodeDetailsPanel: React.FC<NodeDetailsPanelProps> = ({ nodeId }) => {
+  const metrics = useNodeSignalStream(nodeId);
+
+  if (!metrics) {
+    return (
+      <div className="h-full flex flex-col overflow-hidden w-full">
+        <div className="p-6 border-b border-slate-800 flex-shrink-0">
+          <h2 className="text-2xl font-bold tracking-wide text-purple-300 mb-2">
+            Node: {nodeId}
+          </h2>
+        </div>
+        <div className="flex-1 flex items-center justify-center">
+          <p className="text-slate-500 font-mono">awaiting signal…</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-full flex flex-col overflow-hidden w-full">
@@ -29,7 +40,13 @@ export const NodeDetailsPanel: React.FC<NodeDetailsPanelProps> = ({ nodeId }) =>
 
             <div className="p-4 bg-slate-900/60 rounded border border-slate-800 min-w-0 overflow-hidden">
               <p className="text-xs text-slate-500 mb-1 truncate">Status</p>
-              <p className="text-green-400 font-mono text-lg truncate">ONLINE</p>
+              <p className={`font-mono text-lg truncate ${
+                metrics.status === "ONLINE" ? "text-green-400" : 
+                metrics.status === "DEGRADED" ? "text-yellow-400" : 
+                "text-red-400"
+              }`}>
+                {metrics.status}
+              </p>
             </div>
 
             <div className="p-4 bg-slate-900/60 rounded border border-slate-800 min-w-0 overflow-hidden">
@@ -39,18 +56,18 @@ export const NodeDetailsPanel: React.FC<NodeDetailsPanelProps> = ({ nodeId }) =>
 
             <div className="p-4 bg-slate-900/60 rounded border border-slate-800 min-w-0 overflow-hidden">
               <p className="text-xs text-slate-500 mb-1 truncate">CPU Load</p>
-              <p className="text-yellow-300 font-mono text-lg truncate">0.3%</p>
+              <p className="text-yellow-300 font-mono text-lg truncate">{metrics.cpu}</p>
             </div>
 
             <div className="p-4 bg-slate-900/60 rounded border border-slate-800 min-w-0 overflow-hidden">
               <p className="text-xs text-slate-500 mb-1 truncate">Memory</p>
-              <p className="text-blue-300 font-mono text-lg truncate">214 MB</p>
+              <p className="text-blue-300 font-mono text-lg truncate">{metrics.memory}</p>
             </div>
           </div>
 
           <div className="p-4 bg-slate-900/60 rounded border border-slate-800 min-w-0 overflow-hidden">
             <p className="text-xs text-slate-500 mb-2 truncate">Last Heartbeat</p>
-            <p className="text-purple-300 font-mono truncate">just now</p>
+            <p className="text-purple-300 font-mono truncate">{metrics.heartbeat}</p>
           </div>
 
           <div className="p-4 bg-slate-900/60 rounded border border-slate-800 min-w-0 overflow-hidden">
