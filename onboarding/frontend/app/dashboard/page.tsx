@@ -6,7 +6,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { OCTGuard } from '@/components/OCTGuard';
-import { CheckCircle2, Clock, Building2, MapPin, Calendar } from 'lucide-react';
+import { CheckCircle2, Clock, Building2, MapPin, Calendar, UserPlus, Download, Bot } from 'lucide-react';
 import { BootstrapStatusCard } from '@/components/BootstrapStatusCard';
 
 export default function DashboardPage() {
@@ -75,7 +75,7 @@ export default function DashboardPage() {
         transition={{ duration: 0.5 }}
         className="min-h-screen bg-[#0b0c0f] text-white animate-in fade-in duration-300 ease-out"
       >
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           {/* Header Bar */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
@@ -101,33 +101,56 @@ export default function DashboardPage() {
               <BootstrapStatusCard />
             </motion.div>
 
-            {/* Tenant Overview Card */}
+            {/* Tenant Summary Card */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              <Card className="rounded-xl bg-neutral-900/40 border border-white/5 backdrop-blur hover:border-violet-500/30 transition-all p-6">
-                <CardHeader className="p-0 pb-4">
-                  <CardTitle className="flex items-center gap-2">
-                    <Building2 className="w-5 h-5 text-[#6366f1]" />
-                    Tenant Overview
-                  </CardTitle>
+              <Card className="border-white/10 bg-[#111317]">
+                <CardHeader>
+                  <CardTitle>Tenant Overview</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4 p-0">
-                  <div className="flex items-center gap-2">
+                <CardContent className="space-y-3">
+                  <div>
                     <span className="text-sm text-white/60">Tenant Name:</span>
-                    <span className="text-sm font-medium text-[#e2e6ee]">{tenantName}</span>
+                    <p className="text-sm font-medium text-[#e2e6ee]">Example Tenant</p>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-white/40" />
+                  <div>
                     <span className="text-sm text-white/60">Region:</span>
-                    <span className="text-sm font-medium text-[#e2e6ee]">{region}</span>
+                    <p className="text-sm font-medium text-[#e2e6ee]">US-West</p>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-white/40" />
-                    <span className="text-sm text-white/60">Onboarding Date:</span>
-                    <span className="text-sm font-medium text-[#e2e6ee]">{onboardingDate}</span>
+                  <div>
+                    <span className="text-sm text-white/60">Status:</span>
+                    <Badge variant="secondary" className="ml-2">Provisioned</Badge>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            {/* Onboarding Status Card */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.25 }}
+            >
+              <Card className="border-white/10 bg-[#111317]">
+                <CardHeader>
+                  <CardTitle>Onboarding Status</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <p className="text-sm text-white/80">Bootstrap delivered</p>
+                    <p className="text-sm text-white/60">Next step: Create first agent</p>
+                  </div>
+                  <div>
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-xs text-white/60">Progress</span>
+                      <span className="text-xs text-white/60">100%</span>
+                    </div>
+                    <div className="w-full h-2 bg-[#1a1d22] rounded-full overflow-hidden">
+                      <div className="h-full bg-[#10b981] w-full transition-all" />
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -184,11 +207,11 @@ export default function DashboardPage() {
               </Card>
             </motion.div>
 
-            {/* Next Actions Section */}
+            {/* Next Steps Panel */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
             >
               <Card className="border-white/10 bg-[#111317]">
                 <CardHeader>
@@ -197,27 +220,25 @@ export default function DashboardPage() {
                 <CardContent>
                   <div className="space-y-3">
                     <Button
-                      className="w-full justify-start hover:bg-violet-600 active:bg-violet-700 transition-colors focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:outline-none"
-                      variant="default"
-                      onClick={handleGenerateKit}
-                      disabled={isGeneratingKit}
+                      variant="secondary"
+                      className="w-full justify-start"
                     >
-                      {isGeneratingKit ? 'Generating…' : 'Generate New Bootstrap Kit'}
+                      <Bot className="w-4 h-4 mr-2" />
+                      Create First Agent
                     </Button>
                     <Button
-                      className="w-full justify-start hover:bg-neutral-800 active:bg-neutral-900 transition-colors focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:outline-none"
-                      variant="outline"
-                      onClick={handleViewPlans}
-                      disabled={isViewingPlans}
+                      variant="secondary"
+                      className="w-full justify-start"
                     >
-                      {isViewingPlans ? 'Loading…' : 'View Agent Plans'}
+                      <UserPlus className="w-4 h-4 mr-2" />
+                      Invite Additional Operator
                     </Button>
                     <Button
-                      className="w-full justify-start opacity-40 cursor-not-allowed focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:outline-none"
-                      variant="outline"
-                      disabled
+                      variant="secondary"
+                      className="w-full justify-start"
                     >
-                      Add Additional Regions
+                      <Download className="w-4 h-4 mr-2" />
+                      Download Bootstrap Kit
                     </Button>
                   </div>
                 </CardContent>
