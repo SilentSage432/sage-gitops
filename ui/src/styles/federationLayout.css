@@ -487,6 +487,20 @@
   position: relative;
 }
 
+.sage-terminal-input {
+  font-family: var(--font-mono);
+  position: relative;
+}
+
+.sage-terminal-input .ghost {
+  position: absolute;
+  left: 12px;
+  top: 10px;
+  opacity: 0.18;
+  pointer-events: none;
+  user-select: none;
+}
+
 /* === Phase S-Prime-4: PRIME Command-Response Micro-Animations === */
 .prime-ripple {
   backdrop-filter: brightness(1.12) saturate(1.08);

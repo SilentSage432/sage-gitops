@@ -37,6 +37,17 @@ export default function OperatorTerminal() {
   const { remember, recallRecent } = useOperatorMemory();
 
   const [input, setInput] = useState("");
+  const [suggestion, setSuggestion] = useState("");
+  const [commandList] = useState([
+    "help",
+    "clear",
+    "status",
+    "rho2.status",
+    "arc.list",
+    "agents.list",
+    "mesh.uptime",
+    "node.info"
+  ]);
   const [log, setLog] = useState<
     { text?: string; message?: string; category: LogCategory; ts: number; isCommand?: boolean }[]
   >([]);
@@ -315,21 +326,47 @@ export default function OperatorTerminal() {
         transition={{ duration: 0.3, ease: "easeInOut" }}
       >
         <div className="flex items-center gap-3">
-          <Input
-            className={`flex-1 text-base ${isSilentIdle ? "prime-input-silent" : ""}`}
-            value={input}
-            placeholder="Issue command..."
-            onChange={(e) => {
-              setInput(e.target.value);
-              const now = Date.now();
-              setLastInputTime(now);
-              setIsSilentIdle(false);
-              setNeuralState((current) => current === "idle" ? null : current);
-            }}
-            onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-            onFocus={() => setIsInputFocused(true)}
-            onBlur={() => setIsInputFocused(false)}
-          />
+          <div className="relative w-full">
+            {suggestion && (
+              <span className="absolute left-3 top-2 text-white/20 pointer-events-none select-none">
+                {suggestion}
+              </span>
+            )}
+            <Input
+              className={`flex-1 text-base ${isSilentIdle ? "prime-input-silent" : ""}`}
+              value={input}
+              placeholder="Issue command..."
+              onChange={(e) => {
+                const value = e.target.value;
+                setInput(value);
+                if (value.startsWith("/")) {
+                  const match = commandList.find(cmd =>
+                    cmd.startsWith(value.slice(1))
+                  );
+                  setSuggestion(match ? `/${match}` : "");
+                } else {
+                  setSuggestion("");
+                }
+                const now = Date.now();
+                setLastInputTime(now);
+                setIsSilentIdle(false);
+                setNeuralState((current) => current === "idle" ? null : current);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Tab" && suggestion) {
+                  e.preventDefault();
+                  setInput(suggestion);
+                  setSuggestion("");
+                }
+                if (e.key === "Enter") {
+                  handleSend();
+                  setSuggestion("");
+                }
+              }}
+              onFocus={() => setIsInputFocused(true)}
+              onBlur={() => setIsInputFocused(false)}
+            />
+          </div>
           <Button
             className="sage-command-send text-base px-5 py-3"
             onClick={(e) => {
