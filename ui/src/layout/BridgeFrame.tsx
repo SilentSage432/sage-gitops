@@ -140,7 +140,7 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
 
         {/* Center Panel: Command Core */}
         <motion.div
-          className={`federation-command-core sage-main-console flex-1 flex flex-col overflow-hidden min-h-0 ${activePanel === "command-core" ? "federation-active" : "federation-idle"}`}
+          className={`federation-command-core prime-holo-surface sage-main-console flex-1 flex flex-col overflow-hidden min-h-0 ${activePanel === "command-core" ? "federation-active" : "federation-idle"}`}
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{

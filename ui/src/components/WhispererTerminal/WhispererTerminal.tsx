@@ -544,7 +544,7 @@ export function WhispererTerminal() {
   return (
     <div
       ref={containerRef}
-      className="overflow-y-auto p-4 font-mono text-sm text-white"
+      className="prime-holo-surface overflow-y-auto p-4 font-mono text-sm text-white"
     >
       {messages
         .filter(messageMatchesFilter)
