@@ -15,6 +15,7 @@ import { PiClusterChamber } from '../features/federation/PiClusterChamber';
 import { OnboardingNexus } from '../features/federation/OnboardingNexus';
 import { NodesView } from '../features/federation/NodesView';
 import { FederationHealthCore } from '../features/federation/FederationHealthCore';
+import { MeshTelemetrySurface } from '../features/federation/MeshTelemetrySurface';
 import { AgentsOverview } from '../features/agents/AgentsOverview';
 import { AgentDetails } from '../features/agents/AgentDetails';
 import OperatorTerminal from "../features/operator/OperatorTerminal";
@@ -54,6 +55,8 @@ export const App: React.FC = () => {
         return <NodesView />;
       case "federation-health":
         return <FederationHealthCore />;
+      case "mesh-telemetry":
+        return <MeshTelemetrySurface />;
       
       // Agents panels
       case 'agents':
