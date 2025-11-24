@@ -83,7 +83,7 @@ export default function PersonalOnboardingPage() {
 
   return (
       <div className="min-h-[100svh] flex flex-col bg-[#0b0c0f] text-white">
-        <div className="flex-1 overflow-y-auto px-4 py-6 flex items-center justify-center">
+        <div className="flex-1 overflow-y-auto overscroll-behavior-contain px-4 py-6 flex items-center justify-center">
           <div className="max-w-3xl w-full space-y-8 fade-in">
           <div>
             <Card className="rounded-3xl">
