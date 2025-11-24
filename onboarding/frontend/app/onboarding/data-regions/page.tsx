@@ -72,7 +72,7 @@ export default function DataRegionsPage() {
   return (
     <OCTGuard>
       <div className="min-h-[100svh] flex flex-col bg-[#0b0c0f] text-white">
-        <div className="flex-1 overflow-y-auto overscroll-behavior-contain px-4 py-6">
+        <div className="flex flex-col flex-1 min-h-0 overflow-y-auto overscroll-behavior-contain pt-safe pb-safe px-4 py-6">
           <div className="max-w-3xl mx-auto space-y-8 fade-in">
             <div>
               <div className="bg-[#111317] border border-white/10 p-6 rounded-[14px]">
