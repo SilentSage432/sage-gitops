@@ -1,20 +1,33 @@
 import React from "react";
+import { ArrowLeft } from "lucide-react";
 import { useNodeSignalStream } from "@/hooks/useNodeSignalStream";
 
 interface NodeDetailsPanelProps {
   nodeId: string;
+  onBack?: () => void;
 }
 
-export const NodeDetailsPanel: React.FC<NodeDetailsPanelProps> = ({ nodeId }) => {
+export const NodeDetailsPanel: React.FC<NodeDetailsPanelProps> = ({ nodeId, onBack }) => {
   const metrics = useNodeSignalStream(nodeId);
 
   if (!metrics) {
     return (
       <div className="h-full flex flex-col overflow-hidden w-full">
         <div className="p-6 border-b border-slate-800 flex-shrink-0">
-          <h2 className="text-2xl font-bold tracking-wide text-purple-300 mb-2">
-            Node: {nodeId}
-          </h2>
+          <div className="flex items-center gap-3 mb-2">
+            {onBack && (
+              <button
+                onClick={onBack}
+                className="p-2 hover:bg-slate-800/60 rounded transition flex items-center justify-center"
+                title="Back to Pi Kluster"
+              >
+                <ArrowLeft className="w-5 h-5 text-slate-400" />
+              </button>
+            )}
+            <h2 className="text-2xl font-bold tracking-wide text-purple-300">
+              Node: {nodeId}
+            </h2>
+          </div>
         </div>
         <div className="flex-1 flex items-center justify-center">
           <p className="text-slate-500 font-mono">awaiting signal…</p>
@@ -27,9 +40,20 @@ export const NodeDetailsPanel: React.FC<NodeDetailsPanelProps> = ({ nodeId }) =>
     <div className="h-full flex flex-col overflow-hidden w-full">
       {/* HEADER */}
       <div className="p-6 border-b border-slate-800 flex-shrink-0">
-        <h2 className="text-2xl font-bold tracking-wide text-purple-300 mb-2">
-          Node: {nodeId}
-        </h2>
+        <div className="flex items-center gap-3 mb-2">
+          {onBack && (
+            <button
+              onClick={onBack}
+              className="p-2 hover:bg-slate-800/60 rounded transition flex items-center justify-center"
+              title="Back to Pi Kluster"
+            >
+              <ArrowLeft className="w-5 h-5 text-slate-400" />
+            </button>
+          )}
+          <h2 className="text-2xl font-bold tracking-wide text-purple-300">
+            Node: {nodeId}
+          </h2>
+        </div>
       </div>
 
       {/* SCROLLABLE CONTENT */}

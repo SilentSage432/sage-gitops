@@ -90,7 +90,7 @@ export const App: React.FC = () => {
       // Node details - handle node: prefix
       default:
         if (selectedItem?.startsWith('node:')) {
-          return <NodeDetailsPanel nodeId={selectedItem.replace('node:', '')} />;
+          return <NodeDetailsPanel nodeId={selectedItem.replace('node:', '')} onBack={() => setSelectedItem('pi-kluster')} />;
         }
         return null;
     }
