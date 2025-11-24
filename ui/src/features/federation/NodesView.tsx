@@ -1,137 +1,139 @@
-import React, { useState, useEffect } from "react";
-import { Globe } from "lucide-react";
-import { createSimulatedNode, SimNodeMetrics } from "@/simulated/simTelemetry";
-
-const mockFederationNodes = [
-  {
-    id: "sage-prime",
-    location: "Local Core",
-    status: "ONLINE",
-  },
-  {
-    id: "oracle-east",
-    location: "Future Region",
-    status: "PENDING",
-  },
-  {
-    id: "specter-north",
-    location: "Reserved",
-    status: "OFFLINE",
-  },
-];
-
-const statusColors = {
-  ONLINE: "text-green-400 bg-green-400/10",
-  PENDING: "text-yellow-400 bg-yellow-400/10",
-  OFFLINE: "text-red-400 bg-red-400/10",
-};
-
-interface NodeWithMetrics {
-  id: string;
-  location: string;
-  status: string;
-  metrics?: SimNodeMetrics;
-}
+import React from "react";
+import { Server, Plus } from "lucide-react";
 
 export const NodesView = () => {
-  const [selected, setSelected] = useState<string | null>(null);
-  const [nodesWithMetrics, setNodesWithMetrics] = useState<NodeWithMetrics[]>([]);
-
-  useEffect(() => {
-    const generators = Array.from({ length: mockFederationNodes.length }).map(() =>
-      createSimulatedNode()
-    );
-
-    const updateMetrics = () => {
-      setNodesWithMetrics(
-        mockFederationNodes.map((node, idx) => ({
-          ...node,
-          metrics: generators[idx](),
-        }))
-      );
-    };
-
-    updateMetrics();
-    const interval = setInterval(updateMetrics, 4000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const active = nodesWithMetrics.find((n) => n.id === selected);
+  // Static counts - all zero for empty state
+  const totalNodes = 0;
+  const onlineCount = 0;
+  const offlineCount = 0;
+  const unknownCount = 0;
 
   return (
-    <div className="p-6 space-y-6">
-      <h2 className="text-2xl font-bold text-purple-300">Federation Nodes</h2>
-      <p className="text-sm text-slate-400">Awaiting multi-region federation expansion.</p>
-      <div className="space-y-3">
-        {nodesWithMetrics.map((node) => (
-          <button
-            key={node.id}
-            onClick={() => setSelected(node.id)}
-            className="w-full p-4 bg-slate-900/60 rounded-xl border border-slate-800
-            hover:border-purple-500/60 hover:shadow-lg hover:shadow-purple-500/10
-            transition flex items-center justify-between"
-          >
-            <div className="flex items-center gap-2">
-              <Globe className="w-4 h-4 text-purple-300" />
-              <span className="text-slate-200 font-medium">{node.id}</span>
-            </div>
-            <div className="flex items-center gap-4">
-              {node.metrics && (
-                <div className="flex gap-4 text-xs text-slate-400">
-                  <span>CPU: {node.metrics.cpu}%</span>
-                  <span>Latency: {node.metrics.latency}ms</span>
-                  <span className={node.metrics.heartbeat ? "text-green-400" : "text-red-400"}>
-                    ●
-                  </span>
-                </div>
-              )}
-              <span className={`px-2 py-1 rounded text-xs ${statusColors[node.status]}`}>
-                {node.status}
-              </span>
-            </div>
-          </button>
-        ))}
+    <div className="h-full flex flex-col overflow-hidden">
+      {/* HEADER */}
+      <div className="p-6 border-b border-slate-800">
+        <h2 className="text-2xl font-bold tracking-wide text-purple-300 mb-2">
+          Federation Nodes
+        </h2>
+        <p className="text-sm text-slate-400">
+          All registered SAGE federation nodes
+        </p>
       </div>
-      {active && (
-        <div className="fixed right-0 top-0 bottom-0 w-96 bg-[#0b0b12]/95 backdrop-blur-xl
-        border-l border-slate-800 shadow-2xl p-6 animate-in fade-in duration-300 overflow-y-auto">
-          <h3 className="text-xl font-semibold text-purple-300 mb-4">
-            {active.id}
-          </h3>
-          <div className="space-y-4">
-            <div className="p-4 bg-slate-900/60 rounded border border-slate-800">
-              <p className="text-sm text-slate-400">Location</p>
-              <p className="text-slate-200">{active.location}</p>
+
+      {/* SCROLLABLE CONTENT */}
+      <div className="flex-1 overflow-y-auto">
+        <div className="p-6 space-y-6">
+          {/* SUMMARY BAR */}
+          <div className="grid grid-cols-4 gap-4">
+            {/* TOTAL NODES */}
+            <div className="p-4 bg-slate-900/60 rounded-lg border border-slate-800">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm text-slate-400">Total Nodes</span>
+                <span className="px-2 py-1 rounded text-xs font-medium text-slate-300 bg-slate-400/10">
+                  {totalNodes}
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-slate-500"></div>
+                <span className="text-xs text-slate-500">No nodes registered</span>
+              </div>
             </div>
-            {active.metrics && (
-              <>
-                <div className="p-4 bg-slate-900/60 rounded border border-slate-800 space-y-2">
-                  <p className="text-sm text-slate-400">CPU</p>
-                  <p className="text-slate-200">{active.metrics.cpu}%</p>
-                </div>
-                <div className="p-4 bg-slate-900/60 rounded border border-slate-800 space-y-2">
-                  <p className="text-sm text-slate-400">Latency</p>
-                  <p className="text-slate-200">{active.metrics.latency}ms</p>
-                </div>
-                <div className="p-4 bg-slate-900/60 rounded border border-slate-800 space-y-2">
-                  <p className="text-sm text-slate-400">Heartbeat</p>
-                  <p className={active.metrics.heartbeat ? "text-green-400" : "text-red-400"}>
-                    {active.metrics.heartbeat ? "Active" : "Inactive"}
-                  </p>
-                </div>
-              </>
-            )}
+
+            {/* ONLINE */}
+            <div className="p-4 bg-slate-900/60 rounded-lg border border-slate-800">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm text-emerald-400">Online</span>
+                <span className="px-2 py-1 rounded text-xs font-medium text-emerald-400 bg-emerald-400/10">
+                  {onlineCount}
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+                <span className="text-xs text-emerald-500/70">Operational nodes</span>
+              </div>
+            </div>
+
+            {/* OFFLINE */}
+            <div className="p-4 bg-slate-900/60 rounded-lg border border-slate-800">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm text-red-400">Offline</span>
+                <span className="px-2 py-1 rounded text-xs font-medium text-red-400 bg-red-400/10">
+                  {offlineCount}
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-red-500"></div>
+                <span className="text-xs text-red-500/70">Unreachable nodes</span>
+              </div>
+            </div>
+
+            {/* UNKNOWN */}
+            <div className="p-4 bg-slate-900/60 rounded-lg border border-slate-800">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm text-amber-400">Unknown</span>
+                <span className="px-2 py-1 rounded text-xs font-medium text-amber-400 bg-amber-400/10">
+                  {unknownCount}
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></div>
+                <span className="text-xs text-amber-500/70">Status unknown</span>
+              </div>
+            </div>
           </div>
-          <button
-            onClick={() => setSelected(null)}
-            className="mt-8 w-full py-2 rounded-md bg-slate-800 hover:bg-slate-700
-            border border-slate-700 text-slate-300 transition"
-          >
-            Close
-          </button>
+
+          {/* NODE LIST TABLE */}
+          <div className="bg-slate-900/60 rounded-lg border border-slate-800 overflow-hidden">
+            <div className="p-4 border-b border-slate-800">
+              <h3 className="text-lg font-semibold text-slate-200">Node List</h3>
+            </div>
+            <div className="overflow-x-auto">
+              {/* TABLE HEADER */}
+              <div className="grid grid-cols-5 gap-4 p-4 border-b border-slate-800/50 bg-slate-900/40">
+                <div className="text-xs font-semibold text-slate-400 uppercase tracking-wide">
+                  Name
+                </div>
+                <div className="text-xs font-semibold text-slate-400 uppercase tracking-wide">
+                  Status
+                </div>
+                <div className="text-xs font-semibold text-slate-400 uppercase tracking-wide">
+                  Role
+                </div>
+                <div className="text-xs font-semibold text-slate-400 uppercase tracking-wide">
+                  Uptime
+                </div>
+                <div className="text-xs font-semibold text-slate-400 uppercase tracking-wide">
+                  Last Sync
+                </div>
+              </div>
+              {/* EMPTY STATE */}
+              <div className="p-8 text-center">
+                <Server className="w-12 h-12 mx-auto mb-3 text-slate-600" />
+                <p className="text-sm text-slate-400">No federation nodes detected</p>
+              </div>
+            </div>
+          </div>
+
+          {/* REGISTER NODE BUTTON */}
+          <div className="pt-2">
+            <button
+              className="w-full py-3 px-4 bg-purple-600/20 hover:bg-purple-600/30
+              border border-purple-500/30 hover:border-purple-500/50
+              rounded-lg text-purple-300 font-medium
+              transition flex items-center justify-center gap-2
+              disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled
+              title="Available when federation goes online"
+            >
+              <Plus className="w-4 h-4" />
+              Register Node
+            </button>
+            <p className="text-xs text-slate-500 text-center mt-2">
+              Available when federation goes online
+            </p>
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };
