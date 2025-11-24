@@ -48,6 +48,8 @@ export default function OperatorTerminal() {
   const [hasRipple, setHasRipple] = useState(false);
   const [neuralState, setNeuralState] = useState<"processing" | "streaming" | "idle" | null>(null);
   const [lastInputTime, setLastInputTime] = useState(Date.now());
+  const [isSilentIdle, setIsSilentIdle] = useState(false);
+  const [isPreResponse, setIsPreResponse] = useState(false);
 
   const logRef = useRef<HTMLDivElement>(null);
   const userScrolledRef = useRef(false);
@@ -126,6 +128,19 @@ export default function OperatorTerminal() {
     return () => clearInterval(interval);
   }, [lastInputTime, isProcessing]);
 
+  // Track silent idle state (10 seconds without input)
+  useEffect(() => {
+    const checkSilentIdle = () => {
+      const timeSinceInput = Date.now() - lastInputTime;
+      setIsSilentIdle(timeSinceInput > 10000);
+    };
+
+    const interval = setInterval(checkSilentIdle, 1000);
+    checkSilentIdle(); // Initial check
+
+    return () => clearInterval(interval);
+  }, [lastInputTime]);
+
   // Clear streaming state after 400ms
   useEffect(() => {
     if (neuralState === "streaming") {
@@ -191,10 +206,17 @@ export default function OperatorTerminal() {
       // Trigger neural processing state
     setNeuralState("processing");
     setLastInputTime(now);
+    setIsSilentIdle(false);
     // Clear idle state when processing starts
     setTimeout(() => {
       setNeuralState((current) => current === "processing" ? null : current);
     }, 900);
+    
+    // Pre-response tension
+    setIsPreResponse(true);
+    setTimeout(() => {
+      setIsPreResponse(false);
+    }, 120);
     
     // Add command to log for visual feedback
     setLog((prev) => [
@@ -235,7 +257,7 @@ export default function OperatorTerminal() {
   }, [activeFilter, log]);
 
   return (
-    <Card className={`prime-terminal-aura prime-terminal-panel ${isIdle ? "prime-terminal-idle" : isJustActivated ? "prime-terminal-activated" : "prime-terminal-active"}`} style={{ position: "relative" }}>
+    <Card className={`prime-terminal-aura prime-terminal-panel ${isIdle ? "prime-terminal-idle" : isJustActivated ? "prime-terminal-activated" : "prime-terminal-active"} ${isSilentIdle ? "prime-silent-idle" : ""} ${isPreResponse ? "prime-pre-response" : ""}`} style={{ position: "relative" }}>
       {/* Neural Presence Overlay */}
       <div className={`prime-neural-overlay ${neuralState ? `prime-state-${neuralState}` : ""}`} />
       
@@ -294,13 +316,14 @@ export default function OperatorTerminal() {
       >
         <div className="flex items-center gap-3">
           <Input
-            className="flex-1 text-base"
+            className={`flex-1 text-base ${isSilentIdle ? "prime-input-silent" : ""}`}
             value={input}
             placeholder="Issue command..."
             onChange={(e) => {
               setInput(e.target.value);
               const now = Date.now();
               setLastInputTime(now);
+              setIsSilentIdle(false);
               setNeuralState((current) => current === "idle" ? null : current);
             }}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}

@@ -539,6 +539,24 @@
   opacity: 0.08;
 }
 
+/* === Phase P-6: Oracle Silence Layer === */
+.prime-silent-idle {
+  filter: saturate(0.92);
+}
+
+.prime-input-silent {
+  caret-color: rgba(255, 255, 255, 0.55);
+}
+
+.prime-input-silent::placeholder {
+  opacity: 0.65;
+}
+
+.prime-pre-response {
+  filter: saturate(0.88) brightness(0.97);
+  transition: filter 120ms ease;
+}
+
 /* Do not modify or remove this comment.
    Styling only — no logic changes. */
 
