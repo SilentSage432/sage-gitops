@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { Activity, Radio, RefreshCw, Shield, Clock } from "lucide-react";
 import { FederationTopology } from "./health/FederationTopology";
 import { useTopologyNodes } from "./health/useTopologyNodes";
+import { NodeFusionPanel } from "./health/NodeFusionPanel";
 
 export const FederationHealthCore = () => {
   const topologyNodes = useTopologyNodes();
+  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   return (
     <div className="h-full flex flex-col overflow-hidden w-full">
       {/* HEADER */}
@@ -23,7 +25,11 @@ export const FederationHealthCore = () => {
           {/* TOPOLOGY VISUALIZATION */}
           <div className="min-w-0 overflow-hidden">
             <h3 className="text-lg font-semibold text-slate-200 mb-3 truncate">Network Topology</h3>
-            <FederationTopology nodes={topologyNodes} />
+            <FederationTopology
+              nodes={topologyNodes}
+              selectedNodeId={selectedNodeId}
+              onSelectNode={(nodeId) => setSelectedNodeId(nodeId)}
+            />
           </div>
 
           {/* STATUS SUMMARY GRID */}
@@ -137,6 +143,14 @@ export const FederationHealthCore = () => {
           </div>
         </div>
       </div>
+
+      {/* Node Fusion Panel */}
+      {selectedNodeId && (
+        <NodeFusionPanel
+          nodeId={selectedNodeId}
+          onClose={() => setSelectedNodeId(null)}
+        />
+      )}
     </div>
   );
 };

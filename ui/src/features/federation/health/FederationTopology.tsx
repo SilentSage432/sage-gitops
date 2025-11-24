@@ -10,9 +10,15 @@ export interface TopologyNode {
 
 interface FederationTopologyProps {
   nodes: TopologyNode[];
+  selectedNodeId?: string | null;
+  onSelectNode?: (nodeId: string) => void;
 }
 
-export const FederationTopology: React.FC<FederationTopologyProps> = ({ nodes }) => {
+export const FederationTopology: React.FC<FederationTopologyProps> = ({
+  nodes,
+  selectedNodeId,
+  onSelectNode,
+}) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const [dimensions, setDimensions] = useState({ width: 600, height: 400 });
   const [nodePositions, setNodePositions] = useState<Map<string, { x: number; y: number }>>(new Map());
@@ -79,35 +85,46 @@ export const FederationTopology: React.FC<FederationTopologyProps> = ({ nodes })
     });
   }, [nodes]);
 
-  // Get node style based on status
-  const getNodeStyle = (node: TopologyNode) => {
+  // Get node style based on status and selection
+  const getNodeStyle = (node: TopologyNode, isSelected: boolean) => {
     const baseSize = 16;
     const size = baseSize + (node.load / 100) * 8; // Size varies with load
+    const scale = isSelected ? 1.2 : 1; // Selected nodes are larger
+    const scaledSize = size * scale;
+
+    // Enhanced glow and stroke for selected nodes
+    const selectionMultiplier = isSelected ? 1.5 : 1;
 
     switch (node.status) {
       case "healthy":
         return {
           fill: "rgba(59, 130, 246, 0.3)", // blue-500/30
           stroke: "rgba(59, 130, 246, 0.6)", // blue-500/60
-          strokeWidth: 2,
-          glow: "rgba(59, 130, 246, 0.4)",
+          strokeWidth: 2 * selectionMultiplier,
+          glow: `rgba(59, 130, 246, ${0.4 * selectionMultiplier})`,
+          glowRadius: (scaledSize / 2 + 4) * selectionMultiplier,
           animation: "breathing 3s ease-in-out infinite",
+          size: scaledSize,
         };
       case "elevated":
         return {
           fill: "rgba(245, 158, 11, 0.3)", // amber-500/30
           stroke: "rgba(245, 158, 11, 0.6)", // amber-500/60
-          strokeWidth: 2,
-          glow: "rgba(245, 158, 11, 0.4)",
+          strokeWidth: 2 * selectionMultiplier,
+          glow: `rgba(245, 158, 11, ${0.4 * selectionMultiplier})`,
+          glowRadius: (scaledSize / 2 + 4) * selectionMultiplier,
           animation: "pulse 2s ease-in-out infinite",
+          size: scaledSize,
         };
       case "critical":
         return {
           fill: "rgba(239, 68, 68, 0.3)", // red-500/30
           stroke: "rgba(239, 68, 68, 0.8)", // red-500/80
-          strokeWidth: 4, // Thicker ring
-          glow: "rgba(239, 68, 68, 0.6)",
+          strokeWidth: 4 * selectionMultiplier, // Thicker ring
+          glow: `rgba(239, 68, 68, ${0.6 * selectionMultiplier})`,
+          glowRadius: (scaledSize / 2 + 4) * selectionMultiplier,
           animation: "pulse 1s ease-in-out infinite",
+          size: scaledSize,
         };
     }
   };
@@ -206,23 +223,28 @@ export const FederationTopology: React.FC<FederationTopologyProps> = ({ nodes })
           const position = nodePositions.get(node.id);
           if (!position) return null;
 
-          const style = getNodeStyle(node);
-          const baseSize = 16;
-          const size = baseSize + (node.load / 100) * 8;
-          const radius = size / 2;
+          const isSelected = selectedNodeId === node.id;
+          const style = getNodeStyle(node, isSelected);
+          const radius = style.size / 2;
 
           return (
-            <g key={node.id} className="topology-node">
+            <g
+              key={node.id}
+              className="topology-node"
+              style={{ cursor: onSelectNode ? "pointer" : "default" }}
+              onClick={() => onSelectNode?.(node.id)}
+            >
               {/* Glow effect */}
               <circle
                 cx={position.x}
                 cy={position.y}
-                r={radius + 4}
+                r={style.glowRadius}
                 fill={style.glow}
-                opacity={0.3}
+                opacity={isSelected ? 0.5 : 0.3}
                 style={{
-                  filter: `blur(4px)`,
+                  filter: `blur(${isSelected ? 6 : 4}px)`,
                   animation: style.animation,
+                  transition: "all 0.3s ease",
                 }}
               />
               {/* Main circle */}
@@ -235,6 +257,7 @@ export const FederationTopology: React.FC<FederationTopologyProps> = ({ nodes })
                 strokeWidth={style.strokeWidth}
                 style={{
                   animation: style.animation,
+                  transition: "all 0.3s ease",
                 }}
               />
               {/* Node label */}
@@ -243,6 +266,10 @@ export const FederationTopology: React.FC<FederationTopologyProps> = ({ nodes })
                 y={position.y + radius + 16}
                 textAnchor="middle"
                 className="text-xs fill-slate-300 font-mono"
+                style={{
+                  fontWeight: isSelected ? "bold" : "normal",
+                  transition: "all 0.3s ease",
+                }}
               >
                 {node.name}
               </text>
@@ -250,7 +277,7 @@ export const FederationTopology: React.FC<FederationTopologyProps> = ({ nodes })
               <circle
                 cx={position.x}
                 cy={position.y}
-                r={3}
+                r={isSelected ? 4 : 3}
                 fill={
                   node.health > 70
                     ? "rgba(34, 197, 94, 0.8)"
@@ -258,6 +285,9 @@ export const FederationTopology: React.FC<FederationTopologyProps> = ({ nodes })
                     ? "rgba(245, 158, 11, 0.8)"
                     : "rgba(239, 68, 68, 0.8)"
                 }
+                style={{
+                  transition: "all 0.3s ease",
+                }}
               />
             </g>
           );
