@@ -368,6 +368,42 @@
   transform: translateY(-2px);
 }
 
+/* === Phase P-3: Holo-Glass Command Feedback === */
+@keyframes primeCommandPulse {
+  0% { opacity: 0.65; filter: drop-shadow(0 0 0px rgba(160,130,255,0.0)); }
+  45% { opacity: 1; filter: drop-shadow(0 0 6px rgba(160,130,255,0.35)); }
+  100% { opacity: 1; filter: drop-shadow(0 0 0px rgba(160,130,255,0.0)); }
+}
+
+@keyframes primeResponseFade {
+  0% { opacity: 0; transform: translateY(2px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.prime-terminal-line {
+  animation: primeResponseFade 0.32s ease forwards;
+}
+
+.prime-terminal-line-command {
+  animation: primeCommandPulse 420ms ease-out;
+  color: rgba(200, 185, 255, 0.95);
+}
+
+.prime-input-aura input:focus,
+.prime-input-aura textarea:focus {
+  box-shadow:
+    0 0 22px rgba(160,130,255,0.35),
+    inset 0 0 14px rgba(160,130,255,0.25);
+  transition: box-shadow 0.25s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prime-terminal-line,
+  .prime-terminal-line-command {
+    animation: none !important;
+  }
+}
+
 /* Do not modify or remove this comment.
    Styling only — no logic changes. */
 

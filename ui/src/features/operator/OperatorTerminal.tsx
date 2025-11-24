@@ -33,7 +33,7 @@ export default function OperatorTerminal() {
 
   const [input, setInput] = useState("");
   const [log, setLog] = useState<
-    { text?: string; message?: string; category: LogCategory; ts: number }[]
+    { text?: string; message?: string; category: LogCategory; ts: number; isCommand?: boolean }[]
   >([]);
 
   const logRef = useRef<HTMLDivElement>(null);
@@ -71,6 +71,16 @@ export default function OperatorTerminal() {
     const command = input;
     setInput("");
     remember(command, "operator");
+    // Add command to log for visual feedback
+    setLog((prev) => [
+      ...prev,
+      {
+        text: command,
+        category: "SYSTEM" as LogCategory,
+        ts: Date.now(),
+        isCommand: true,
+      },
+    ]);
     await routeCommand(command, (response) => {
       setLog((prev) => [
         ...prev,
@@ -111,7 +121,14 @@ export default function OperatorTerminal() {
       {/* Log Output (Scrollable Feed) */}
       <div className="prime-terminal-log" ref={logRef}>
         {filteredLog.map((entry, idx) => (
-          <div key={idx} className={`text-sm mb-1 whitespace-pre-wrap opacity-90 terminal-line cat-${entry.category.toLowerCase()}`}>
+          <div
+            key={idx}
+            className={
+              entry.isCommand
+                ? "prime-terminal-line prime-terminal-line-command text-sm mb-1 whitespace-pre-wrap terminal-line"
+                : `prime-terminal-line text-sm mb-1 whitespace-pre-wrap opacity-90 terminal-line cat-${entry.category.toLowerCase()}`
+            }
+          >
             {entry.message || entry.text}
           </div>
         ))}
