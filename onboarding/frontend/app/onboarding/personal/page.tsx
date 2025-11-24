@@ -223,7 +223,7 @@ export default function PersonalOnboardingPage() {
                       </p>
                     </div>
                   </div>
-                </motion.div>
+                </div>
               )}
 
               {/* Navigation Buttons */}
