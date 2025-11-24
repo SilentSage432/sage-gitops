@@ -32,21 +32,21 @@ export const App: React.FC = () => {
       
       // Arc panels
       case 'arc-theta':
-        return <ArcThetaPanel />;
+        return <ArcThetaPanel key="arc-theta" />;
       case 'arc-sigma':
-        return <ArcSigmaPanel />;
+        return <ArcSigmaPanel key="arc-sigma" />;
       case 'arc-omega':
-        return <ArcOmegaPanel />;
+        return <ArcOmegaPanel key="arc-omega" />;
       case 'arc-rho2':
         return <ArcRho2Lodge />;
       case 'arc-lambda':
-        return <ArcLambdaPanel />;
+        return <ArcLambdaPanel key="arc-lambda" />;
       case 'arc-chi':
-        return <ArcChiPanel />;
+        return <ArcChiPanel key="arc-chi" />;
       
       // Federation panels
       case 'pi-kluster':
-        return <PiClusterChamber />;
+        return <PiClusterChamber key="pi-kluster" />;
       case 'onboarding-nexus':
         return <OnboardingNexus />;
       case 'nodes':
