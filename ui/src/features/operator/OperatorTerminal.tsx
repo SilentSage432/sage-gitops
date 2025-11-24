@@ -61,6 +61,7 @@ export default function OperatorTerminal() {
   const [lastInputTime, setLastInputTime] = useState(Date.now());
   const [isSilentIdle, setIsSilentIdle] = useState(false);
   const [isPreResponse, setIsPreResponse] = useState(false);
+  const [showJumpToLive, setShowJumpToLive] = useState(false);
 
   const logRef = useRef<HTMLDivElement>(null);
   const userScrolledRef = useRef(false);
@@ -73,6 +74,7 @@ export default function OperatorTerminal() {
       const { scrollTop, scrollHeight, clientHeight } = logRef.current;
       const isNearBottom = scrollHeight - scrollTop - clientHeight < 100;
       userScrolledRef.current = !isNearBottom;
+      setShowJumpToLive(!isNearBottom);
     };
 
     const logElement = logRef.current;
@@ -187,6 +189,76 @@ export default function OperatorTerminal() {
     window.addEventListener("SAGE_TERMINAL_LOG", handler as EventListener);
     return () =>
       window.removeEventListener("SAGE_TERMINAL_LOG", handler as EventListener);
+  }, []);
+
+  // Mock event stream for live telemetry
+  useEffect(() => {
+    const eventTypes = [
+      { signal: "HEARTBEAT_TICK", category: "HEARTBEAT" as LogCategory, source: "arc-bridge-local" },
+      { signal: "AGENT_STATUS", category: "AGENT" as LogCategory, source: "agent-orchestrator" },
+      { signal: "ARC_EVENT", category: "ARC" as LogCategory, source: "arc-core" },
+      { signal: "RHO2_SIGNAL", category: "RHO2" as LogCategory, source: "rho2-bus" },
+      { signal: "CONNECTED", category: "FEDERATION" as LogCategory, source: "federation-gateway" },
+    ];
+
+    const generateEvent = () => {
+      const eventType = eventTypes[Math.floor(Math.random() * eventTypes.length)];
+      const now = Date.now();
+      const timestamp = new Date(now).toLocaleTimeString();
+      
+      let message = "";
+      switch (eventType.signal) {
+        case "HEARTBEAT_TICK":
+          message = `[${timestamp}] ♥ HEARTBEAT_TICK | ${eventType.source} | load: ${(Math.random() * 100).toFixed(1)}% | uptime: ${(performance.now() / 1000).toFixed(1)}s`;
+          break;
+        case "AGENT_STATUS":
+          const agents = ["alpha", "beta", "gamma"];
+          const agent = agents[Math.floor(Math.random() * agents.length)];
+          message = `[${timestamp}] 🤖 AGENT_STATUS | ${agent} | state: ${Math.random() > 0.5 ? "active" : "idle"}`;
+          break;
+        case "ARC_EVENT":
+          message = `[${timestamp}] ⚡ ARC_EVENT | ${eventType.source} | signal: ${Math.random() > 0.5 ? "pulse" : "sync"}`;
+          break;
+        case "RHO2_SIGNAL":
+          message = `[${timestamp}] 🌊 RHO2_SIGNAL | ${eventType.source} | freq: ${(Math.random() * 1000).toFixed(0)}Hz`;
+          break;
+        case "CONNECTED":
+          message = `[${timestamp}] 🔗 CONNECTED | ${eventType.source} | handshake complete`;
+          break;
+        default:
+          message = `[${timestamp}] ${eventType.signal} | ${eventType.source}`;
+      }
+
+      setLog((prev) => [...prev, { text: message, category: eventType.category, ts: now }]);
+      setLastMessageTime(now);
+      setIsIdle(false);
+      setIsJustActivated(true);
+      setTimeout(() => setIsJustActivated(false), 900);
+      
+      setNeuralState((current) => {
+        if (current !== "processing") {
+          return "streaming";
+        }
+        return current;
+      });
+    };
+
+    // Start with initial delay, then random intervals between 3-6 seconds
+    const scheduleNext = () => {
+      const delay = 3000 + Math.random() * 3000; // 3-6 seconds
+      return setTimeout(() => {
+        generateEvent();
+        intervalRef.current = scheduleNext();
+      }, delay);
+    };
+
+    const intervalRef = { current: scheduleNext() };
+
+    return () => {
+      if (intervalRef.current) {
+        clearTimeout(intervalRef.current);
+      }
+    };
   }, []);
 
   function normalizeCategory(value?: string): LogCategory {
@@ -305,14 +377,41 @@ export default function OperatorTerminal() {
                 ? "prime-terminal-line prime-terminal-line-command text-sm mb-1 whitespace-pre-wrap terminal-line"
                 : `prime-terminal-line prime-terminal-line-${entry.category.toLowerCase()} text-sm mb-1 whitespace-pre-wrap opacity-90 terminal-line cat-${entry.category.toLowerCase()}`
             }
-            initial={{ opacity: 0, y: 2 }}
+            initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.12, ease: "easeOut" }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
           >
             {entry.message || entry.text}
           </motion.div>
         ))}
       </motion.div>
+
+      {/* Jump to Live Button */}
+      {showJumpToLive && (
+        <motion.div
+          className="absolute bottom-20 right-8 z-30"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.9 }}
+          transition={{ duration: 0.2 }}
+        >
+          <Button
+            className="bg-purple-600/80 hover:bg-purple-600 text-white text-xs px-3 py-1.5 rounded-full shadow-lg backdrop-blur-sm border border-purple-400/30"
+            onClick={() => {
+              if (logRef.current) {
+                logRef.current.scrollTo({
+                  top: logRef.current.scrollHeight,
+                  behavior: "smooth",
+                });
+                userScrolledRef.current = false;
+                setShowJumpToLive(false);
+              }
+            }}
+          >
+            Jump to Live
+          </Button>
+        </motion.div>
+      )}
 
       {/* Command Bar (Bottom Anchored) */}
       <motion.div
