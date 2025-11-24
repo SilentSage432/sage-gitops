@@ -173,6 +173,7 @@ export default function DataRegionsPage() {
           </div>
         </div>
       </div>
+      </div>
     </OCTGuard>
   );
 }

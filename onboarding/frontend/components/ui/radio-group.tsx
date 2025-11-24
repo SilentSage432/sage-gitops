@@ -11,7 +11,8 @@ export interface RadioGroupProps {
 
 const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
   ({ className, options, value, onValueChange, name, ...props }, ref) => {
-    const groupName = name || `radio-group-${Math.random().toString(36).substr(2, 9)}`;
+    const generatedId = React.useId()
+    const groupName = name || generatedId
     
     return (
       <div ref={ref} className={cn("space-y-3", className)} {...props}>
