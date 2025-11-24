@@ -90,7 +90,7 @@ export default function PersonalOnboardingPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <Card className="border-white/10 bg-[#111317] rounded-3xl">
+          <Card className="rounded-3xl">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle className="flex items-center gap-2 text-xl font-medium">

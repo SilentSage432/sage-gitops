@@ -9,7 +9,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
       <div
         ref={ref}
         className={cn(
-          "rounded-[14px] border border-white/10 bg-[#1a1d22] text-[#e2e6ee] transition-colors",
+          "bg-[#0c0c0f]/60 border border-white/10 backdrop-blur-xl rounded-xl shadow-[0_0_20px_-10px_rgba(0,0,0,0.7)] transition-all duration-300 text-[#e2e6ee]",
           className
         )}
         {...props}

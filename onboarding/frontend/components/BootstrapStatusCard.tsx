@@ -188,7 +188,7 @@ export function BootstrapStatusCard({ fingerprint }: BootstrapStatusCardProps) {
   };
 
   return (
-    <Card className="border-white/10 bg-[#111317]">
+    <Card>
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle>Bootstrap Kit</CardTitle>

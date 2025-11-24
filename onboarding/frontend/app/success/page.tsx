@@ -27,7 +27,7 @@ export default function SuccessPage() {
     <OCTGuard>
       <div className="min-h-screen bg-[#0b0c0f] text-white flex items-center justify-center px-4 animate-in fade-in duration-700">
         <div className="max-w-3xl mx-auto py-10 px-4 text-center">
-          <Card className="border-white/10 bg-[#111317]">
+          <Card className="bg-[#0e0e12]/70 border border-white/15 backdrop-blur-2xl rounded-2xl shadow-[0_0_32px_-12px_rgba(0,0,0,0.85)]">
             <CardContent className="p-6 space-y-4">
               {/* Success Icon */}
               <div className="flex justify-center">

@@ -107,7 +107,7 @@ export default function DashboardPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              <Card className="border-white/10 bg-[#111317]">
+              <Card>
                 <CardHeader>
                   <CardTitle>Tenant Overview</CardTitle>
                 </CardHeader>
@@ -134,7 +134,7 @@ export default function DashboardPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.25 }}
             >
-              <Card className="border-white/10 bg-[#111317]">
+              <Card>
                 <CardHeader>
                   <CardTitle>Onboarding Status</CardTitle>
                 </CardHeader>
@@ -163,7 +163,7 @@ export default function DashboardPage() {
               transition={{ duration: 0.5, delay: 0.3 }}
               className="grid grid-cols-1 sm:grid-cols-3 gap-4"
             >
-              <Card className="border-white/10 bg-[#111317] hover:border-violet-400/30 hover:scale-[1.01] transition-transform focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:outline-none">
+              <Card className="hover:border-white/20 hover:shadow-[0_0_28px_-14px_rgba(0,0,0,0.9)] focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:outline-none">
                 <CardContent className="pt-6">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm text-white/60 flex items-center gap-2">
@@ -178,7 +178,7 @@ export default function DashboardPage() {
                 </CardContent>
               </Card>
 
-              <Card className="border-white/10 bg-[#111317] hover:border-violet-400/30 hover:scale-[1.01] transition-transform focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:outline-none">
+              <Card className="hover:border-white/20 hover:shadow-[0_0_28px_-14px_rgba(0,0,0,0.9)] focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:outline-none">
                 <CardContent className="pt-6">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm text-white/60 flex items-center gap-2">
@@ -193,7 +193,7 @@ export default function DashboardPage() {
                 </CardContent>
               </Card>
 
-              <Card className="border-white/10 bg-[#111317] hover:border-violet-400/30 hover:scale-[1.01] transition-transform focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:outline-none">
+              <Card className="hover:border-white/20 hover:shadow-[0_0_28px_-14px_rgba(0,0,0,0.9)] focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:outline-none">
                 <CardContent className="pt-6">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm text-white/60 flex items-center gap-2">
@@ -213,7 +213,7 @@ export default function DashboardPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
             >
-              <Card className="border-white/10 bg-[#111317]">
+              <Card>
                 <CardHeader>
                   <CardTitle>Next Actions</CardTitle>
                 </CardHeader>
@@ -251,7 +251,7 @@ export default function DashboardPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.35 }}
             >
-              <Card className="border-white/10 bg-[#111317]">
+              <Card>
                 <CardHeader>
                   <CardTitle>Quick Tools</CardTitle>
                 </CardHeader>
@@ -299,7 +299,7 @@ export default function DashboardPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.5 }}
             >
-              <Card className="border-white/10 bg-[#111317]">
+              <Card>
                 <CardHeader>
                   <CardTitle>Recent Activity</CardTitle>
                 </CardHeader>

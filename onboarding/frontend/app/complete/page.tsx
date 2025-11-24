@@ -65,7 +65,7 @@ export default function CompletePage() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
           >
-            <Card className="border-white/10 bg-[#111317] shadow-xl shadow-purple-500/10">
+            <Card>
               <CardContent className="p-6 space-y-4">
                 <motion.div
                   initial={{ scale: 0 }}
