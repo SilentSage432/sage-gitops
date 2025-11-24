@@ -7,12 +7,16 @@ import { Badge } from '@/components/ui/badge';
 import { OCTGuard } from '@/components/OCTGuard';
 import { CheckCircle2, Clock, Building2, MapPin, Calendar, UserPlus, Download, Bot, KeyRound, ScrollText } from 'lucide-react';
 import { BootstrapStatusCard } from '@/components/BootstrapStatusCard';
+import { useFakeTelemetry } from '@/lib/useFakeTelemetry';
 
 export default function DashboardPage() {
   // Loading states
   const [isGeneratingKit, setIsGeneratingKit] = useState(false);
   const [isViewingPlans, setIsViewingPlans] = useState(false);
   const [activityVisible, setActivityVisible] = useState<boolean[]>([]);
+  
+  // Live telemetry
+  const telemetry = useFakeTelemetry();
 
   // Mock data
   const tenantName = 'Acme Industries';
@@ -140,12 +144,12 @@ export default function DashboardPage() {
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm text-white/60 flex items-center gap-2">
                       <span className="block w-2 h-2 rounded-full bg-[#10b981]"></span>
-                      Bootstrap Status
+                      Agents Online
                     </span>
-                    <CheckCircle2 className="w-5 h-5 text-[#10b981]" />
+                    <Bot className="w-5 h-5 text-[#10b981]" />
                   </div>
                   <Badge variant="default" className="bg-[#10b981]/20 text-[#10b981] border-[#10b981]/30">
-                    ✅ Ready
+                    {telemetry.agentsOnline}
                   </Badge>
                 </CardContent>
               </Card>
@@ -155,12 +159,12 @@ export default function DashboardPage() {
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm text-white/60 flex items-center gap-2">
                       <span className="block w-2 h-2 rounded-full bg-[#10b981]"></span>
-                      OCT Status
+                      Signal Strength
                     </span>
                     <CheckCircle2 className="w-5 h-5 text-[#10b981]" />
                   </div>
                   <Badge variant="default" className="bg-[#10b981]/20 text-[#10b981] border-[#10b981]/30">
-                    ✅ Active
+                    {telemetry.signal}%
                   </Badge>
                 </CardContent>
               </Card>
@@ -174,13 +178,27 @@ export default function DashboardPage() {
                     </span>
                     <Clock className="w-5 h-5 text-white/40" />
                   </div>
-                  <Badge variant="secondary">Pending</Badge>
+                  <Badge variant="secondary">{telemetry.rotationETA}s</Badge>
+                </CardContent>
+              </Card>
+            </div>
+            
+            {/* System Status Card */}
+            <div className="slide-up" style={{ animationDelay: "0.25s" }}>
+              <Card>
+                <CardHeader>
+                  <CardTitle>System Status</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Badge variant="secondary" className="capitalize">
+                    {telemetry.status}
+                  </Badge>
                 </CardContent>
               </Card>
             </div>
 
             {/* Next Steps Panel */}
-            <div className="slide-up" style={{ animationDelay: "0.25s" }}>
+            <div className="slide-up" style={{ animationDelay: "0.3s" }}>
               <Card>
                 <CardHeader>
                   <CardTitle>Next Actions</CardTitle>
@@ -214,7 +232,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Quick Tools */}
-            <div className="slide-up" style={{ animationDelay: "0.3s" }}>
+            <div className="slide-up" style={{ animationDelay: "0.35s" }}>
               <Card>
                 <CardHeader>
                   <CardTitle>Quick Tools</CardTitle>
@@ -258,7 +276,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Activity Feed Placeholder */}
-            <div className="slide-up" style={{ animationDelay: "0.35s" }}>
+            <div className="slide-up" style={{ animationDelay: "0.4s" }}>
               <Card>
                 <CardHeader>
                   <CardTitle>Recent Activity</CardTitle>
