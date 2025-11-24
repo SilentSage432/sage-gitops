@@ -31,10 +31,8 @@ export const BridgeFrame: React.FC = () => {
       >
         {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
       </button>
-      <div className="flex-1 overflow-y-auto pt-16 pb-24 w-full">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <OperatorTerminal />
-        </div>
+      <div className="flex flex-1 items-center justify-center px-8 pt-12 pb-24 w-full min-w-0 transition-all duration-300">
+        <OperatorTerminal />
       </div>
       <OperatorInput />
       <AnimatePresence>
