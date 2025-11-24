@@ -18,6 +18,7 @@ import { FederationHealthCore } from '../features/federation/FederationHealthCor
 import { FederationHealthMatrix } from '../features/federation/FederationHealthMatrix';
 import { MeshTelemetrySurface } from '../features/federation/MeshTelemetrySurface';
 import { SignalHistoryPanel } from '../features/federation/SignalHistoryPanel';
+import { FederationAlertsPanel } from '../features/federation/FederationAlertsPanel';
 import { NodeDetailsPanel } from '../features/federation/NodeDetailsPanel';
 import { AgentsOverview } from '../features/agents/AgentsOverview';
 import { AgentDetails } from '../features/agents/AgentDetails';
@@ -62,6 +63,8 @@ export const App: React.FC = () => {
         return <MeshTelemetrySurface />;
       case 'signal-history':
         return <SignalHistoryPanel />;
+      case 'federation-alerts':
+        return <FederationAlertsPanel />;
       
       // Agents panels
       case 'agents':

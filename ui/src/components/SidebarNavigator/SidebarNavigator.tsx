@@ -50,7 +50,8 @@ export const SidebarNavigator: React.FC<SidebarNavigatorProps> = ({
         { id: 'nodes', label: 'Nodes' },
         { id: 'federation-health', label: 'Federation Health' },
         { id: 'mesh-telemetry', label: 'Mesh Telemetry' },
-        { id: 'signal-history', label: 'Signal History' }
+        { id: 'signal-history', label: 'Signal History' },
+        { id: 'federation-alerts', label: 'Alerts' }
       ]
     },
     {
