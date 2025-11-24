@@ -5,6 +5,7 @@ import { OperatorTerminal } from "../components/OperatorTerminal";
 import { OperatorInput } from "../components/OperatorInput";
 import { SidebarNavigator } from "../components/SidebarNavigator/SidebarNavigator";
 import { useUIShockwave } from "../core/UIShockwaveContext";
+import { KernelRegistry } from "../sage/kernel/KernelSignalRegistry";
 import Rho2Panel from "../panels/Rho2Panel";
 import NodesPanel from "../panels/NodesPanel";
 import AgentsPanel from "../panels/AgentsPanel";
@@ -43,6 +44,25 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [selectedItem, onSelectItem]);
+
+  // ✅ Kernel signal registry for core UI signals
+  useEffect(() => {
+    KernelRegistry.register("kernel.focus.arc", (payload) => {
+      onSelectItem?.(`arc-${payload.arc}`);
+    });
+
+    KernelRegistry.register("kernel.warning", () => {
+      console.warn("⚠️ Kernel warning received");
+    });
+
+    KernelRegistry.register("kernel.pulse.ui", () => {
+      // UI heartbeat animation already handled
+    });
+
+    return () => {
+      KernelRegistry.clearAll();
+    };
+  }, [onSelectItem]);
 
   const handleToggleSidebar = useCallback(() => {
     setSidebarOpen(true);
