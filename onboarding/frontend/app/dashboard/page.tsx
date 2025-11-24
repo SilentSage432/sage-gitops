@@ -6,7 +6,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { OCTGuard } from '@/components/OCTGuard';
-import { CheckCircle2, Clock, Building2, MapPin, Calendar, UserPlus, Download, Bot } from 'lucide-react';
+import { CheckCircle2, Clock, Building2, MapPin, Calendar, UserPlus, Download, Bot, KeyRound, ScrollText } from 'lucide-react';
 import { BootstrapStatusCard } from '@/components/BootstrapStatusCard';
 
 export default function DashboardPage() {
@@ -239,6 +239,54 @@ export default function DashboardPage() {
                     >
                       <Download className="w-4 h-4 mr-2" />
                       Download Bootstrap Kit
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            {/* Quick Tools */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.35 }}
+            >
+              <Card className="border-white/10 bg-[#111317]">
+                <CardHeader>
+                  <CardTitle>Quick Tools</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 gap-4">
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start"
+                    >
+                      <Bot className="mr-2 h-4 w-4" />
+                      Manage Agents
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start"
+                    >
+                      <KeyRound className="mr-2 h-4 w-4" />
+                      Operator Access
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start"
+                      disabled={false}
+                    >
+                      <Download className="mr-2 h-4 w-4" />
+                      Download Bootstrap
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start"
+                      disabled={true}
+                      title="Coming soon"
+                    >
+                      <ScrollText className="mr-2 h-4 w-4" />
+                      View Audit Log
                     </Button>
                   </div>
                 </CardContent>
