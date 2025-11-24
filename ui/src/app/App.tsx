@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BridgeFrame } from '../layout/BridgeFrame';
+import BridgeFrame from '../layout/BridgeFrame';
 import { OperatorEffectProvider } from "../core/OperatorEffectContext";
 import { TelemetryFilterProvider } from "../core/filters/useTelemetryFilter";
 import { HybridModeProvider } from "../sage/hybrid/HybridModeContext";
