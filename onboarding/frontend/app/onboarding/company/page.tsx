@@ -151,6 +151,7 @@ export default function CompanyPage() {
                   )}
                 </div>
               </div>
+              </div>
             </div>
           </div>
         </div>
