@@ -1,11 +1,14 @@
 import React from "react";
 import { Server, Plus, AlertCircle } from "lucide-react";
+import { useMeshTelemetry } from "../../sage/telemetry/useMeshTelemetry";
 
 export const PiClusterChamber = () => {
   // Static counts - all zero for empty state
   const offlineCount = 0;
   const pendingCount = 0;
   const readyCount = 0;
+
+  const telemetry = useMeshTelemetry();
 
   return (
     <div className="h-full flex flex-col overflow-hidden">
@@ -102,26 +105,47 @@ export const PiClusterChamber = () => {
           </div>
 
           {/* TELEMETRY BLOCK */}
-          <div className="bg-slate-900/60 rounded-lg border border-slate-800 p-4 opacity-50">
+          <div className="bg-slate-900/60 rounded-lg border border-slate-800 p-4">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-slate-400">Telemetry</h3>
+              <h3 className="text-lg font-semibold text-slate-200">Telemetry</h3>
               <AlertCircle className="w-4 h-4 text-slate-500" />
             </div>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-slate-500">CPU Usage</span>
-                <span className="text-slate-600">—</span>
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-slate-500">Temperature</span>
-                <span className="text-slate-600">—</span>
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-slate-500">Network Latency</span>
-                <span className="text-slate-600">—</span>
-              </div>
+            <div className="space-y-4 mt-6">
+              {telemetry.slice(-5).map((pkt, i) => (
+                <div key={i} className="p-4 bg-slate-900/60 rounded border border-slate-800">
+                  <div className="flex justify-between text-sm text-slate-400">
+                    <span>{pkt.node}</span>
+                    <span>{new Date(pkt.timestamp).toLocaleTimeString()}</span>
+                  </div>
+                  <div className="mt-2 grid grid-cols-4 gap-4 text-center">
+                    <div>
+                      <p className="text-lg text-purple-300 font-semibold">
+                        {pkt.cpu.toFixed(1)}%
+                      </p>
+                      <p className="text-xs text-slate-500">CPU</p>
+                    </div>
+                    <div>
+                      <p className="text-lg text-blue-300 font-semibold">
+                        {pkt.memory.toFixed(1)}%
+                      </p>
+                      <p className="text-xs text-slate-500">Memory</p>
+                    </div>
+                    <div>
+                      <p className="text-lg text-orange-300 font-semibold">
+                        {pkt.temp.toFixed(1)}°C
+                      </p>
+                      <p className="text-xs text-slate-500">Temp</p>
+                    </div>
+                    <div>
+                      <p className="text-lg text-green-300 font-semibold">
+                        {pkt.latency.toFixed(1)}ms
+                      </p>
+                      <p className="text-xs text-slate-500">Latency</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
-            <p className="text-xs text-slate-600 mt-4 italic">Telemetry inactive — no nodes available</p>
           </div>
 
           {/* ADD FIRST NODE BUTTON */}
