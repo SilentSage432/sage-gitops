@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from "react";
+import { motion } from "framer-motion";
 
 import "./OperatorTerminal.css";
 import {
@@ -43,6 +44,7 @@ export default function OperatorTerminal() {
   const [isIdle, setIsIdle] = useState(false);
   const [isJustActivated, setIsJustActivated] = useState(false);
   const [lastMessageTime, setLastMessageTime] = useState(Date.now());
+  const [isInputFocused, setIsInputFocused] = useState(false);
 
   const logRef = useRef<HTMLDivElement>(null);
   const userScrolledRef = useRef(false);
@@ -198,7 +200,13 @@ export default function OperatorTerminal() {
       </div>
 
       {/* Log Output (Scrollable Feed) */}
-      <div className="prime-terminal-log" ref={logRef}>
+      <motion.div
+        className="prime-terminal-log"
+        ref={logRef}
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35, ease: "easeOut" }}
+      >
         {filteredLog.map((entry, idx) => (
           <div
             key={idx}
@@ -211,10 +219,18 @@ export default function OperatorTerminal() {
             {entry.message || entry.text}
           </div>
         ))}
-      </div>
+      </motion.div>
 
       {/* Command Bar (Bottom Anchored) */}
-      <div className={`prime-terminal-input ${isProcessing ? "prime-terminal-processing" : ""}`}>
+      <motion.div
+        className={`prime-terminal-input ${isProcessing ? "prime-terminal-processing" : ""}`}
+        animate={{
+          boxShadow: isInputFocused
+            ? "0 0 18px rgba(128, 90, 213, 0.35)"
+            : "0 0 0px rgba(128, 90, 213, 0)",
+        }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+      >
         <div className="flex items-center gap-3">
           <Input
             className="flex-1 text-base"
@@ -222,6 +238,8 @@ export default function OperatorTerminal() {
             placeholder="Issue command..."
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+            onFocus={() => setIsInputFocused(true)}
+            onBlur={() => setIsInputFocused(false)}
           />
           <Button
             className="sage-command-send text-base px-5 py-3"
@@ -233,7 +251,7 @@ export default function OperatorTerminal() {
             Send
           </Button>
         </div>
-      </div>
+      </motion.div>
     </Card>
   );
 }

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { SidebarNavigator } from "../components/SidebarNavigator/SidebarNavigator";
 import { WhispererTerminal } from "../components/WhispererTerminal/WhispererTerminal";
 import { StatusBar } from "../components/StatusBar/StatusBar";
@@ -138,25 +139,41 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
         </div>
 
         {/* Center Panel: Command Core */}
-        <div className={`federation-command-core sage-main-console flex-1 flex flex-col overflow-hidden min-h-0 ${activePanel === "command-core" ? "federation-active" : "federation-idle"}`}>
+        <motion.div
+          className={`federation-command-core sage-main-console flex-1 flex flex-col overflow-hidden min-h-0 ${activePanel === "command-core" ? "federation-active" : "federation-idle"}`}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            default: { duration: 0.35, ease: "easeOut" },
+            scale: { duration: 0.4, ease: "easeInOut" }
+          }}
+          whileHover={{ scale: 1.012 }}
+        >
           <WhispererTerminal />
-        </div>
+        </motion.div>
 
         {/* Right Panel: Telemetry & Control */}
         {activeChamber && (
-          <div
+          <motion.div
             className={`federation-intel-stack sage-right-panel
               w-96 border-l border-slate-800 flex-shrink-0
               flex flex-col min-h-0
               ${activePanel === "intel-stack" ? "federation-active" : "federation-idle"}
             `}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              default: { duration: 0.35, ease: "easeOut" },
+              scale: { duration: 0.4, ease: "easeInOut" }
+            }}
+            whileHover={{ scale: 1.012 }}
           >
             <div
               className="flex-1 overflow-y-auto p-6 min-h-0"
             >
               {activeChamber}
             </div>
-          </div>
+          </motion.div>
         )}
       </div>
 
