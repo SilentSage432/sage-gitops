@@ -32,7 +32,7 @@
     inset 0 0 22px rgba(180, 80, 255, 0.05),
     0 0 28px rgba(0, 0, 0, 0.45);
   transition: all 240ms ease;
-  animation: sage-breath 7s ease-in-out infinite;
+  animation: federationCoreBreath 12s ease-in-out infinite;
 }
 
 .federation-command-core.active {
@@ -236,18 +236,37 @@
 }
 
 /* === F4 Volumetric Focus Layer === */
+@keyframes federationPulseActivate {
+  0% { transform: scale(1); }
+  32% { transform: scale(1.015); }
+  100% { transform: scale(1); }
+}
+
+@keyframes federationCoreBreath {
+  0% { filter: brightness(0.94) saturate(0.92); }
+  50% { filter: brightness(1.02) saturate(1.04); }
+  100% { filter: brightness(0.94) saturate(0.92); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .federation-command-core,
+  .federation-active {
+    animation: none !important;
+  }
+}
+
 .federation-active {
   transition:
     box-shadow 420ms ease,
     opacity 420ms ease,
     filter 420ms ease;
   filter: brightness(1.12) saturate(1.08);
+  animation: federationPulseActivate 140ms ease-out;
 }
 
 .federation-idle {
-  opacity: 0.82;
-  transition:
-    opacity 420ms ease;
+  opacity: 0.85;
+  transition: opacity 320ms ease;
 }
 
 .federation-command-core.federation-active {
