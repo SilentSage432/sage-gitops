@@ -1,80 +1,112 @@
-import React, { useEffect, useState } from 'react';
-import { getFederationNodes, FederationNode } from '../../services/federationService';
+import React, { useState } from "react";
+import { Server, Cpu, Wifi, Activity } from "lucide-react";
 
-/**
- * PiClusterChamber – Pi Kluster constellation shell
- */
-export const PiClusterChamber: React.FC = () => {
-  const [nodes, setNodes] = useState<FederationNode[]>([]);
+const mockPiNodes = [
+  {
+    id: "pi-alpha",
+    label: "Pi-Alpha",
+    status: "ONLINE",
+    cpu: "12%",
+    temp: "47°C",
+    ip: "192.168.10.21",
+  },
+  {
+    id: "pi-beta",
+    label: "Pi-Beta",
+    status: "BOOTING",
+    cpu: "—",
+    temp: "—",
+    ip: "pending…",
+  },
+  {
+    id: "pi-gamma",
+    label: "Pi-Gamma",
+    status: "OFFLINE",
+    cpu: "—",
+    temp: "—",
+    ip: "unreachable",
+  },
+];
 
-  useEffect(() => {
-    const loadData = async () => {
-      const data = await getFederationNodes();
-      setNodes(data);
-    };
-    loadData();
-  }, []);
+const statusColors: Record<string, string> = {
+  ONLINE: "text-green-400 bg-green-400/10",
+  BOOTING: "text-yellow-400 bg-yellow-400/10",
+  OFFLINE: "text-red-400 bg-red-400/10",
+  UNKNOWN: "text-slate-400 bg-slate-400/10",
+};
 
-  const statusColor = (status: string) => {
-    switch (status) {
-      case 'healthy':
-        return 'bg-green-600/30 text-green-400';
-      case 'warning':
-        return 'bg-yellow-600/30 text-yellow-400';
-      case 'critical':
-        return 'bg-red-600/30 text-red-400';
-      default:
-        return 'bg-slate-700 text-slate-400';
-    }
-  };
+export const PiClusterChamber = () => {
+  const [selectedNode, setSelectedNode] = useState<string | null>(null);
+  const active = mockPiNodes.find((n) => n.id === selectedNode);
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold text-slate-100 mb-2">
-          Pi Kluster Chamber
-        </h2>
-        <p className="text-sm text-slate-400">
-          Pi Kluster constellation shell
-        </p>
-      </div>
-
-      <div className="mt-8 space-y-4">
-        <h3 className="text-sm font-semibold text-slate-300 uppercase tracking-wide">
-          Cluster Nodes
-        </h3>
-        {nodes.length > 0 ? (
-          <div className="space-y-2">
-            {nodes.map((node) => (
-              <div
-                key={node.id}
-                className="p-4 bg-slate-900/50 rounded border border-slate-800 hover:border-slate-700 transition-colors"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className={`w-2 h-2 rounded-full ${node.status === 'healthy' ? 'bg-green-400' : 'bg-yellow-400'}`}></div>
-                    <div>
-                      <span className="text-slate-200 font-medium font-mono">
-                        {node.id}
-                      </span>
-                      <span className="ml-3 text-xs text-slate-500">
-                        {node.role} | {node.pods} pods
-                      </span>
-                    </div>
-                  </div>
-                  <span
-                    className={`text-xs px-2 py-1 rounded ${statusColor(node.status)}`}
-                  >
-                    {node.status}
-                  </span>
-                </div>
+    <div className="p-6 space-y-6">
+      <h2 className="text-2xl font-bold tracking-wide text-purple-300">
+        Pi Kluster
+      </h2>
+      <p className="text-sm text-slate-400">Cluster readiness pending federation ignition.</p>
+      {/* NODE GRID */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {mockPiNodes.map((node) => (
+          <button
+            key={node.id}
+            onClick={() => setSelectedNode(node.id)}
+            className="p-4 bg-slate-900/60 border border-slate-800 rounded-xl
+            hover:border-purple-500/60 hover:shadow-lg hover:shadow-purple-500/10
+            transition flex flex-col gap-3 text-left"
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Server className="w-4 h-4 text-purple-300" />
+                <span className="text-slate-200 font-medium">{node.label}</span>
               </div>
-            ))}
-          </div>
-        ) : (
-          <p className="text-slate-500 text-sm">Loading...</p>
-        )}
+              <span
+                className={`px-2 py-1 rounded text-xs font-medium
+                ${statusColors[node.status]}`}
+              >
+                {node.status}
+              </span>
+            </div>
+            <div className="flex items-center gap-3 text-xs text-slate-400">
+              <Cpu className="w-3 h-3" /> {node.cpu}
+              <Activity className="w-3 h-3" /> {node.temp}
+              <Wifi className="w-3 h-3" /> {node.ip}
+            </div>
+          </button>
+        ))}
       </div>
+      {/* RIGHT-SIDE DETAILS DRAWER */}
+      {active && (
+        <div className="fixed right-0 top-0 bottom-0 w-96 bg-[#0b0b12]/95 backdrop-blur-xl
+        border-l border-slate-800 shadow-2xl p-6 animate-in fade-in duration-300 overflow-y-auto">
+          <h3 className="text-xl font-semibold text-purple-300 mb-4">
+            {active.label}
+          </h3>
+          <div className="space-y-4">
+            <div className="p-4 bg-slate-900/60 rounded border border-slate-800">
+              <p className="text-sm text-slate-400">Status</p>
+              <span className={`text-sm ${statusColors[active.status]}`}>
+                {active.status}
+              </span>
+            </div>
+            <div className="p-4 bg-slate-900/60 rounded border border-slate-800 space-y-2">
+              <p className="text-sm text-slate-400">CPU</p>
+              <p className="text-slate-200">{active.cpu}</p>
+            </div>
+            <div className="p-4 bg-slate-900/60 rounded border border-slate-800 space-y-2">
+              <p className="text-sm text-slate-400">Temperature</p>
+              <p className="text-slate-200">{active.temp}</p>
+            </div>
+          </div>
+          <button
+            onClick={() => setSelectedNode(null)}
+            className="mt-8 w-full py-2 rounded-md bg-slate-800 hover:bg-slate-700
+            border border-slate-700 text-slate-300 transition"
+          >
+            Close
+          </button>
+        </div>
+      )}
     </div>
   );
 };

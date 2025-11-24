@@ -1,10 +1,6 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Terminal } from "lucide-react";
-import { routeCommand } from "../sage/commandRouter";
-import { CommandResponse } from "../sage/commandResponse";
 
 interface LogEntry {
   id: string;
@@ -100,17 +96,25 @@ export function OperatorTerminal() {
       const cmd = command.trim();
       if (!cmd) return;
 
+      if (cmd === "clear") {
+        setLogs([]);
+        return;
+      }
+
       // Add command to log
       addLog({ type: "command", content: cmd });
 
-      // Route command through federation system
-      await routeCommand(cmd, (response: CommandResponse) => {
-        if (response.status === "failed") {
-          addLog({ type: "error", content: response.message });
-        } else {
-          addStreamingOutput(response.message);
-        }
-      });
+      // Dispatch to federation system
+      window.dispatchEvent(
+        new CustomEvent("OPERATOR_COMMAND", {
+          detail: { command: cmd },
+        })
+      );
+
+      // Simulate response (replace with actual federation routing)
+      setTimeout(() => {
+        addStreamingOutput(`Command received: ${cmd}`);
+      }, 300);
     },
     [addLog, addStreamingOutput]
   );
@@ -139,49 +143,44 @@ export function OperatorTerminal() {
   };
 
   return (
-    <Card className="rounded-3xl bg-neutral-900/60 border border-white/10 backdrop-blur">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Terminal className="w-5 h-5 text-violet-400" />
-          Operator Terminal
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="h-[300px] overflow-auto pr-2 font-mono text-sm" ref={scrollRef}>
-          {logs.length === 0 ? (
-            <p className="text-sm text-white/40 text-center py-8">
-              Type a command to begin
-            </p>
-          ) : (
-            <div className="space-y-1">
-              {logs.map((log) => (
-                <div
-                  key={log.id}
-                  className={`flex items-start gap-2 ${
-                    log.type === "command"
-                      ? "text-violet-400"
-                      : log.type === "error"
-                      ? "text-red-400"
-                      : "text-white/80"
-                  }`}
-                >
-                  <span className="text-white/40 text-xs flex-shrink-0">
-                    {formatTime(log.timestamp)}
-                  </span>
-                  <span className="flex-shrink-0">
-                    {log.type === "command" ? "$" : log.type === "error" ? "!" : ">"}
-                  </span>
-                  <span className={log.isStreaming ? "animate-pulse" : ""}>
-                    {log.content}
-                  </span>
-                  {log.isStreaming && <span className="animate-pulse">▋</span>}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </CardContent>
-    </Card>
+    <div className="onboarding-terminal-frame h-full flex flex-col overflow-hidden">
+      <div className="onboarding-terminal-header">
+        <h2 className="onboarding-terminal-title">Operator Terminal</h2>
+      </div>
+      <div className="flex-1 overflow-auto px-6 py-4 pr-2 font-mono text-sm" ref={scrollRef}>
+        {logs.length === 0 ? (
+          <p className="text-sm text-white/40 text-center py-8">
+            Type a command to begin
+          </p>
+        ) : (
+          <div className="space-y-1">
+            {logs.map((log) => (
+              <div
+                key={log.id}
+                className={`flex items-start gap-2 ${
+                  log.type === "command"
+                    ? "text-violet-400"
+                    : log.type === "error"
+                    ? "text-red-400"
+                    : "text-white/80"
+                }`}
+              >
+                <span className="text-white/40 text-xs flex-shrink-0">
+                  {formatTime(log.timestamp)}
+                </span>
+                <span className="flex-shrink-0">
+                  {log.type === "command" ? "$" : log.type === "error" ? "!" : ">"}
+                </span>
+                <span className={log.isStreaming ? "animate-pulse" : ""}>
+                  {log.content}
+                </span>
+                {log.isStreaming && <span className="animate-pulse">▋</span>}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
 
