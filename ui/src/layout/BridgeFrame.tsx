@@ -6,6 +6,18 @@ import { OperatorInput } from "../components/OperatorInput";
 import { SidebarNavigator } from "../components/SidebarNavigator/SidebarNavigator";
 import { useUIShockwave } from "../core/UIShockwaveContext";
 
+const PANEL_REGISTRY: Record<string, React.ReactNode> = {
+  "arc-theta": <div>Theta Console TODO</div>,
+  "arc-sigma": <div>Sigma Console TODO</div>,
+  "arc-omega": <div>Omega Console TODO</div>,
+  "arc-rho2": <div>Rho² Console TODO</div>,
+  "arc-lambda": <div>Lambda Console TODO</div>,
+  "arc-chi": <div>Chi Console TODO</div>,
+  nodes: <div>Nodes Console TODO</div>,
+  agents: <div>Agents Overview TODO</div>,
+  cognition: <div>Cognition Stream TODO</div>,
+};
+
 interface BridgeFrameProps {
   activeChamber?: ReactNode;
   selectedItem?: string;
@@ -42,13 +54,12 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
     setSidebarOpen(true);
   }, []);
 
-  const handleSelectItem = useCallback(
-    (itemId: string) => {
-      onSelectItem?.(itemId);
-      setSidebarOpen(false);
-    },
-    [onSelectItem]
-  );
+  const handleSelectItem = useCallback((itemId: string) => {
+    onSelectItem?.(itemId);
+    setSidebarOpen(false);
+  }, [onSelectItem]);
+
+  const ActivePanel = selectedItem ? PANEL_REGISTRY[selectedItem] : null;
 
   return (
     <div
@@ -105,13 +116,13 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
           </div>
 
           {/* RIGHT: ACTIVE PANEL — ALWAYS VISIBLE WHEN SET */}
-          {activeChamber && (
+          {ActivePanel && (
             <div
               key={selectedItem}
               className="w-[420px] flex-shrink-0 h-full border-l border-slate-800 bg-[#0c0c13]/95
               backdrop-blur-xl shadow-2xl overflow-y-auto"
             >
-              {activeChamber}
+              {ActivePanel}
             </div>
           )}
         </div>
