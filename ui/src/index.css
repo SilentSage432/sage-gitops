@@ -101,6 +101,10 @@
   --sage-text-primary: #e8ecf7;
   --sage-text-secondary: rgba(232, 236, 247, 0.6);
   --sage-text-dim: rgba(232, 236, 247, 0.38);
+
+  --sage-bg-base: #050508;
+  --sage-bg-panel: rgba(10, 10, 15, 0.6);
+  --sage-border-glow: rgba(180, 80, 255, 0.12);
 }
 
 body, #root {
@@ -275,4 +279,17 @@ nav a.active,
 .sage-terminal-log {
   scrollbar-width: thin;
   scrollbar-color: rgba(120, 86, 255, 0.3) transparent;
+}
+
+body#sageRootLayout {
+  background: radial-gradient(
+      circle at 50% 0%,
+      rgba(60, 0, 120, 0.12),
+      rgba(5, 5, 8, 1)
+    ),
+    #050508;
+  background-attachment: fixed;
+  color: #e8e8f2;
+  -webkit-font-smoothing: antialiased;
+  font-family: 'Inter', system-ui, sans-serif;
 }
