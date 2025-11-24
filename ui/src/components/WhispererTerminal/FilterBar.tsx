@@ -1,6 +1,7 @@
 import React from "react";
 
 import { TelemetryCategory } from "../../sage/telemetry/TelemetryTypes";
+import { Badge } from "@/components/ui/badge";
 
 const categories: TelemetryCategory[] = [
   "ALL",
@@ -25,13 +26,14 @@ export function FilterBar({
   return (
     <div className="filter-bar">
       {categories.map((c) => (
-        <button
+        <Badge
           key={c}
-          className={`filter-btn ${active === c ? "active" : ""}`}
+          variant={active === c ? "default" : "outline"}
+          className={`filter-btn cursor-pointer ${active === c ? "active" : ""}`}
           onClick={() => onSelect(c)}
         >
           {c}
-        </button>
+        </Badge>
       ))}
     </div>
   );

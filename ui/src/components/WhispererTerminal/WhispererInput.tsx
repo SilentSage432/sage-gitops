@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { pushThought } from "../../sage/cognition/ThoughtChain";
 import { operatorCognitiveSync } from "../../systems/operatorCognitiveSync";
+import { Button } from "@/components/ui/button";
 
 interface WhispererInputProps {
   onSend: (content: string) => void;
@@ -71,13 +72,12 @@ export const WhispererInput: React.FC<WhispererInputProps> = ({ onSend }) => {
           onChange={(event) => setValue(event.target.value)}
           onKeyDown={handleKeyDown}
         />
-        <button
-          type="button"
+        <Button
           onClick={handleSend}
-          className="whisperer-send-btn px-5 py-3 rounded-xl font-semibold text-base tracking-wide uppercase"
+          className="whisperer-send-btn px-5 py-3 text-base font-semibold tracking-wide uppercase"
         >
           Send
-        </button>
+        </Button>
       </div>
     </div>
   );

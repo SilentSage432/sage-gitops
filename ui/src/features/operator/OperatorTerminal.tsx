@@ -7,6 +7,10 @@ import {
 } from "../../core/filters/useTelemetryFilter";
 import { useOperatorMemory } from "../../core/OperatorMemoryContext";
 import { routeCommand } from "../../sage/commandRouter";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
 
 type LogCategory = Exclude<TelemetryFilter, "ALL">;
 
@@ -176,19 +180,20 @@ export default function OperatorTerminal() {
   }, [activeFilter, log]);
 
   return (
-    <div className={`prime-terminal-aura prime-terminal-panel ${isIdle ? "prime-terminal-idle" : isJustActivated ? "prime-terminal-activated" : "prime-terminal-active"}`}>
+    <Card className={`prime-terminal-aura prime-terminal-panel ${isIdle ? "prime-terminal-idle" : isJustActivated ? "prime-terminal-activated" : "prime-terminal-active"}`}>
       {/* Filter Bar */}
       <div className="terminal-filter-bar">
         {FILTERS.map((cat) => (
-          <button
+          <Badge
             key={cat}
-            className={`terminal-filter-btn ${
+            variant={activeFilter === cat ? "default" : "outline"}
+            className={`terminal-filter-btn cursor-pointer ${
               activeFilter === cat ? "on" : "off"
             }`}
             onClick={() => setActiveFilter(cat)}
           >
             {cat.toUpperCase()}
-          </button>
+          </Badge>
         ))}
       </div>
 
@@ -211,25 +216,24 @@ export default function OperatorTerminal() {
       {/* Command Bar (Bottom Anchored) */}
       <div className={`prime-terminal-input ${isProcessing ? "prime-terminal-processing" : ""}`}>
         <div className="flex items-center gap-3">
-          <input
-            className="flex-1 bg-transparent border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500/50 placeholder-white/40 text-white text-base"
+          <Input
+            className="flex-1 text-base"
             value={input}
             placeholder="Issue command..."
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
           />
-          <button
-            type="button"
-            className="sage-command-send bg-purple-600 hover:bg-purple-500 rounded-xl px-5 py-3 text-white transition-all text-base"
+          <Button
+            className="sage-command-send text-base px-5 py-3"
             onClick={(e) => {
               e.preventDefault();
               handleSend();
             }}
           >
             Send
-          </button>
+          </Button>
         </div>
       </div>
-    </div>
+    </Card>
   );
 }
