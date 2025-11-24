@@ -14,6 +14,7 @@ import { ArcChiPanel } from '../features/arc/ArcChiPanel';
 import { PiClusterChamber } from '../features/federation/PiClusterChamber';
 import { OnboardingNexus } from '../features/federation/OnboardingNexus';
 import { NodesView } from '../features/federation/NodesView';
+import { FederationHealthCore } from '../features/federation/FederationHealthCore';
 import { AgentsOverview } from '../features/agents/AgentsOverview';
 import { AgentDetails } from '../features/agents/AgentDetails';
 import OperatorTerminal from "../features/operator/OperatorTerminal";
@@ -51,6 +52,8 @@ export const App: React.FC = () => {
         return <OnboardingNexus />;
       case 'nodes':
         return <NodesView />;
+      case "federation-health":
+        return <FederationHealthCore />;
       
       // Agents panels
       case 'agents':
