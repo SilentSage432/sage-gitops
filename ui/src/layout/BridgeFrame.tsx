@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { SidebarNavigator } from "../components/SidebarNavigator/SidebarNavigator";
 import { WhispererTerminal } from "../components/WhispererTerminal/WhispererTerminal";
 import { StatusBar } from "../components/StatusBar/StatusBar";
@@ -40,6 +40,7 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
   selectedItem,
   onSelectItem
 }) => {
+  const [activePanel, setActivePanel] = useState<string>("command-core");
   const { state } = useOperatorEffect();
   const cortex = useOperatorCortex(selectedItem);
   const awareness = useAwarenessMatrix();
@@ -74,6 +75,12 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
       : alertState.level === "warning" && alertState.burst
       ? "UI-warning-pulse"
       : "";
+
+  // Handle sidebar navigation clicks - set active panel to command-core
+  const handleSelectItem = (item: string) => {
+    onSelectItem?.(item);
+    setActivePanel("command-core");
+  };
 
   // UI Action Dispatcher Listener
   useEffect(() => {
@@ -126,22 +133,23 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
     >
       <div className="sage-surface flex flex-1 overflow-hidden min-h-0">
         {/* Left Panel: Federation Navigation */}
-        <div className="federation-left-nav w-64 border-r border-slate-800 flex-shrink-0 overflow-y-auto">
-          <SidebarNavigator selectedItem={selectedItem} onSelectItem={onSelectItem} />
+        <div className={`federation-left-nav w-64 border-r border-slate-800 flex-shrink-0 overflow-y-auto ${activePanel === "left-nav" ? "federation-active" : "federation-idle"}`}>
+          <SidebarNavigator selectedItem={selectedItem} onSelectItem={handleSelectItem} />
         </div>
 
         {/* Center Panel: Command Core */}
-        <div className="federation-command-core sage-main-console flex-1 flex flex-col overflow-hidden min-h-0">
+        <div className={`federation-command-core sage-main-console flex-1 flex flex-col overflow-hidden min-h-0 ${activePanel === "command-core" ? "federation-active" : "federation-idle"}`}>
           <WhispererTerminal />
         </div>
 
         {/* Right Panel: Telemetry & Control */}
         {activeChamber && (
           <div
-            className="federation-intel-stack sage-right-panel
+            className={`federation-intel-stack sage-right-panel
               w-96 border-l border-slate-800 flex-shrink-0
               flex flex-col min-h-0
-            "
+              ${activePanel === "intel-stack" ? "federation-active" : "federation-idle"}
+            `}
           >
             <div
               className="flex-1 overflow-y-auto p-6 min-h-0"

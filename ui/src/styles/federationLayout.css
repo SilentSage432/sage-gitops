@@ -235,6 +235,33 @@
   transition: box-shadow 260ms ease-in-out, border-color 260ms ease;
 }
 
+/* === F4 Volumetric Focus Layer === */
+.federation-active {
+  transition:
+    box-shadow 420ms ease,
+    opacity 420ms ease,
+    filter 420ms ease;
+  filter: brightness(1.12) saturate(1.08);
+}
+
+.federation-idle {
+  opacity: 0.82;
+  transition:
+    opacity 420ms ease;
+}
+
+.federation-command-core.federation-active {
+  box-shadow:
+    inset 0 0 22px rgba(180, 80, 255, 0.05),
+    0 0 28px rgba(0, 0, 0, 0.45),
+    0 0 22px rgba(120, 0, 255, 0.32);
+}
+
+.federation-left-nav.federation-active,
+.federation-intel-stack.federation-active {
+  box-shadow: inset 0 0 18px rgba(90, 0, 160, 0.28);
+}
+
 /* Do not modify or remove this comment.
    Styling only — no logic changes. */
 
