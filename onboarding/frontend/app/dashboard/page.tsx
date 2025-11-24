@@ -9,6 +9,7 @@ import { CheckCircle2, Clock, Building2, MapPin, Calendar, UserPlus, Download, B
 import { BootstrapStatusCard } from '@/components/BootstrapStatusCard';
 import { useFakeTelemetry } from '@/lib/useFakeTelemetry';
 import { useActivityStream } from '@/lib/useActivityStream';
+import { useStatusTiles } from '@/lib/useStatusTiles';
 
 export default function DashboardPage() {
   // Loading states
@@ -18,6 +19,7 @@ export default function DashboardPage() {
   // Live telemetry
   const telemetry = useFakeTelemetry();
   const activity = useActivityStream();
+  const tiles = useStatusTiles();
 
   const handleGenerateKit = () => {
     setIsGeneratingKit(true);
@@ -146,16 +148,38 @@ export default function DashboardPage() {
               </Card>
             </div>
             
-            {/* System Status Card */}
+            {/* Live Status Tiles */}
             <div className="slide-up" style={{ animationDelay: "0.25s" }}>
               <Card>
                 <CardHeader>
                   <CardTitle>System Status</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <Badge variant="secondary" className="capitalize">
-                    {telemetry.status}
-                  </Badge>
+                  <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                    {tiles.map((t) => (
+                      <div
+                        key={t.label}
+                        className={`
+                          rounded-xl p-4 border backdrop-blur 
+                          transition-all duration-500
+                          ${
+                            t.state === "ok"
+                              ? "border-emerald-500/40 bg-emerald-500/10"
+                              : t.state === "warning"
+                              ? "border-amber-500/40 bg-amber-500/10 animate-pulse"
+                              : "border-red-500/50 bg-red-500/20 shadow-[0_0_18px_rgba(255,0,0,0.45)]"
+                          }
+                        `}
+                      >
+                        <p className="text-white/90 font-medium">{t.label}</p>
+                        <p className="text-xs text-white/50 mt-1">
+                          {t.state === "ok" && "Stable"}
+                          {t.state === "warning" && "Degraded"}
+                          {t.state === "error" && "Fault"}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
                 </CardContent>
               </Card>
             </div>
