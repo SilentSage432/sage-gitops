@@ -15,6 +15,7 @@ import { PiClusterChamber } from '../features/federation/PiClusterChamber';
 import { OnboardingNexus } from '../features/federation/OnboardingNexus';
 import { NodesView } from '../features/federation/NodesView';
 import { FederationHealthCore } from '../features/federation/FederationHealthCore';
+import { FederationHealthMatrix } from '../features/federation/FederationHealthMatrix';
 import { MeshTelemetrySurface } from '../features/federation/MeshTelemetrySurface';
 import { AgentsOverview } from '../features/agents/AgentsOverview';
 import { AgentDetails } from '../features/agents/AgentDetails';
@@ -54,7 +55,7 @@ export const App: React.FC = () => {
       case 'nodes':
         return <NodesView />;
       case "federation-health":
-        return <FederationHealthCore />;
+        return <FederationHealthMatrix />;
       case "mesh-telemetry":
         return <MeshTelemetrySurface />;
       

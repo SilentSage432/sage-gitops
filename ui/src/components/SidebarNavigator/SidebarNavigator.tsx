@@ -48,7 +48,7 @@ export const SidebarNavigator: React.FC<SidebarNavigatorProps> = ({
         { id: 'pi-kluster', label: 'Pi Kluster' },
         { id: 'onboarding-nexus', label: 'Onboarding Nexus' },
         { id: 'nodes', label: 'Nodes' },
-        { id: 'federation-health', label: 'Health Core' },
+        { id: 'federation-health', label: 'Federation Health' },
         { id: 'mesh-telemetry', label: 'Mesh Telemetry' }
       ]
     },
