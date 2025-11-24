@@ -200,6 +200,7 @@ export default function ReviewPage() {
               <div className="flex justify-center mb-6">
                 <CheckCircle2 className="w-16 h-16 text-[#10b981]" />
               </div>
+            </div>
               <h2 className="text-3xl font-semibold tracking-tight text-[#e2e6ee]">
                 Bootstrap Kit Ready
               </h2>
@@ -521,6 +522,7 @@ export default function ReviewPage() {
             <div className="hidden sm:block w-24" /> {/* Spacer for alignment */}
           </div>
         </div>
+      </div>
       </div>
     </OCTGuard>
   );

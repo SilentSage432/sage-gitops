@@ -323,6 +323,7 @@ export default function AccessPage() {
           </div>
         </div>
       </div>
+      </div>
     </OCTGuard>
   );
 }
