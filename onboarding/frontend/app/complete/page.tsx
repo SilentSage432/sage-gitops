@@ -32,10 +32,10 @@ export default function CompletePage() {
       return;
     }
 
-    // Auto-redirect to dashboard after 800ms
+    // Auto-redirect to success page after 800ms
     setIsRedirecting(true);
     const redirectTimer = setTimeout(() => {
-      router.push('/dashboard');
+      router.push('/success');
     }, 800);
 
     return () => {
