@@ -4,6 +4,8 @@ import { cn } from '@/utils/cn';
 interface SidebarNavigatorProps {
   selectedItem?: string;
   onSelectItem?: (item: string) => void;
+  onClose?: () => void;
+  isOpen?: boolean;
 }
 
 interface NavSection {
@@ -20,7 +22,9 @@ interface NavSection {
  */
 export const SidebarNavigator: React.FC<SidebarNavigatorProps> = ({
   selectedItem,
-  onSelectItem
+  onSelectItem,
+  onClose,
+  isOpen = false,
 }) => {
   const navSections: NavSection[] = [
     {
@@ -51,13 +55,6 @@ export const SidebarNavigator: React.FC<SidebarNavigatorProps> = ({
       items: [{ id: 'agents', label: 'Agents Overview' }]
     },
     {
-      title: 'Operator',
-      items: [
-        { id: 'tools', label: 'Operator Tools' },
-        { id: 'operator-terminal', label: 'Operator Terminal', symbol: '⌘' }
-      ]
-    },
-    {
       title: 'Cognition',
       items: [
         { id: 'cognition', label: 'Cognition Stream' }
@@ -71,12 +68,25 @@ export const SidebarNavigator: React.FC<SidebarNavigatorProps> = ({
 
   return (
     <aside className="federation-left-nav sage-sidebar h-full bg-[#0d0d12] border-r border-slate-800 p-4 flex flex-col gap-6 overflow-y-auto">
-      <div className="mb-4">
-        <h1 className="text-xl font-bold tracking-wide text-slate-100">
-          SAGE Federation
-        </h1>
-        <p className="text-xs text-slate-500 mt-1">Navigation</p>
+      <div className="mb-2 flex items-start justify-between gap-3">
+        <div>
+          <h1 className="text-xl font-bold tracking-wide text-slate-100">
+            SAGE Federation
+          </h1>
+          <p className="text-xs text-slate-500 mt-1">Navigation</p>
+        </div>
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="text-xs uppercase tracking-wide text-slate-400 hover:text-white transition-colors"
+          >
+            Close
+          </button>
+        )}
       </div>
+      <span className={`text-[10px] uppercase tracking-[0.3em] ${isOpen ? "text-emerald-400" : "text-slate-500"}`}>
+        {isOpen ? "Panel Open" : "Panel Closed"}
+      </span>
 
       {navSections.map((section) => (
         <div key={section.title} className="flex flex-col gap-2">

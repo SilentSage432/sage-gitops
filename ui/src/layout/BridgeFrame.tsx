@@ -1,248 +1,71 @@
-import React, { useEffect, useState, useRef } from "react";
-import { motion } from "framer-motion";
+import React, { useState, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X } from "lucide-react";
+import { OperatorTerminal } from "../components/OperatorTerminal";
+import { OperatorInput } from "../components/OperatorInput";
 import { SidebarNavigator } from "../components/SidebarNavigator/SidebarNavigator";
-import { WhispererTerminal } from "../components/WhispererTerminal/WhispererTerminal";
-import { StatusBar } from "../components/StatusBar/StatusBar";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Send } from "lucide-react";
-import { useOperatorEffect } from "../core/OperatorEffectContext";
-import { useHybridAutonomy } from "../sage/hybrid/useHybridAutonomy";
-import { useUIAlertsBridge } from "../core/useUIAlertsBridge";
-import { PredictiveOverlay } from "../sage/predictive/ui/PredictiveOverlay";
-import { usePredictiveWS } from "../sage/predictive/ws/usePredictiveWS";
-import { useUIShockwave } from "../core/UIShockwaveContext";
-import { useKernelHeartbeat } from "../core/hooks/useKernelHeartbeat";
-import { useKernelSignal } from "../sage/kernel/useKernelSignal";
-import { useReflex } from "../sage/kernel/useReflex";
-import { useHeartbeat } from "../sage/kernel/useHeartbeat";
-import { startKernelPulse } from "../sage/kernel/KernelPulse";
-import { subscribeKernel } from "../sage/kernel/KernelSignalBus";
-import { useENFL } from "../sage/enfl/useENFL";
-import useOperatorCortex from "../core/OperatorCortex";
-import useAutoSurface from "../core/AutoSurfaceEngine";
-import useAwarenessMatrix from "../core/awareness/AwarenessMatrix";
-import useAutonomicSafeguard from "../core/safeguards/useAutonomicSafeguard";
-import useSelfHealingLoop from "../core/recovery/useSelfHealingLoop";
-import { useStabilityForecast } from "../sage/cognition/useStabilityForecast";
-import { ForecastHUD } from "../components/ForecastHUD/ForecastHUD";
-import "../components/ForecastHUD/ForecastHUD.css";
-import "../styles/ui-alerts.css";
 
-interface BridgeFrameProps {
-  activeChamber?: React.ReactNode;
-  selectedItem?: string;
-  onSelectItem?: (item: string) => void;
-}
+export const BridgeFrame: React.FC = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [selectedNavItem, setSelectedNavItem] = useState<string>();
 
-/**
- * BridgeFrame – The core Operator Bridge layout
- * Contains: Left Navigator, Center Whisperer, Right Chamber, Bottom Status Bar
- */
-export const BridgeFrame: React.FC<BridgeFrameProps> = ({ 
-  activeChamber, 
-  selectedItem,
-  onSelectItem
-}) => {
-  const [activePanel, setActivePanel] = useState<string>("command-core");
-  const { state } = useOperatorEffect();
-  const cortex = useOperatorCortex(selectedItem);
-  const awareness = useAwarenessMatrix();
-  const errorSignal = awareness === "ALERT";
-  useAutonomicSafeguard(awareness);
-  useSelfHealingLoop(errorSignal);
-  useStabilityForecast();
-  useAutoSurface(cortex.isOperatorActive);
-  useHybridAutonomy();
-  useUIAlertsBridge();
-  useKernelHeartbeat();
-  usePredictiveWS();
-  useENFL(); // enables emergent responsiveness
-
-  useEffect(() => {
-    startKernelPulse();
+  const handleToggleSidebar = useCallback(() => {
+    setSidebarOpen((prev) => !prev);
   }, []);
 
-  useReflex();
-  useHeartbeat();
-
-  const kernelPulse = useKernelSignal("kernel.pulse");
-  const kernelWarning = useKernelSignal("kernel.warning");
-  const reflexFlash = useKernelSignal("kernel.flash");
-  const hb = useKernelSignal("kernel.pulse.ui");
-
-  const alertState = useUIShockwave().state;
-
-  const alertClass =
-    alertState.level === "critical"
-      ? "UI-critical-shockwave"
-      : alertState.level === "warning" && alertState.burst
-      ? "UI-warning-pulse"
-      : "";
-
-  // Handle sidebar navigation clicks - set active panel to command-core
-  const handleSelectItem = (item: string) => {
-    onSelectItem?.(item);
-    setActivePanel("command-core");
-  };
-
-  // UI Action Dispatcher Listener
-  useEffect(() => {
-    function onAction(e: CustomEvent) {
-      const { action, payload } = e.detail;
-
-      if (action === "ui.focus.arc") {
-        onSelectItem?.(`arc-${payload.arc}`);
-      }
-      if (action === "ui.focus.rho2") {
-        onSelectItem?.("arc-rho2");
-      }
-      if (action === "ui.open.operator-terminal") {
-        onSelectItem?.("operator-terminal");
-        cortex.registerCommand();
-      }
-      if (action === "ui.surface.panel") {
-        const { panel } = payload;
-        onSelectItem?.(panel);
-      }
-    }
-
-    window.addEventListener("SAGE_UI_ACTION", onAction as EventListener);
-    return () =>
-      window.removeEventListener("SAGE_UI_ACTION", onAction as EventListener);
-  }, [onSelectItem, cortex]);
-
-  // Kernel focus arc listener
-  useEffect(() => {
-    const unsub = subscribeKernel("kernel.focus.arc", (payload) => {
-      onSelectItem?.(`arc-${payload.arc}`);
-    });
-    return unsub;
-  }, [onSelectItem]);
+  const handleSelectItem = useCallback(
+    (itemId: string) => {
+      setSelectedNavItem(itemId);
+      setSidebarOpen(false);
+    },
+    []
+  );
 
   return (
-    <div
-      className={`
-        relative flex h-screen w-screen sage-ui-surface text-white overflow-hidden flex-col
-        transition-all duration-700
-        ${state.flash ? "ring-4 ring-purple-500" : ""}
-        ${alertClass}
-        ${kernelPulse ? "ring-1 ring-purple-600/20" : ""}
-        ${kernelWarning ? "bg-[#12030a]" : ""}
-        ${reflexFlash ? `animate-[reflexFlash_0.8s_ease-out]` : ""}
-        ${hb ? "animate-[uiPulse_1.2s_ease-in-out]" : ""}
-        ${awareness === "ELEVATED" ? "ring-2 ring-yellow-500" : ""}
-        ${awareness === "ALERT" ? "ring-4 ring-red-500" : ""}
-      `}
-      style={{ paddingBottom: "80px" }}
-    >
-      <div className="sage-surface flex flex-1 overflow-hidden min-h-0">
-        {/* Left Panel: Federation Navigation */}
-        <div className={`federation-left-nav w-64 border-r border-slate-800 flex-shrink-0 overflow-y-auto ${activePanel === "left-nav" ? "federation-active" : "federation-idle"}`}>
-          <SidebarNavigator selectedItem={selectedItem} onSelectItem={handleSelectItem} />
+    <div className="min-h-screen bg-[#0b0c0f] text-white relative flex flex-col">
+      <button
+        type="button"
+        aria-label="Toggle sidebar"
+        onClick={handleToggleSidebar}
+        className="fixed top-4 left-4 z-50 inline-flex items-center justify-center rounded-md border border-white/10 bg-black/40 px-3 py-2 text-sm text-white hover:bg-black/60 transition-colors"
+      >
+        {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+      </button>
+      <div className="flex-1 overflow-y-auto pt-16 pb-24 w-full">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <OperatorTerminal />
         </div>
-
-        {/* Center Panel: Command Core */}
-        <motion.div
-          className={`federation-command-core prime-holo-surface sage-main-console flex-1 flex flex-col overflow-hidden min-h-0 ${activePanel === "command-core" ? "federation-active" : "federation-idle"}`}
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            default: { duration: 0.35, ease: "easeOut" },
-            scale: { duration: 0.4, ease: "easeInOut" }
-          }}
-          whileHover={{ scale: 1.012 }}
-        >
-          <WhispererTerminal />
-        </motion.div>
-
-        {/* Right Panel: Telemetry & Control */}
-        {activeChamber && (
-          <motion.div
-            className={`federation-intel-stack sage-right-panel
-              w-96 border-l border-slate-800 flex-shrink-0
-              flex flex-col min-h-0
-              ${activePanel === "intel-stack" ? "federation-active" : "federation-idle"}
-            `}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              default: { duration: 0.35, ease: "easeOut" },
-              scale: { duration: 0.4, ease: "easeInOut" }
-            }}
-            whileHover={{ scale: 1.012 }}
-          >
-            <div
-              className="flex-1 overflow-y-auto p-6 min-h-0"
-              style={{ paddingTop: "12px" }}
+      </div>
+      <OperatorInput />
+      <AnimatePresence>
+        {sidebarOpen && (
+          <>
+            <motion.div
+              className="fixed inset-0 bg-black/50 backdrop-blur-[2px] z-40"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={handleToggleSidebar}
+            />
+            <motion.aside
+              className="fixed inset-y-0 left-0 w-80 max-w-sm bg-[#0d0d12] border-r border-slate-800 z-50 shadow-2xl"
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "spring", stiffness: 260, damping: 30 }}
             >
-              {activeChamber}
-            </div>
-          </motion.div>
+              <SidebarNavigator
+                selectedItem={selectedNavItem}
+                onSelectItem={handleSelectItem}
+                onClose={handleToggleSidebar}
+                isOpen={sidebarOpen}
+              />
+            </motion.aside>
+          </>
         )}
-      </div>
-
-      <PredictiveOverlay />
-
-      {/* Bottom Status Bar */}
-      <div className="h-12 flex-shrink-0 border-t border-slate-800">
-        <StatusBar />
-      </div>
-
-      <ForecastHUD />
-
-      {/* Global Command Input Bar */}
-      <GlobalCommandBar />
+      </AnimatePresence>
     </div>
   );
 };
 
-// Global Command Input Bar Component
-const GlobalCommandBar: React.FC = () => {
-  const [input, setInput] = useState("");
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const command = input.trim();
-    if (!command) return;
-
-    // Dispatch command to OperatorTerminal
-    window.dispatchEvent(new CustomEvent("OPERATOR_COMMAND", {
-      detail: { command }
-    }));
-
-    setInput("");
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      handleSubmit(e);
-    }
-  };
-
-  return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 global-command-bar">
-      <div className="max-w-5xl mx-auto px-4" style={{ paddingTop: "8px", paddingBottom: "8px" }}>
-        <form onSubmit={handleSubmit} className="flex gap-2">
-          <Input
-            ref={inputRef}
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder="Enter command... (Shift+Enter for newline)"
-            className="flex-1 font-mono text-sm bg-slate-900/80 backdrop-blur-md border-slate-700"
-            style={{ height: "calc(1.5rem + 8px)" }}
-          />
-          <Button type="submit" variant="default" size="default" className="shrink-0" style={{ height: "calc(1.5rem + 8px)" }}>
-            <Send className="w-4 h-4 mr-2" />
-            Send
-          </Button>
-        </form>
-      </div>
-    </div>
-  );
-};
-
+export default BridgeFrame;
