@@ -60,23 +60,25 @@ export const WhispererInput: React.FC<WhispererInputProps> = ({ onSend }) => {
   }, [value, adjustHeight]);
 
   return (
-    <div className="federation-input-dock sage-command-bar whisperer-input flex items-end gap-3">
-      <textarea
-        ref={textareaRef}
-        className="whisperer-input-area flex-1 resize-none rounded-xl border bg-[#050506] p-3 text-sm text-slate-100 placeholder:text-slate-500 transition"
-        rows={1}
-        placeholder="Transmit to the Mesh… (Shift+Enter for newline)"
-        value={value}
-        onChange={(event) => setValue(event.target.value)}
-        onKeyDown={handleKeyDown}
-      />
-      <button
-        type="button"
-        onClick={handleSend}
-        className="whisperer-send-btn px-5 py-2 rounded-xl font-semibold text-sm tracking-wide uppercase"
-      >
-        Send
-      </button>
+    <div className="prime-terminal-input">
+      <div className="flex items-end gap-3">
+        <textarea
+          ref={textareaRef}
+          className="whisperer-input-area flex-1 resize-none rounded-xl border bg-[#050506] p-4 text-base text-slate-100 placeholder:text-slate-500 transition"
+          rows={1}
+          placeholder="Transmit to the Mesh… (Shift+Enter for newline)"
+          value={value}
+          onChange={(event) => setValue(event.target.value)}
+          onKeyDown={handleKeyDown}
+        />
+        <button
+          type="button"
+          onClick={handleSend}
+          className="whisperer-send-btn px-5 py-3 rounded-xl font-semibold text-base tracking-wide uppercase"
+        >
+          Send
+        </button>
+      </div>
     </div>
   );
 };
