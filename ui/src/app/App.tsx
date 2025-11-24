@@ -71,7 +71,7 @@ export const App: React.FC = () => {
         );
       
       case "operator-terminal":
-        return <OperatorTerminal />;
+        return null; // Terminal is now always shown in main area, not in drawer
       
       case "cognition":
         return <CognitionPanel />;
@@ -88,9 +88,9 @@ export const App: React.FC = () => {
           <UIShockwaveProvider>
             <UIPulseProvider>
               <BridgeFrame
-                activeChamber={renderActiveChamber()}
                 selectedItem={selectedItem}
                 onSelectItem={setSelectedItem}
+                activeChamber={renderActiveChamber()}
               />
             </UIPulseProvider>
           </UIShockwaveProvider>
