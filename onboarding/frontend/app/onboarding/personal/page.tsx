@@ -258,6 +258,7 @@ export default function PersonalOnboardingPage() {
               </div>
             </CardContent>
           </Card>
+          </div>
         </div>
       </div>
     </div>
