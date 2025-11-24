@@ -1,7 +1,10 @@
 import React from "react";
 import { Activity, Radio, RefreshCw, Shield, Clock } from "lucide-react";
+import { FederationTopology } from "./health/FederationTopology";
+import { useTopologyNodes } from "./health/useTopologyNodes";
 
 export const FederationHealthCore = () => {
+  const topologyNodes = useTopologyNodes();
   return (
     <div className="h-full flex flex-col overflow-hidden w-full">
       {/* HEADER */}
@@ -17,6 +20,12 @@ export const FederationHealthCore = () => {
       {/* SCROLLABLE CONTENT */}
       <div className="flex-1 overflow-y-auto min-w-0">
         <div className="p-6 space-y-6 min-w-0">
+          {/* TOPOLOGY VISUALIZATION */}
+          <div className="min-w-0 overflow-hidden">
+            <h3 className="text-lg font-semibold text-slate-200 mb-3 truncate">Network Topology</h3>
+            <FederationTopology nodes={topologyNodes} />
+          </div>
+
           {/* STATUS SUMMARY GRID */}
           <div className="grid grid-cols-2 gap-4 min-w-0">
             {/* MESH STATUS */}
