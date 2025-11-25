@@ -4,8 +4,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/go-webauthn/webauthn/webauthn"
@@ -20,11 +22,11 @@ func handleWebAuthnChallenge(w http.ResponseWriter, r *http.Request) {
 
 	// Check if operator key already exists and has credentials
 	var hasCredential bool
-	err := dbPool.QueryRow(ctx, 
+	err := dbPool.QueryRow(ctx,
 		"SELECT EXISTS(SELECT 1 FROM public.operator_keys WHERE user_id = $1 AND credential_data IS NOT NULL)",
 		"tyson",
 	).Scan(&hasCredential)
-	
+
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(map[string]interface{}{
@@ -47,7 +49,7 @@ func handleWebAuthnChallenge(w http.ResponseWriter, r *http.Request) {
 			"SELECT credential_data FROM public.operator_keys WHERE user_id = $1 AND credential_data IS NOT NULL ORDER BY created_at DESC LIMIT 1",
 			"tyson",
 		).Scan(&credentialBytes)
-		
+
 		if err == nil {
 			var cred webauthn.Credential
 			if err := json.Unmarshal(credentialBytes, &cred); err == nil {
@@ -173,7 +175,7 @@ func handleWebAuthnVerify(w http.ResponseWriter, r *http.Request) {
 			"SELECT credential_data FROM public.operator_keys WHERE user_id = $1 AND credential_data IS NOT NULL ORDER BY created_at DESC LIMIT 1",
 			"tyson",
 		).Scan(&credentialBytes)
-		
+
 		if err == nil {
 			var cred webauthn.Credential
 			if err := json.Unmarshal(credentialBytes, &cred); err == nil {
@@ -257,7 +259,7 @@ func handleIssueOCT(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(map[string]interface{}{
 			"token":     "mock-oct-token",
-			"expiresAt": time.Now().Add(10 * time.Minute).Unix() * 1000, // JavaScript timestamp
+			"expiresAt": time.Now().Add(10*time.Minute).Unix() * 1000, // JavaScript timestamp
 			"scopes":    []string{"tenant.create", "agent.plan.create", "bootstrap.sign"},
 		})
 		return
@@ -322,12 +324,12 @@ func handleIssueOCT(w http.ResponseWriter, r *http.Request) {
 	expiresAt := now.Add(10 * time.Minute)
 
 	claims := jwt.MapClaims{
-		"sub":      "tyson",
-		"iat":      now.Unix(),
-		"exp":      expiresAt.Unix(),
-		"scopes":   []string{"tenant.create", "agent.plan.create", "bootstrap.sign"},
-		"type":     "oct",
-		"jti":      uuid.New().String(),
+		"sub":    "tyson",
+		"iat":    now.Unix(),
+		"exp":    expiresAt.Unix(),
+		"scopes": []string{"tenant.create", "agent.plan.create", "bootstrap.sign"},
+		"type":   "oct",
+		"jti":    uuid.New().String(),
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
@@ -440,6 +442,45 @@ func handleVerifyOCT(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// Request structs matching frontend schema
+type CompanyData struct {
+	Name     string  `json:"name"`
+	Email    string  `json:"email"`
+	Industry *string `json:"industry,omitempty"`
+	Size     *string `json:"size,omitempty"`
+	// Legacy fields for backward compatibility
+	Domain *string `json:"domain,omitempty"`
+	Region *string `json:"region,omitempty"`
+}
+
+type DataRegionsConfig struct {
+	Sensitivity       *string  `json:"sensitivity,omitempty"`
+	SelectedRegions   []string `json:"selectedRegions"`
+	ResidencyRequired bool     `json:"residencyRequired"`
+}
+
+type AgentSelection struct {
+	SelectedAgents []string `json:"selectedAgents"`
+}
+
+type AccessConfig struct {
+	AuthMethod       string  `json:"authMethod"` // "local" | "sso"
+	ScimEnabled      bool    `json:"scimEnabled,omitempty"`
+	IdentityProvider *string `json:"identityProvider,omitempty"`
+	ClientId         *string `json:"clientId,omitempty"`
+	ClientSecret     *string `json:"clientSecret,omitempty"`
+	CallbackUrl      *string `json:"callbackUrl,omitempty"`
+	AdminEmail       *string `json:"adminEmail,omitempty"`
+	TempPassword     *string `json:"tempPassword,omitempty"`
+}
+
+type CreateTenantRequest struct {
+	Company           CompanyData       `json:"company"`
+	DataRegionsConfig DataRegionsConfig `json:"dataRegionsConfig"`
+	AgentSelection    AgentSelection    `json:"agentSelection"`
+	AccessConfig      AccessConfig      `json:"accessConfig"`
+}
+
 // Create Tenant Handler
 func handleCreateTenant(w http.ResponseWriter, r *http.Request) {
 	// Force bypass for development
@@ -495,33 +536,175 @@ func handleCreateTenant(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var req struct {
-		Company     interface{} `json:"company"`
-		DataRegions interface{} `json:"dataRegions"`
-		AgentPlan   interface{} `json:"agentPlan"`
-		AccessModel interface{} `json:"accessModel"`
-	}
-
+	// Parse request with correct struct
+	var req CreateTenantRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		http.Error(w, "Invalid request", http.StatusBadRequest)
+		http.Error(w, fmt.Sprintf("Invalid request: %v", err), http.StatusBadRequest)
 		return
 	}
 
+	// Validate required fields
+	if req.Company.Name == "" {
+		http.Error(w, "Company name is required", http.StatusBadRequest)
+		return
+	}
+	if req.Company.Email == "" {
+		http.Error(w, "Company email is required", http.StatusBadRequest)
+		return
+	}
+	if len(req.DataRegionsConfig.SelectedRegions) == 0 {
+		http.Error(w, "At least one data region must be selected", http.StatusBadRequest)
+		return
+	}
+	if len(req.AgentSelection.SelectedAgents) == 0 {
+		http.Error(w, "At least one agent must be selected", http.StatusBadRequest)
+		return
+	}
+	if req.AccessConfig.AuthMethod == "" {
+		http.Error(w, "Authentication method is required", http.StatusBadRequest)
+		return
+	}
+
+	// Validate auth method specific fields
+	if req.AccessConfig.AuthMethod == "local" {
+		if req.AccessConfig.AdminEmail == nil || *req.AccessConfig.AdminEmail == "" {
+			http.Error(w, "Admin email is required for local authentication", http.StatusBadRequest)
+			return
+		}
+	} else if req.AccessConfig.AuthMethod == "sso" {
+		if req.AccessConfig.ClientId == nil || *req.AccessConfig.ClientId == "" {
+			http.Error(w, "Client ID is required for SSO", http.StatusBadRequest)
+			return
+		}
+		if req.AccessConfig.ClientSecret == nil || *req.AccessConfig.ClientSecret == "" {
+			http.Error(w, "Client Secret is required for SSO", http.StatusBadRequest)
+			return
+		}
+	} else {
+		http.Error(w, "Invalid authentication method", http.StatusBadRequest)
+		return
+	}
+
+	// Begin transaction
+	tx, err := dbPool.Begin(ctx)
+	if err != nil {
+		http.Error(w, "Failed to start transaction", http.StatusInternalServerError)
+		return
+	}
+	defer tx.Rollback(ctx)
+
 	// Create tenant
 	tenantID := uuid.New().String()
-	tenantData, _ := json.Marshal(req)
+	now := time.Now()
 
-	_, err = dbPool.Exec(ctx,
-		"INSERT INTO public.tenants (id, name, config_data, created_at, updated_at) VALUES ($1, $2, $3, $4, $5)",
+	// Extract domain from email if not provided
+	domain := req.Company.Domain
+	if domain == nil || *domain == "" {
+		// Extract domain from email (simple extraction)
+		emailParts := strings.Split(req.Company.Email, "@")
+		if len(emailParts) == 2 {
+			domainStr := emailParts[1]
+			domain = &domainStr
+		}
+	}
+
+	// Use first selected region as primary region (for backward compatibility)
+	primaryRegion := ""
+	if len(req.DataRegionsConfig.SelectedRegions) > 0 {
+		primaryRegion = req.DataRegionsConfig.SelectedRegions[0]
+	}
+
+	// Store full config in JSONB
+	configData, err := json.Marshal(req)
+	if err != nil {
+		http.Error(w, "Failed to marshal config data", http.StatusInternalServerError)
+		return
+	}
+
+	// Insert tenant with proper name
+	_, err = tx.Exec(ctx,
+		"INSERT INTO public.tenants (id, name, domain, region, config_data, status, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
 		tenantID,
-		"tenant-"+tenantID[:8],
-		tenantData,
-		time.Now(),
-		time.Now(),
+		req.Company.Name, // Use actual company name
+		domain,
+		primaryRegion,
+		configData,
+		"pending",
+		now,
+		now,
 	)
 
 	if err != nil {
-		http.Error(w, "Failed to create tenant", http.StatusInternalServerError)
+		http.Error(w, fmt.Sprintf("Failed to create tenant: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	// Create tenant_agents junction records
+	if len(req.AgentSelection.SelectedAgents) > 0 {
+		// Verify agents exist in registry (optional check)
+		for _, agentID := range req.AgentSelection.SelectedAgents {
+			var agentExists bool
+			err := tx.QueryRow(ctx,
+				"SELECT EXISTS(SELECT 1 FROM public.agents WHERE id = $1)",
+				agentID,
+			).Scan(&agentExists)
+
+			// If agents table doesn't exist or agent not found, still create the link
+			// (allows for backward compatibility during migration)
+			if err == nil && !agentExists {
+				// Log warning but continue (agent might be added later)
+				log.Printf("Warning: Agent %s not found in registry, creating link anyway", agentID)
+			}
+
+			// Insert tenant_agent link
+			_, err = tx.Exec(ctx,
+				"INSERT INTO public.tenant_agents (tenant_id, agent_id, created_at) VALUES ($1, $2, $3) ON CONFLICT (tenant_id, agent_id) DO NOTHING",
+				tenantID,
+				agentID,
+				now,
+			)
+			if err != nil {
+				// If tenant_agents table doesn't exist yet, log and continue
+				// (migration might not have run)
+				log.Printf("Warning: Failed to create tenant_agent link: %v (table may not exist)", err)
+			}
+		}
+	}
+
+	// Store access config in tenant_policies for queryability
+	accessPolicyData, err := json.Marshal(req.AccessConfig)
+	if err == nil {
+		// Check if policy already exists, update if it does, insert if not
+		var policyExists bool
+		_ = tx.QueryRow(ctx,
+			"SELECT EXISTS(SELECT 1 FROM public.tenant_policies WHERE tenant_id = $1 AND policy_type = $2)",
+			tenantID,
+			"access_config",
+		).Scan(&policyExists)
+
+		if policyExists {
+			_, _ = tx.Exec(ctx,
+				"UPDATE public.tenant_policies SET policy_data = $1, updated_at = $2 WHERE tenant_id = $3 AND policy_type = $4",
+				accessPolicyData,
+				now,
+				tenantID,
+				"access_config",
+			)
+		} else {
+			_, _ = tx.Exec(ctx,
+				"INSERT INTO public.tenant_policies (tenant_id, policy_type, policy_data, created_at, updated_at) VALUES ($1, $2, $3, $4, $5)",
+				tenantID,
+				"access_config",
+				accessPolicyData,
+				now,
+				now,
+			)
+		}
+	}
+
+	// Commit transaction
+	if err := tx.Commit(ctx); err != nil {
+		http.Error(w, "Failed to commit transaction", http.StatusInternalServerError)
 		return
 	}
 
@@ -530,8 +713,8 @@ func handleCreateTenant(w http.ResponseWriter, r *http.Request) {
 		"INSERT INTO public.audit_log (event_type, user_id, details, created_at) VALUES ($1, $2, $3, $4)",
 		"tenant_created",
 		claims["sub"].(string),
-		fmt.Sprintf(`{"tenant_id": "%s"}`, tenantID),
-		time.Now(),
+		fmt.Sprintf(`{"tenant_id": "%s", "company_name": "%s", "agents": %v}`, tenantID, req.Company.Name, req.AgentSelection.SelectedAgents),
+		now,
 	)
 
 	w.Header().Set("Content-Type", "application/json")
@@ -662,4 +845,3 @@ func (u *WebAuthnUser) WebAuthnCredentials() []webauthn.Credential {
 func (u *WebAuthnUser) WebAuthnIcon() string {
 	return ""
 }
-
