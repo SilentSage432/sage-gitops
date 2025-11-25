@@ -5,7 +5,9 @@ import { OperatorTerminal } from "../components/OperatorTerminal";
 import { OperatorInput } from "../components/OperatorInput";
 import { SidebarNavigator } from "../components/SidebarNavigator/SidebarNavigator";
 import { useUIShockwave } from "../core/UIShockwaveContext";
+import { useUIPulse } from "../core/UIPulseContext";
 import { KernelRegistry } from "../sage/kernel/KernelSignalRegistry";
+import { federationAlerts } from "../core/alert/FederationAlertEngine";
 import Rho2Panel from "../panels/Rho2Panel";
 import NodesPanel from "../panels/NodesPanel";
 import AgentsPanel from "../panels/AgentsPanel";
@@ -24,7 +26,8 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
   activeChamber,
 }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const alertState = useUIShockwave().state;
+  const { state: alertState, triggerWarning, triggerCritical } = useUIShockwave();
+  const { pulseMedium, pulseStrong } = useUIPulse();
   console.log("🎯 ACTIVE SELECTED ITEM:", selectedItem);
 
   const alertClass =
@@ -62,6 +65,72 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
     return () => {
       KernelRegistry.clearAll();
     };
+  }, [onSelectItem]);
+
+  // ✅ Federation Alert Engine - UI Reactions
+  useEffect(() => {
+    const onAlert = (alert: any) => {
+      // UI reaction based on severity
+      if (alert.severity === "warning") {
+        triggerWarning();
+        pulseMedium();
+        document.body.dispatchEvent(new CustomEvent("UI_WARNING"));
+      }
+      if (alert.severity === "elevated") {
+        triggerWarning();
+        pulseStrong();
+        document.body.dispatchEvent(new CustomEvent("UI_ELEVATED"));
+      }
+      if (alert.severity === "critical") {
+        triggerCritical();
+        document.body.dispatchEvent(new CustomEvent("UI_CRITICAL"));
+      }
+      if (alert.severity === "fatal") {
+        triggerCritical();
+        document.body.dispatchEvent(new CustomEvent("UI_FATAL"));
+      }
+    };
+
+    const onEsc = (data: any) => {
+      if (data.level === "critical") {
+        triggerCritical();
+        document.body.dispatchEvent(new CustomEvent("UI_CRITICAL"));
+      }
+      if (data.level === "fatal") {
+        triggerCritical();
+        document.body.dispatchEvent(new CustomEvent("UI_FATAL"));
+      }
+    };
+
+    federationAlerts.on("alert", onAlert);
+    federationAlerts.on("escalation", onEsc);
+
+    return () => {
+      federationAlerts.off("alert", onAlert);
+      federationAlerts.off("escalation", onEsc);
+    };
+  }, [triggerWarning, triggerCritical, pulseMedium, pulseStrong]);
+
+  // ✅ Auto-Routing Logic - Route to appropriate panel based on alert source
+  useEffect(() => {
+    const handleRouting = (alert: any) => {
+      if (alert.source.startsWith("node")) {
+        onSelectItem?.("nodes");
+      }
+      if (alert.source === "rho2") {
+        onSelectItem?.("arc-rho2");
+      }
+      if (alert.source === "kernel") {
+        onSelectItem?.("arc-theta");
+      }
+      // Federation errors route to Pi Kluster
+      if (alert.source.includes("federation") || alert.source.includes("mesh")) {
+        onSelectItem?.("pi-kluster");
+      }
+    };
+
+    federationAlerts.on("alert", handleRouting);
+    return () => federationAlerts.off("alert", handleRouting);
   }, [onSelectItem]);
 
   const handleToggleSidebar = useCallback(() => {

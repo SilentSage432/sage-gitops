@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import BridgeFrame from '../layout/BridgeFrame';
+import { startMockAlerts } from "../core/alert/mockStream";
 import { OperatorEffectProvider } from "../core/OperatorEffectContext";
 import { TelemetryFilterProvider } from "../core/filters/useTelemetryFilter";
 import { HybridModeProvider } from "../sage/hybrid/HybridModeContext";
@@ -30,6 +31,13 @@ import CognitionPanel from "../features/cognition/CognitionPanel";
  */
 export const App: React.FC = () => {
   const [selectedItem, setSelectedItem] = useState<string>('home');
+
+  // ✅ Start mock alert stream in development
+  useEffect(() => {
+    if (import.meta.env.DEV) {
+      startMockAlerts();
+    }
+  }, []);
 
   const renderActiveChamber = () => {
     switch (selectedItem) {
