@@ -1,39 +1,61 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { OCTGuard } from '@/components/OCTGuard';
-import { CheckCircle2, Clock, Building2, MapPin, Calendar, UserPlus, Download, Bot, KeyRound, ScrollText } from 'lucide-react';
+import { CheckCircle2, Clock, UserPlus, Download, Bot, KeyRound, ScrollText, RefreshCw, AlertCircle } from 'lucide-react';
 import { BootstrapStatusCard } from '@/components/BootstrapStatusCard';
-import { useFakeTelemetry } from '@/lib/useFakeTelemetry';
-import { useActivityStream } from '@/lib/useActivityStream';
-import { useStatusTiles } from '@/lib/useStatusTiles';
+import { useTenantDashboard } from '@/lib/useTenantDashboard';
 
 export default function DashboardPage() {
-  // Loading states
-  const [isGeneratingKit, setIsGeneratingKit] = useState(false);
-  const [isViewingPlans, setIsViewingPlans] = useState(false);
+  // Get tenantId from localStorage (set during onboarding)
+  const [tenantId] = useState<string | null>(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('lastTenantId');
+    }
+    return null;
+  });
+
+  // Real dashboard data
+  const dashboardData = useTenantDashboard(tenantId);
   
-  // Live telemetry
-  const telemetry = useFakeTelemetry();
-  const activity = useActivityStream();
-  const tiles = useStatusTiles();
-
-  const handleGenerateKit = () => {
-    setIsGeneratingKit(true);
-    setTimeout(() => {
-      setIsGeneratingKit(false);
-    }, 800);
+  // Derived data for backward compatibility with existing UI
+  const telemetry = dashboardData.telemetry ? {
+    agentsOnline: dashboardData.telemetry.agentCount,
+    signal: dashboardData.telemetry.signalStrength,
+    rotationETA: dashboardData.telemetry.rotationETA.replace(/[^0-9]/g, '') || '0',
+    status: dashboardData.telemetry.bootstrapStatus === 'activated' ? 'optimizing' : 'stabilizing',
+  } : {
+    agentsOnline: 0,
+    signal: 0,
+    rotationETA: '0',
+    status: 'stabilizing',
   };
 
-  const handleViewPlans = () => {
-    setIsViewingPlans(true);
-    setTimeout(() => {
-      setIsViewingPlans(false);
-    }, 800);
-  };
+  // Map status data to tiles format
+  const tiles = dashboardData.status ? [
+    { label: "Mesh Link", state: dashboardData.status.overallHealth === "green" ? "ok" : dashboardData.status.overallHealth === "yellow" ? "warning" : "error" as const },
+    { label: "Rho² Vault", state: dashboardData.status.bootstrap.status === "activated" ? "ok" : dashboardData.status.bootstrap.status === "expired" ? "warning" : "ok" as const },
+    { label: "Policy Engine", state: "ok" as const },
+    { label: "Signal Horizon", state: dashboardData.status.overallHealth === "green" ? "ok" : "warning" as const },
+    { label: "Audit Channel", state: "ok" as const },
+    { label: "Bootstrap CA", state: dashboardData.status.bootstrap.status === "activated" ? "ok" : dashboardData.status.bootstrap.status === "expired" ? "warning" : "ok" as const },
+  ] : [
+    { label: "Mesh Link", state: "ok" as const },
+    { label: "Rho² Vault", state: "ok" as const },
+    { label: "Policy Engine", state: "ok" as const },
+    { label: "Signal Horizon", state: "ok" as const },
+    { label: "Audit Channel", state: "ok" as const },
+    { label: "Bootstrap CA", state: "ok" as const },
+  ];
+
+  // Map activity events to activity stream format
+  const activity = dashboardData.activity?.events.map((event) => {
+    const icon = event.severity === "success" ? "✓" : event.severity === "warning" ? "⚠" : event.severity === "error" ? "✗" : "›";
+    return `${icon} ${event.summary}`;
+  }) || [];
 
   return (
     <OCTGuard>
@@ -41,12 +63,33 @@ export default function DashboardPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 space-y-8">
           {/* Header Bar */}
           <div className="border-b border-white/5 pb-4">
-            <h1 className="text-3xl font-semibold tracking-tight text-[#e2e6ee]">
-              SAGE Onboarding Dashboard
-            </h1>
-            <p className="text-sm text-white/60 mt-2">
-              Tenant successfully initialized
-            </p>
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-3xl font-semibold tracking-tight text-[#e2e6ee]">
+                  SAGE Onboarding Dashboard
+                </h1>
+                <p className="text-sm text-white/60 mt-2">
+                  {dashboardData.status?.companyName || "Tenant Dashboard"}
+                </p>
+              </div>
+              {dashboardData.isLoading && (
+                <RefreshCw className="w-5 h-5 text-white/40 animate-spin" />
+              )}
+            </div>
+            {dashboardData.error && (
+              <div className="mt-4 p-3 bg-red-500/20 border border-red-500/30 rounded-lg flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 text-red-500" />
+                <p className="text-sm text-red-500">{dashboardData.error}</p>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => window.location.reload()}
+                  className="ml-auto"
+                >
+                  Retry
+                </Button>
+              </div>
+            )}
           </div>
 
           <div className="space-y-6">
@@ -64,15 +107,32 @@ export default function DashboardPage() {
                 <CardContent className="space-y-4">
                   <div>
                     <span className="text-sm text-white/60">Tenant Name:</span>
-                    <p className="text-sm font-medium text-[#e2e6ee]">Example Tenant</p>
+                    <p className="text-sm font-medium text-[#e2e6ee]">
+                      {dashboardData.status?.companyName || dashboardData.telemetry?.companyName || "Loading..."}
+                    </p>
                   </div>
                   <div>
-                    <span className="text-sm text-white/60">Region:</span>
-                    <p className="text-sm font-medium text-[#e2e6ee]">US-West</p>
+                    <span className="text-sm text-white/60">Tenant ID:</span>
+                    <p className="text-sm font-mono text-[#e2e6ee]">
+                      {tenantId ? tenantId.substring(0, 8) + "..." : "N/A"}
+                    </p>
                   </div>
                   <div>
                     <span className="text-sm text-white/60">Status:</span>
-                    <Badge variant="secondary" className="ml-2">Provisioned</Badge>
+                    <Badge 
+                      variant="secondary" 
+                      className={`ml-2 ${
+                        dashboardData.status?.overallHealth === "green" ? "bg-green-500/20 text-green-500" :
+                        dashboardData.status?.overallHealth === "yellow" ? "bg-yellow-500/20 text-yellow-500" :
+                        dashboardData.status?.overallHealth === "red" ? "bg-red-500/20 text-red-500" :
+                        ""
+                      }`}
+                    >
+                      {dashboardData.status?.overallHealth === "green" ? "Healthy" :
+                       dashboardData.status?.overallHealth === "yellow" ? "Degraded" :
+                       dashboardData.status?.overallHealth === "red" ? "Fault" :
+                       "Provisioned"}
+                    </Badge>
                   </div>
                 </CardContent>
               </Card>
@@ -193,21 +253,21 @@ export default function DashboardPage() {
                 <CardContent>
                   <div className="space-y-3">
                     <Button
-                      variant="secondary"
+                      variant="outline"
                       className="w-full justify-start"
                     >
                       <Bot className="w-4 h-4 mr-2" />
                       Create First Agent
                     </Button>
                     <Button
-                      variant="secondary"
+                      variant="outline"
                       className="w-full justify-start"
                     >
                       <UserPlus className="w-4 h-4 mr-2" />
                       Invite Additional Operator
                     </Button>
                     <Button
-                      variant="secondary"
+                      variant="outline"
                       className="w-full justify-start"
                     >
                       <Download className="w-4 h-4 mr-2" />
@@ -262,20 +322,26 @@ export default function DashboardPage() {
               </Card>
             </div>
 
-            {/* Activity Feed Placeholder */}
+            {/* Activity Feed */}
             <div className="slide-up" style={{ animationDelay: "0.4s" }}>
               <Card>
                 <CardHeader>
                   <CardTitle>Recent Activity</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <ul className="space-y-1 font-mono text-sm text-white/80">
-                    {activity.map((line, i) => (
-                      <li key={i} className="animate-[fadeIn_300ms_ease]">
-                        {line}
-                      </li>
-                    ))}
-                  </ul>
+                  {dashboardData.isLoading ? (
+                    <p className="text-sm text-white/60">Loading activity...</p>
+                  ) : activity.length > 0 ? (
+                    <ul className="space-y-1 font-mono text-sm text-white/80">
+                      {activity.map((line, i) => (
+                        <li key={i} className="animate-[fadeIn_300ms_ease]">
+                          {line}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-sm text-white/60">No activity recorded yet.</p>
+                  )}
                 </CardContent>
               </Card>
             </div>

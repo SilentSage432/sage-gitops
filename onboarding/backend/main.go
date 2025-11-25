@@ -122,6 +122,13 @@ func main() {
 		r.Get("/bootstrap/verify", handleBootstrapVerify) // Also support GET for QR codes
 		r.Get("/agents", handleListAgents)
 		r.Get("/regions", handleListRegions)
+		
+		// Phase 3: Dashboard endpoints
+		r.Route("/tenants/{tenantId}", func(r chi.Router) {
+			r.Get("/telemetry", handleTenantTelemetry)
+			r.Get("/status", handleTenantStatus)
+			r.Get("/activity", handleTenantActivity)
+		})
 	})
 
 	// Legacy routes (for backward compatibility)
