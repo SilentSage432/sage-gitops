@@ -73,13 +73,13 @@ func main() {
 	} else {
 		// Parse existing key (assumes PEM format directly or base64-encoded)
 		keyData := []byte(keyBytes)
-		
+
 		// Try decoding as base64 first
 		decoded, err := base64.StdEncoding.DecodeString(keyBytes)
 		if err == nil {
 			keyData = decoded
 		}
-		
+
 		privateKey, err = jwt.ParseRSAPrivateKeyFromPEM(keyData)
 		if err != nil {
 			log.Fatalf("Failed to parse private key: %v", err)
@@ -113,6 +113,17 @@ func main() {
 		r.Post("/verify", handleVerifyOCT)
 	})
 
+	// New standardized onboarding API routes
+	r.Route("/api/onboarding", func(r chi.Router) {
+		r.Post("/tenants", handleCreateTenant)
+		r.Post("/bootstrap/kit", handleBootstrapKit)
+		r.Get("/bootstrap/meta", handleBootstrapMeta)
+		r.Post("/bootstrap/verify", handleBootstrapVerify)
+		r.Get("/agents", handleListAgents)
+		r.Get("/regions", handleListRegions)
+	})
+
+	// Legacy routes (for backward compatibility)
 	r.Post("/tenants", handleCreateTenant)
 	r.Post("/bootstrap/kit", handleBootstrapKit)
 	r.Get("/bootstrap/meta", handleBootstrapMeta)
@@ -133,4 +144,3 @@ func main() {
 		log.Fatalf("Server failed: %v", err)
 	}
 }
-

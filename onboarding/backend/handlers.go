@@ -845,3 +845,107 @@ func (u *WebAuthnUser) WebAuthnCredentials() []webauthn.Credential {
 func (u *WebAuthnUser) WebAuthnIcon() string {
 	return ""
 }
+
+// List Agents Handler (stub)
+func handleListAgents(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	// Try to fetch from database, fallback to hardcoded list
+	var agents []map[string]interface{}
+
+	rows, err := dbPool.Query(ctx, "SELECT id, name, description FROM public.agents ORDER BY id")
+	if err == nil {
+		defer rows.Close()
+		for rows.Next() {
+			var id, name, description string
+			if err := rows.Scan(&id, &name, &description); err == nil {
+				agents = append(agents, map[string]interface{}{
+					"id":          id,
+					"name":        name,
+					"description": description,
+				})
+			}
+		}
+	}
+
+	// Fallback to hardcoded list if database query fails or returns no results
+	if len(agents) == 0 {
+		agents = []map[string]interface{}{
+			{"id": "researcher", "name": "Researcher Agent", "description": "Data gathering + external retrieval"},
+			{"id": "audit-logger", "name": "Audit Logger", "description": "Immutable compliance logging"},
+			{"id": "etl-lite", "name": "ETL-Lite", "description": "Basic data processing and ingestion"},
+			{"id": "notification-relay", "name": "Notification Relay", "description": "Alerts + async messaging"},
+			{"id": "observer", "name": "Observer Agent", "description": "Passive telemetry + drift detection"},
+		}
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"agents": agents,
+	})
+}
+
+// List Regions Handler (stub)
+func handleListRegions(w http.ResponseWriter, r *http.Request) {
+	regions := []map[string]interface{}{
+		{"id": "us-east", "name": "US-East", "location": "United States (East Coast)"},
+		{"id": "us-west", "name": "US-West", "location": "United States (West Coast)"},
+		{"id": "eu", "name": "EU", "location": "Europe"},
+		{"id": "apac", "name": "APAC", "location": "Asia Pacific"},
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"regions": regions,
+	})
+}
+
+// Bootstrap Verify Handler (stub)
+func handleBootstrapVerify(w http.ResponseWriter, r *http.Request) {
+	var req struct {
+		Fingerprint string `json:"fingerprint"`
+		TenantID    string `json:"tenantId,omitempty"`
+	}
+
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Invalid request", http.StatusBadRequest)
+		return
+	}
+
+	if req.Fingerprint == "" {
+		http.Error(w, "Fingerprint is required", http.StatusBadRequest)
+		return
+	}
+
+	ctx := r.Context()
+
+	// Check if fingerprint exists in bootstrap_kits table (if it exists)
+	var isValid bool
+	err := dbPool.QueryRow(ctx,
+		"SELECT EXISTS(SELECT 1 FROM public.bootstrap_kits WHERE fingerprint = $1)",
+		req.Fingerprint,
+	).Scan(&isValid)
+
+	// If table doesn't exist or query fails, return stub response
+	if err != nil {
+		// Stub: accept any fingerprint that looks valid
+		isValid = len(req.Fingerprint) > 10 && strings.HasPrefix(req.Fingerprint, "sha256:")
+	} else if !isValid {
+		// Fingerprint not found in database
+		isValid = false
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	if isValid {
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"valid":   true,
+			"message": "Bootstrap kit fingerprint verified",
+		})
+	} else {
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"valid":   false,
+			"message": "Bootstrap kit fingerprint not found or invalid",
+		})
+	}
+}

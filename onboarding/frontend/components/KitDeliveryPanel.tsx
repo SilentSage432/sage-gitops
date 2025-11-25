@@ -29,7 +29,7 @@ export function KitDeliveryPanel() {
 
       const octData = JSON.parse(token);
       const response = await axios.post(
-        `${API_BASE_URL}/bootstrap/kit`,
+        `${API_BASE_URL}/api/onboarding/bootstrap/kit`,
         {},
         {
           headers: {
@@ -50,7 +50,7 @@ export function KitDeliveryPanel() {
       document.body.removeChild(a);
 
       // Fetch fingerprint and verify command
-      const metaResponse = await axios.get(`${API_BASE_URL}/bootstrap/meta`, {
+      const metaResponse = await axios.get(`${API_BASE_URL}/api/onboarding/bootstrap/meta`, {
         headers: {
           Authorization: `Bearer ${octData.token}`,
         },

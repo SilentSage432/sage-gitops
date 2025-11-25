@@ -119,7 +119,7 @@ export default function ReviewPage() {
         setIsExpired(false);
       } else {
         // Call actual API endpoint (stub for now)
-        const response = await fetch('/api/bootstrap/kit', {
+        const response = await fetch('/api/onboarding/bootstrap/kit', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

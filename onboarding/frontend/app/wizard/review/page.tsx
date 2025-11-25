@@ -33,7 +33,7 @@ export default function ReviewPage() {
       const octData = JSON.parse(token);
       
       await axios.post(
-        `${API_BASE_URL}/tenants`,
+        `${API_BASE_URL}/api/onboarding/tenants`,
         {
           company,
           dataRegions: dataRegions.filter((r) => r.selected),
