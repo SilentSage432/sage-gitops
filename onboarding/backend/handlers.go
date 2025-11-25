@@ -1074,24 +1074,53 @@ func (u *WebAuthnUser) WebAuthnIcon() string {
 	return ""
 }
 
-// List Agents Handler (stub)
+// List Agents Handler
 func handleListAgents(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	// Try to fetch from database, fallback to hardcoded list
+	// Try to fetch from database with capabilities and requirements
 	var agents []map[string]interface{}
 
-	rows, err := dbPool.Query(ctx, "SELECT id, name, description FROM public.agents ORDER BY id")
+	rows, err := dbPool.Query(ctx, "SELECT id, name, description, capabilities, requirements FROM public.agents ORDER BY id")
 	if err == nil {
 		defer rows.Close()
 		for rows.Next() {
 			var id, name, description string
-			if err := rows.Scan(&id, &name, &description); err == nil {
-				agents = append(agents, map[string]interface{}{
+			var capabilities, requirements []byte
+			if err := rows.Scan(&id, &name, &description, &capabilities, &requirements); err == nil {
+				agent := map[string]interface{}{
 					"id":          id,
 					"name":        name,
 					"description": description,
-				})
+				}
+				
+				// Parse capabilities JSONB
+				if len(capabilities) > 0 {
+					var caps interface{}
+					if err := json.Unmarshal(capabilities, &caps); err == nil {
+						agent["capabilities"] = caps
+					} else {
+						// Default capabilities based on agent type
+						agent["capabilities"] = getDefaultCapabilities(id)
+					}
+				} else {
+					agent["capabilities"] = getDefaultCapabilities(id)
+				}
+				
+				// Parse requirements JSONB
+				if len(requirements) > 0 {
+					var reqs interface{}
+					if err := json.Unmarshal(requirements, &reqs); err == nil {
+						agent["requirements"] = reqs
+					} else {
+						// Default requirements
+						agent["requirements"] = getDefaultRequirements(id)
+					}
+				} else {
+					agent["requirements"] = getDefaultRequirements(id)
+				}
+				
+				agents = append(agents, agent)
 			}
 		}
 	}
@@ -1099,11 +1128,41 @@ func handleListAgents(w http.ResponseWriter, r *http.Request) {
 	// Fallback to hardcoded list if database query fails or returns no results
 	if len(agents) == 0 {
 		agents = []map[string]interface{}{
-			{"id": "researcher", "name": "Researcher Agent", "description": "Data gathering + external retrieval"},
-			{"id": "audit-logger", "name": "Audit Logger", "description": "Immutable compliance logging"},
-			{"id": "etl-lite", "name": "ETL-Lite", "description": "Basic data processing and ingestion"},
-			{"id": "notification-relay", "name": "Notification Relay", "description": "Alerts + async messaging"},
-			{"id": "observer", "name": "Observer Agent", "description": "Passive telemetry + drift detection"},
+			{
+				"id":          "researcher",
+				"name":        "Researcher Agent",
+				"description": "Data gathering + external retrieval",
+				"capabilities": getDefaultCapabilities("researcher"),
+				"requirements": getDefaultRequirements("researcher"),
+			},
+			{
+				"id":          "audit-logger",
+				"name":        "Audit Logger",
+				"description": "Immutable compliance logging",
+				"capabilities": getDefaultCapabilities("audit-logger"),
+				"requirements": getDefaultRequirements("audit-logger"),
+			},
+			{
+				"id":          "etl-lite",
+				"name":        "ETL-Lite",
+				"description": "Basic data processing and ingestion",
+				"capabilities": getDefaultCapabilities("etl-lite"),
+				"requirements": getDefaultRequirements("etl-lite"),
+			},
+			{
+				"id":          "notification-relay",
+				"name":        "Notification Relay",
+				"description": "Alerts + async messaging",
+				"capabilities": getDefaultCapabilities("notification-relay"),
+				"requirements": getDefaultRequirements("notification-relay"),
+			},
+			{
+				"id":          "observer",
+				"name":        "Observer Agent",
+				"description": "Passive telemetry + drift detection",
+				"capabilities": getDefaultCapabilities("observer"),
+				"requirements": getDefaultRequirements("observer"),
+			},
 		}
 	}
 
@@ -1113,13 +1172,91 @@ func handleListAgents(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// List Regions Handler (stub)
+// Helper function to get default capabilities for an agent
+func getDefaultCapabilities(agentID string) []string {
+	capabilities := map[string][]string{
+		"researcher":       {"data-retrieval", "external-api", "web-scraping"},
+		"audit-logger":     {"compliance-logging", "immutable-audit", "event-tracking"},
+		"etl-lite":         {"data-processing", "data-ingestion", "transformation"},
+		"notification-relay": {"alerting", "messaging", "async-communication"},
+		"observer":         {"telemetry", "drift-detection", "monitoring"},
+	}
+	if caps, ok := capabilities[agentID]; ok {
+		return caps
+	}
+	return []string{}
+}
+
+// Helper function to get default requirements for an agent
+func getDefaultRequirements(agentID string) map[string]interface{} {
+	requirements := map[string]map[string]interface{}{
+		"audit-logger": {
+			"requiredAgents": []string{},
+			"requiredCapabilities": []string{"compliance-logging"},
+			"minRegions": 1,
+		},
+		"researcher": {
+			"requiredAgents": []string{},
+			"requiredCapabilities": []string{},
+			"minRegions": 0,
+		},
+		"etl-lite": {
+			"requiredAgents": []string{},
+			"requiredCapabilities": []string{},
+			"minRegions": 0,
+		},
+		"notification-relay": {
+			"requiredAgents": []string{},
+			"requiredCapabilities": []string{},
+			"minRegions": 0,
+		},
+		"observer": {
+			"requiredAgents": []string{},
+			"requiredCapabilities": []string{},
+			"minRegions": 0,
+		},
+	}
+	if reqs, ok := requirements[agentID]; ok {
+		return reqs
+	}
+	return map[string]interface{}{
+		"requiredAgents":      []string{},
+		"requiredCapabilities": []string{},
+		"minRegions":          0,
+	}
+}
+
+// List Regions Handler
 func handleListRegions(w http.ResponseWriter, r *http.Request) {
 	regions := []map[string]interface{}{
-		{"id": "us-east", "name": "US-East", "location": "United States (East Coast)"},
-		{"id": "us-west", "name": "US-West", "location": "United States (West Coast)"},
-		{"id": "eu", "name": "EU", "location": "Europe"},
-		{"id": "apac", "name": "APAC", "location": "Asia Pacific"},
+		{
+			"id":          "us-east",
+			"name":        "US-East",
+			"location":    "United States (East Coast)",
+			"compliance":  []string{"SOC2", "HIPAA", "PCI-DSS"},
+			"allowedSensitivity": []string{"None", "PCI", "PHI / HIPAA", "High Confidential"},
+		},
+		{
+			"id":          "us-west",
+			"name":        "US-West",
+			"location":    "United States (West Coast)",
+			"compliance":  []string{"SOC2", "HIPAA", "PCI-DSS"},
+			"allowedSensitivity": []string{"None", "PCI", "PHI / HIPAA", "High Confidential"},
+		},
+		{
+			"id":          "eu",
+			"name":        "EU",
+			"location":    "Europe",
+			"compliance":  []string{"GDPR", "SOC2", "ISO27001"},
+			"allowedSensitivity": []string{"None", "High Confidential"},
+		},
+		{
+			"id":          "apac",
+			"name":        "APAC",
+			"location":    "Asia Pacific",
+			"compliance":  []string{"SOC2", "ISO27001"},
+			"allowedSensitivity": []string{"None", "High Confidential"},
+		},
 	}
 
 	w.Header().Set("Content-Type", "application/json")

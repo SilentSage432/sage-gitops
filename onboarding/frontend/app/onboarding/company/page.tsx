@@ -9,8 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectOption } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { OCTGuard } from '@/components/OCTGuard';
-
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+import { companySchema } from '@/lib/validation/onboarding-schemas';
 
 export default function CompanyPage() {
   const { company, setCompany } = useOnboardingStore();
@@ -23,40 +22,42 @@ export default function CompanyPage() {
     email: company?.email || '',
   });
 
-  const [errors, setErrors] = useState<{
-    name?: string;
-    email?: string;
-  }>({});
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isValid, setIsValid] = useState(false);
 
-  // Validate form
+  // Validate form with Zod
   const validateForm = () => {
-    const newErrors: typeof errors = {};
-    
-    if (!formData.name.trim()) {
-      newErrors.name = 'Company name is required';
+    try {
+      const result = companySchema.parse({
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        industry: formData.industry || undefined,
+        size: formData.size || undefined,
+      });
+      setErrors({});
+      setIsValid(true);
+      return true;
+    } catch (error: any) {
+      if (error.errors) {
+        const newErrors: Record<string, string> = {};
+        error.errors.forEach((err: any) => {
+          if (err.path && err.path.length > 0) {
+            newErrors[err.path[0]] = err.message;
+          }
+        });
+        setErrors(newErrors);
+      }
+      setIsValid(false);
+      return false;
     }
-    
-    if (!formData.email.trim()) {
-      newErrors.email = 'Contact email is required';
-    } else if (!emailRegex.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address';
-    }
-    
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
   };
-
-  // Check if form is valid
-  const isFormValid = formData.name.trim().length > 0 && 
-                      formData.email.trim().length > 0 && 
-                      emailRegex.test(formData.email);
 
   // Validate on change
   useEffect(() => {
     if (formData.name.trim() || formData.email.trim()) {
       validateForm();
     }
-  }, [formData.name, formData.email]);
+  }, [formData.name, formData.email, formData.industry, formData.size]);
 
   const handleSubmit = () => {
     if (validateForm()) {
@@ -174,7 +175,7 @@ export default function CompanyPage() {
 
             <Button
               onClick={handleSubmit}
-              disabled={!isFormValid}
+              disabled={!isValid}
               className="w-full sm:w-auto px-6"
             >
               <ArrowRight className="h-4 w-4 mr-2" />
