@@ -1,7 +1,9 @@
 import React from "react";
 import { Server, Plus } from "lucide-react";
+import { useFederationGenesisStream } from "../../sage/federation/useFederationWS";
 
 export const NodesView = () => {
+  const genesis = useFederationGenesisStream();
   // Static counts - all zero for empty state
   const totalNodes = 0;
   const onlineCount = 0;
@@ -23,6 +25,15 @@ export const NodesView = () => {
       {/* SCROLLABLE CONTENT */}
       <div className="flex-1 overflow-y-auto">
         <div className="p-6 space-y-6">
+          {/* GENESIS EVENT NOTIFICATION */}
+          {genesis && (
+            <div className="p-3 rounded-md bg-purple-800/20 border border-purple-600/40 mb-4">
+              <span className="text-purple-300 font-semibold">
+                ⚡ Genesis Event: New Node Detected
+              </span>
+            </div>
+          )}
+
           {/* SUMMARY BAR */}
           <div className="grid grid-cols-4 gap-4">
             {/* TOTAL NODES */}

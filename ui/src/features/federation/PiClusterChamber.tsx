@@ -3,6 +3,7 @@ import { Server, Plus, AlertCircle } from "lucide-react";
 import { useMeshTelemetry } from "../../sage/telemetry/useMeshTelemetry";
 import { useFederationNodes } from "./useFederationNodes";
 import { NodeGrid } from "./NodeGrid";
+import { useFederationGenesisStream } from "../../sage/federation/useFederationWS";
 
 interface PiClusterChamberProps {
   onSelect?: (nodeId: string) => void;
@@ -11,6 +12,7 @@ interface PiClusterChamberProps {
 export const PiClusterChamber: React.FC<PiClusterChamberProps> = ({ onSelect }) => {
   const telemetry = useMeshTelemetry();
   const nodes = useFederationNodes();
+  const genesis = useFederationGenesisStream();
 
   // Calculate counts from live nodes
   const offlineCount = nodes.filter(n => n.status === "offline").length;
@@ -33,6 +35,24 @@ export const PiClusterChamber: React.FC<PiClusterChamberProps> = ({ onSelect }) 
       {/* SCROLLABLE CONTENT */}
       <div className="flex-1 overflow-y-auto">
         <div className="p-6 space-y-6">
+          {/* GENESIS EVENT NOTIFICATION */}
+          {genesis && (
+            <div className="p-4 rounded-xl bg-purple-900/20 border border-purple-500/40 shadow-lg animate-in fade-in duration-300">
+              <h3 className="text-lg font-semibold text-purple-300 mb-2">
+                ⚡ Node Genesis Detected
+              </h3>
+              <p className="text-sm text-slate-300">
+                Node ID: <span className="font-mono">{genesis.nodeId}</span>
+              </p>
+              <p className="text-sm text-slate-300">
+                Hardware: <span className="font-mono">{genesis.hardware}</span>
+              </p>
+              <p className="text-sm text-slate-300">
+                Fingerprint: <span className="font-mono">{genesis.fingerprint}</span>
+              </p>
+            </div>
+          )}
+
           {/* THREE-TIER STATUS SHELL */}
           <div className="grid grid-cols-3 gap-4">
             {/* OFFLINE */}
