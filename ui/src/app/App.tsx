@@ -27,6 +27,7 @@ import { AgentDetails } from '../features/agents/AgentDetails';
 import { AgentGenesis } from '../features/agents/AgentGenesis';
 import OperatorTerminal from "../features/operator/OperatorTerminal";
 import CognitionPanel from "../features/cognition/CognitionPanel";
+import { FederationSyncBridge } from "../sage/federation/kernel/FederationSyncBridge";
 
 /**
  * App – Root component that wires the Bridge Frame
@@ -41,6 +42,11 @@ export const App: React.FC = () => {
   //     startMockAlerts();
   //   }
   // }, []);
+
+  // ✅ Initialize Federation Sync Bridge on app startup
+  useEffect(() => {
+    FederationSyncBridge.start();
+  }, []);
 
   const renderActiveChamber = () => {
     switch (selectedItem) {

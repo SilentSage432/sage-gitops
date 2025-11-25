@@ -3,6 +3,8 @@ import { motion } from "framer-motion";
 import { Sparkles, Cog, Shield, Brain, Eye, FileCode, Loader2, CheckCircle2, XCircle, AlertCircle } from "lucide-react";
 import { genesisOrchestrator } from "./orchestrator/GenesisOrchestrator";
 import { AgentManifest } from "./types/agentManifest";
+import { federationKernelBus } from "../../sage/federation/kernel/FederationKernelBus";
+import type { FederationEvent } from "../../sage/federation/kernel/FederationKernelBus";
 
 const agentClasses = [
   { id: "researcher", label: "Researcher", icon: Brain },
@@ -38,6 +40,7 @@ export const AgentGenesis: React.FC = () => {
   const [genesisId, setGenesisId] = useState<string | null>(null);
   const [isComplete, setIsComplete] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
+  const [progressEvents, setProgressEvents] = useState<FederationEvent[]>([]);
 
   const toggleCap = (cap: string) => {
     setSelectedCaps((prev) =>
@@ -53,6 +56,56 @@ export const AgentGenesis: React.FC = () => {
     version: 1,
     mode: "active",
   };
+
+  // Subscribe to federation kernel bus events
+  useEffect(() => {
+    const unsubscribe = federationKernelBus.onAny((event: FederationEvent) => {
+      if (event.type.startsWith("federation.agent")) {
+        setProgressEvents((prev) => [...prev, event]);
+
+        // Update status based on federation events
+        if (event.type === "federation.agent.status") {
+          if (event.agentId === genesisId) {
+            setGenesisStatus(event.status.charAt(0).toUpperCase() + event.status.slice(1));
+            
+            // Update progress based on status
+            if (event.status === "forging") {
+              setGenesisProgress(30);
+              setGenesisMessage("Forging agent...");
+            } else if (event.status === "deploying") {
+              setGenesisProgress(70);
+              setGenesisMessage("Deploying agent...");
+            } else if (event.status === "completed") {
+              setGenesisProgress(100);
+              setGenesisMessage("Agent successfully forged!");
+              setIsComplete(true);
+              setIsLoading(false);
+            } else if (event.status === "error") {
+              setIsFailed(true);
+              setIsLoading(false);
+            }
+          }
+        } else if (event.type === "federation.agent.forged") {
+          if (event.agentId === genesisId) {
+            setGenesisStatus("Completed");
+            setGenesisProgress(100);
+            setGenesisMessage(`Agent ${event.agentId} successfully forged!`);
+            setIsComplete(true);
+            setIsLoading(false);
+          }
+        } else if (event.type === "federation.agent.error") {
+          if (event.agentId === genesisId) {
+            setGenesisStatus("Error");
+            setGenesisMessage(event.message);
+            setIsFailed(true);
+            setIsLoading(false);
+          }
+        }
+      }
+    });
+
+    return () => unsubscribe();
+  }, [genesisId]);
 
   // Subscribe to genesis events
   useEffect(() => {

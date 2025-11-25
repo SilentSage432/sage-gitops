@@ -9,6 +9,7 @@ import { ValidationResult } from "../types/agentManifest";
 import { next as stateMachineNext, getStateLabel } from "./genesisStateMachine";
 import { createAgent, getGenesisStatus } from "../../../services/agentService";
 import { genesisClient } from "../../../api/genesisClient";
+import { FederationSyncBridge } from "../../../sage/federation/kernel/FederationSyncBridge";
 
 type GenesisEventHandler = (event: { type: string; data: any }) => void;
 
@@ -53,13 +54,25 @@ class GenesisOrchestrator {
       throw new Error(`Manifest validation failed: ${validation.errors.join(", ")}`);
     }
 
-    // Step 2: Submit genesis request
+    // Step 2: Submit genesis request via Federation Sync Bridge
     this.emit("genesis.started", { manifest });
 
-    let genesisResult: GenesisResult;
     try {
-      genesisResult = await createAgent(manifest);
+      // Use Federation Sync Bridge for agent creation
+      const entry = FederationSyncBridge.forgeAgent(manifest);
+      
+      const genesisResult: GenesisResult = {
+        genesisId: entry.id,
+        status: entry.status,
+        agentId: entry.id,
+      };
+
       this.currentStates.set(genesisResult.genesisId, "validating");
+
+      // Step 3: Subscribe to status updates and track progress
+      this.trackGenesisStatus(genesisResult.genesisId, manifest);
+
+      return genesisResult;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Unknown error";
       this.emit("genesis.failed", {
@@ -68,11 +81,6 @@ class GenesisOrchestrator {
       });
       throw error;
     }
-
-    // Step 3: Subscribe to status updates and track progress
-    this.trackGenesisStatus(genesisResult.genesisId, manifest);
-
-    return genesisResult;
   }
 
   /**
