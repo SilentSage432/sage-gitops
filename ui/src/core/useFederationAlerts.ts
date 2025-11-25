@@ -5,7 +5,8 @@ export function useFederationAlerts() {
   const [alerts, setAlerts] = useState<any[]>([]);
 
   useEffect(() => {
-    startMockFederationAlerts();
+    // Disabled - no mock alerts in development
+    // startMockFederationAlerts();
     const unsub = subscribeToFederationAlerts((alert) => {
       setAlerts((prev) => [alert, ...prev]);
     });

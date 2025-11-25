@@ -33,11 +33,12 @@ export const App: React.FC = () => {
   const [selectedItem, setSelectedItem] = useState<string>('home');
 
   // ✅ Start mock alert stream in development
-  useEffect(() => {
-    if (import.meta.env.DEV) {
-      startMockAlerts();
-    }
-  }, []);
+  // Disabled - no mock alerts in development
+  // useEffect(() => {
+  //   if (import.meta.env.DEV) {
+  //     startMockAlerts();
+  //   }
+  // }, []);
 
   const renderActiveChamber = () => {
     switch (selectedItem) {
