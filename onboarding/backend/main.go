@@ -117,8 +117,9 @@ func main() {
 	r.Route("/api/onboarding", func(r chi.Router) {
 		r.Post("/tenants", handleCreateTenant)
 		r.Post("/bootstrap/kit", handleBootstrapKit)
-		r.Get("/bootstrap/meta", handleBootstrapMeta)
+		r.Get("/bootstrap/meta/{tenantId}", handleBootstrapMeta)
 		r.Post("/bootstrap/verify", handleBootstrapVerify)
+		r.Get("/bootstrap/verify", handleBootstrapVerify) // Also support GET for QR codes
 		r.Get("/agents", handleListAgents)
 		r.Get("/regions", handleListRegions)
 	})

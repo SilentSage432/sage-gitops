@@ -4,16 +4,20 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"os"
 	"strings"
 	"time"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/go-webauthn/webauthn/webauthn"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
+
+	"github.com/silentsage432/sage-gitops/onboarding/backend/bootstrap"
 )
 
 // WebAuthn Challenge Handler
@@ -726,12 +730,16 @@ func handleCreateTenant(w http.ResponseWriter, r *http.Request) {
 
 // Bootstrap Kit Handler
 func handleBootstrapKit(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
 	// Force bypass for development
 	if os.Getenv("BYPASS_OCT") == "true" {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(map[string]interface{}{
+			"ok":          true,
 			"fingerprint": "sha256:mock-fingerprint-" + uuid.New().String()[:16],
+			"size":        1024,
 		})
 		return
 	}
@@ -776,15 +784,208 @@ func handleBootstrapKit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Generate bootstrap kit (placeholder ZIP)
-	bootstrapContent := []byte("bootstrap-kit-placeholder")
+	// Get tenant ID from query parameter
+	tenantID := r.URL.Query().Get("tenantId")
+
+	// If no tenantId in query, check if we have full tenant data in body
+	var tenantRequest *CreateTenantRequest
+	if tenantID == "" && r.Body != nil {
+		// Read body (we'll need it for tenant creation if needed)
+		bodyBytes, err := io.ReadAll(r.Body)
+		if err != nil {
+			log.Printf("Failed to read request body: %v", err)
+		}
+
+		if len(bodyBytes) > 0 {
+			var req CreateTenantRequest
+			if err := json.Unmarshal(bodyBytes, &req); err == nil {
+				tenantRequest = &req
+				// Try to find existing tenant by email
+				err := dbPool.QueryRow(ctx,
+					"SELECT id FROM public.tenants WHERE email = $1 ORDER BY created_at DESC LIMIT 1",
+					req.Company.Email,
+				).Scan(&tenantID)
+				if err != nil {
+					// Tenant doesn't exist, we'll create it below
+					tenantID = ""
+				}
+			}
+		}
+	}
+
+	// If still no tenantID, create tenant from request data
+	if tenantID == "" {
+		if tenantRequest == nil {
+			// Try to get most recent tenant as fallback
+			err := dbPool.QueryRow(ctx,
+				"SELECT id FROM public.tenants ORDER BY created_at DESC LIMIT 1",
+			).Scan(&tenantID)
+			if err != nil {
+				http.Error(w, "No tenant found and no tenant data provided. Please create a tenant first.", http.StatusBadRequest)
+				return
+			}
+		} else {
+			// Create tenant from request data
+			// (Reuse handleCreateTenant logic but simplified)
+			newTenantID := uuid.New().String()
+			now := time.Now()
+
+			domain := tenantRequest.Company.Domain
+			if domain == nil || *domain == "" {
+				emailParts := strings.Split(tenantRequest.Company.Email, "@")
+				if len(emailParts) == 2 {
+					domainStr := emailParts[1]
+					domain = &domainStr
+				}
+			}
+
+			primaryRegion := ""
+			if len(tenantRequest.DataRegionsConfig.SelectedRegions) > 0 {
+				primaryRegion = tenantRequest.DataRegionsConfig.SelectedRegions[0]
+			}
+
+			configData, _ := json.Marshal(tenantRequest)
+
+			_, err := dbPool.Exec(ctx,
+				"INSERT INTO public.tenants (id, name, domain, region, config_data, status, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
+				newTenantID, tenantRequest.Company.Name, domain, primaryRegion, configData, "pending", now, now,
+			)
+
+			if err != nil {
+				http.Error(w, fmt.Sprintf("Failed to create tenant: %v", err), http.StatusInternalServerError)
+				return
+			}
+
+			tenantID = newTenantID
+		}
+	}
+
+	// Fetch tenant data
+	var tenantName, tenantEmail, tenantDomain, tenantRegion string
+	var configData []byte
+	err = dbPool.QueryRow(ctx,
+		"SELECT name, email, domain, region, config_data FROM public.tenants WHERE id = $1",
+		tenantID,
+	).Scan(&tenantName, &tenantEmail, &tenantDomain, &tenantRegion, &configData)
+
+	if err != nil {
+		http.Error(w, "Tenant not found", http.StatusNotFound)
+		return
+	}
+
+	// Parse tenant config
+	var tenantConfig CreateTenantRequest
+	if err := json.Unmarshal(configData, &tenantConfig); err != nil {
+		http.Error(w, "Invalid tenant configuration", http.StatusInternalServerError)
+		return
+	}
+
+	// Fetch selected agents
+	var agents []string
+	rows, err := dbPool.Query(ctx,
+		"SELECT agent_id FROM public.tenant_agents WHERE tenant_id = $1",
+		tenantID,
+	)
+	if err == nil {
+		defer rows.Close()
+		for rows.Next() {
+			var agentID string
+			if err := rows.Scan(&agentID); err == nil {
+				agents = append(agents, agentID)
+			}
+		}
+	}
+	// Fallback to config if no agents in junction table
+	if len(agents) == 0 {
+		agents = tenantConfig.AgentSelection.SelectedAgents
+	}
+
+	// Build tenant info for kit generation
+	tenantInfo := bootstrap.TenantInfo{
+		ID:      tenantID,
+		Name:    tenantName,
+		Email:   tenantEmail,
+		Domain:  tenantDomain,
+		Region:  tenantRegion,
+		Agents:  agents,
+		Regions: tenantConfig.DataRegionsConfig.SelectedRegions,
+		Sensitivity: func() string {
+			if tenantConfig.DataRegionsConfig.Sensitivity != nil {
+				return *tenantConfig.DataRegionsConfig.Sensitivity
+			}
+			return "None"
+		}(),
+		Access: bootstrap.AccessConfig{
+			AuthMethod: tenantConfig.AccessConfig.AuthMethod,
+			AdminEmail: func() string {
+				if tenantConfig.AccessConfig.AdminEmail != nil {
+					return *tenantConfig.AccessConfig.AdminEmail
+				}
+				return ""
+			}(),
+			ClientId: func() string {
+				if tenantConfig.AccessConfig.ClientId != nil {
+					return *tenantConfig.AccessConfig.ClientId
+				}
+				return ""
+			}(),
+			ClientSecret: func() string {
+				if tenantConfig.AccessConfig.ClientSecret != nil {
+					return *tenantConfig.AccessConfig.ClientSecret
+				}
+				return ""
+			}(),
+			CallbackUrl: func() string {
+				if tenantConfig.AccessConfig.CallbackUrl != nil {
+					return *tenantConfig.AccessConfig.CallbackUrl
+				}
+				return ""
+			}(),
+			ScimEnabled: tenantConfig.AccessConfig.ScimEnabled,
+			IdentityProvider: func() string {
+				if tenantConfig.AccessConfig.IdentityProvider != nil {
+					return *tenantConfig.AccessConfig.IdentityProvider
+				}
+				return ""
+			}(),
+		},
+	}
+
+	// Generate bootstrap kit
+	kit, err := bootstrap.GenerateBootstrapKit(tenantInfo)
+	if err != nil {
+		log.Printf("Failed to generate bootstrap kit: %v", err)
+		http.Error(w, fmt.Sprintf("Failed to generate bootstrap kit: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	// Store kit in database
+	now := time.Now()
+	expiresAt := now.Add(15 * time.Minute) // 15 minute expiry
+	_, err = dbPool.Exec(ctx,
+		"INSERT INTO public.bootstrap_kits (tenant_id, fingerprint, kit_data, created_at, expires_at) VALUES ($1, $2, $3, $4, $5) ON CONFLICT (fingerprint) DO UPDATE SET kit_data = $3, expires_at = $5",
+		tenantID,
+		kit.Fingerprint,
+		kit.ZIPData,
+		now,
+		expiresAt,
+	)
+
+	if err != nil {
+		log.Printf("Failed to store bootstrap kit: %v", err)
+		// Continue anyway - kit is generated, just not stored
+	}
+
+	// Return ZIP file
 	w.Header().Set("Content-Type", "application/zip")
-	w.Header().Set("Content-Disposition", "attachment; filename=bootstrap.zip")
-	w.Write(bootstrapContent)
+	w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=bootstrap-%s.zip", tenantID[:8]))
+	w.Header().Set("Content-Length", fmt.Sprintf("%d", kit.Size))
+	w.Write(kit.ZIPData)
 }
 
 // Bootstrap Meta Handler
 func handleBootstrapMeta(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
 
 	// Verify OCT token
 	authHeader := r.Header.Get("Authorization")
@@ -806,11 +1007,37 @@ func handleBootstrapMeta(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Get tenant ID from URL parameter
+	tenantID := chi.URLParam(r, "tenantId")
+	if tenantID == "" {
+		http.Error(w, "tenantId parameter is required", http.StatusBadRequest)
+		return
+	}
+
+	// Fetch bootstrap kit for tenant
+	var fingerprint string
+	var createdAt time.Time
+	err = dbPool.QueryRow(ctx,
+		"SELECT fingerprint, created_at FROM public.bootstrap_kits WHERE tenant_id = $1 ORDER BY created_at DESC LIMIT 1",
+		tenantID,
+	).Scan(&fingerprint, &createdAt)
+
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			http.Error(w, "Bootstrap kit not found for this tenant", http.StatusNotFound)
+			return
+		}
+		http.Error(w, "Database error", http.StatusInternalServerError)
+		return
+	}
+
 	// Return bootstrap metadata
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]interface{}{
-		"fingerprint":   "sha256:abc123def456...",
-		"verifyCommand": "shasum -a 256 bootstrap.zip | grep abc123def456",
+		"fingerprint":   fingerprint,
+		"verifyCommand": fmt.Sprintf("sage verify-kit --tenant %s --fingerprint %s", tenantID, fingerprint),
+		"downloadUrl":   "/api/onboarding/bootstrap/kit?tenantId=" + tenantID,
+		"createdAt":     createdAt.Format(time.RFC3339),
 	})
 }
 
@@ -900,16 +1127,24 @@ func handleListRegions(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// Bootstrap Verify Handler (stub)
+// Bootstrap Verify Handler
 func handleBootstrapVerify(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
 	var req struct {
 		Fingerprint string `json:"fingerprint"`
 		TenantID    string `json:"tenantId,omitempty"`
 	}
 
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		http.Error(w, "Invalid request", http.StatusBadRequest)
-		return
+	// Support both GET (query params) and POST (JSON body)
+	if r.Method == "GET" {
+		req.Fingerprint = r.URL.Query().Get("fingerprint")
+		req.TenantID = r.URL.Query().Get("tenantId")
+	} else {
+		if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+			http.Error(w, "Invalid request", http.StatusBadRequest)
+			return
+		}
 	}
 
 	if req.Fingerprint == "" {
@@ -917,35 +1152,60 @@ func handleBootstrapVerify(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ctx := r.Context()
-
-	// Check if fingerprint exists in bootstrap_kits table (if it exists)
+	// Check if fingerprint exists in bootstrap_kits table
 	var isValid bool
-	err := dbPool.QueryRow(ctx,
-		"SELECT EXISTS(SELECT 1 FROM public.bootstrap_kits WHERE fingerprint = $1)",
-		req.Fingerprint,
-	).Scan(&isValid)
+	var tenantID string
+	var activatedAt *time.Time
+	var expiresAt *time.Time
 
-	// If table doesn't exist or query fails, return stub response
-	if err != nil {
-		// Stub: accept any fingerprint that looks valid
-		isValid = len(req.Fingerprint) > 10 && strings.HasPrefix(req.Fingerprint, "sha256:")
-	} else if !isValid {
-		// Fingerprint not found in database
-		isValid = false
+	query := "SELECT tenant_id, activated_at, expires_at FROM public.bootstrap_kits WHERE fingerprint = $1"
+	if req.TenantID != "" {
+		query += " AND tenant_id = $2"
+		err := dbPool.QueryRow(ctx, query, req.Fingerprint, req.TenantID).Scan(&tenantID, &activatedAt, &expiresAt)
+		isValid = (err == nil)
+	} else {
+		err := dbPool.QueryRow(ctx, query, req.Fingerprint).Scan(&tenantID, &activatedAt, &expiresAt)
+		isValid = (err == nil)
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	if isValid {
-		json.NewEncoder(w).Encode(map[string]interface{}{
-			"valid":   true,
-			"message": "Bootstrap kit fingerprint verified",
-		})
-	} else {
+	if !isValid {
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusNotFound)
 		json.NewEncoder(w).Encode(map[string]interface{}{
 			"valid":   false,
 			"message": "Bootstrap kit fingerprint not found or invalid",
 		})
+		return
 	}
+
+	// Check if expired
+	if expiresAt != nil && time.Now().After(*expiresAt) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusGone)
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"valid":   false,
+			"message": "Bootstrap kit has expired",
+		})
+		return
+	}
+
+	// Mark as activated if not already activated
+	if activatedAt == nil {
+		_, err := dbPool.Exec(ctx,
+			"UPDATE public.bootstrap_kits SET activated_at = $1 WHERE fingerprint = $2",
+			time.Now(),
+			req.Fingerprint,
+		)
+		if err != nil {
+			log.Printf("Failed to mark kit as activated: %v", err)
+		}
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"valid":     true,
+		"message":   "Bootstrap kit fingerprint verified",
+		"tenantId":  tenantID,
+		"activated": activatedAt != nil,
+	})
 }

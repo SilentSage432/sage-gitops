@@ -28,8 +28,13 @@ export function KitDeliveryPanel() {
       }
 
       const octData = JSON.parse(token);
+      
+      // Get tenantId from query param or localStorage
+      const urlParams = new URLSearchParams(window.location.search);
+      const tenantId = urlParams.get('tenantId') || localStorage.getItem('lastTenantId') || '';
+      
       const response = await axios.post(
-        `${API_BASE_URL}/api/onboarding/bootstrap/kit`,
+        `${API_BASE_URL}/api/onboarding/bootstrap/kit${tenantId ? `?tenantId=${tenantId}` : ''}`,
         {},
         {
           headers: {
@@ -43,24 +48,30 @@ export function KitDeliveryPanel() {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'bootstrap.zip';
+      a.download = `bootstrap-${tenantId ? tenantId.substring(0, 8) : 'kit'}.zip`;
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
 
-      // Fetch fingerprint and verify command
-      const metaResponse = await axios.get(`${API_BASE_URL}/api/onboarding/bootstrap/meta`, {
-        headers: {
-          Authorization: `Bearer ${octData.token}`,
-        },
-      });
+      // Fetch fingerprint and verify command if we have tenantId
+      if (tenantId) {
+        try {
+          const metaResponse = await axios.get(`${API_BASE_URL}/api/onboarding/bootstrap/meta/${tenantId}`, {
+            headers: {
+              Authorization: `Bearer ${octData.token}`,
+            },
+          });
 
-      if (metaResponse.data.fingerprint) {
-        setFingerprint(metaResponse.data.fingerprint);
-      }
-      if (metaResponse.data.verifyCommand) {
-        setVerifyCommand(metaResponse.data.verifyCommand);
+          if (metaResponse.data.fingerprint) {
+            setFingerprint(metaResponse.data.fingerprint);
+          }
+          if (metaResponse.data.verifyCommand) {
+            setVerifyCommand(metaResponse.data.verifyCommand);
+          }
+        } catch (err) {
+          console.error('Failed to fetch meta:', err);
+        }
       }
     } catch (error: any) {
       console.error('Download error:', error);

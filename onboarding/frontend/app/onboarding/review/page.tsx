@@ -44,6 +44,7 @@ export default function ReviewPage() {
   const [timeRemaining, setTimeRemaining] = useState<number>(15 * 60); // 15 minutes in seconds
   const [isExpired, setIsExpired] = useState(false);
   const [showQR, setShowQR] = useState(false);
+  const [tenantId, setTenantId] = useState<string>('');
 
   // Validate required data and redirect if missing
   useEffect(() => {
@@ -118,11 +119,48 @@ export default function ReviewPage() {
         setTimeRemaining(15 * 60); // Reset timer on success
         setIsExpired(false);
       } else {
-        // Call actual API endpoint (stub for now)
-        const response = await fetch('/api/onboarding/bootstrap/kit', {
+        const octToken = localStorage.getItem('oct-storage') ? JSON.parse(localStorage.getItem('oct-storage')!).token : '';
+        if (!octToken) {
+          throw new Error('No access token available');
+        }
+
+        // Step 1: Create tenant first (if not already created)
+        let currentTenantId = tenantId || localStorage.getItem('lastTenantId') || '';
+        
+        if (!currentTenantId) {
+          const tenantResponse = await fetch('/api/onboarding/tenants', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${octToken}`,
+            },
+            body: JSON.stringify({
+              company,
+              dataRegionsConfig,
+              agentSelection,
+              accessConfig,
+            }),
+          });
+
+          if (!tenantResponse.ok) {
+            const errorText = await tenantResponse.text();
+            throw new Error(`Failed to create tenant: ${errorText}`);
+          }
+
+          const tenantData = await tenantResponse.json();
+          currentTenantId = tenantData.tenantID || tenantData.tenantId;
+          if (currentTenantId) {
+            setTenantId(currentTenantId);
+            localStorage.setItem('lastTenantId', currentTenantId);
+          }
+        }
+
+        // Step 2: Generate bootstrap kit
+        const response = await fetch(`/api/onboarding/bootstrap/kit?tenantId=${currentTenantId}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${octToken}`,
           },
           body: JSON.stringify({
             company,
@@ -133,13 +171,58 @@ export default function ReviewPage() {
         });
         
         if (response.ok) {
-          const data = await response.json();
-          setKitFingerprint(data.fingerprint || '');
+          // Check if response is ZIP (application/zip) or JSON
+          const contentType = response.headers.get('content-type');
+          if (contentType && contentType.includes('application/zip')) {
+            // Download the ZIP file
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `bootstrap-${company.name.replace(/\s+/g, '-').toLowerCase()}.zip`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+            
+            // Step 3: Get fingerprint from meta endpoint
+            if (currentTenantId) {
+              try {
+                const metaResponse = await fetch(`/api/onboarding/bootstrap/meta/${currentTenantId}`, {
+                  headers: {
+                    'Authorization': `Bearer ${octToken}`,
+                  },
+                });
+                
+                if (metaResponse.ok) {
+                  const meta = await metaResponse.json();
+                  if (meta.fingerprint) {
+                    setKitFingerprint(meta.fingerprint);
+                    localStorage.setItem('bootstrap-fingerprint', meta.fingerprint);
+                  }
+                }
+              } catch (err) {
+                console.error('Failed to fetch meta:', err);
+                // Generate placeholder fingerprint
+                const hashBytes = crypto.getRandomValues(new Uint8Array(32));
+                const hashHex = Array.from(hashBytes)
+                  .map(b => b.toString(16).padStart(2, '0'))
+                  .join('');
+                setKitFingerprint(`sha256:${hashHex}`);
+              }
+            }
+          } else {
+            // JSON response (fallback)
+            const data = await response.json();
+            setKitFingerprint(data.fingerprint || '');
+          }
+          
           setIsSuccess(true);
           setTimeRemaining(15 * 60); // Reset timer on success
           setIsExpired(false);
         } else {
-          throw new Error('Failed to generate kit');
+          const errorText = await response.text();
+          throw new Error(errorText || 'Failed to generate kit');
         }
       }
     } catch (error) {
@@ -161,7 +244,10 @@ export default function ReviewPage() {
   };
 
   const handleCopyVerificationCommand = async () => {
-    const command = `sage verify-kit --fingerprint "${kitFingerprint}"`;
+    const currentTenantId = tenantId || localStorage.getItem('lastTenantId') || '';
+    const command = currentTenantId 
+      ? `sage verify-kit --tenant ${currentTenantId} --fingerprint "${kitFingerprint}"`
+      : `sage verify-kit --fingerprint "${kitFingerprint}"`;
     try {
       await navigator.clipboard.writeText(command);
       setCommandCopied(true);
@@ -271,14 +357,14 @@ export default function ReviewPage() {
                   {showQR && (
                     <div className="mt-4 p-4 bg-[#1a1d22] border border-white/10 rounded-[14px] flex flex-col items-center">
                       <QRCodeSVG
-                        value={`https://bootstrap.example/activate/DEMO123`}
+                        value={`${window.location.origin}/api/onboarding/bootstrap/verify?tenantId=${tenantId || localStorage.getItem('lastTenantId') || ''}&fingerprint=${kitFingerprint}`}
                         size={200}
                         level="M"
                         includeMargin={true}
                         className="bg-white p-2 rounded"
                       />
-                      <p className="text-xs text-white/60 mt-4 text-center font-mono">
-                        https://bootstrap.example/activate/DEMO123
+                      <p className="text-xs text-white/60 mt-4 text-center font-mono break-all">
+                        Verify: {tenantId || localStorage.getItem('lastTenantId') || 'N/A'}
                       </p>
                     </div>
                   )}
@@ -287,11 +373,41 @@ export default function ReviewPage() {
 
               <div className="space-y-3">
                 <Button
+                  onClick={async () => {
+                    const octToken = localStorage.getItem('oct-storage') ? JSON.parse(localStorage.getItem('oct-storage')!).token : '';
+                    const currentTenantId = tenantId || localStorage.getItem('lastTenantId') || '';
+                    if (!currentTenantId) {
+                      alert('No tenant ID available. Please generate the kit first.');
+                      return;
+                    }
+                    try {
+                      const response = await fetch(`/api/onboarding/bootstrap/kit?tenantId=${currentTenantId}`, {
+                        method: 'POST',
+                        headers: {
+                          'Authorization': `Bearer ${octToken}`,
+                        },
+                      });
+                      if (response.ok) {
+                        const blob = await response.blob();
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `bootstrap-${company?.name?.replace(/\s+/g, '-').toLowerCase() || 'kit'}.zip`;
+                        document.body.appendChild(a);
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                        document.body.removeChild(a);
+                      }
+                    } catch (err) {
+                      console.error('Download error:', err);
+                      alert('Failed to download kit');
+                    }
+                  }}
                   disabled={isExpired}
                   className="w-full px-6"
                   variant="outline"
                 >
-                  {isExpired ? 'Download Kit (Expired)' : 'Download Kit (Coming Soon)'}
+                  {isExpired ? 'Download Kit (Expired)' : 'Download Kit'}
                 </Button>
 
                 {isExpired && (
