@@ -179,7 +179,7 @@ export default function ReviewPage() {
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `bootstrap-${company.name.replace(/\s+/g, '-').toLowerCase()}.zip`;
+            a.download = `bootstrap-${company?.name?.replace(/\s+/g, '-').toLowerCase() || 'kit'}.zip`;
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);
@@ -392,7 +392,7 @@ export default function ReviewPage() {
                         const url = window.URL.createObjectURL(blob);
                         const a = document.createElement('a');
                         a.href = url;
-                        a.download = `bootstrap-${company?.name?.replace(/\s+/g, '-').toLowerCase() || 'kit'}.zip`;
+                        a.download = `bootstrap-${company?.name?.replace(/\s+/g, '-').toLowerCase() || currentTenantId.substring(0, 8) || 'kit'}.zip`;
                         document.body.appendChild(a);
                         a.click();
                         window.URL.revokeObjectURL(url);
