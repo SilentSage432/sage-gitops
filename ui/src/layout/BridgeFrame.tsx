@@ -112,25 +112,28 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
   }, [triggerWarning, triggerCritical, pulseMedium, pulseStrong]);
 
   // ✅ Auto-Routing Logic - Route to appropriate panel based on alert source
+  // Disable auto-routing in development
   useEffect(() => {
-    const handleRouting = (alert: any) => {
-      if (alert.source.startsWith("node")) {
-        onSelectItem?.("nodes");
-      }
-      if (alert.source === "rho2") {
-        onSelectItem?.("arc-rho2");
-      }
-      if (alert.source === "kernel") {
-        onSelectItem?.("arc-theta");
-      }
-      // Federation errors route to Pi Kluster
-      if (alert.source.includes("federation") || alert.source.includes("mesh")) {
-        onSelectItem?.("pi-kluster");
-      }
-    };
+    if (!import.meta.env.DEV) {
+      const handleRouting = (alert: any) => {
+        if (alert.source.startsWith("node")) {
+          onSelectItem?.("nodes");
+        }
+        if (alert.source === "rho2") {
+          onSelectItem?.("arc-rho2");
+        }
+        if (alert.source === "kernel") {
+          onSelectItem?.("arc-theta");
+        }
+        // Federation errors route to Pi Kluster
+        if (alert.source.includes("federation") || alert.source.includes("mesh")) {
+          onSelectItem?.("pi-kluster");
+        }
+      };
 
-    federationAlerts.on("alert", handleRouting);
-    return () => federationAlerts.off("alert", handleRouting);
+      federationAlerts.on("alert", handleRouting);
+      return () => federationAlerts.off("alert", handleRouting);
+    }
   }, [onSelectItem]);
 
   const handleToggleSidebar = useCallback(() => {
