@@ -24,6 +24,7 @@ import { FederationLogs } from '../features/federation/FederationLogs';
 import { NodeDetailsPanel } from '../features/federation/NodeDetailsPanel';
 import { AgentsOverview } from '../features/agents/AgentsOverview';
 import { AgentDetails } from '../features/agents/AgentDetails';
+import { AgentGenesis } from '../features/agents/AgentGenesis';
 import OperatorTerminal from "../features/operator/OperatorTerminal";
 import CognitionPanel from "../features/cognition/CognitionPanel";
 
@@ -81,6 +82,8 @@ export const App: React.FC = () => {
       // Agents panels
       case 'agents':
         return <AgentsOverview />;
+      case 'agent-genesis':
+        return <AgentGenesis />;
       case 'tools':
         return (
           <div className="space-y-6">

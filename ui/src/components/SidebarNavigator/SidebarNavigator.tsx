@@ -57,7 +57,10 @@ export const SidebarNavigator: React.FC<SidebarNavigatorProps> = ({
     },
     {
       title: 'Agents',
-      items: [{ id: 'agents', label: 'Agents Overview' }]
+      items: [
+        { id: 'agents', label: 'Agents Overview' },
+        { id: 'agent-genesis', label: 'Agent Genesis', symbol: '⚡' }
+      ]
     },
     {
       title: 'Cognition',
