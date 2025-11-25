@@ -51,7 +51,8 @@ export const SidebarNavigator: React.FC<SidebarNavigatorProps> = ({
         { id: 'federation-health', label: 'Federation Health' },
         { id: 'mesh-telemetry', label: 'Mesh Telemetry' },
         { id: 'signal-history', label: 'Signal History' },
-        { id: 'federation-alerts', label: 'Alerts' }
+        { id: 'federation-alerts', label: 'Alerts' },
+        { id: 'federation-logs', label: 'Federation Logs' }
       ]
     },
     {
