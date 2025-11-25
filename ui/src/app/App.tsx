@@ -25,6 +25,7 @@ import { NodeDetailsPanel } from '../features/federation/NodeDetailsPanel';
 import { AgentsOverview } from '../features/agents/AgentsOverview';
 import { AgentDetails } from '../features/agents/AgentDetails';
 import { AgentGenesis } from '../features/agents/AgentGenesis';
+import { AgentLibraryPanel } from '../features/agents/AgentLibraryPanel';
 import OperatorTerminal from "../features/operator/OperatorTerminal";
 import CognitionPanel from "../features/cognition/CognitionPanel";
 import { FederationSyncBridge } from "../sage/federation/kernel/FederationSyncBridge";
@@ -90,6 +91,8 @@ export const App: React.FC = () => {
         return <AgentsOverview />;
       case 'agent-genesis':
         return <AgentGenesis />;
+      case 'agent-library':
+        return <AgentLibraryPanel />;
       case 'tools':
         return (
           <div className="space-y-6">

@@ -10,6 +10,7 @@ const knownCommands = [
   "pi restart",
   "rho2 status",
   "agents list",
+  "agents library",
   "agent create",
   "agent forge",
   "agent status",
@@ -93,6 +94,19 @@ export async function routeCommand(input: string): Promise<CommandResponse[]> {
   }
 
   // ✅ Agent commands
+  if (command === "agents library") {
+    return [
+      {
+        type: "info",
+        message: "Opening Agent Library...",
+      },
+      {
+        type: "hint",
+        message: "Open the sidebar and select 'Agent Library' to view the canonical agent archive.",
+      },
+    ];
+  }
+
   if (command === "agents list") {
     try {
       // Dynamically import to avoid circular dependencies
