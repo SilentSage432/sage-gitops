@@ -445,7 +445,7 @@ export default function DashboardPage() {
                   <CardTitle>Recent Activity</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  {dashboardData.isLoading ? (
+                  {(telemetry.isLoading || status.isLoading || agents.isLoading || activity.isLoading) ? (
                     <p className="text-sm text-white/60">Loading activity...</p>
                   ) : activity.length > 0 ? (
                     <ul className="space-y-1 font-mono text-sm text-white/80">
