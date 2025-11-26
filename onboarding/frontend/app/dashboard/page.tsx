@@ -5,8 +5,9 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { OCTGuard } from '@/components/OCTGuard';
-import { CheckCircle2, Clock, UserPlus, Download, Bot, KeyRound, ScrollText, RefreshCw, AlertCircle } from 'lucide-react';
+import { CheckCircle2, Clock, UserPlus, Bot, KeyRound, ScrollText, RefreshCw, AlertCircle } from 'lucide-react';
 import { BootstrapStatusCard } from '@/components/BootstrapStatusCard';
+import { BootstrapAuditFeed } from '@/components/BootstrapAuditFeed';
 import { useTenantDashboard } from '@/lib/useTenantDashboard';
 
 export default function DashboardPage() {
@@ -34,14 +35,32 @@ export default function DashboardPage() {
     status: 'stabilizing',
   };
 
-  // Map status data to tiles format
+  // Map status data to tiles format (Phase 7 enhanced)
   const tiles = dashboardData.status ? [
-    { label: "Mesh Link", state: dashboardData.status.overallHealth === "green" ? "ok" : dashboardData.status.overallHealth === "yellow" ? "warning" : "error" as const },
-    { label: "Rho² Vault", state: dashboardData.status.bootstrap.status === "activated" ? "ok" : dashboardData.status.bootstrap.status === "expired" ? "warning" : "ok" as const },
-    { label: "Policy Engine", state: "ok" as const },
-    { label: "Signal Horizon", state: dashboardData.status.overallHealth === "green" ? "ok" : "warning" as const },
-    { label: "Audit Channel", state: "ok" as const },
-    { label: "Bootstrap CA", state: dashboardData.status.bootstrap.status === "activated" ? "ok" : dashboardData.status.bootstrap.status === "expired" ? "warning" : "ok" as const },
+    { 
+      label: "Mesh Link", 
+      state: dashboardData.status.federation.ready && dashboardData.status.federation.nodeConnected ? "ok" : dashboardData.status.federation.nodeConnected ? "warning" : "error" as const 
+    },
+    { 
+      label: "Rho² Vault", 
+      state: dashboardData.status.activation.bootstrapActivated ? "ok" : dashboardData.status.activation.bootstrapExpired ? "warning" : dashboardData.status.activation.bootstrapGenerated ? "warning" : "ok" as const 
+    },
+    { 
+      label: "Policy Engine", 
+      state: dashboardData.status.agents.failed === 0 ? "ok" : "warning" as const 
+    },
+    { 
+      label: "Signal Horizon", 
+      state: dashboardData.status.federation.ready ? "ok" : "warning" as const 
+    },
+    { 
+      label: "Audit Channel", 
+      state: "ok" as const 
+    },
+    { 
+      label: "Bootstrap CA", 
+      state: dashboardData.status.activation.bootstrapActivated ? "ok" : dashboardData.status.activation.bootstrapExpired ? "warning" : dashboardData.status.activation.bootstrapGenerated ? "warning" : "ok" as const 
+    },
   ] : [
     { label: "Mesh Link", state: "ok" as const },
     { label: "Rho² Vault", state: "ok" as const },
@@ -108,7 +127,7 @@ export default function DashboardPage() {
                   <div>
                     <span className="text-sm text-white/60">Tenant Name:</span>
                     <p className="text-sm font-medium text-[#e2e6ee]">
-                      {dashboardData.status?.companyName || dashboardData.telemetry?.companyName || "Loading..."}
+                      {dashboardData.telemetry?.companyName || "Loading..."}
                     </p>
                   </div>
                   <div>
@@ -118,20 +137,20 @@ export default function DashboardPage() {
                     </p>
                   </div>
                   <div>
-                    <span className="text-sm text-white/60">Status:</span>
+                    <span className="text-sm text-white/60">Activation Status:</span>
                     <Badge 
                       variant="secondary" 
                       className={`ml-2 ${
-                        dashboardData.status?.overallHealth === "green" ? "bg-green-500/20 text-green-500" :
-                        dashboardData.status?.overallHealth === "yellow" ? "bg-yellow-500/20 text-yellow-500" :
-                        dashboardData.status?.overallHealth === "red" ? "bg-red-500/20 text-red-500" :
-                        ""
+                        dashboardData.status?.activation.bootstrapActivated ? "bg-green-500/20 text-green-500" :
+                        dashboardData.status?.activation.bootstrapExpired ? "bg-yellow-500/20 text-yellow-500" :
+                        dashboardData.status?.activation.bootstrapGenerated ? "bg-blue-500/20 text-blue-500" :
+                        "bg-gray-500/20 text-gray-500"
                       }`}
                     >
-                      {dashboardData.status?.overallHealth === "green" ? "Healthy" :
-                       dashboardData.status?.overallHealth === "yellow" ? "Degraded" :
-                       dashboardData.status?.overallHealth === "red" ? "Fault" :
-                       "Provisioned"}
+                      {dashboardData.status?.activation.bootstrapActivated ? "Activated" :
+                       dashboardData.status?.activation.bootstrapExpired ? "Expired" :
+                       dashboardData.status?.activation.bootstrapGenerated ? "Generated" :
+                       "Pending"}
                     </Badge>
                   </div>
                 </CardContent>
@@ -162,19 +181,58 @@ export default function DashboardPage() {
               </Card>
             </div>
 
-            {/* Status Indicators Row */}
+            {/* Status Indicators Row - Phase 7 Enhanced */}
             <div className="slide-up grid grid-cols-1 sm:grid-cols-3 gap-4" style={{ animationDelay: "0.2s" }}>
               <Card className="hover:border-white/20 hover:shadow-[0_0_28px_-14px_rgba(0,0,0,0.9)] focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:outline-none">
                 <CardContent className="pt-6">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm text-white/60 flex items-center gap-2">
-                      <span className="block w-2 h-2 rounded-full bg-[#10b981]"></span>
-                      Agents Online
+                      <span className={`block w-2 h-2 rounded-full ${
+                        dashboardData.status?.agents.deployed > 0 ? "bg-[#10b981]" : 
+                        dashboardData.status?.agents.pending > 0 ? "bg-yellow-500" : 
+                        "bg-neutral-500"
+                      }`}></span>
+                      Agents Deployed
                     </span>
                     <Bot className="w-5 h-5 text-[#10b981]" />
                   </div>
-                  <Badge variant="default" className="bg-[#10b981]/20 text-[#10b981] border-[#10b981]/30">
-                    {telemetry.agentsOnline}
+                  <div className="space-y-1">
+                    <Badge variant="default" className="bg-[#10b981]/20 text-[#10b981] border-[#10b981]/30">
+                      {dashboardData.status?.agents.deployed || 0} / {dashboardData.status?.agents.count || 0}
+                    </Badge>
+                    {dashboardData.status && dashboardData.status.agents.failed > 0 && (
+                      <p className="text-xs text-red-400">{dashboardData.status.agents.failed} failed</p>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="hover:border-white/20 hover:shadow-[0_0_28px_-14px_rgba(0,0,0,0.9)] focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:outline-none">
+                <CardContent className="pt-6">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm text-white/60 flex items-center gap-2">
+                      <span className={`block w-2 h-2 rounded-full ${
+                        dashboardData.status?.activation.bootstrapActivated ? "bg-[#10b981]" :
+                        dashboardData.status?.activation.bootstrapGenerated ? "bg-blue-500" :
+                        "bg-neutral-500"
+                      }`}></span>
+                      Bootstrap Status
+                    </span>
+                    <CheckCircle2 className={`w-5 h-5 ${
+                          dashboardData.status?.activation.bootstrapActivated ? "text-[#10b981]" :
+                          dashboardData.status?.activation.bootstrapGenerated ? "text-blue-500" :
+                          "text-white/40"
+                        }`} />
+                  </div>
+                  <Badge variant="default" className={
+                    dashboardData.status?.activation.bootstrapActivated ? "bg-[#10b981]/20 text-[#10b981] border-[#10b981]/30" :
+                    dashboardData.status?.activation.bootstrapGenerated ? "bg-blue-500/20 text-blue-500 border-blue-500/30" :
+                    "bg-neutral-500/20 text-neutral-500 border-neutral-500/30"
+                  }>
+                    {dashboardData.status?.activation.bootstrapActivated ? "Activated" :
+                     dashboardData.status?.activation.bootstrapExpired ? "Expired" :
+                     dashboardData.status?.activation.bootstrapGenerated ? "Generated" :
+                     "Pending"}
                   </Badge>
                 </CardContent>
               </Card>
@@ -183,27 +241,22 @@ export default function DashboardPage() {
                 <CardContent className="pt-6">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm text-white/60 flex items-center gap-2">
-                      <span className="block w-2 h-2 rounded-full bg-[#10b981]"></span>
-                      Signal Strength
+                      <span className={`block w-2 h-2 rounded-full ${
+                        dashboardData.status?.federation.ready && dashboardData.status?.federation.nodeConnected ? "bg-[#10b981]" :
+                        dashboardData.status?.federation.nodeConnected ? "bg-yellow-500" :
+                        "bg-neutral-500"
+                      }`}></span>
+                      Federation
                     </span>
-                    <CheckCircle2 className="w-5 h-5 text-[#10b981]" />
+                    <Clock className={`w-5 h-5 ${
+                      dashboardData.status?.federation.ready ? "text-[#10b981]" : "text-white/40"
+                    }`} />
                   </div>
-                  <Badge variant="default" className="bg-[#10b981]/20 text-[#10b981] border-[#10b981]/30">
-                    {telemetry.signal}%
+                  <Badge variant="secondary">
+                    {dashboardData.status?.federation.ready ? "Ready" :
+                     dashboardData.status?.federation.nodeConnected ? "Connected" :
+                     "Not Connected"}
                   </Badge>
-                </CardContent>
-              </Card>
-
-              <Card className="hover:border-white/20 hover:shadow-[0_0_28px_-14px_rgba(0,0,0,0.9)] focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:outline-none">
-                <CardContent className="pt-6">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm text-white/60 flex items-center gap-2">
-                      <span className="block w-2 h-2 rounded-full bg-neutral-500"></span>
-                      Next Rotation
-                    </span>
-                    <Clock className="w-5 h-5 text-white/40" />
-                  </div>
-                  <Badge variant="secondary">{telemetry.rotationETA}s</Badge>
                 </CardContent>
               </Card>
             </div>
@@ -244,6 +297,103 @@ export default function DashboardPage() {
               </Card>
             </div>
 
+            {/* Agent Summary - Phase 7 */}
+            {dashboardData.status && dashboardData.status.agents.count > 0 && (
+              <div className="slide-up" style={{ animationDelay: "0.26s" }}>
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Agent Deployment Status</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-white/60">Total Agents</span>
+                        <span className="text-sm font-medium text-[#e2e6ee]">{dashboardData.status.agents.count}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-white/60">Deployed</span>
+                        <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
+                          {dashboardData.status.agents.deployed}
+                        </Badge>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-white/60">Pending</span>
+                        <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">
+                          {dashboardData.status.agents.pending}
+                        </Badge>
+                      </div>
+                      {dashboardData.status.agents.failed > 0 && (
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-white/60">Failed</span>
+                          <Badge className="bg-red-500/20 text-red-400 border-red-500/30">
+                            {dashboardData.status.agents.failed}
+                          </Badge>
+                        </div>
+                      )}
+                      <div className="mt-4 pt-4 border-t border-white/10">
+                        <p className="text-xs text-white/60 mb-2">Agent Details:</p>
+                        <div className="space-y-2">
+                          {dashboardData.status.agents.details.map((agent) => (
+                            <div key={agent.id} className="flex items-center justify-between text-sm">
+                              <span className="text-white/80">{agent.name}</span>
+                              <Badge className={
+                                agent.status === "deployed" ? "bg-green-500/20 text-green-400 border-green-500/30" :
+                                agent.status === "failed" ? "bg-red-500/20 text-red-400 border-red-500/30" :
+                                "bg-yellow-500/20 text-yellow-400 border-yellow-500/30"
+                              }>
+                                {agent.status}
+                              </Badge>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+
+            {/* Federation Summary - Phase 7 */}
+            <div className="slide-up" style={{ animationDelay: "0.27s" }}>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Federation Status</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-white/60">Ready</span>
+                      <Badge className={
+                        dashboardData.status?.federation.ready 
+                          ? "bg-green-500/20 text-green-400 border-green-500/30" 
+                          : "bg-gray-500/20 text-gray-400 border-gray-500/30"
+                      }>
+                        {dashboardData.status?.federation.ready ? "Yes" : "No"}
+                      </Badge>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-white/60">Node Connected</span>
+                      <Badge className={
+                        dashboardData.status?.federation.nodeConnected 
+                          ? "bg-green-500/20 text-green-400 border-green-500/30" 
+                          : "bg-gray-500/20 text-gray-400 border-gray-500/30"
+                      }>
+                        {dashboardData.status?.federation.nodeConnected ? "Connected" : "Not Connected"}
+                      </Badge>
+                    </div>
+                    {dashboardData.status?.federation.lastSeen && (
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-white/60">Last Seen</span>
+                        <span className="text-xs font-mono text-white/60">
+                          {new Date(dashboardData.status.federation.lastSeen).toLocaleString()}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
             {/* Next Steps Panel */}
             <div className="slide-up" style={{ animationDelay: "0.3s" }}>
               <Card>
@@ -265,13 +415,6 @@ export default function DashboardPage() {
                     >
                       <UserPlus className="w-4 h-4 mr-2" />
                       Invite Additional Operator
-                    </Button>
-                    <Button
-                      variant="outline"
-                      className="w-full justify-start"
-                    >
-                      <Download className="w-4 h-4 mr-2" />
-                      Download Bootstrap Kit
                     </Button>
                   </div>
                 </CardContent>
@@ -299,14 +442,6 @@ export default function DashboardPage() {
                     >
                       <KeyRound className="mr-2 h-4 w-4" />
                       Operator Access
-                    </Button>
-                    <Button
-                      variant="outline"
-                      className="w-full justify-start"
-                      disabled={false}
-                    >
-                      <Download className="mr-2 h-4 w-4" />
-                      Download Bootstrap
                     </Button>
                     <Button
                       variant="outline"
@@ -344,6 +479,11 @@ export default function DashboardPage() {
                   )}
                 </CardContent>
               </Card>
+            </div>
+
+            {/* Bootstrap Audit Feed */}
+            <div className="slide-up" style={{ animationDelay: "0.45s" }}>
+              <BootstrapAuditFeed tenantId={tenantId} />
             </div>
           </div>
         </div>

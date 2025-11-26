@@ -15,20 +15,28 @@ export interface TenantTelemetryResponse {
 
 export interface TenantStatusResponse {
   tenantId: string;
-  companyName: string;
-  overallHealth: "green" | "yellow" | "red";
-  bootstrap: {
-    status: "pending" | "issued" | "activated" | "expired";
-    lastIssuedAt: string | null;
-    activatedAt: string | null;
+  activation: {
+    createdAt: string;
+    bootstrapGenerated: boolean;
+    bootstrapFingerprint: string | null;
+    bootstrapActivated: boolean;
+    bootstrapExpired: boolean;
   };
   agents: {
     count: number;
-    classes: string[];
+    deployed: number;
+    pending: number;
+    failed: number;
+    details: Array<{
+      id: string;
+      name: string;
+      status: "deployed" | "pending" | "failed";
+    }>;
   };
   federation: {
-    connectedNodes: number;
-    piReady: boolean;
+    ready: boolean;
+    lastSeen: string | null;
+    nodeConnected: boolean;
   };
 }
 

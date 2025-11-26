@@ -977,6 +977,14 @@ func handleBootstrapKit(w http.ResponseWriter, r *http.Request) {
 		// Continue anyway - kit is generated, just not stored
 	}
 
+	// Log KIT_GENERATED event
+	clientIP := GetClientIP(r)
+	userAgent := r.Header.Get("User-Agent")
+	go RecordAuditEvent(ctx, tenantID, string(AuditActionKitGenerated), kit.Fingerprint, clientIP, userAgent)
+
+	// Log KIT_DOWNLOADED event (since this endpoint both generates and downloads)
+	go RecordAuditEvent(ctx, tenantID, string(AuditActionKitDownloaded), kit.Fingerprint, clientIP, userAgent)
+
 	// Return ZIP file
 	w.Header().Set("Content-Type", "application/zip")
 	w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=bootstrap-%s.zip", tenantID[:8]))
@@ -1398,7 +1406,7 @@ func handleTenantTelemetry(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// Tenant Status Handler
+// Tenant Status Handler (Phase 7 Enhanced)
 func handleTenantStatus(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
@@ -1431,12 +1439,12 @@ func handleTenantStatus(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Fetch tenant data
-	var companyName string
+	// Fetch tenant core data
+	var createdAt time.Time
 	err := dbPool.QueryRow(ctx,
-		"SELECT name FROM public.tenants WHERE id = $1",
+		"SELECT created_at FROM public.tenants WHERE id = $1",
 		tenantID,
-	).Scan(&companyName)
+	).Scan(&createdAt)
 
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
@@ -1447,86 +1455,155 @@ func handleTenantStatus(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Determine overall health
-	overallHealth := "green" // Default
-
 	// Fetch bootstrap status
-	var bootstrapStatus string
-	var lastIssuedAt sql.NullTime
-	var activatedAt sql.NullTime
-	var expiresAt sql.NullTime
-	err = dbPool.QueryRow(ctx,
-		"SELECT created_at, activated_at, expires_at FROM public.bootstrap_kits WHERE tenant_id = $1 ORDER BY created_at DESC LIMIT 1",
-		tenantID,
-	).Scan(&lastIssuedAt, &activatedAt, &expiresAt)
+	var bootstrapGenerated bool
+	var bootstrapFingerprint sql.NullString
+	var bootstrapCreatedAt sql.NullTime
+	var bootstrapActivatedAt sql.NullTime
+	var bootstrapExpiresAt sql.NullTime
 
-	if err != nil {
-		if errors.Is(err, pgx.ErrNoRows) {
-			bootstrapStatus = "pending"
-		} else {
-			bootstrapStatus = "pending"
-		}
-	} else {
-		if activatedAt.Valid {
-			bootstrapStatus = "activated"
-		} else if expiresAt.Valid && expiresAt.Time.Before(time.Now()) {
-			bootstrapStatus = "expired"
-			overallHealth = "yellow"
-		} else {
-			bootstrapStatus = "issued"
-		}
+	err = dbPool.QueryRow(ctx,
+		"SELECT fingerprint, created_at, activated_at, expires_at FROM public.bootstrap_kits WHERE tenant_id = $1 ORDER BY created_at DESC LIMIT 1",
+		tenantID,
+	).Scan(&bootstrapFingerprint, &bootstrapCreatedAt, &bootstrapActivatedAt, &bootstrapExpiresAt)
+
+	bootstrapGenerated = (err == nil)
+	bootstrapActivated := bootstrapActivatedAt.Valid
+	bootstrapExpired := false
+	if bootstrapExpiresAt.Valid {
+		bootstrapExpired = time.Now().After(bootstrapExpiresAt.Time)
 	}
 
-	// Fetch agent count and classes
-	var agentCount int
-	var agentClasses []string
+	// Fetch agent status
+	var agentDetails []map[string]interface{}
+	var deployedCount, pendingCount, failedCount int
+
 	rows, err := dbPool.Query(ctx,
-		"SELECT agent_id FROM public.tenant_agents WHERE tenant_id = $1",
+		`SELECT ta.agent_id, ta.status, a.name 
+		 FROM public.tenant_agents ta 
+		 LEFT JOIN public.agents a ON ta.agent_id = a.id 
+		 WHERE ta.tenant_id = $1`,
 		tenantID,
 	)
+
 	if err == nil {
 		defer rows.Close()
 		for rows.Next() {
-			var agentID string
-			if err := rows.Scan(&agentID); err == nil {
-				agentClasses = append(agentClasses, agentID)
+			var agentID, agentStatus, agentName string
+			// Handle NULL status (default to 'pending' if migration not run yet)
+			var status sql.NullString
+			if err := rows.Scan(&agentID, &status, &agentName); err == nil {
+				if !status.Valid {
+					agentStatus = "pending"
+				} else {
+					agentStatus = status.String
+				}
+
+				// Count by status
+				switch agentStatus {
+				case "deployed":
+					deployedCount++
+				case "failed":
+					failedCount++
+				default:
+					pendingCount++
+				}
+
+				agentDetails = append(agentDetails, map[string]interface{}{
+					"id":     agentID,
+					"name":   agentName,
+					"status": agentStatus,
+				})
 			}
 		}
-		agentCount = len(agentClasses)
 	}
 
-	// Format timestamps
-	var lastIssuedAtStr *string
-	if lastIssuedAt.Valid {
-		formatted := lastIssuedAt.Time.Format(time.RFC3339)
-		lastIssuedAtStr = &formatted
+	// Format bootstrap fingerprint
+	var fingerprintStr *string
+	if bootstrapFingerprint.Valid {
+		fp := bootstrapFingerprint.String
+		fingerprintStr = &fp
 	}
 
-	var activatedAtStr *string
-	if activatedAt.Valid {
-		formatted := activatedAt.Time.Format(time.RFC3339)
-		activatedAtStr = &formatted
-	}
+	// Federation state (stub for now - ready for future integration)
+	federationReady := false
+	var federationLastSeen *string
+	nodeConnected := false
 
-	// Return status data
+	// TODO: Integrate with SAGE cluster API when available
+	// For now, return stub values structured for easy future enhancement
+
+	// Return comprehensive status data
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]interface{}{
-		"tenantId":     tenantID,
-		"companyName":  companyName,
-		"overallHealth": overallHealth,
-		"bootstrap": map[string]interface{}{
-			"status":        bootstrapStatus,
-			"lastIssuedAt":  lastIssuedAtStr,
-			"activatedAt":   activatedAtStr,
+		"tenantId": tenantID,
+		"activation": map[string]interface{}{
+			"createdAt":           createdAt.Format(time.RFC3339),
+			"bootstrapGenerated":  bootstrapGenerated,
+			"bootstrapFingerprint": fingerprintStr,
+			"bootstrapActivated":  bootstrapActivated,
+			"bootstrapExpired":     bootstrapExpired,
 		},
 		"agents": map[string]interface{}{
-			"count":   agentCount,
-			"classes": agentClasses,
+			"count":   deployedCount + pendingCount + failedCount,
+			"deployed": deployedCount,
+			"pending":  pendingCount,
+			"failed":   failedCount,
+			"details": agentDetails,
 		},
 		"federation": map[string]interface{}{
-			"connectedNodes": 0,
-			"piReady":       false,
+			"ready":        federationReady,
+			"lastSeen":     federationLastSeen,
+			"nodeConnected": nodeConnected,
 		},
+	})
+}
+
+// Bootstrap Audit Handler
+func handleBootstrapAudit(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	// Verify OCT token (with bypass for development)
+	if os.Getenv("BYPASS_OCT") != "true" {
+		authHeader := r.Header.Get("Authorization")
+		if authHeader == "" || len(authHeader) < 7 || authHeader[:7] != "Bearer " {
+			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			return
+		}
+
+		tokenString := authHeader[7:]
+		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+			if _, ok := token.Method.(*jwt.SigningMethodRSA); !ok {
+				return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+			}
+			return &privateKey.PublicKey, nil
+		})
+
+		if err != nil || !token.Valid {
+			http.Error(w, "Invalid token", http.StatusUnauthorized)
+			return
+		}
+	}
+
+	// Get tenant ID from URL parameter
+	tenantID := chi.URLParam(r, "tenantId")
+	if tenantID == "" {
+		http.Error(w, "tenantId parameter is required", http.StatusBadRequest)
+		return
+	}
+
+	// Query audit events
+	events, err := QueryAuditEvents(ctx, tenantID)
+	if err != nil {
+		log.Printf("Failed to query audit events: %v", err)
+		http.Error(w, "Failed to retrieve audit log", http.StatusInternalServerError)
+		return
+	}
+
+	// Return audit events
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"events": events,
 	})
 }
 
@@ -1689,6 +1766,13 @@ func handleBootstrapVerify(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if !isValid {
+		// Log failed verification
+		clientIP := GetClientIP(r)
+		userAgent := r.Header.Get("User-Agent")
+		if req.TenantID != "" {
+			go RecordAuditEvent(ctx, req.TenantID, string(AuditActionVerifyFailed), req.Fingerprint, clientIP, userAgent)
+		}
+		
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusNotFound)
 		json.NewEncoder(w).Encode(map[string]interface{}{
@@ -1700,6 +1784,11 @@ func handleBootstrapVerify(w http.ResponseWriter, r *http.Request) {
 
 	// Check if expired
 	if expiresAt != nil && time.Now().After(*expiresAt) {
+		// Log failed verification (expired)
+		clientIP := GetClientIP(r)
+		userAgent := r.Header.Get("User-Agent")
+		go RecordAuditEvent(ctx, tenantID, string(AuditActionVerifyFailed), req.Fingerprint, clientIP, userAgent)
+		
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusGone)
 		json.NewEncoder(w).Encode(map[string]interface{}{
@@ -1721,9 +1810,18 @@ func handleBootstrapVerify(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	// Log verification result
+	clientIP := GetClientIP(r)
+	userAgent := r.Header.Get("User-Agent")
+	if isValid {
+		go RecordAuditEvent(ctx, tenantID, string(AuditActionVerifySuccess), req.Fingerprint, clientIP, userAgent)
+	} else {
+		go RecordAuditEvent(ctx, tenantID, string(AuditActionVerifyFailed), req.Fingerprint, clientIP, userAgent)
+	}
+
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]interface{}{
-		"valid":     true,
+		"valid":     isValid,
 		"message":   "Bootstrap kit fingerprint verified",
 		"tenantId":  tenantID,
 		"activated": activatedAt != nil,
