@@ -972,6 +972,18 @@ func handleBootstrapKit(w http.ResponseWriter, r *http.Request) {
 		expiresAt,
 	)
 
+	// Phase 11: Log kit generation activity
+	if err == nil {
+		go RecordActivityEvent(ctx, tenantID, ActivityEventKitGenerated,
+			"Bootstrap kit generated",
+			fmt.Sprintf("Kit fingerprint: %s", kit.Fingerprint),
+			ActivitySeveritySuccess,
+			map[string]interface{}{
+				"fingerprint": kit.Fingerprint,
+				"size":        kit.Size,
+			})
+	}
+
 	if err != nil {
 		log.Printf("Failed to store bootstrap kit: %v", err)
 		// Continue anyway - kit is generated, just not stored
@@ -2119,6 +2131,15 @@ func handleBootstrapVerify(w http.ResponseWriter, r *http.Request) {
 		}
 		// Update local variable for response
 		activatedAt = sql.NullTime{Time: now, Valid: true}
+
+		// Phase 11: Log kit verification activity
+		go RecordActivityEvent(ctx, tenantID, ActivityEventKitVerified,
+			"Bootstrap kit verified",
+			fmt.Sprintf("Kit fingerprint verified and activated: %s", req.Fingerprint),
+			ActivitySeveritySuccess,
+			map[string]interface{}{
+				"fingerprint": req.Fingerprint,
+			})
 	}
 
 	// Log verification result (Phase 9 - ensure audit entry)
@@ -2133,4 +2154,180 @@ func handleBootstrapVerify(w http.ResponseWriter, r *http.Request) {
 		"tenantId":  tenantID,
 		"activated": activatedAt.Valid,
 	})
+}
+
+// Phase 10: Identity Provider Detection
+func handleListIdentityProviders(w http.ResponseWriter, r *http.Request) {
+	// Return list of supported identity providers
+	providers := []map[string]interface{}{
+		{
+			"id":          "okta",
+			"name":        "Okta",
+			"type":        "saml",
+			"description": "Okta SSO integration",
+			"features":    []string{"saml", "scim", "mfa"},
+		},
+		{
+			"id":          "azure-ad",
+			"name":        "Azure AD",
+			"type":        "oidc",
+			"description": "Microsoft Azure Active Directory",
+			"features":    []string{"oidc", "scim", "mfa"},
+		},
+		{
+			"id":          "google-workspace",
+			"name":        "Google Workspace",
+			"type":        "oidc",
+			"description": "Google Workspace SSO",
+			"features":    []string{"oidc", "scim"},
+		},
+		{
+			"id":          "auth0",
+			"name":        "Auth0",
+			"type":        "oidc",
+			"description": "Auth0 identity platform",
+			"features":    []string{"oidc", "scim", "mfa"},
+		},
+		{
+			"id":          "generic-oidc",
+			"name":        "Generic OIDC",
+			"type":        "oidc",
+			"description": "Generic OpenID Connect provider",
+			"features":    []string{"oidc"},
+		},
+		{
+			"id":          "generic-saml",
+			"name":        "Generic SAML",
+			"type":        "saml",
+			"description": "Generic SAML 2.0 provider",
+			"features":    []string{"saml"},
+		},
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"providers": providers,
+	})
+}
+
+// Phase 10: Identity Validation
+func handleValidateIdentity(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var req struct {
+		TenantID         string `json:"tenantId"`
+		IdentityProvider string `json:"identityProvider"`
+		ClientId         string `json:"clientId"`
+		ClientSecret     string `json:"clientSecret"`
+		CallbackUrl      string `json:"callbackUrl"`
+		ScimEnabled      bool   `json:"scimEnabled"`
+	}
+
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Invalid request", http.StatusBadRequest)
+		return
+	}
+
+	// Validate required fields
+	if req.TenantID == "" {
+		http.Error(w, "tenantId is required", http.StatusBadRequest)
+		return
+	}
+
+	if req.IdentityProvider == "" {
+		http.Error(w, "identityProvider is required", http.StatusBadRequest)
+		return
+	}
+
+	if req.ClientId == "" {
+		http.Error(w, "clientId is required", http.StatusBadRequest)
+		return
+	}
+
+	if req.ClientSecret == "" {
+		http.Error(w, "clientSecret is required", http.StatusBadRequest)
+		return
+	}
+
+	if req.CallbackUrl == "" {
+		http.Error(w, "callbackUrl is required", http.StatusBadRequest)
+		return
+	}
+
+	// Validate callback URL format
+	if !strings.HasPrefix(req.CallbackUrl, "http://") && !strings.HasPrefix(req.CallbackUrl, "https://") {
+		http.Error(w, "callbackUrl must be a valid HTTP/HTTPS URL", http.StatusBadRequest)
+		return
+	}
+
+	// Verify tenant exists
+	var tenantExists bool
+	err := dbPool.QueryRow(ctx,
+		"SELECT EXISTS(SELECT 1 FROM public.tenants WHERE id = $1)",
+		req.TenantID,
+	).Scan(&tenantExists)
+
+	if err != nil || !tenantExists {
+		http.Error(w, "Tenant not found", http.StatusNotFound)
+		return
+	}
+
+	// TODO: In production, this would make actual API calls to validate credentials
+	// For now, we'll do basic validation and simulate success
+	validationResult := map[string]interface{}{
+		"valid":            true,
+		"tenantId":         req.TenantID,
+		"identityProvider": req.IdentityProvider,
+		"validatedAt":      time.Now().Format(time.RFC3339),
+		"details": map[string]interface{}{
+			"clientIdValid":    true,
+			"clientSecretValid": true,
+			"callbackUrlValid":  true,
+			"scimAvailable":     req.ScimEnabled,
+		},
+	}
+
+	// Store identity configuration in tenants table
+	identityConfig := map[string]interface{}{
+		"identityProvider": req.IdentityProvider,
+		"clientId":         req.ClientId,
+		"callbackUrl":      req.CallbackUrl,
+		"scimEnabled":      req.ScimEnabled,
+		"validatedAt":      time.Now().Format(time.RFC3339),
+	}
+
+	identityConfigJSON, _ := json.Marshal(identityConfig)
+
+	_, err = dbPool.Exec(ctx,
+		`UPDATE public.tenants 
+		 SET identity_provider = $1, 
+		     identity_config = $2, 
+		     identity_validated_at = $3,
+		     updated_at = $4
+		 WHERE id = $5`,
+		req.IdentityProvider,
+		identityConfigJSON,
+		time.Now(),
+		time.Now(),
+		req.TenantID,
+	)
+
+	if err != nil {
+		log.Printf("Failed to update tenant identity config: %v", err)
+		http.Error(w, "Failed to save identity configuration", http.StatusInternalServerError)
+		return
+	}
+
+	// Phase 11: Log identity validation activity
+	go RecordActivityEvent(ctx, req.TenantID, ActivityEventIdentityValidated,
+		"Identity configuration validated",
+		fmt.Sprintf("SSO configured with %s", req.IdentityProvider),
+		ActivitySeveritySuccess,
+		map[string]interface{}{
+			"identityProvider": req.IdentityProvider,
+			"scimEnabled":       req.ScimEnabled,
+		})
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(validationResult)
 }

@@ -125,6 +125,10 @@ func main() {
 		r.Get("/agents", handleListAgents)
 		r.Get("/regions", handleListRegions)
 		
+		// Phase 10: Identity/SSO endpoints
+		r.Get("/identity/providers", handleListIdentityProviders)
+		r.Post("/identity/validate", handleValidateIdentity)
+		
 		// Phase 3 & 8: Dashboard endpoints
 		r.Route("/tenants/{tenantId}", func(r chi.Router) {
 			r.Get("/telemetry", handleTenantTelemetry)

@@ -28,6 +28,7 @@ const authMethodOptions = [
   { value: 'sso', label: 'SSO (OIDC / SAML)' },
 ];
 
+// Identity providers will be fetched from API (Phase 10)
 const identityProviderOptions = [
   'Okta',
   'Azure AD',
@@ -62,6 +63,27 @@ export default function AccessPage() {
     clientId?: string;
     clientSecret?: string;
   }>({});
+  
+  const [identityProviders, setIdentityProviders] = useState<Array<{id: string; name: string; type: string; description: string}>>([]);
+  const [validating, setValidating] = useState(false);
+  const [validationStatus, setValidationStatus] = useState<{valid: boolean; message?: string} | null>(null);
+
+  // Fetch identity providers on mount (Phase 10)
+  useEffect(() => {
+    const fetchProviders = async () => {
+      try {
+        const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+        const res = await fetch(`${API_BASE_URL}/api/onboarding/identity/providers`);
+        if (res.ok) {
+          const data = await res.json();
+          setIdentityProviders(data.providers || []);
+        }
+      } catch (err) {
+        console.error('Failed to fetch identity providers:', err);
+      }
+    };
+    fetchProviders();
+  }, []);
 
   // Generate password on mount if local auth and no password exists
   useEffect(() => {
@@ -118,6 +140,47 @@ export default function AccessPage() {
 
   const handleBack = () => {
     router.push('/onboarding/agents');
+  };
+
+  // Phase 10: Validate identity configuration
+  const handleValidateIdentity = async () => {
+    if (formData.authMethod !== 'sso') return;
+    
+    const tenantId = localStorage.getItem('lastTenantId');
+    if (!tenantId) {
+      setValidationStatus({ valid: false, message: 'No tenant ID found. Please complete previous steps.' });
+      return;
+    }
+
+    setValidating(true);
+    setValidationStatus(null);
+
+    try {
+      const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+      const res = await fetch(`${API_BASE_URL}/api/onboarding/identity/validate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          tenantId: tenantId,
+          identityProvider: formData.identityProvider,
+          clientId: formData.clientId,
+          clientSecret: formData.clientSecret,
+          callbackUrl: getCallbackUrl(),
+          scimEnabled: formData.scimEnabled,
+        }),
+      });
+
+      const data = await res.json();
+      if (res.ok && data.valid) {
+        setValidationStatus({ valid: true, message: 'Identity configuration validated successfully' });
+      } else {
+        setValidationStatus({ valid: false, message: data.message || 'Validation failed' });
+      }
+    } catch (err) {
+      setValidationStatus({ valid: false, message: 'Failed to validate identity configuration' });
+    } finally {
+      setValidating(false);
+    }
   };
 
   const handleNext = () => {
@@ -217,11 +280,19 @@ export default function AccessPage() {
                         onChange={(e) => setFormData({ ...formData, identityProvider: e.target.value })}
                       >
                         <SelectOption value="">Select identity provider</SelectOption>
-                        {identityProviderOptions.map((provider) => (
-                          <SelectOption key={provider} value={provider}>
-                            {provider}
-                          </SelectOption>
-                        ))}
+                        {identityProviders.length > 0 ? (
+                          identityProviders.map((provider) => (
+                            <SelectOption key={provider.id} value={provider.id}>
+                              {provider.name} {provider.type && `(${provider.type.toUpperCase()})`}
+                            </SelectOption>
+                          ))
+                        ) : (
+                          identityProviderOptions.map((provider) => (
+                            <SelectOption key={provider} value={provider}>
+                              {provider}
+                            </SelectOption>
+                          ))
+                        )}
                       </Select>
                     </div>
 
@@ -289,6 +360,30 @@ export default function AccessPage() {
                         onCheckedChange={(checked) => setFormData({ ...formData, scimEnabled: checked })}
                       />
                     </div>
+
+                    {/* Phase 10: Identity Validation */}
+                    {formData.clientId && formData.clientSecret && formData.identityProvider && (
+                      <div className="space-y-2">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={handleValidateIdentity}
+                          disabled={validating}
+                          className="w-full"
+                        >
+                          {validating ? 'Validating...' : 'Validate Identity Configuration'}
+                        </Button>
+                        {validationStatus && (
+                          <div className={`p-3 rounded-lg text-sm ${
+                            validationStatus.valid 
+                              ? 'bg-green-500/20 text-green-400 border border-green-500/30' 
+                              : 'bg-red-500/20 text-red-400 border border-red-500/30'
+                          }`}>
+                            {validationStatus.message}
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

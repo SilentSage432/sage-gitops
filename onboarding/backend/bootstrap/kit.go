@@ -365,6 +365,36 @@ stringData:
 	return []byte(content)
 }
 
+// Phase 10: generateIdentityConfig generates the identity configuration manifest
+func generateIdentityConfig(tenant TenantInfo) []byte {
+	namespaceName := fmt.Sprintf("tenant-%s", sanitizeName(tenant.Name))
+
+	content := fmt.Sprintf(`apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: identity-config
+  namespace: %s
+data:
+  identityProvider: "%s"
+  clientId: "%s"
+  callbackUrl: "%s"
+  scimEnabled: "%t"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: identity-secret
+  namespace: %s
+type: Opaque
+stringData:
+  clientSecret: "%s"
+`, namespaceName, tenant.Access.IdentityProvider, tenant.Access.ClientId,
+		tenant.Access.CallbackUrl, tenant.Access.ScimEnabled,
+		namespaceName, tenant.Access.ClientSecret)
+
+	return []byte(content)
+}
+
 // generateTenantConfig generates the tenant configuration
 func generateTenantConfig(tenant TenantInfo) []byte {
 	namespaceName := fmt.Sprintf("tenant-%s", sanitizeName(tenant.Name))
