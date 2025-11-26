@@ -1393,16 +1393,72 @@ func handleTenantTelemetry(w http.ResponseWriter, r *http.Request) {
 	// This ensures it's consistent across refreshes
 	rotationETA := "~12 hours" // Placeholder, but deterministic
 
-	// Return telemetry data
+	// Calculate health score (0-100)
+	healthScore := 100
+	if bootstrapStatus == "expired" {
+		healthScore -= 20
+	} else if bootstrapStatus == "pending" {
+		healthScore -= 10
+	}
+	if agentCount == 0 {
+		healthScore -= 15
+	}
+	if signalStrength < 50 {
+		healthScore -= 10
+	}
+	if healthScore < 0 {
+		healthScore = 0
+	}
+
+	// Generate alerts based on status
+	var alerts []map[string]interface{}
+	if bootstrapStatus == "expired" {
+		alerts = append(alerts, map[string]interface{}{
+			"severity": "warning",
+			"message":  "Bootstrap kit has expired",
+			"timestamp": time.Now().Format(time.RFC3339),
+		})
+	}
+	if agentCount == 0 {
+		alerts = append(alerts, map[string]interface{}{
+			"severity": "info",
+			"message":  "No agents deployed yet",
+			"timestamp": time.Now().Format(time.RFC3339),
+		})
+	}
+
+	// Generate signals (system events)
+	var signals []map[string]interface{}
+	if bootstrapStatus == "activated" {
+		signals = append(signals, map[string]interface{}{
+			"type":      "bootstrap.activated",
+			"timestamp": time.Now().Format(time.RFC3339),
+			"value":     "Bootstrap kit verified and activated",
+		})
+	}
+	if agentCount > 0 {
+		signals = append(signals, map[string]interface{}{
+			"type":      "agents.deployed",
+			"timestamp": time.Now().Format(time.RFC3339),
+			"value":     fmt.Sprintf("%d agents configured", agentCount),
+		})
+	}
+
+	// Format last signal timestamp
+	lastSignal := time.Now().Format(time.RFC3339)
+	if len(signals) > 0 {
+		lastSignal = signals[0]["timestamp"].(string)
+	}
+
+	// Return enhanced telemetry data (Phase 8)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]interface{}{
-		"tenantId":        tenantID,
-		"companyName":     companyName,
-		"agentCount":      agentCount,
-		"selectedAgents":  selectedAgents,
-		"bootstrapStatus": bootstrapStatus,
-		"signalStrength":  signalStrength,
-		"rotationETA":     rotationETA,
+		"agentCount":  agentCount,
+		"lastSignal":  lastSignal,
+		"rotationEta": rotationETA,
+		"healthScore": healthScore,
+		"alerts":      alerts,
+		"signals":     signals,
 	})
 }
 
@@ -1533,9 +1589,38 @@ func handleTenantStatus(w http.ResponseWriter, r *http.Request) {
 	// TODO: Integrate with SAGE cluster API when available
 	// For now, return stub values structured for easy future enhancement
 
-	// Return comprehensive status data
+	// Determine regions ready status (check if tenant has region config)
+	var regionsReady bool
+	var regionCount int
+	err = dbPool.QueryRow(ctx,
+		"SELECT COUNT(*) FROM public.tenants WHERE id = $1 AND data_regions IS NOT NULL",
+		tenantID,
+	).Scan(&regionCount)
+	regionsReady = (err == nil && regionCount > 0)
+
+	// Determine cluster health
+	clusterHealth := "nominal"
+	if failedCount > 0 {
+		clusterHealth = "degraded"
+	}
+	if failedCount > deployedCount {
+		clusterHealth = "critical"
+	}
+	if !bootstrapActivated {
+		clusterHealth = "initializing"
+	}
+
+	// Return enhanced status data (Phase 8 compatible)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]interface{}{
+		"bootstrap": map[string]interface{}{
+			"generated": bootstrapGenerated,
+			"verified":  bootstrapActivated,
+		},
+		"agentsReady":   deployedCount > 0,
+		"regionsReady":  regionsReady,
+		"clusterHealth": clusterHealth,
+		// Also include Phase 7 structure for backward compatibility
 		"tenantId": tenantID,
 		"activation": map[string]interface{}{
 			"createdAt":           createdAt.Format(time.RFC3339),
@@ -1717,11 +1802,89 @@ func handleTenantActivity(w http.ResponseWriter, r *http.Request) {
 		events[i], events[j] = events[j], events[i]
 	}
 
-	// Return activity data
+	// Return Phase 8 activity data
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]interface{}{
-		"tenantId": tenantID,
-		"events":   events,
+		"events": events,
+	})
+}
+
+// Tenant Agents Handler (Phase 8)
+func handleTenantAgents(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	// Verify OCT token (with bypass for development)
+	if os.Getenv("BYPASS_OCT") != "true" {
+		authHeader := r.Header.Get("Authorization")
+		if authHeader == "" || len(authHeader) < 7 || authHeader[:7] != "Bearer " {
+			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			return
+		}
+
+		tokenString := authHeader[7:]
+		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+			if _, ok := token.Method.(*jwt.SigningMethodRSA); !ok {
+				return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+			}
+			return &privateKey.PublicKey, nil
+		})
+
+		if err != nil || !token.Valid {
+			http.Error(w, "Invalid token", http.StatusUnauthorized)
+			return
+		}
+	}
+
+	// Get tenant ID from URL parameter
+	tenantID := chi.URLParam(r, "tenantId")
+	if tenantID == "" {
+		http.Error(w, "tenantId parameter is required", http.StatusBadRequest)
+		return
+	}
+
+	// Verify tenant exists
+	err := dbPool.QueryRow(ctx,
+		"SELECT id FROM public.tenants WHERE id = $1",
+		tenantID,
+	).Scan(&tenantID)
+
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			http.Error(w, "Tenant not found", http.StatusNotFound)
+			return
+		}
+		http.Error(w, "Database error", http.StatusInternalServerError)
+		return
+	}
+
+	// Fetch agents with status
+	var agents []map[string]interface{}
+	rows, err := dbPool.Query(ctx,
+		`SELECT ta.agent_id, COALESCE(ta.status, 'pending') as status, a.name 
+		 FROM public.tenant_agents ta 
+		 LEFT JOIN public.agents a ON ta.agent_id = a.id 
+		 WHERE ta.tenant_id = $1
+		 ORDER BY ta.created_at DESC`,
+		tenantID,
+	)
+
+	if err == nil {
+		defer rows.Close()
+		for rows.Next() {
+			var agentID, agentStatus, agentName string
+			if err := rows.Scan(&agentID, &agentStatus, &agentName); err == nil {
+				agents = append(agents, map[string]interface{}{
+					"id":     agentID,
+					"status": agentStatus,
+				})
+			}
+		}
+	}
+
+	// Return agents data
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"agents": agents,
 	})
 }
 

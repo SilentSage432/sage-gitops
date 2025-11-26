@@ -1,15 +1,21 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { CheckCircle2, QrCode, X, LayoutDashboard } from 'lucide-react';
 import { OCTGuard } from '@/components/OCTGuard';
+import { QRCodeSVG } from 'qrcode.react';
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 
 export default function SuccessPage() {
   const router = useRouter();
   const [showQRModal, setShowQRModal] = useState(false);
+  const [tenantId, setTenantId] = useState<string>('');
+  const [fingerprint, setFingerprint] = useState<string>('');
+  const [isLoadingFingerprint, setIsLoadingFingerprint] = useState(false);
 
   const handleEnterDashboard = () => {
     router.push('/dashboard');
@@ -21,6 +27,39 @@ export default function SuccessPage() {
 
   const handleCloseQR = () => {
     setShowQRModal(false);
+  };
+
+  // Fetch tenantId and fingerprint on mount
+  useEffect(() => {
+    const storedTenantId = localStorage.getItem('lastTenantId');
+    if (storedTenantId) {
+      setTenantId(storedTenantId);
+      fetchFingerprint(storedTenantId);
+    }
+  }, []);
+
+  const fetchFingerprint = async (tid: string) => {
+    setIsLoadingFingerprint(true);
+    try {
+      const octToken = localStorage.getItem('oct-storage') 
+        ? JSON.parse(localStorage.getItem('oct-storage')!).token 
+        : '';
+      
+      const response = await fetch(`${API_BASE_URL}/api/onboarding/bootstrap/meta/${tid}`, {
+        headers: {
+          'Authorization': `Bearer ${octToken}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setFingerprint(data.fingerprint || '');
+      }
+    } catch (error) {
+      console.error('Failed to fetch fingerprint:', error);
+    } finally {
+      setIsLoadingFingerprint(false);
+    }
   };
 
   return (
@@ -89,9 +128,37 @@ export default function SuccessPage() {
                   <X className="w-4 h-4" />
                 </Button>
               </div>
-              <p className="text-base leading-relaxed text-white/60 text-center">
-                QR delivery will be available after bootstrap activation.
-              </p>
+              {isLoadingFingerprint ? (
+                <p className="text-base leading-relaxed text-white/60 text-center">
+                  Loading verification data...
+                </p>
+              ) : fingerprint && tenantId ? (
+                <div className="space-y-4">
+                  <div className="flex justify-center">
+                    <QRCodeSVG
+                      value={`${window.location.origin}/api/onboarding/bootstrap/verify?tenantId=${tenantId}&fingerprint=${fingerprint}`}
+                      size={200}
+                      level="M"
+                      includeMargin={true}
+                      fgColor="#e2e6ee"
+                      bgColor="#0b0c0f"
+                    />
+                  </div>
+                  <p className="text-sm text-white/60 text-center">
+                    Scan to verify bootstrap kit activation
+                  </p>
+                  <div className="p-3 bg-[#0b0c0f] rounded-lg border border-white/10">
+                    <p className="text-xs text-white/40 mb-1">Tenant ID:</p>
+                    <p className="text-xs font-mono text-white/80 break-all">{tenantId}</p>
+                    <p className="text-xs text-white/40 mt-2 mb-1">Fingerprint:</p>
+                    <p className="text-xs font-mono text-white/80 break-all">{fingerprint}</p>
+                  </div>
+                </div>
+              ) : (
+                <p className="text-base leading-relaxed text-white/60 text-center">
+                  QR delivery will be available after bootstrap activation.
+                </p>
+              )}
               <Button
                 onClick={handleCloseQR}
                 variant="outline"

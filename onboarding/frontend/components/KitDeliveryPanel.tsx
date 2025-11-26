@@ -22,41 +22,23 @@ export function KitDeliveryPanel() {
         return;
       }
 
-      const token = localStorage.getItem('oct-storage');
-      if (!token) {
-        throw new Error('No access token available');
-      }
-
-      const octData = JSON.parse(token);
-      
       // Get tenantId from query param or localStorage
       const urlParams = new URLSearchParams(window.location.search);
       const tenantId = urlParams.get('tenantId') || localStorage.getItem('lastTenantId') || '';
-      
-      const response = await axios.post(
-        `${API_BASE_URL}/api/onboarding/bootstrap/kit${tenantId ? `?tenantId=${tenantId}` : ''}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${octData.token}`,
-          },
-          responseType: 'blob',
-        }
-      );
 
-      const blob = new Blob([response.data], { type: 'application/zip' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `bootstrap-${tenantId ? tenantId.substring(0, 8) : 'kit'}.zip`;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
+      if (!tenantId) {
+        throw new Error('No tenant ID available');
+      }
+
+      // Use shared download utility
+      const { downloadBootstrapKit } = await import('@/lib/downloadKit');
+      await downloadBootstrapKit(tenantId);
 
       // Fetch fingerprint and verify command if we have tenantId
-      if (tenantId) {
-        try {
+      try {
+        const token = localStorage.getItem('oct-storage');
+        if (token) {
+          const octData = JSON.parse(token);
           const metaResponse = await axios.get(`${API_BASE_URL}/api/onboarding/bootstrap/meta/${tenantId}`, {
             headers: {
               Authorization: `Bearer ${octData.token}`,
@@ -69,9 +51,9 @@ export function KitDeliveryPanel() {
           if (metaResponse.data.verifyCommand) {
             setVerifyCommand(metaResponse.data.verifyCommand);
           }
-        } catch (err) {
-          console.error('Failed to fetch meta:', err);
         }
+      } catch (err) {
+        console.error('Failed to fetch meta:', err);
       }
     } catch (error: any) {
       console.error('Download error:', error);

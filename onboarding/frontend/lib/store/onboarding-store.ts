@@ -1,6 +1,12 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
+// Cleanup legacy localStorage keys
+if (typeof window !== 'undefined') {
+  const legacyKeys = ['wizardCompany', 'wizardAgents', 'wizardAccess', 'wizardData', 'wizard-store'];
+  legacyKeys.forEach((k) => localStorage.removeItem(k));
+}
+
 export interface CompanyData {
   name: string;
   industry?: 'Healthcare' | 'Finance' | 'Retail' | 'Manufacturing' | 'Other';

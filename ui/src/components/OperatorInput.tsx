@@ -72,4 +72,3 @@ export function OperatorInput({ onSend }: OperatorInputProps) {
     </div>
   );
 }
-

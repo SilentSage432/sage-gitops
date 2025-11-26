@@ -189,46 +189,25 @@ export function BootstrapStatusCard({ fingerprint }: BootstrapStatusCardProps) {
 
   const handleDownloadKit = async () => {
     try {
-      const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
-      const token = localStorage.getItem('oct-storage');
-      if (!token) {
-        alert('No access token available. Please authenticate first.');
-        return;
-      }
-
-      const octData = JSON.parse(token);
-      
       // Get tenantId from localStorage or URL
       const urlParams = new URLSearchParams(window.location.search);
       const tenantId = urlParams.get('tenantId') || localStorage.getItem('lastTenantId') || '';
 
-      const response = await fetch(
-        `${API_BASE_URL}/api/onboarding/bootstrap/kit${tenantId ? `?tenantId=${tenantId}` : ''}`,
-        {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${octData.token}`,
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error('Failed to download bootstrap kit');
+      if (!tenantId) {
+        alert('No tenant ID available. Please complete onboarding first.');
+        return;
       }
 
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `bootstrap-${tenantId ? tenantId.substring(0, 8) : 'kit'}.zip`;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
+      // Use shared download utility
+      const { downloadBootstrapKit } = await import('@/lib/downloadKit');
+      await downloadBootstrapKit(tenantId);
 
       // Fetch meta to update fingerprint if available
-      if (tenantId) {
-        try {
+      try {
+        const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+        const token = localStorage.getItem('oct-storage');
+        if (token) {
+          const octData = JSON.parse(token);
           const metaResponse = await fetch(`${API_BASE_URL}/api/onboarding/bootstrap/meta/${tenantId}`, {
             headers: {
               'Authorization': `Bearer ${octData.token}`,
@@ -241,9 +220,9 @@ export function BootstrapStatusCard({ fingerprint }: BootstrapStatusCardProps) {
               localStorage.setItem(STORAGE_FINGERPRINT_KEY, meta.fingerprint);
             }
           }
-        } catch (err) {
-          console.error('Failed to fetch meta:', err);
         }
+      } catch (err) {
+        console.error('Failed to fetch meta:', err);
       }
     } catch (error) {
       console.error('Download error:', error);

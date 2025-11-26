@@ -22,13 +22,13 @@ export default function InitiatorPage() {
             <h2 className="text-xl font-semibold mb-4 text-[#e2e6ee]">Ready to Begin Onboarding</h2>
             <p className="text-white/60 mb-6">
               Your YubiKey has been authenticated and an Operator Capability Token (OCT) has been issued.
-              Proceed to the wizard to configure your SAGE deployment.
+              Proceed to configure your SAGE deployment.
             </p>
             <button
-              onClick={() => router.push('/wizard')}
+              onClick={() => router.push('/onboarding/company')}
               className="px-6 py-3 bg-[#6366f1] text-white rounded-[14px] hover:bg-[#585ae8] transition-colors"
             >
-              Start Onboarding Wizard
+              Start Onboarding
             </button>
           </div>
         </div>

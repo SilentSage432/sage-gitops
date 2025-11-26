@@ -8,50 +8,38 @@ import { OCTGuard } from '@/components/OCTGuard';
 import { CheckCircle2, Clock, UserPlus, Bot, KeyRound, ScrollText, RefreshCw, AlertCircle } from 'lucide-react';
 import { BootstrapStatusCard } from '@/components/BootstrapStatusCard';
 import { BootstrapAuditFeed } from '@/components/BootstrapAuditFeed';
-import { useTenantDashboard } from '@/lib/useTenantDashboard';
+import { useTenantTelemetry } from '@/lib/useTenantTelemetry';
+import { useTenantStatus } from '@/lib/useTenantStatus';
+import { useTenantAgents } from '@/lib/useTenantAgents';
+import { useTenantActivity } from '@/lib/useTenantActivity';
+import { getTenantId } from '@/lib/onboarding/getTenantId';
 
 export default function DashboardPage() {
-  // Get tenantId from localStorage (set during onboarding)
-  const [tenantId] = useState<string | null>(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('lastTenantId');
-    }
-    return null;
-  });
+  // Get tenantId using helper
+  const tenantId = getTenantId();
 
-  // Real dashboard data
-  const dashboardData = useTenantDashboard(tenantId);
-  
-  // Derived data for backward compatibility with existing UI
-  const telemetry = dashboardData.telemetry ? {
-    agentsOnline: dashboardData.telemetry.agentCount,
-    signal: dashboardData.telemetry.signalStrength,
-    rotationETA: dashboardData.telemetry.rotationETA.replace(/[^0-9]/g, '') || '0',
-    status: dashboardData.telemetry.bootstrapStatus === 'activated' ? 'optimizing' : 'stabilizing',
-  } : {
-    agentsOnline: 0,
-    signal: 0,
-    rotationETA: '0',
-    status: 'stabilizing',
-  };
-
-  // Map status data to tiles format (Phase 7 enhanced)
-  const tiles = dashboardData.status ? [
+  // Phase 8: Real-time data hooks
+  const telemetry = useTenantTelemetry(tenantId);
+  const status = useTenantStatus(tenantId);
+  const agents = useTenantAgents(tenantId);
+  const activity = useTenantActivity(tenantId);
+  // Map status data to tiles format (Phase 8)
+  const tiles = status.data ? [
     { 
       label: "Mesh Link", 
-      state: dashboardData.status.federation.ready && dashboardData.status.federation.nodeConnected ? "ok" : dashboardData.status.federation.nodeConnected ? "warning" : "error" as const 
+      state: status.data.clusterHealth === "nominal" ? "ok" : status.data.clusterHealth === "degraded" ? "warning" : "error" as const 
     },
     { 
       label: "Rho² Vault", 
-      state: dashboardData.status.activation.bootstrapActivated ? "ok" : dashboardData.status.activation.bootstrapExpired ? "warning" : dashboardData.status.activation.bootstrapGenerated ? "warning" : "ok" as const 
+      state: status.data.bootstrap.verified ? "ok" : status.data.bootstrap.generated ? "warning" : "ok" as const 
     },
     { 
       label: "Policy Engine", 
-      state: dashboardData.status.agents.failed === 0 ? "ok" : "warning" as const 
+      state: status.data.clusterHealth === "nominal" ? "ok" : "warning" as const 
     },
     { 
       label: "Signal Horizon", 
-      state: dashboardData.status.federation.ready ? "ok" : "warning" as const 
+      state: status.data.regionsReady ? "ok" : "warning" as const 
     },
     { 
       label: "Audit Channel", 
@@ -59,7 +47,7 @@ export default function DashboardPage() {
     },
     { 
       label: "Bootstrap CA", 
-      state: dashboardData.status.activation.bootstrapActivated ? "ok" : dashboardData.status.activation.bootstrapExpired ? "warning" : dashboardData.status.activation.bootstrapGenerated ? "warning" : "ok" as const 
+      state: status.data.bootstrap.verified ? "ok" : status.data.bootstrap.generated ? "warning" : "ok" as const 
     },
   ] : [
     { label: "Mesh Link", state: "ok" as const },
@@ -70,10 +58,16 @@ export default function DashboardPage() {
     { label: "Bootstrap CA", state: "ok" as const },
   ];
 
-  // Map activity events to activity stream format
-  const activity = dashboardData.activity?.events.map((event) => {
-    const icon = event.severity === "success" ? "✓" : event.severity === "warning" ? "⚠" : event.severity === "error" ? "✗" : "›";
-    return `${icon} ${event.summary}`;
+  // Format activity events for display
+  const activityEvents = activity.data?.events.map((event) => {
+    const typeMap: Record<string, string> = {
+      'tenant.created': 'Tenant registered',
+      'kit.generated': 'Bootstrap kit generated',
+      'kit.verified': 'Bootstrap kit verified',
+      'agent.created': 'Agent created',
+    };
+    const icon = event.type.includes('verified') ? "✓" : event.type.includes('created') ? "›" : "⚠";
+    return `${icon} ${typeMap[event.type] || event.type}`;
   }) || [];
 
   return (
@@ -88,17 +82,19 @@ export default function DashboardPage() {
                   SAGE Onboarding Dashboard
                 </h1>
                 <p className="text-sm text-white/60 mt-2">
-                  {dashboardData.status?.companyName || "Tenant Dashboard"}
+                  Tenant Dashboard
                 </p>
               </div>
-              {dashboardData.isLoading && (
+              {(telemetry.isLoading || status.isLoading || agents.isLoading || activity.isLoading) && (
                 <RefreshCw className="w-5 h-5 text-white/40 animate-spin" />
               )}
             </div>
-            {dashboardData.error && (
+            {(telemetry.error || status.error || agents.error || activity.error) && (
               <div className="mt-4 p-3 bg-red-500/20 border border-red-500/30 rounded-lg flex items-center gap-2">
                 <AlertCircle className="w-4 h-4 text-red-500" />
-                <p className="text-sm text-red-500">{dashboardData.error}</p>
+                <p className="text-sm text-red-500">
+                  {telemetry.error || status.error || agents.error || activity.error}
+                </p>
                 <Button
                   variant="ghost"
                   size="sm"
@@ -125,9 +121,9 @@ export default function DashboardPage() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div>
-                    <span className="text-sm text-white/60">Tenant Name:</span>
-                    <p className="text-sm font-medium text-[#e2e6ee]">
-                      {dashboardData.telemetry?.companyName || "Loading..."}
+                    <span className="text-sm text-white/60">Tenant ID:</span>
+                    <p className="text-sm font-mono text-[#e2e6ee]">
+                      {tenantId ? tenantId.substring(0, 8) + "..." : "N/A"}
                     </p>
                   </div>
                   <div>
@@ -141,16 +137,28 @@ export default function DashboardPage() {
                     <Badge 
                       variant="secondary" 
                       className={`ml-2 ${
-                        dashboardData.status?.activation.bootstrapActivated ? "bg-green-500/20 text-green-500" :
-                        dashboardData.status?.activation.bootstrapExpired ? "bg-yellow-500/20 text-yellow-500" :
-                        dashboardData.status?.activation.bootstrapGenerated ? "bg-blue-500/20 text-blue-500" :
+                        status.data?.bootstrap.verified ? "bg-green-500/20 text-green-500" :
+                        status.data?.bootstrap.generated ? "bg-blue-500/20 text-blue-500" :
                         "bg-gray-500/20 text-gray-500"
                       }`}
                     >
-                      {dashboardData.status?.activation.bootstrapActivated ? "Activated" :
-                       dashboardData.status?.activation.bootstrapExpired ? "Expired" :
-                       dashboardData.status?.activation.bootstrapGenerated ? "Generated" :
+                      {status.data?.bootstrap.verified ? "Activated" :
+                       status.data?.bootstrap.generated ? "Generated" :
                        "Pending"}
+                    </Badge>
+                  </div>
+                  <div>
+                    <span className="text-sm text-white/60">Cluster Health:</span>
+                    <Badge 
+                      variant="secondary" 
+                      className={`ml-2 ${
+                        status.data?.clusterHealth === "nominal" ? "bg-green-500/20 text-green-500" :
+                        status.data?.clusterHealth === "degraded" ? "bg-yellow-500/20 text-yellow-500" :
+                        status.data?.clusterHealth === "critical" ? "bg-red-500/20 text-red-500" :
+                        "bg-gray-500/20 text-gray-500"
+                      }`}
+                    >
+                      {status.data?.clusterHealth || "Unknown"}
                     </Badge>
                   </div>
                 </CardContent>
@@ -181,58 +189,21 @@ export default function DashboardPage() {
               </Card>
             </div>
 
-            {/* Status Indicators Row - Phase 7 Enhanced */}
+            {/* Status Indicators Row - Phase 8 */}
             <div className="slide-up grid grid-cols-1 sm:grid-cols-3 gap-4" style={{ animationDelay: "0.2s" }}>
               <Card className="hover:border-white/20 hover:shadow-[0_0_28px_-14px_rgba(0,0,0,0.9)] focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:outline-none">
                 <CardContent className="pt-6">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm text-white/60 flex items-center gap-2">
                       <span className={`block w-2 h-2 rounded-full ${
-                        dashboardData.status?.agents.deployed > 0 ? "bg-[#10b981]" : 
-                        dashboardData.status?.agents.pending > 0 ? "bg-yellow-500" : 
-                        "bg-neutral-500"
+                        telemetry.data?.agentCount > 0 ? "bg-[#10b981]" : "bg-neutral-500"
                       }`}></span>
-                      Agents Deployed
+                      Agents Online
                     </span>
                     <Bot className="w-5 h-5 text-[#10b981]" />
                   </div>
-                  <div className="space-y-1">
-                    <Badge variant="default" className="bg-[#10b981]/20 text-[#10b981] border-[#10b981]/30">
-                      {dashboardData.status?.agents.deployed || 0} / {dashboardData.status?.agents.count || 0}
-                    </Badge>
-                    {dashboardData.status && dashboardData.status.agents.failed > 0 && (
-                      <p className="text-xs text-red-400">{dashboardData.status.agents.failed} failed</p>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="hover:border-white/20 hover:shadow-[0_0_28px_-14px_rgba(0,0,0,0.9)] focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:outline-none">
-                <CardContent className="pt-6">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm text-white/60 flex items-center gap-2">
-                      <span className={`block w-2 h-2 rounded-full ${
-                        dashboardData.status?.activation.bootstrapActivated ? "bg-[#10b981]" :
-                        dashboardData.status?.activation.bootstrapGenerated ? "bg-blue-500" :
-                        "bg-neutral-500"
-                      }`}></span>
-                      Bootstrap Status
-                    </span>
-                    <CheckCircle2 className={`w-5 h-5 ${
-                          dashboardData.status?.activation.bootstrapActivated ? "text-[#10b981]" :
-                          dashboardData.status?.activation.bootstrapGenerated ? "text-blue-500" :
-                          "text-white/40"
-                        }`} />
-                  </div>
-                  <Badge variant="default" className={
-                    dashboardData.status?.activation.bootstrapActivated ? "bg-[#10b981]/20 text-[#10b981] border-[#10b981]/30" :
-                    dashboardData.status?.activation.bootstrapGenerated ? "bg-blue-500/20 text-blue-500 border-blue-500/30" :
-                    "bg-neutral-500/20 text-neutral-500 border-neutral-500/30"
-                  }>
-                    {dashboardData.status?.activation.bootstrapActivated ? "Activated" :
-                     dashboardData.status?.activation.bootstrapExpired ? "Expired" :
-                     dashboardData.status?.activation.bootstrapGenerated ? "Generated" :
-                     "Pending"}
+                  <Badge variant="default" className="bg-[#10b981]/20 text-[#10b981] border-[#10b981]/30">
+                    {telemetry.data?.agentCount || 0}
                   </Badge>
                 </CardContent>
               </Card>
@@ -242,20 +213,45 @@ export default function DashboardPage() {
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm text-white/60 flex items-center gap-2">
                       <span className={`block w-2 h-2 rounded-full ${
-                        dashboardData.status?.federation.ready && dashboardData.status?.federation.nodeConnected ? "bg-[#10b981]" :
-                        dashboardData.status?.federation.nodeConnected ? "bg-yellow-500" :
+                        (telemetry.data?.healthScore || 0) >= 90 ? "bg-[#10b981]" :
+                        (telemetry.data?.healthScore || 0) >= 70 ? "bg-yellow-500" :
+                        "bg-red-500"
+                      }`}></span>
+                      Health Score
+                    </span>
+                    <CheckCircle2 className={`w-5 h-5 ${
+                      (telemetry.data?.healthScore || 0) >= 90 ? "text-[#10b981]" :
+                      (telemetry.data?.healthScore || 0) >= 70 ? "text-yellow-500" :
+                      "text-red-500"
+                    }`} />
+                  </div>
+                  <Badge variant="default" className={
+                    (telemetry.data?.healthScore || 0) >= 90 ? "bg-[#10b981]/20 text-[#10b981] border-[#10b981]/30" :
+                    (telemetry.data?.healthScore || 0) >= 70 ? "bg-yellow-500/20 text-yellow-500 border-yellow-500/30" :
+                    "bg-red-500/20 text-red-500 border-red-500/30"
+                  }>
+                    {telemetry.data?.healthScore || 0}%
+                  </Badge>
+                </CardContent>
+              </Card>
+
+              <Card className="hover:border-white/20 hover:shadow-[0_0_28px_-14px_rgba(0,0,0,0.9)] focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:outline-none">
+                <CardContent className="pt-6">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm text-white/60 flex items-center gap-2">
+                      <span className={`block w-2 h-2 rounded-full ${
+                        status.data?.clusterHealth === "nominal" ? "bg-[#10b981]" :
+                        status.data?.clusterHealth === "degraded" ? "bg-yellow-500" :
                         "bg-neutral-500"
                       }`}></span>
-                      Federation
+                      Cluster Health
                     </span>
                     <Clock className={`w-5 h-5 ${
-                      dashboardData.status?.federation.ready ? "text-[#10b981]" : "text-white/40"
+                      status.data?.clusterHealth === "nominal" ? "text-[#10b981]" : "text-white/40"
                     }`} />
                   </div>
                   <Badge variant="secondary">
-                    {dashboardData.status?.federation.ready ? "Ready" :
-                     dashboardData.status?.federation.nodeConnected ? "Connected" :
-                     "Not Connected"}
+                    {status.data?.clusterHealth || "Unknown"}
                   </Badge>
                 </CardContent>
               </Card>
@@ -297,8 +293,8 @@ export default function DashboardPage() {
               </Card>
             </div>
 
-            {/* Agent Summary - Phase 7 */}
-            {dashboardData.status && dashboardData.status.agents.count > 0 && (
+            {/* Agent Summary - Phase 8 */}
+            {agents.data && agents.data.agents.length > 0 && (
               <div className="slide-up" style={{ animationDelay: "0.26s" }}>
                 <Card>
                   <CardHeader>
@@ -308,34 +304,34 @@ export default function DashboardPage() {
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
                         <span className="text-sm text-white/60">Total Agents</span>
-                        <span className="text-sm font-medium text-[#e2e6ee]">{dashboardData.status.agents.count}</span>
+                        <span className="text-sm font-medium text-[#e2e6ee]">{agents.data.agents.length}</span>
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-sm text-white/60">Deployed</span>
                         <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
-                          {dashboardData.status.agents.deployed}
+                          {agents.data.agents.filter(a => a.status === 'deployed').length}
                         </Badge>
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-sm text-white/60">Pending</span>
                         <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">
-                          {dashboardData.status.agents.pending}
+                          {agents.data.agents.filter(a => a.status === 'pending').length}
                         </Badge>
                       </div>
-                      {dashboardData.status.agents.failed > 0 && (
+                      {agents.data.agents.filter(a => a.status === 'failed').length > 0 && (
                         <div className="flex items-center justify-between">
                           <span className="text-sm text-white/60">Failed</span>
                           <Badge className="bg-red-500/20 text-red-400 border-red-500/30">
-                            {dashboardData.status.agents.failed}
+                            {agents.data.agents.filter(a => a.status === 'failed').length}
                           </Badge>
                         </div>
                       )}
                       <div className="mt-4 pt-4 border-t border-white/10">
                         <p className="text-xs text-white/60 mb-2">Agent Details:</p>
                         <div className="space-y-2">
-                          {dashboardData.status.agents.details.map((agent) => (
+                          {agents.data.agents.map((agent) => (
                             <div key={agent.id} className="flex items-center justify-between text-sm">
-                              <span className="text-white/80">{agent.name}</span>
+                              <span className="text-white/80">{agent.id}</span>
                               <Badge className={
                                 agent.status === "deployed" ? "bg-green-500/20 text-green-400 border-green-500/30" :
                                 agent.status === "failed" ? "bg-red-500/20 text-red-400 border-red-500/30" :
@@ -353,43 +349,28 @@ export default function DashboardPage() {
               </div>
             )}
 
-            {/* Federation Summary - Phase 7 */}
+            {/* Activity Feed - Phase 8 */}
             <div className="slide-up" style={{ animationDelay: "0.27s" }}>
               <Card>
                 <CardHeader>
-                  <CardTitle>Federation Status</CardTitle>
+                  <CardTitle>Activity Stream</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-white/60">Ready</span>
-                      <Badge className={
-                        dashboardData.status?.federation.ready 
-                          ? "bg-green-500/20 text-green-400 border-green-500/30" 
-                          : "bg-gray-500/20 text-gray-400 border-gray-500/30"
-                      }>
-                        {dashboardData.status?.federation.ready ? "Yes" : "No"}
-                      </Badge>
+                  {activity.isLoading ? (
+                    <p className="text-sm text-white/60">Loading activity...</p>
+                  ) : activity.error ? (
+                    <p className="text-sm text-red-400">Error loading activity: {activity.error}</p>
+                  ) : activityEvents.length === 0 ? (
+                    <p className="text-sm text-white/60">No activity recorded yet</p>
+                  ) : (
+                    <div className="space-y-2 max-h-64 overflow-y-auto">
+                      {activityEvents.map((event, idx) => (
+                        <div key={idx} className="text-sm text-white/80 font-mono">
+                          {event}
+                        </div>
+                      ))}
                     </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-white/60">Node Connected</span>
-                      <Badge className={
-                        dashboardData.status?.federation.nodeConnected 
-                          ? "bg-green-500/20 text-green-400 border-green-500/30" 
-                          : "bg-gray-500/20 text-gray-400 border-gray-500/30"
-                      }>
-                        {dashboardData.status?.federation.nodeConnected ? "Connected" : "Not Connected"}
-                      </Badge>
-                    </div>
-                    {dashboardData.status?.federation.lastSeen && (
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-white/60">Last Seen</span>
-                        <span className="text-xs font-mono text-white/60">
-                          {new Date(dashboardData.status.federation.lastSeen).toLocaleString()}
-                        </span>
-                      </div>
-                    )}
-                  </div>
+                  )}
                 </CardContent>
               </Card>
             </div>

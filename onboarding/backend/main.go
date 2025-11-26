@@ -123,12 +123,19 @@ func main() {
 		r.Get("/agents", handleListAgents)
 		r.Get("/regions", handleListRegions)
 		
-		// Phase 3: Dashboard endpoints
+		// Phase 3 & 8: Dashboard endpoints
 		r.Route("/tenants/{tenantId}", func(r chi.Router) {
 			r.Get("/telemetry", handleTenantTelemetry)
 			r.Get("/status", handleTenantStatus)
 			r.Get("/activity", handleTenantActivity)
+			r.Get("/agents", handleTenantAgents) // Phase 8
 		})
+		
+		// Phase 6: Bootstrap audit log
+		r.Get("/bootstrap/audit/{tenantId}", handleBootstrapAudit)
+		
+		// Phase 6: Bootstrap audit log
+		r.Get("/bootstrap/audit/{tenantId}", handleBootstrapAudit)
 	})
 
 	// Legacy routes (for backward compatibility)

@@ -31,6 +31,7 @@
 @import "./styles/interactiveElements.css";
 @import "./styles/navigationFrame.css";
 @import "./styles/terminalStyles.css";
+@import "./styles/terminal.css";
 @import "./styles/microMotion.css";
 @import "./styles/statusTokens.css";
 @import "./styles/statusStyles.css";
@@ -314,4 +315,50 @@ body#sageRootLayout {
   --sage-holo-secondary: rgba(90, 200, 255, 0.18);
   --sage-holo-pulse: rgba(200, 120, 255, 0.32);
   --sage-holo-scan: rgba(255, 255, 255, 0.07);
+}
+
+
+
+@layer base {
+  :root {
+    /* SAGE Federation Theme - Deep Violet / Cosmic Black */
+    --background: 250 20% 3%;
+    --foreground: 230 30% 92%;
+    --card: 250 18% 6%;
+    --card-foreground: 230 30% 92%;
+    --popover: 250 18% 6%;
+    --popover-foreground: 230 30% 92%;
+    /* SAGE Purple Glow Primary */
+    --primary: 260 80% 65%;
+    --primary-foreground: 230 30% 98%;
+    --secondary: 250 25% 12%;
+    --secondary-foreground: 230 30% 88%;
+    --muted: 250 20% 10%;
+    --muted-foreground: 230 20% 65%;
+    --accent: 260 60% 55%;
+    --accent-foreground: 230 30% 98%;
+    --destructive: 0 70% 55%;
+    --destructive-foreground: 230 30% 98%;
+    --border: 250 25% 18%;
+    --input: 250 25% 18%;
+    --ring: 260 80% 65%;
+    --chart-1: 260 80% 65%;
+    --chart-2: 280 70% 60%;
+    --chart-3: 240 60% 55%;
+    --chart-4: 300 65% 60%;
+    --chart-5: 220 70% 55%;
+    /* 18px border radius */
+    --radius: 1.125rem;
+  }
+}
+
+
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }

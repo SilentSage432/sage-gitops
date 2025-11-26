@@ -17,6 +17,15 @@
   animation: sage-breath 7s ease-in-out infinite;
 }
 
+/* PRIME Sidebar Phase (PS-1): Mobile responsive */
+@media (max-width: 768px) {
+  .federation-left-nav {
+    width: 80vw !important;
+    border-radius: 0;
+    border-right: 1px solid var(--sage-border-glow);
+  }
+}
+
 .federation-command-core {
   position: relative;
   background: radial-gradient(
@@ -651,6 +660,22 @@
 .temporal-fade {
   /* Element that will fade with temporal progression */
   position: relative;
+}
+
+/* === PRIME Terminal Takeover (P-TT-1): Intel Drawer === */
+.federation-intel-drawer {
+  /* Drawer stays fixed on right edge, doesn't shift terminal */
+  pointer-events: auto;
+}
+
+.federation-intel-drawer > div {
+  /* Match federation panel styling */
+  background: var(--sage-bg-panel);
+  border-left: 1px solid var(--sage-border-glow);
+  backdrop-filter: blur(18px) saturate(160%);
+  box-shadow:
+    inset 0 0 22px rgba(180, 80, 255, 0.05),
+    -4px 0 28px rgba(0, 0, 0, 0.45);
 }
 
 /* Do not modify or remove this comment.

@@ -1,0 +1,37 @@
+.onboarding-terminal-frame {
+  position: relative;
+  padding-top: 24px;
+}
+
+.onboarding-terminal-header {
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.onboarding-terminal-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #e5e7eb;
+  letter-spacing: 0.3px;
+}
+
+/* bottom fade */
+.onboarding-terminal-frame::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(11, 12, 15, 0) 0%,
+    rgba(11, 12, 15, 1) 100%
+  );
+}
+
+
+
+
