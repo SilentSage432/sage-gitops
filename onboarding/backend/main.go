@@ -118,8 +118,10 @@ func main() {
 		r.Post("/tenants", handleCreateTenant)
 		r.Post("/bootstrap/kit", handleBootstrapKit)
 		r.Get("/bootstrap/meta/{tenantId}", handleBootstrapMeta)
+		r.Get("/bootstrap/status/{tenantId}", handleBootstrapStatus) // Phase 9
 		r.Post("/bootstrap/verify", handleBootstrapVerify)
 		r.Get("/bootstrap/verify", handleBootstrapVerify) // Also support GET for QR codes
+		r.Get("/bootstrap/scan", handleBootstrapScan) // Phase 9 - QR verification
 		r.Get("/agents", handleListAgents)
 		r.Get("/regions", handleListRegions)
 		

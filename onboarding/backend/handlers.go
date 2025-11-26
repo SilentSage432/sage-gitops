@@ -1888,6 +1888,151 @@ func handleTenantAgents(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// Bootstrap Status Handler (Phase 9)
+func handleBootstrapStatus(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	// Get tenant ID from URL parameter
+	tenantID := chi.URLParam(r, "tenantId")
+	if tenantID == "" {
+		http.Error(w, "tenantId parameter is required", http.StatusBadRequest)
+		return
+	}
+
+	// Fetch latest bootstrap kit for tenant
+	var fingerprint sql.NullString
+	var activatedAt sql.NullTime
+	var createdAt sql.NullTime
+	var expiresAt sql.NullTime
+
+	err := dbPool.QueryRow(ctx,
+		"SELECT fingerprint, activated_at, created_at, expires_at FROM public.bootstrap_kits WHERE tenant_id = $1 ORDER BY created_at DESC LIMIT 1",
+		tenantID,
+	).Scan(&fingerprint, &activatedAt, &createdAt, &expiresAt)
+
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			// No kit exists yet
+			w.Header().Set("Content-Type", "application/json")
+			json.NewEncoder(w).Encode(map[string]interface{}{
+				"tenantId":    tenantID,
+				"fingerprint": nil,
+				"activated":   false,
+				"activatedAt": nil,
+				"createdAt":   nil,
+				"expiresAt":   nil,
+			})
+			return
+		}
+		http.Error(w, "Database error", http.StatusInternalServerError)
+		return
+	}
+
+	// Format response
+	var fingerprintStr *string
+	if fingerprint.Valid {
+		fp := fingerprint.String
+		fingerprintStr = &fp
+	}
+
+	var activatedAtStr *string
+	if activatedAt.Valid {
+		at := activatedAt.Time.Format(time.RFC3339)
+		activatedAtStr = &at
+	}
+
+	var createdAtStr *string
+	if createdAt.Valid {
+		ct := createdAt.Time.Format(time.RFC3339)
+		createdAtStr = &ct
+	}
+
+	var expiresAtStr *string
+	if expiresAt.Valid {
+		et := expiresAt.Time.Format(time.RFC3339)
+		expiresAtStr = &et
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"tenantId":    tenantID,
+		"fingerprint": fingerprintStr,
+		"activated":   activatedAt.Valid,
+		"activatedAt": activatedAtStr,
+		"createdAt":   createdAtStr,
+		"expiresAt":   expiresAtStr,
+	})
+}
+
+// Bootstrap Scan Handler (Phase 9 - QR Code Verification)
+func handleBootstrapScan(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	fingerprint := r.URL.Query().Get("fingerprint")
+	if fingerprint == "" {
+		http.Error(w, "fingerprint parameter is required", http.StatusBadRequest)
+		return
+	}
+
+	// Check if fingerprint exists and get tenant ID
+	var tenantID string
+	var activatedAt sql.NullTime
+	var expiresAt sql.NullTime
+
+	err := dbPool.QueryRow(ctx,
+		"SELECT tenant_id, activated_at, expires_at FROM public.bootstrap_kits WHERE fingerprint = $1",
+		fingerprint,
+	).Scan(&tenantID, &activatedAt, &expiresAt)
+
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			w.Header().Set("Content-Type", "application/json")
+			json.NewEncoder(w).Encode(map[string]interface{}{
+				"valid":      false,
+				"tenantId":   nil,
+				"activation": "invalid",
+			})
+			return
+		}
+		http.Error(w, "Database error", http.StatusInternalServerError)
+		return
+	}
+
+	// Check if expired
+	if expiresAt.Valid && expiresAt.Time.Before(time.Now()) {
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"valid":      false,
+			"tenantId":   tenantID,
+			"activation": "expired",
+		})
+		return
+	}
+
+	// If not activated, activate it now
+	if !activatedAt.Valid {
+		_, err := dbPool.Exec(ctx,
+			"UPDATE public.bootstrap_kits SET activated_at = NOW() WHERE fingerprint = $1",
+			fingerprint,
+		)
+		if err != nil {
+			log.Printf("Failed to activate bootstrap kit: %v", err)
+			http.Error(w, "Failed to activate kit", http.StatusInternalServerError)
+			return
+		}
+
+		// Log successful verification
+		go RecordAuditEvent(ctx, tenantID, string(AuditActionVerifySuccess), fingerprint, GetClientIP(r), r.UserAgent())
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"valid":      true,
+		"tenantId":   tenantID,
+		"activation": "success",
+	})
+}
+
 func handleBootstrapVerify(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
@@ -1913,22 +2058,20 @@ func handleBootstrapVerify(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Check if fingerprint exists in bootstrap_kits table
-	var isValid bool
 	var tenantID string
-	var activatedAt *time.Time
-	var expiresAt *time.Time
+	var activatedAt sql.NullTime
+	var expiresAt sql.NullTime
 
 	query := "SELECT tenant_id, activated_at, expires_at FROM public.bootstrap_kits WHERE fingerprint = $1"
+	var err error
 	if req.TenantID != "" {
 		query += " AND tenant_id = $2"
-		err := dbPool.QueryRow(ctx, query, req.Fingerprint, req.TenantID).Scan(&tenantID, &activatedAt, &expiresAt)
-		isValid = (err == nil)
+		err = dbPool.QueryRow(ctx, query, req.Fingerprint, req.TenantID).Scan(&tenantID, &activatedAt, &expiresAt)
 	} else {
-		err := dbPool.QueryRow(ctx, query, req.Fingerprint).Scan(&tenantID, &activatedAt, &expiresAt)
-		isValid = (err == nil)
+		err = dbPool.QueryRow(ctx, query, req.Fingerprint).Scan(&tenantID, &activatedAt, &expiresAt)
 	}
 
-	if !isValid {
+	if err != nil {
 		// Log failed verification
 		clientIP := GetClientIP(r)
 		userAgent := r.Header.Get("User-Agent")
@@ -1946,7 +2089,7 @@ func handleBootstrapVerify(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Check if expired
-	if expiresAt != nil && time.Now().After(*expiresAt) {
+	if expiresAt.Valid && time.Now().After(expiresAt.Time) {
 		// Log failed verification (expired)
 		clientIP := GetClientIP(r)
 		userAgent := r.Header.Get("User-Agent")
@@ -1961,32 +2104,33 @@ func handleBootstrapVerify(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Mark as activated if not already activated
-	if activatedAt == nil {
+	// Mark as activated if not already activated (Phase 9 enhancement)
+	if !activatedAt.Valid {
+		now := time.Now()
 		_, err := dbPool.Exec(ctx,
 			"UPDATE public.bootstrap_kits SET activated_at = $1 WHERE fingerprint = $2",
-			time.Now(),
+			now,
 			req.Fingerprint,
 		)
 		if err != nil {
 			log.Printf("Failed to mark kit as activated: %v", err)
+			http.Error(w, "Failed to activate kit", http.StatusInternalServerError)
+			return
 		}
+		// Update local variable for response
+		activatedAt = sql.NullTime{Time: now, Valid: true}
 	}
 
-	// Log verification result
+	// Log verification result (Phase 9 - ensure audit entry)
 	clientIP := GetClientIP(r)
 	userAgent := r.Header.Get("User-Agent")
-	if isValid {
-		go RecordAuditEvent(ctx, tenantID, string(AuditActionVerifySuccess), req.Fingerprint, clientIP, userAgent)
-	} else {
-		go RecordAuditEvent(ctx, tenantID, string(AuditActionVerifyFailed), req.Fingerprint, clientIP, userAgent)
-	}
+	go RecordAuditEvent(ctx, tenantID, string(AuditActionVerifySuccess), req.Fingerprint, clientIP, userAgent)
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]interface{}{
-		"valid":     isValid,
+		"valid":     true,
 		"message":   "Bootstrap kit fingerprint verified",
 		"tenantId":  tenantID,
-		"activated": activatedAt != nil,
+		"activated": activatedAt.Valid,
 	})
 }

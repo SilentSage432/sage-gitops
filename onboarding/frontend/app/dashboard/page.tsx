@@ -12,6 +12,7 @@ import { useTenantTelemetry } from '@/lib/useTenantTelemetry';
 import { useTenantStatus } from '@/lib/useTenantStatus';
 import { useTenantAgents } from '@/lib/useTenantAgents';
 import { useTenantActivity } from '@/lib/useTenantActivity';
+import { useBootstrapStatus } from '@/lib/useBootstrapStatus';
 import { getTenantId } from '@/lib/onboarding/getTenantId';
 
 export default function DashboardPage() {
@@ -23,7 +24,10 @@ export default function DashboardPage() {
   const status = useTenantStatus(tenantId);
   const agents = useTenantAgents(tenantId);
   const activity = useTenantActivity(tenantId);
-  // Map status data to tiles format (Phase 8)
+  // Phase 9: Bootstrap status
+  const bootstrapStatus = useBootstrapStatus(tenantId);
+  
+  // Map status data to tiles format (Phase 9 - using bootstrapStatus)
   const tiles = status.data ? [
     { 
       label: "Mesh Link", 
@@ -31,7 +35,7 @@ export default function DashboardPage() {
     },
     { 
       label: "Rho² Vault", 
-      state: status.data.bootstrap.verified ? "ok" : status.data.bootstrap.generated ? "warning" : "ok" as const 
+      state: bootstrapStatus.data?.activated ? "ok" : bootstrapStatus.data?.fingerprint ? "warning" : "ok" as const 
     },
     { 
       label: "Policy Engine", 
@@ -47,7 +51,7 @@ export default function DashboardPage() {
     },
     { 
       label: "Bootstrap CA", 
-      state: status.data.bootstrap.verified ? "ok" : status.data.bootstrap.generated ? "warning" : "ok" as const 
+      state: bootstrapStatus.data?.activated ? "ok" : bootstrapStatus.data?.fingerprint ? "warning" : "ok" as const 
     },
   ] : [
     { label: "Mesh Link", state: "ok" as const },
@@ -133,18 +137,19 @@ export default function DashboardPage() {
                     </p>
                   </div>
                   <div>
-                    <span className="text-sm text-white/60">Activation Status:</span>
+                    <span className="text-sm text-white/60">Bootstrap Status:</span>
                     <Badge 
                       variant="secondary" 
                       className={`ml-2 ${
-                        status.data?.bootstrap.verified ? "bg-green-500/20 text-green-500" :
-                        status.data?.bootstrap.generated ? "bg-blue-500/20 text-blue-500" :
+                        bootstrapStatus.data?.activated ? "bg-green-500/20 text-green-500" :
+                        bootstrapStatus.data?.fingerprint ? "bg-yellow-500/20 text-yellow-500" :
                         "bg-gray-500/20 text-gray-500"
                       }`}
                     >
-                      {status.data?.bootstrap.verified ? "Activated" :
-                       status.data?.bootstrap.generated ? "Generated" :
-                       "Pending"}
+                      {bootstrapStatus.data?.activated ? "Verified ✓" :
+                       bootstrapStatus.data?.fingerprint ? "Pending Verification" :
+                       bootstrapStatus.data?.expiresAt && new Date(bootstrapStatus.data.expiresAt) < new Date() ? "Expired" :
+                       "Not Generated"}
                     </Badge>
                   </div>
                   <div>

@@ -4,155 +4,86 @@ import { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Copy, Check, Download, CheckCircle2 } from 'lucide-react';
+import { Copy, Check, Download } from 'lucide-react';
+import { useBootstrapStatus } from '@/lib/useBootstrapStatus';
+import { getTenantId } from '@/lib/onboarding/getTenantId';
 
 interface BootstrapStatusCardProps {
   fingerprint?: string;
 }
 
-type ActivationStatus = 'pending activation' | 'awaiting first check-in' | 'active' | 'expired';
-
-const STORAGE_KEY = 'bootstrap-status';
-const STORAGE_FINGERPRINT_KEY = 'bootstrap-fingerprint';
-const STORAGE_TIMER_KEY = 'bootstrap-timer-start';
+type ActivationStatus = 'pending' | 'verified' | 'expired';
 
 export function BootstrapStatusCard({ fingerprint }: BootstrapStatusCardProps) {
-  // Initialize from localStorage or defaults
-  const getInitialStatus = (): ActivationStatus => {
-    if (typeof window === 'undefined') return 'pending activation';
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored && ['pending activation', 'awaiting first check-in', 'active', 'expired'].includes(stored)) {
-      return stored as ActivationStatus;
-    }
-    // If no stored status, initialize as pending
-    localStorage.setItem(STORAGE_KEY, 'pending activation');
-    return 'pending activation';
-  };
-
-  const [status, setStatus] = useState<ActivationStatus>(() => {
-    if (typeof window === 'undefined') return 'pending activation';
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored && ['pending activation', 'awaiting first check-in', 'active', 'expired'].includes(stored)) {
-      return stored as ActivationStatus;
-    }
-    // If no stored status, initialize as pending
-    localStorage.setItem(STORAGE_KEY, 'pending activation');
-    return 'pending activation';
-  });
-  const [timeRemaining, setTimeRemaining] = useState<number>(15 * 60); // 15 minutes in seconds
+  const tenantId = getTenantId();
+  const { data: bootstrapStatus, isLoading } = useBootstrapStatus(tenantId);
+  
   const [fingerprintCopied, setFingerprintCopied] = useState(false);
   const [commandCopied, setCommandCopied] = useState(false);
-  const [displayFingerprint, setDisplayFingerprint] = useState<string>('');
 
-  // Initialize fingerprint from localStorage or generate new
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    
-    const stored = localStorage.getItem(STORAGE_FINGERPRINT_KEY);
-    if (stored) {
-      setDisplayFingerprint(stored);
-      return;
+  // Determine status from API data (Phase 9)
+  const getStatus = (): ActivationStatus => {
+    if (!bootstrapStatus) return 'pending';
+    if (bootstrapStatus.activated) return 'verified';
+    if (bootstrapStatus.expiresAt && new Date(bootstrapStatus.expiresAt) < new Date()) {
+      return 'expired';
     }
-    
-    const generated = fingerprint || 'sha256:' + Array.from(crypto.getRandomValues(new Uint8Array(32)))
-      .map(b => b.toString(16).padStart(2, '0'))
-      .join('');
-    
-    localStorage.setItem(STORAGE_FINGERPRINT_KEY, generated);
-    setDisplayFingerprint(generated);
-  }, [fingerprint]);
+    return 'pending';
+  };
 
-  // Initialize timer from localStorage or start new
+  const status = getStatus();
+  const displayFingerprint = bootstrapStatus?.fingerprint || fingerprint || '';
+
+  // Calculate time remaining until expiry
+  const getTimeRemaining = (): number => {
+    if (!bootstrapStatus?.expiresAt) return 0;
+    const expires = new Date(bootstrapStatus.expiresAt).getTime();
+    const now = Date.now();
+    return Math.max(0, Math.floor((expires - now) / 1000));
+  };
+
+  const [timeRemaining, setTimeRemaining] = useState(getTimeRemaining);
+
+  // Update time remaining
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    if (status === 'active' || status === 'expired') return;
-    
-    const timerStart = localStorage.getItem(STORAGE_TIMER_KEY);
-    if (timerStart) {
-      const elapsed = Math.floor((Date.now() - parseInt(timerStart)) / 1000);
-      const remaining = Math.max(0, 15 * 60 - elapsed);
-      setTimeRemaining(remaining);
-      
-      if (remaining === 0) {
-        setStatus('expired');
-        localStorage.setItem(STORAGE_KEY, 'expired');
-      }
-    } else {
-      localStorage.setItem(STORAGE_TIMER_KEY, Date.now().toString());
-    }
-  }, [status]);
-
-  // Auto-transition: pending → awaiting after 5 seconds (only if still in pending state)
-  useEffect(() => {
-    if (status !== 'pending activation') return;
-    
-    // Check if we've already transitioned (stored in localStorage)
-    const storedStatus = localStorage.getItem(STORAGE_KEY);
-    if (storedStatus === 'awaiting first check-in' || storedStatus === 'active' || storedStatus === 'expired') {
-      return;
-    }
-
-    const timer = setTimeout(() => {
-      setStatus((currentStatus) => {
-        if (currentStatus === 'pending activation') {
-          localStorage.setItem(STORAGE_KEY, 'awaiting first check-in');
-          return 'awaiting first check-in';
-        }
-        return currentStatus;
-      });
-    }, 5000);
-
-    return () => clearTimeout(timer);
-  }, [status]);
-
-  // Countdown timer
-  useEffect(() => {
-    if (status === 'expired' || status === 'active') return;
+    if (status === 'expired' || status === 'verified') return;
 
     const interval = setInterval(() => {
-      setTimeRemaining((prev) => {
-        if (prev <= 1) {
-          setStatus('expired');
-          localStorage.setItem(STORAGE_KEY, 'expired');
-          return 0;
-        }
-        return prev - 1;
-      });
+      const remaining = getTimeRemaining();
+      setTimeRemaining(remaining);
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [status]);
+  }, [bootstrapStatus, status]);
 
-  // Format time remaining as MM:SS
+  // Format time helper
   const formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
-  // Get status badge variant and color
+  // Get status badge variant and color (Phase 9)
   const getStatusBadge = () => {
     switch (status) {
-      case 'active':
-        return <Badge variant="default" className="bg-[#10b981]/20 text-[#10b981] border-[#10b981]/30">Active</Badge>;
+      case 'verified':
+        return <Badge variant="default" className="bg-[#10b981]/20 text-[#10b981] border-[#10b981]/30">Verified ✓</Badge>;
       case 'expired':
         return <Badge variant="secondary" className="bg-red-500/20 text-red-500 border-red-500/30">Expired</Badge>;
-      case 'awaiting first check-in':
-        return <Badge variant="secondary" className="bg-yellow-500/20 text-yellow-500 border-yellow-500/30">Awaiting Check-in</Badge>;
       default:
-        return <Badge variant="secondary" className="bg-yellow-500/20 text-yellow-500 border-yellow-500/30">Pending Activation</Badge>;
+        return <Badge variant="secondary" className="bg-yellow-500/20 text-yellow-500 border-yellow-500/30">Pending Verification</Badge>;
     }
   };
 
-  // Get status description text
+  // Get status description text (Phase 9)
   const getStatusDescription = (): string => {
     switch (status) {
-      case 'pending activation':
-        return 'Kit generated and awaiting delivery';
-      case 'awaiting first check-in':
-        return 'Bootstrap detected — waiting for first agent signal';
-      case 'active':
-        return 'Tenant successfully initialized';
+      case 'pending':
+        return 'Kit generated and awaiting verification';
+      case 'verified':
+        return bootstrapStatus?.activatedAt 
+          ? `Verified on ${new Date(bootstrapStatus.activatedAt).toLocaleString()}`
+          : 'Tenant successfully verified';
       case 'expired':
         return 'Bootstrap expired — regenerate required';
       default:
@@ -160,13 +91,8 @@ export function BootstrapStatusCard({ fingerprint }: BootstrapStatusCardProps) {
     }
   };
 
-  // Handle manual activation
-  const handleMarkAsActivated = () => {
-    setStatus('active');
-    localStorage.setItem(STORAGE_KEY, 'active');
-  };
-
   const handleCopyFingerprint = async () => {
+    if (!displayFingerprint) return;
     try {
       await navigator.clipboard.writeText(displayFingerprint);
       setFingerprintCopied(true);
@@ -177,6 +103,7 @@ export function BootstrapStatusCard({ fingerprint }: BootstrapStatusCardProps) {
   };
 
   const handleCopyVerifyCommand = async () => {
+    if (!displayFingerprint) return;
     const command = `sage verify-kit --fingerprint "${displayFingerprint}"`;
     try {
       await navigator.clipboard.writeText(command);
@@ -202,28 +129,7 @@ export function BootstrapStatusCard({ fingerprint }: BootstrapStatusCardProps) {
       const { downloadBootstrapKit } = await import('@/lib/downloadKit');
       await downloadBootstrapKit(tenantId);
 
-      // Fetch meta to update fingerprint if available
-      try {
-        const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
-        const token = localStorage.getItem('oct-storage');
-        if (token) {
-          const octData = JSON.parse(token);
-          const metaResponse = await fetch(`${API_BASE_URL}/api/onboarding/bootstrap/meta/${tenantId}`, {
-            headers: {
-              'Authorization': `Bearer ${octData.token}`,
-            },
-          });
-          if (metaResponse.ok) {
-            const meta = await metaResponse.json();
-            if (meta.fingerprint) {
-              setDisplayFingerprint(meta.fingerprint);
-              localStorage.setItem(STORAGE_FINGERPRINT_KEY, meta.fingerprint);
-            }
-          }
-        }
-      } catch (err) {
-        console.error('Failed to fetch meta:', err);
-      }
+      // Status will be updated by useBootstrapStatus hook
     } catch (error) {
       console.error('Download error:', error);
       alert('Failed to download bootstrap kit: ' + (error instanceof Error ? error.message : 'Unknown error'));
@@ -243,40 +149,58 @@ export function BootstrapStatusCard({ fingerprint }: BootstrapStatusCardProps) {
         <div>
           <p className="text-sm text-white/60">{getStatusDescription()}</p>
         </div>
+        
+        {/* Loading State */}
+        {isLoading && (
+          <p className="text-sm text-white/60">Loading status...</p>
+        )}
+
         {/* Fingerprint */}
-        <div>
-          <div className="flex items-center justify-between mb-2">
-            <p className="text-sm text-white/60">Fingerprint:</p>
-            <Button
-              onClick={handleCopyFingerprint}
-              variant="ghost"
-              size="sm"
-              className="h-7 px-2 text-xs"
-            >
-              {fingerprintCopied ? (
-                <>
-                  <Check className="w-3 h-3 mr-1 text-[#10b981]" />
-                  Copied
-                </>
-              ) : (
-                <>
-                  <Copy className="w-3 h-3 mr-1" />
-                  Copy
-                </>
-              )}
-            </Button>
+        {displayFingerprint && (
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-sm text-white/60">Fingerprint:</p>
+              <Button
+                onClick={handleCopyFingerprint}
+                variant="ghost"
+                size="sm"
+                className="h-7 px-2 text-xs"
+              >
+                {fingerprintCopied ? (
+                  <>
+                    <Check className="w-3 h-3 mr-1 text-[#10b981]" />
+                    Copied
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-3 h-3 mr-1" />
+                    Copy
+                  </>
+                )}
+              </Button>
+            </div>
+            <code className="text-xs font-mono text-[#e2e6ee] break-all block bg-[#0b0c0f] p-2 rounded border border-white/5">
+              {displayFingerprint}
+            </code>
           </div>
-          <code className="text-xs font-mono text-[#e2e6ee] break-all block bg-[#0b0c0f] p-2 rounded border border-white/5">
-            {displayFingerprint}
-          </code>
-        </div>
+        )}
 
         {/* Expiry Countdown */}
-        {status !== 'expired' && status !== 'active' && (
+        {status !== 'expired' && status !== 'verified' && timeRemaining > 0 && (
           <div>
             <p className="text-sm text-white/60 mb-1">Expires in:</p>
             <p className="text-lg font-mono font-semibold text-white/80">
               {formatTime(timeRemaining)}
+            </p>
+          </div>
+        )}
+
+        {/* Activation Timestamp */}
+        {status === 'verified' && bootstrapStatus?.activatedAt && (
+          <div>
+            <p className="text-sm text-white/60 mb-1">Activated:</p>
+            <p className="text-sm font-mono text-white/80">
+              {new Date(bootstrapStatus.activatedAt).toLocaleString()}
             </p>
           </div>
         )}
@@ -294,7 +218,7 @@ export function BootstrapStatusCard({ fingerprint }: BootstrapStatusCardProps) {
               Download Kit
             </Button>
           ) : (
-            (status === 'pending activation' || status === 'awaiting first check-in') && (
+            status === 'pending' && (
               <Button
                 variant="outline"
                 className="w-full justify-start"
@@ -306,34 +230,24 @@ export function BootstrapStatusCard({ fingerprint }: BootstrapStatusCardProps) {
             )
           )}
 
-          {/* Copy Verify Command - Always available */}
-          <Button
-            variant="outline"
-            className="w-full justify-start"
-            onClick={handleCopyVerifyCommand}
-          >
-            {commandCopied ? (
-              <>
-                <Check className="w-4 h-4 mr-2 text-[#10b981]" />
-                Command Copied
-              </>
-            ) : (
-              <>
-                <Copy className="w-4 h-4 mr-2" />
-                Copy Verify Command
-              </>
-            )}
-          </Button>
-
-          {/* Mark as Activated Button - Only show when awaiting */}
-          {status === 'awaiting first check-in' && (
+          {/* Copy Verify Command - Show when fingerprint available */}
+          {displayFingerprint && (
             <Button
-              variant="default"
+              variant="outline"
               className="w-full justify-start"
-              onClick={handleMarkAsActivated}
+              onClick={handleCopyVerifyCommand}
             >
-              <CheckCircle2 className="w-4 h-4 mr-2" />
-              Mark as Activated
+              {commandCopied ? (
+                <>
+                  <Check className="w-4 h-4 mr-2 text-[#10b981]" />
+                  Command Copied
+                </>
+              ) : (
+                <>
+                  <Copy className="w-4 h-4 mr-2" />
+                  Copy Verify Command
+                </>
+              )}
             </Button>
           )}
 
@@ -352,4 +266,3 @@ export function BootstrapStatusCard({ fingerprint }: BootstrapStatusCardProps) {
     </Card>
   );
 }
-
