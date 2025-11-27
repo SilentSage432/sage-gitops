@@ -19,6 +19,7 @@ import (
 	"github.com/jackc/pgx/v5"
 
 	"github.com/silentsage432/sage-gitops/onboarding/backend/bootstrap"
+	"github.com/silentsage432/sage-gitops/onboarding/backend/federation"
 	fedmw "github.com/silentsage432/sage-gitops/onboarding/backend/middleware"
 )
 
@@ -2484,7 +2485,8 @@ func handleFederationBus(w http.ResponseWriter, r *http.Request) {
 	// Process message based on type
 	switch req.Type {
 	case "heartbeat":
-		// TODO: event processing
+		// Phase 14.2: Update node heartbeat in registry
+		federation.UpdateNodeHeartbeat(fedPayload.NodeID)
 		log.Printf("Heartbeat received from node=%s tenant=%s", fedPayload.NodeID, fedPayload.TenantID)
 		break
 
@@ -2508,5 +2510,16 @@ func handleFederationBus(w http.ResponseWriter, r *http.Request) {
 		"nodeId":   fedPayload.NodeID,
 		"tenantId": fedPayload.TenantID,
 		"type":     req.Type,
+	})
+}
+
+// Phase 14.2: List Federation Nodes Handler
+// Exposes registered nodes for UI federation presence display
+func handleListFederationNodes(w http.ResponseWriter, r *http.Request) {
+	nodes := federation.GetNodes()
+	
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"nodes": nodes,
 	})
 }

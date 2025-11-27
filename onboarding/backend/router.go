@@ -47,8 +47,13 @@ func SetupRouter(dbPool *pgxpool.Pool) chi.Router {
 		r.Use(fedmw.RequireFederationSession)
 		
 		// Protected federation endpoints go here
-		// Example: r.Get("/nodes", handleListFederationNodes)
 		// Example: r.Post("/sync", handleFederationSync)
+	})
+
+	// Phase 14.2: Federation Nodes API
+	// Expose registered nodes (public read, no auth required for now)
+	r.Route("/federation/nodes", func(r chi.Router) {
+		r.Get("/", handleListFederationNodes)
 	})
 
 	// Phase 13.11: Agent Federation API
