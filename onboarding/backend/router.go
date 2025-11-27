@@ -51,9 +51,11 @@ func SetupRouter(dbPool *pgxpool.Pool) chi.Router {
 	})
 
 	// Phase 14.2: Federation Nodes API
+	// Phase 14.3: Extended with status endpoint
 	// Expose registered nodes (public read, no auth required for now)
 	r.Route("/federation/nodes", func(r chi.Router) {
 		r.Get("/", handleListFederationNodes)
+		r.Get("/status", handleFederationNodesStatus)
 	})
 
 	// Phase 13.11: Agent Federation API

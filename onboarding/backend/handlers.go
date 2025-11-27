@@ -2486,9 +2486,17 @@ func handleFederationBus(w http.ResponseWriter, r *http.Request) {
 	switch req.Type {
 	case "heartbeat":
 		// Phase 14.2: Update node heartbeat in registry
+		// Phase 14.3: Heartbeat updates timestamp and status
 		federation.UpdateNodeHeartbeat(fedPayload.NodeID)
 		log.Printf("Heartbeat received from node=%s tenant=%s", fedPayload.NodeID, fedPayload.TenantID)
-		break
+		
+		// Return success with status confirmation
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"ok":     true,
+			"status": "alive",
+		})
+		return
 
 	case "telemetry":
 		// TODO: metrics, status
@@ -2520,6 +2528,18 @@ func handleListFederationNodes(w http.ResponseWriter, r *http.Request) {
 	
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]interface{}{
+		"nodes": nodes,
+	})
+}
+
+// Phase 14.3: Federation Nodes Status Handler
+// Returns nodes with current timestamp for UI federation presence
+func handleFederationNodesStatus(w http.ResponseWriter, r *http.Request) {
+	nodes := federation.GetNodes()
+	
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"ts":    time.Now().UnixMilli(),
 		"nodes": nodes,
 	})
 }
