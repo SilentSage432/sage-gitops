@@ -2498,6 +2498,20 @@ func handleFederationBus(w http.ResponseWriter, r *http.Request) {
 		})
 		return
 
+	case "command":
+		// Command dispatch protocol (no execution)
+		// Phase: Categorization and validation only
+		cmd, _ := req.Data["cmd"].(string)
+		log.Printf("Command received from node=%s tenant=%s cmd=%s", fedPayload.NodeID, fedPayload.TenantID, cmd)
+		
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"ok":      true,
+			"accepted": true,
+			"cmd":     cmd,
+		})
+		return
+
 	case "telemetry":
 		// TODO: metrics, status
 		log.Printf("Telemetry received from node=%s tenant=%s", fedPayload.NodeID, fedPayload.TenantID)
