@@ -12,6 +12,7 @@ import (
 	"time"
 
 	fedmw "github.com/silentsage432/sage-gitops/onboarding/backend/middleware"
+	"github.com/silentsage432/sage-gitops/onboarding/backend/federation"
 )
 
 // Phase 13.1: Stateless handshake store
@@ -169,26 +170,32 @@ func handleFederationAssert(w http.ResponseWriter, r *http.Request) {
 	delete(pendingChallenges, req.NodeID)
 	challengeMutex.Unlock()
 
-	// Federation session token: NOT JWT, not from DB
-	federationTokenBytes := make([]byte, 48)
-	if _, err := rand.Read(federationTokenBytes); err != nil {
-		log.Printf("Failed to generate federation token: %v", err)
+	// Phase 13.4: Ed25519 signed token
+	payload := federation.FederationTokenPayload{
+		NodeID:      req.NodeID,
+		TenantID:    entry.tenantID,
+		Fingerprint: req.Fingerprint,
+		IssuedAt:    time.Now().UnixMilli(),
+	}
+
+	signedToken, err := federation.SignFederationToken(payload)
+	if err != nil {
+		log.Printf("Failed to sign federation token: %v", err)
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return
 	}
-	federationToken := hex.EncodeToString(federationTokenBytes)
 
 	// Phase 13.2: Store session as valid
-	fedmw.RegisterFederationSession(federationToken)
+	fedmw.RegisterFederationSession(signedToken)
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]interface{}{
 		"ok":             true,
 		"tenantId":       entry.tenantID,
 		"nodeId":         req.NodeID,
-		"federationToken": federationToken,
+		"federationToken": signedToken,
 		"federated":      true,
-		"cipher":         "stateless",
+		"cipher":         "ed25519",
 		"expiresIn":      3600000,
 	})
 }

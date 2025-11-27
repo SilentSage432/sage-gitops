@@ -3,6 +3,8 @@ package middleware
 import (
 	"net/http"
 	"sync"
+
+	"github.com/silentsage432/sage-gitops/onboarding/backend/federation"
 )
 
 // Phase 13.2: Stateless token cache for validated sessions
@@ -46,10 +48,17 @@ func RequireFederationSession(next http.Handler) http.Handler {
 		}
 
 		if !IsFederationSessionValid(token) {
-			w.Header().Set("Content-Type", "application/json")
-			w.WriteHeader(http.StatusForbidden)
-			w.Write([]byte(`{"error":"INVALID_OR_EXPIRED_SESSION"}`))
-			return
+			// Phase 13.4: Signature check fallback
+			payload, err := federation.VerifyFederationToken(token)
+			if err != nil || payload == nil {
+				w.Header().Set("Content-Type", "application/json")
+				w.WriteHeader(http.StatusForbidden)
+				w.Write([]byte(`{"error":"INVALID_OR_EXPIRED_SESSION"}`))
+				return
+			}
+			// Token is valid via signature verification
+			// Optionally register it for faster future lookups
+			RegisterFederationSession(token)
 		}
 
 		// Session authenticated — forward request

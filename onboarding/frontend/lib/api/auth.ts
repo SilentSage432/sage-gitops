@@ -1,7 +1,17 @@
 import axios from 'axios';
 import { startRegistration, startAuthentication } from '@simplewebauthn/browser';
+import { getFederationToken } from '../federation/handshake';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+
+// Phase 13.3: Add federation token to all requests
+axios.interceptors.request.use((config) => {
+  const token = getFederationToken();
+  if (token) {
+    config.headers['X-Federation-Token'] = token;
+  }
+  return config;
+});
 
 export interface WebAuthnChallengeResponse {
   challenge: string;
