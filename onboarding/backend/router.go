@@ -36,6 +36,8 @@ func SetupRouter(dbPool *pgxpool.Pool) chi.Router {
 		r.Post("/handshake", handleFederationHandshake)
 		r.Post("/assert", handleFederationAssert)
 		r.Post("/verify", handleFederationVerify)
+		// Phase 13.10: Node join endpoint for Pi bootstrap
+		r.Post("/node/join", handleFederationNodeJoin)
 		r.Get("/export", handleFederationExport)
 		r.Post("/import", handleFederationImport)
 	})

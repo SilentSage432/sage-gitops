@@ -296,6 +296,52 @@ func cleanupExpiredChallenges() {
 	}()
 }
 
+// Phase 13.10: Node Join Handler
+// Pi nodes use this endpoint to join the federation using their bootstrap token
+func handleFederationNodeJoin(w http.ResponseWriter, r *http.Request) {
+	var req struct {
+		Federation struct {
+			Token string `json:"token"`
+		} `json:"federation"`
+	}
+
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Invalid request", http.StatusBadRequest)
+		return
+	}
+
+	if req.Federation.Token == "" {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"error": "MISSING_FEDERATION",
+		})
+		return
+	}
+
+	// Verify federation token using Ed25519 signature
+	payload, err := federation.VerifyFederationToken(req.Federation.Token)
+	if err != nil || payload == nil {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusForbidden)
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"error": "INVALID_FEDERATION",
+		})
+		return
+	}
+
+	// Register the node session
+	fedmw.RegisterFederationSession(req.Federation.Token)
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"ok":        true,
+		"nodeJoined": payload.NodeID,
+		"tenantId":  payload.TenantID,
+		"region":    payload.Fingerprint, // Note: region not in payload, using fingerprint as placeholder
+	})
+}
+
 func init() {
 	// Start cleanup goroutine
 	cleanupExpiredChallenges()

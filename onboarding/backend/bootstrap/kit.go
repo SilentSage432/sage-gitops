@@ -14,6 +14,8 @@ import (
 	"fmt"
 	"math/big"
 	"time"
+
+	"github.com/silentsage432/sage-gitops/onboarding/backend/federation"
 )
 
 // TenantInfo represents tenant data needed for kit generation
@@ -135,6 +137,54 @@ func GenerateBootstrapKit(tenant TenantInfo) (*BootstrapKit, error) {
 	if tenant.Config != nil {
 		if federationMeta, ok := tenant.Config["federation"]; ok {
 			metadata["federation"] = federationMeta
+		}
+	}
+	
+	// Phase 13.10: Generate federation token envelope for Pi bootstrap
+	// Create a pre-signed federation token for this node/tenant
+	if tenant.ID != "" && tenant.Region != "" {
+		// Generate a node ID from tenant ID (or use provided nodeId if available)
+		nodeID := "node-" + tenant.ID[:8]
+		if tenant.Config != nil {
+			if nodeIDFromConfig, ok := tenant.Config["nodeId"].(string); ok && nodeIDFromConfig != "" {
+				nodeID = nodeIDFromConfig
+			}
+		}
+		
+		// Generate bootstrap fingerprint (simplified for now)
+		fingerprint := "bootstrap-" + tenant.ID
+		
+		// Create and sign federation token using Ed25519
+		// Import federation package to sign token
+		payload := federation.FederationTokenPayload{
+			NodeID:      nodeID,
+			TenantID:    tenant.ID,
+			Fingerprint: fingerprint,
+			IssuedAt:    time.Now().UnixMilli(),
+		}
+		
+		signedToken, err := federation.SignFederationToken(payload)
+		if err == nil {
+			// Include signed token in envelope
+			metadata["federationEnvelope"] = map[string]interface{}{
+				"token":       signedToken,
+				"nodeId":      nodeID,
+				"tenantId":    tenant.ID,
+				"region":      tenant.Region,
+				"source":      "bootstrap",
+				"ts":          time.Now().UnixMilli(),
+			}
+		} else {
+			// Fallback: include envelope structure without token
+			// Pi will need to perform handshake to get token
+			metadata["federationEnvelope"] = map[string]interface{}{
+				"nodeId":      nodeID,
+				"tenantId":    tenant.ID,
+				"region":      tenant.Region,
+				"source":      "bootstrap",
+				"ts":          time.Now().UnixMilli(),
+				"note":        "Token generation failed, handshake required",
+			}
 		}
 	}
 	metadataJSON, _ := json.MarshalIndent(metadata, "", "  ")
