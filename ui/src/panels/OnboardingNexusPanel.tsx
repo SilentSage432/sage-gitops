@@ -1,8 +1,18 @@
 import React from "react";
+import { exportFederationEnvelope } from "../federation/token";
 
-export default function OnboardingNexusPanel() {
+const OnboardingNexusPanel: React.FC = () => {
   const handleLaunch = () => {
-    window.open("https://localhost:3000/onboarding", "_blank", "noreferrer");
+    const env = exportFederationEnvelope();
+    if (env) {
+      const encoded = encodeURIComponent(JSON.stringify(env));
+      if (typeof window !== "undefined") {
+        window.localStorage.setItem("federationEnvelope", JSON.stringify(env));
+      }
+      window.open(`https://localhost:3000/onboarding?token=${encoded}`, "_blank", "noreferrer");
+    } else {
+      window.open("https://localhost:3000/onboarding", "_blank", "noreferrer");
+    }
   };
 
   return (
@@ -27,5 +37,7 @@ export default function OnboardingNexusPanel() {
       </button>
     </div>
   );
-}
+};
+
+export default OnboardingNexusPanel;
 
