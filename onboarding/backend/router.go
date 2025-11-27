@@ -30,6 +30,13 @@ func SetupRouter(dbPool *pgxpool.Pool) chi.Router {
 	// Initialize federation router
 	federationRouter := fedmw.NewFederationRouter(dbPool)
 
+	// Phase 13.1: Federation Auth Handshake API (stateless)
+	r.Route("/api/federation/auth", func(r chi.Router) {
+		r.Post("/handshake", handleFederationHandshake)
+		r.Post("/assert", handleFederationAssert)
+		r.Post("/verify", handleFederationVerify)
+	})
+
 	// Federation API routes (with federation middleware)
 	r.Route("/federation/api", func(r chi.Router) {
 		r.Use(federationRouter.FederationMiddleware)
