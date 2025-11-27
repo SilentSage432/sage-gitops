@@ -19,6 +19,7 @@ import (
 	"github.com/jackc/pgx/v5"
 
 	"github.com/silentsage432/sage-gitops/onboarding/backend/bootstrap"
+	fedmw "github.com/silentsage432/sage-gitops/onboarding/backend/middleware"
 )
 
 // WebAuthn Challenge Handler
@@ -2355,4 +2356,106 @@ func handleValidateIdentity(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(validationResult)
+}
+
+// Phase 13.11: Agent Federation Handlers
+// Agents authenticate using Ed25519 federation tokens
+
+// Agent Telemetry Handler
+// Agents send telemetry data to this endpoint
+func handleAgentTelemetry(w http.ResponseWriter, r *http.Request) {
+	// Get federation payload from middleware
+	fedPayload := fedmw.GetFederationPayload(r)
+	if fedPayload == nil {
+		http.Error(w, "Federation payload not found", http.StatusInternalServerError)
+		return
+	}
+
+	var telemetryData map[string]interface{}
+	if err := json.NewDecoder(r.Body).Decode(&telemetryData); err != nil {
+		http.Error(w, "Invalid telemetry data", http.StatusBadRequest)
+		return
+	}
+
+	// Log telemetry receipt
+	log.Printf("Agent telemetry received from node=%s tenant=%s", fedPayload.NodeID, fedPayload.TenantID)
+
+	// Process telemetry data (store in database, forward to message mesh, etc.)
+	// For now, just acknowledge receipt
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"ok":      true,
+		"nodeId":  fedPayload.NodeID,
+		"tenantId": fedPayload.TenantID,
+		"message": "Telemetry received",
+	})
+}
+
+// Agent Commands Handler
+// Agents receive commands from this endpoint
+func handleAgentCommands(w http.ResponseWriter, r *http.Request) {
+	// Get federation payload from middleware
+	fedPayload := fedmw.GetFederationPayload(r)
+	if fedPayload == nil {
+		http.Error(w, "Federation payload not found", http.StatusInternalServerError)
+		return
+	}
+
+	// Return pending commands for this agent/node
+	// In a full implementation, this would query a command queue
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"ok":       true,
+		"nodeId":   fedPayload.NodeID,
+		"tenantId": fedPayload.TenantID,
+		"commands": []interface{}{}, // Empty for now
+	})
+}
+
+// Agent Jobs Handler
+// Agents submit job execution results to this endpoint
+func handleAgentJobs(w http.ResponseWriter, r *http.Request) {
+	// Get federation payload from middleware
+	fedPayload := fedmw.GetFederationPayload(r)
+	if fedPayload == nil {
+		http.Error(w, "Federation payload not found", http.StatusInternalServerError)
+		return
+	}
+
+	var jobData map[string]interface{}
+	if err := json.NewDecoder(r.Body).Decode(&jobData); err != nil {
+		http.Error(w, "Invalid job data", http.StatusBadRequest)
+		return
+	}
+
+	// Process job results
+	log.Printf("Agent job result received from node=%s tenant=%s", fedPayload.NodeID, fedPayload.TenantID)
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"ok":       true,
+		"nodeId":   fedPayload.NodeID,
+		"tenantId": fedPayload.TenantID,
+		"message":  "Job result received",
+	})
+}
+
+// Agent Status Handler
+// Agents can check their federation status
+func handleAgentStatus(w http.ResponseWriter, r *http.Request) {
+	// Get federation payload from middleware
+	fedPayload := fedmw.GetFederationPayload(r)
+	if fedPayload == nil {
+		http.Error(w, "Federation payload not found", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"ok":        true,
+		"nodeId":    fedPayload.NodeID,
+		"tenantId":  fedPayload.TenantID,
+		"federated": true,
+		"status":    "active",
+	})
 }

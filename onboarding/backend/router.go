@@ -51,6 +51,24 @@ func SetupRouter(dbPool *pgxpool.Pool) chi.Router {
 		// Example: r.Post("/sync", handleFederationSync)
 	})
 
+	// Phase 13.11: Agent Federation API
+	// Agents authenticate using Ed25519 federation tokens
+	r.Route("/api/federation/agents", func(r chi.Router) {
+		r.Use(fedmw.RequireAgentFederation)
+		
+		// Agent telemetry endpoint
+		r.Post("/telemetry", handleAgentTelemetry)
+		
+		// Agent command endpoint (for receiving commands)
+		r.Post("/commands", handleAgentCommands)
+		
+		// Agent job endpoint (for job execution)
+		r.Post("/jobs", handleAgentJobs)
+		
+		// Agent status endpoint
+		r.Get("/status", handleAgentStatus)
+	})
+
 	// Federation API routes (with federation middleware)
 	r.Route("/federation/api", func(r chi.Router) {
 		r.Use(federationRouter.FederationMiddleware)
