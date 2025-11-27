@@ -130,6 +130,13 @@ func GenerateBootstrapKit(tenant TenantInfo) (*BootstrapKit, error) {
 		"regions":     tenant.Regions,
 		"version":     "1.0.0",
 	}
+	
+	// Phase 12: Add federation metadata if available
+	if tenant.Config != nil {
+		if federationMeta, ok := tenant.Config["federation"]; ok {
+			metadata["federation"] = federationMeta
+		}
+	}
 	metadataJSON, _ := json.MarshalIndent(metadata, "", "  ")
 	if err := writeFile(zipWriter, "metadata.json", metadataJSON); err != nil {
 		return nil, err

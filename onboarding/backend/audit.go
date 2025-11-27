@@ -33,12 +33,13 @@ type AuditEvent struct {
 
 // RecordAuditEvent records an audit event in the database
 func RecordAuditEvent(ctx context.Context, tenantID, action, fingerprint, ipAddress, userAgent string) error {
-	if dbPool == nil {
+	db := getDB(ctx)
+	if db == nil {
 		log.Printf("Warning: Database pool not initialized, skipping audit log")
 		return nil
 	}
 
-	_, err := dbPool.Exec(ctx,
+	_, err := db.Exec(ctx,
 		`INSERT INTO public.bootstrap_kit_audit_log 
 		 (id, tenant_id, action, fingerprint, ip_address, user_agent, timestamp) 
 		 VALUES ($1, $2, $3, $4, $5, $6, $7)`,
@@ -61,11 +62,12 @@ func RecordAuditEvent(ctx context.Context, tenantID, action, fingerprint, ipAddr
 
 // QueryAuditEvents retrieves audit events for a given tenant, ordered by timestamp descending
 func QueryAuditEvents(ctx context.Context, tenantID string) ([]AuditEvent, error) {
-	if dbPool == nil {
+	db := getDB(ctx)
+	if db == nil {
 		return []AuditEvent{}, nil
 	}
 
-	rows, err := dbPool.Query(ctx,
+	rows, err := db.Query(ctx,
 		`SELECT id, tenant_id, action, fingerprint, ip_address, user_agent, timestamp 
 		 FROM public.bootstrap_kit_audit_log 
 		 WHERE tenant_id = $1 

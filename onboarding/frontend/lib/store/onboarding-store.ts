@@ -133,7 +133,12 @@ export const useOnboardingStore = create<OnboardingState>()(
     }),
     {
       name: 'onboarding-storage',
-      storage: createJSONStorage(() => (typeof window !== 'undefined' ? localStorage : undefined)),
+      storage: createJSONStorage(() => {
+        if (typeof window === 'undefined') {
+          throw new Error('localStorage is not available');
+        }
+        return localStorage;
+      }),
       partialize: (state) => ({
         company: state.company,
         dataRegions: state.dataRegions,

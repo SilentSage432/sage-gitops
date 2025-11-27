@@ -27,7 +27,7 @@ func handleWebAuthnChallenge(w http.ResponseWriter, r *http.Request) {
 
 	// Check if operator key already exists and has credentials
 	var hasCredential bool
-	err := dbPool.QueryRow(ctx,
+	err := getDB(ctx).QueryRow(ctx,
 		"SELECT EXISTS(SELECT 1 FROM public.operator_keys WHERE user_id = $1 AND credential_data IS NOT NULL)",
 		"tyson",
 	).Scan(&hasCredential)
@@ -50,7 +50,7 @@ func handleWebAuthnChallenge(w http.ResponseWriter, r *http.Request) {
 	// Load credentials from database if they exist (for authentication)
 	if hasCredential {
 		var credentialBytes []byte
-		err = dbPool.QueryRow(ctx,
+		err = getDB(ctx).QueryRow(ctx,
 			"SELECT credential_data FROM public.operator_keys WHERE user_id = $1 AND credential_data IS NOT NULL ORDER BY created_at DESC LIMIT 1",
 			"tyson",
 		).Scan(&credentialBytes)
@@ -74,7 +74,7 @@ func handleWebAuthnChallenge(w http.ResponseWriter, r *http.Request) {
 
 		// Store session in database
 		sessionJSON, _ := json.Marshal(session)
-		_, err = dbPool.Exec(ctx,
+		_, err = getDB(ctx).Exec(ctx,
 			"UPDATE public.operator_keys SET session_data = $1, updated_at = $2 WHERE user_id = $3",
 			sessionJSON,
 			time.Now(),
@@ -104,7 +104,7 @@ func handleWebAuthnChallenge(w http.ResponseWriter, r *http.Request) {
 
 		// Store session in database
 		sessionJSON, _ := json.Marshal(session)
-		_, err = dbPool.Exec(ctx,
+		_, err = getDB(ctx).Exec(ctx,
 			"INSERT INTO public.operator_keys (id, user_id, session_data, created_at) VALUES ($1, $2, $3, $4) ON CONFLICT (user_id) DO UPDATE SET session_data = $3, updated_at = $4",
 			uuid.New().String(),
 			"tyson",
@@ -131,7 +131,7 @@ func handleWebAuthnVerify(w http.ResponseWriter, r *http.Request) {
 
 	// Load session from database
 	var sessionData []byte
-	err := dbPool.QueryRow(ctx,
+	err := getDB(ctx).QueryRow(ctx,
 		"SELECT session_data FROM public.operator_keys WHERE user_id = $1 ORDER BY created_at DESC LIMIT 1",
 		"tyson",
 	).Scan(&sessionData)
@@ -153,10 +153,10 @@ func handleWebAuthnVerify(w http.ResponseWriter, r *http.Request) {
 
 	// Check if user has credentials (for authentication) or not (for registration)
 	var hasCredential bool
-	err = dbPool.QueryRow(ctx,
-		"SELECT EXISTS(SELECT 1 FROM public.operator_keys WHERE user_id = $1 AND credential_data IS NOT NULL)",
-		"tyson",
-	).Scan(&hasCredential)
+		err = getDB(ctx).QueryRow(ctx,
+			"SELECT EXISTS(SELECT 1 FROM public.operator_keys WHERE user_id = $1 AND credential_data IS NOT NULL)",
+			"tyson",
+		).Scan(&hasCredential)
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -176,7 +176,7 @@ func handleWebAuthnVerify(w http.ResponseWriter, r *http.Request) {
 	// Load credentials from database if they exist
 	if hasCredential {
 		var credentialBytes []byte
-		err = dbPool.QueryRow(ctx,
+		err = getDB(ctx).QueryRow(ctx,
 			"SELECT credential_data FROM public.operator_keys WHERE user_id = $1 AND credential_data IS NOT NULL ORDER BY created_at DESC LIMIT 1",
 			"tyson",
 		).Scan(&credentialBytes)
@@ -202,7 +202,7 @@ func handleWebAuthnVerify(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// Log audit event
-		_, _ = dbPool.Exec(ctx,
+		_, _ = getDB(ctx).Exec(ctx,
 			"INSERT INTO public.audit_log (event_type, user_id, details, created_at) VALUES ($1, $2, $3, $4)",
 			"webauthn_success",
 			"tyson",
@@ -223,7 +223,7 @@ func handleWebAuthnVerify(w http.ResponseWriter, r *http.Request) {
 
 		// Store credential for future authentication
 		credentialJSON, _ := json.Marshal(credentialData)
-		_, err = dbPool.Exec(ctx,
+		_, err = getDB(ctx).Exec(ctx,
 			"UPDATE public.operator_keys SET credential_data = $1, updated_at = $2 WHERE user_id = $3",
 			credentialJSON,
 			time.Now(),
@@ -239,7 +239,7 @@ func handleWebAuthnVerify(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// Log audit event
-		_, _ = dbPool.Exec(ctx,
+		_, _ = getDB(ctx).Exec(ctx,
 			"INSERT INTO public.audit_log (event_type, user_id, details, created_at) VALUES ($1, $2, $3, $4)",
 			"webauthn_registered",
 			"tyson",
@@ -294,7 +294,7 @@ func handleIssueOCT(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// Store token in database for consistency
-		_, _ = dbPool.Exec(ctx,
+		_, _ = getDB(ctx).Exec(ctx,
 			"INSERT INTO public.capability_tokens (token_id, user_id, scopes, expires_at, created_at) VALUES ($1, $2, $3, $4, $5)",
 			claims["jti"],
 			"dev-operator",
@@ -314,7 +314,7 @@ func handleIssueOCT(w http.ResponseWriter, r *http.Request) {
 
 	// Normal flow: Verify that user is authenticated (has credential in database)
 	var hasCredential bool
-	err := dbPool.QueryRow(ctx,
+	err := getDB(ctx).QueryRow(ctx,
 		"SELECT EXISTS(SELECT 1 FROM public.operator_keys WHERE user_id = $1 AND credential_data IS NOT NULL)",
 		"tyson",
 	).Scan(&hasCredential)
@@ -345,7 +345,7 @@ func handleIssueOCT(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Store token in database
-	_, err = dbPool.Exec(ctx,
+	_, err = getDB(ctx).Exec(ctx,
 		"INSERT INTO public.capability_tokens (token_id, user_id, scopes, expires_at, created_at) VALUES ($1, $2, $3, $4, $5)",
 		claims["jti"],
 		"tyson",
@@ -359,7 +359,7 @@ func handleIssueOCT(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Log audit event
-	_, _ = dbPool.Exec(ctx,
+	_, _ = getDB(ctx).Exec(ctx,
 		"INSERT INTO public.audit_log (event_type, user_id, details, created_at) VALUES ($1, $2, $3, $4)",
 		"oct_issued",
 		"tyson",
@@ -426,7 +426,7 @@ func handleVerifyOCT(w http.ResponseWriter, r *http.Request) {
 	// Verify token exists in database and is not expired
 	var expiresAt time.Time
 	var scopes []string
-	err = dbPool.QueryRow(ctx,
+	err = getDB(ctx).QueryRow(ctx,
 		"SELECT expires_at, scopes FROM public.capability_tokens WHERE token_id = $1",
 		claims["jti"],
 	).Scan(&expiresAt, &scopes)
@@ -591,7 +591,7 @@ func handleCreateTenant(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Begin transaction
-	tx, err := dbPool.Begin(ctx)
+	tx, err := getDB(ctx).Begin(ctx)
 	if err != nil {
 		http.Error(w, "Failed to start transaction", http.StatusInternalServerError)
 		return
@@ -714,7 +714,7 @@ func handleCreateTenant(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Log audit event
-	_, _ = dbPool.Exec(ctx,
+	_, _ = getDB(ctx).Exec(ctx,
 		"INSERT INTO public.audit_log (event_type, user_id, details, created_at) VALUES ($1, $2, $3, $4)",
 		"tenant_created",
 		claims["sub"].(string),
@@ -802,7 +802,7 @@ func handleBootstrapKit(w http.ResponseWriter, r *http.Request) {
 			if err := json.Unmarshal(bodyBytes, &req); err == nil {
 				tenantRequest = &req
 				// Try to find existing tenant by email
-				err := dbPool.QueryRow(ctx,
+				err := getDB(ctx).QueryRow(ctx,
 					"SELECT id FROM public.tenants WHERE email = $1 ORDER BY created_at DESC LIMIT 1",
 					req.Company.Email,
 				).Scan(&tenantID)
@@ -818,7 +818,7 @@ func handleBootstrapKit(w http.ResponseWriter, r *http.Request) {
 	if tenantID == "" {
 		if tenantRequest == nil {
 			// Try to get most recent tenant as fallback
-			err := dbPool.QueryRow(ctx,
+			err := getDB(ctx).QueryRow(ctx,
 				"SELECT id FROM public.tenants ORDER BY created_at DESC LIMIT 1",
 			).Scan(&tenantID)
 			if err != nil {
@@ -847,7 +847,7 @@ func handleBootstrapKit(w http.ResponseWriter, r *http.Request) {
 
 			configData, _ := json.Marshal(tenantRequest)
 
-			_, err := dbPool.Exec(ctx,
+			_, err := getDB(ctx).Exec(ctx,
 				"INSERT INTO public.tenants (id, name, domain, region, config_data, status, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
 				newTenantID, tenantRequest.Company.Name, domain, primaryRegion, configData, "pending", now, now,
 			)
@@ -864,7 +864,7 @@ func handleBootstrapKit(w http.ResponseWriter, r *http.Request) {
 	// Fetch tenant data
 	var tenantName, tenantEmail, tenantDomain, tenantRegion string
 	var configData []byte
-	err = dbPool.QueryRow(ctx,
+	err = getDB(ctx).QueryRow(ctx,
 		"SELECT name, email, domain, region, config_data FROM public.tenants WHERE id = $1",
 		tenantID,
 	).Scan(&tenantName, &tenantEmail, &tenantDomain, &tenantRegion, &configData)
@@ -883,7 +883,7 @@ func handleBootstrapKit(w http.ResponseWriter, r *http.Request) {
 
 	// Fetch selected agents
 	var agents []string
-	rows, err := dbPool.Query(ctx,
+	rows, err := getDB(ctx).Query(ctx,
 		"SELECT agent_id FROM public.tenant_agents WHERE tenant_id = $1",
 		tenantID,
 	)
@@ -901,6 +901,28 @@ func handleBootstrapKit(w http.ResponseWriter, r *http.Request) {
 		agents = tenantConfig.AgentSelection.SelectedAgents
 	}
 
+	// Phase 12: Fetch federation metadata
+	federationMetadata := make(map[string]interface{})
+	var primaryNodeID, primaryRegion string
+	var federationMetaJSON []byte
+	err = getDB(ctx).QueryRow(ctx,
+		`SELECT primary_node_id, primary_region, federation_metadata 
+		 FROM public.tenant_federation_map 
+		 WHERE tenant_id = $1`,
+		tenantID,
+	).Scan(&primaryNodeID, &primaryRegion, &federationMetaJSON)
+
+	if err == nil {
+		federationMetadata["primaryNodeId"] = primaryNodeID
+		federationMetadata["primaryRegion"] = primaryRegion
+		if len(federationMetaJSON) > 0 {
+			var meta map[string]interface{}
+			if err := json.Unmarshal(federationMetaJSON, &meta); err == nil {
+				federationMetadata["metadata"] = meta
+			}
+		}
+	}
+
 	// Build tenant info for kit generation
 	tenantInfo := bootstrap.TenantInfo{
 		ID:      tenantID,
@@ -910,6 +932,9 @@ func handleBootstrapKit(w http.ResponseWriter, r *http.Request) {
 		Region:  tenantRegion,
 		Agents:  agents,
 		Regions: tenantConfig.DataRegionsConfig.SelectedRegions,
+		Config: map[string]interface{}{
+			"federation": federationMetadata,
+		},
 		Sensitivity: func() string {
 			if tenantConfig.DataRegionsConfig.Sensitivity != nil {
 				return *tenantConfig.DataRegionsConfig.Sensitivity
@@ -963,7 +988,7 @@ func handleBootstrapKit(w http.ResponseWriter, r *http.Request) {
 	// Store kit in database
 	now := time.Now()
 	expiresAt := now.Add(15 * time.Minute) // 15 minute expiry
-	_, err = dbPool.Exec(ctx,
+	_, err = getDB(ctx).Exec(ctx,
 		"INSERT INTO public.bootstrap_kits (tenant_id, fingerprint, kit_data, created_at, expires_at) VALUES ($1, $2, $3, $4, $5) ON CONFLICT (fingerprint) DO UPDATE SET kit_data = $3, expires_at = $5",
 		tenantID,
 		kit.Fingerprint,
@@ -1038,7 +1063,7 @@ func handleBootstrapMeta(w http.ResponseWriter, r *http.Request) {
 	// Fetch bootstrap kit for tenant
 	var fingerprint string
 	var createdAt time.Time
-	err = dbPool.QueryRow(ctx,
+	err = getDB(ctx).QueryRow(ctx,
 		"SELECT fingerprint, created_at FROM public.bootstrap_kits WHERE tenant_id = $1 ORDER BY created_at DESC LIMIT 1",
 		tenantID,
 	).Scan(&fingerprint, &createdAt)
@@ -1101,7 +1126,7 @@ func handleListAgents(w http.ResponseWriter, r *http.Request) {
 	// Try to fetch from database with capabilities and requirements
 	var agents []map[string]interface{}
 
-	rows, err := dbPool.Query(ctx, "SELECT id, name, description, capabilities, requirements FROM public.agents ORDER BY id")
+	rows, err := getDB(ctx).Query(ctx, "SELECT id, name, description, capabilities, requirements FROM public.agents ORDER BY id")
 	if err == nil {
 		defer rows.Close()
 		for rows.Next() {
@@ -1321,7 +1346,7 @@ func handleTenantTelemetry(w http.ResponseWriter, r *http.Request) {
 
 	// Fetch tenant data
 	var companyName string
-	err := dbPool.QueryRow(ctx,
+	err := getDB(ctx).QueryRow(ctx,
 		"SELECT name FROM public.tenants WHERE id = $1",
 		tenantID,
 	).Scan(&companyName)
@@ -1337,7 +1362,7 @@ func handleTenantTelemetry(w http.ResponseWriter, r *http.Request) {
 
 	// Count agents for this tenant
 	var agentCount int
-	err = dbPool.QueryRow(ctx,
+	err = getDB(ctx).QueryRow(ctx,
 		"SELECT COUNT(*) FROM public.tenant_agents WHERE tenant_id = $1",
 		tenantID,
 	).Scan(&agentCount)
@@ -1348,7 +1373,7 @@ func handleTenantTelemetry(w http.ResponseWriter, r *http.Request) {
 
 	// Fetch selected agent IDs
 	var selectedAgents []map[string]string
-	rows, err := dbPool.Query(ctx,
+	rows, err := getDB(ctx).Query(ctx,
 		"SELECT ta.agent_id, a.name FROM public.tenant_agents ta JOIN public.agents a ON ta.agent_id = a.id WHERE ta.tenant_id = $1",
 		tenantID,
 	)
@@ -1369,7 +1394,7 @@ func handleTenantTelemetry(w http.ResponseWriter, r *http.Request) {
 	var bootstrapStatus string
 	var activatedAt sql.NullTime
 	var expiresAt sql.NullTime
-	err = dbPool.QueryRow(ctx,
+	err = getDB(ctx).QueryRow(ctx,
 		"SELECT activated_at, expires_at FROM public.bootstrap_kits WHERE tenant_id = $1 ORDER BY created_at DESC LIMIT 1",
 		tenantID,
 	).Scan(&activatedAt, &expiresAt)
@@ -1509,7 +1534,7 @@ func handleTenantStatus(w http.ResponseWriter, r *http.Request) {
 
 	// Fetch tenant core data
 	var createdAt time.Time
-	err := dbPool.QueryRow(ctx,
+	err := getDB(ctx).QueryRow(ctx,
 		"SELECT created_at FROM public.tenants WHERE id = $1",
 		tenantID,
 	).Scan(&createdAt)
@@ -1530,7 +1555,7 @@ func handleTenantStatus(w http.ResponseWriter, r *http.Request) {
 	var bootstrapActivatedAt sql.NullTime
 	var bootstrapExpiresAt sql.NullTime
 
-	err = dbPool.QueryRow(ctx,
+	err = getDB(ctx).QueryRow(ctx,
 		"SELECT fingerprint, created_at, activated_at, expires_at FROM public.bootstrap_kits WHERE tenant_id = $1 ORDER BY created_at DESC LIMIT 1",
 		tenantID,
 	).Scan(&bootstrapFingerprint, &bootstrapCreatedAt, &bootstrapActivatedAt, &bootstrapExpiresAt)
@@ -1546,7 +1571,7 @@ func handleTenantStatus(w http.ResponseWriter, r *http.Request) {
 	var agentDetails []map[string]interface{}
 	var deployedCount, pendingCount, failedCount int
 
-	rows, err := dbPool.Query(ctx,
+	rows, err := getDB(ctx).Query(ctx,
 		`SELECT ta.agent_id, ta.status, a.name 
 		 FROM public.tenant_agents ta 
 		 LEFT JOIN public.agents a ON ta.agent_id = a.id 
@@ -1604,7 +1629,7 @@ func handleTenantStatus(w http.ResponseWriter, r *http.Request) {
 	// Determine regions ready status (check if tenant has region config)
 	var regionsReady bool
 	var regionCount int
-	err = dbPool.QueryRow(ctx,
+	err = getDB(ctx).QueryRow(ctx,
 		"SELECT COUNT(*) FROM public.tenants WHERE id = $1 AND data_regions IS NOT NULL",
 		tenantID,
 	).Scan(&regionCount)
@@ -1740,7 +1765,7 @@ func handleTenantActivity(w http.ResponseWriter, r *http.Request) {
 	// Verify tenant exists
 	var companyName string
 	var createdAt time.Time
-	err := dbPool.QueryRow(ctx,
+	err := getDB(ctx).QueryRow(ctx,
 		"SELECT name, created_at FROM public.tenants WHERE id = $1",
 		tenantID,
 	).Scan(&companyName, &createdAt)
@@ -1768,7 +1793,7 @@ func handleTenantActivity(w http.ResponseWriter, r *http.Request) {
 	})
 
 	// Fetch bootstrap kit events
-	rows, err := dbPool.Query(ctx,
+	rows, err := getDB(ctx).Query(ctx,
 		"SELECT fingerprint, created_at, activated_at FROM public.bootstrap_kits WHERE tenant_id = $1 ORDER BY created_at DESC",
 		tenantID,
 	)
@@ -1855,7 +1880,7 @@ func handleTenantAgents(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Verify tenant exists
-	err := dbPool.QueryRow(ctx,
+	err := getDB(ctx).QueryRow(ctx,
 		"SELECT id FROM public.tenants WHERE id = $1",
 		tenantID,
 	).Scan(&tenantID)
@@ -1871,7 +1896,7 @@ func handleTenantAgents(w http.ResponseWriter, r *http.Request) {
 
 	// Fetch agents with status
 	var agents []map[string]interface{}
-	rows, err := dbPool.Query(ctx,
+	rows, err := getDB(ctx).Query(ctx,
 		`SELECT ta.agent_id, COALESCE(ta.status, 'pending') as status, a.name 
 		 FROM public.tenant_agents ta 
 		 LEFT JOIN public.agents a ON ta.agent_id = a.id 
@@ -1917,7 +1942,7 @@ func handleBootstrapStatus(w http.ResponseWriter, r *http.Request) {
 	var createdAt sql.NullTime
 	var expiresAt sql.NullTime
 
-	err := dbPool.QueryRow(ctx,
+	err := getDB(ctx).QueryRow(ctx,
 		"SELECT fingerprint, activated_at, created_at, expires_at FROM public.bootstrap_kits WHERE tenant_id = $1 ORDER BY created_at DESC LIMIT 1",
 		tenantID,
 	).Scan(&fingerprint, &activatedAt, &createdAt, &expiresAt)
@@ -1991,7 +2016,7 @@ func handleBootstrapScan(w http.ResponseWriter, r *http.Request) {
 	var activatedAt sql.NullTime
 	var expiresAt sql.NullTime
 
-	err := dbPool.QueryRow(ctx,
+	err := getDB(ctx).QueryRow(ctx,
 		"SELECT tenant_id, activated_at, expires_at FROM public.bootstrap_kits WHERE fingerprint = $1",
 		fingerprint,
 	).Scan(&tenantID, &activatedAt, &expiresAt)
@@ -2023,7 +2048,7 @@ func handleBootstrapScan(w http.ResponseWriter, r *http.Request) {
 
 	// If not activated, activate it now
 	if !activatedAt.Valid {
-		_, err := dbPool.Exec(ctx,
+		_, err := getDB(ctx).Exec(ctx,
 			"UPDATE public.bootstrap_kits SET activated_at = NOW() WHERE fingerprint = $1",
 			fingerprint,
 		)
@@ -2078,9 +2103,9 @@ func handleBootstrapVerify(w http.ResponseWriter, r *http.Request) {
 	var err error
 	if req.TenantID != "" {
 		query += " AND tenant_id = $2"
-		err = dbPool.QueryRow(ctx, query, req.Fingerprint, req.TenantID).Scan(&tenantID, &activatedAt, &expiresAt)
+		err = getDB(ctx).QueryRow(ctx, query, req.Fingerprint, req.TenantID).Scan(&tenantID, &activatedAt, &expiresAt)
 	} else {
-		err = dbPool.QueryRow(ctx, query, req.Fingerprint).Scan(&tenantID, &activatedAt, &expiresAt)
+		err = getDB(ctx).QueryRow(ctx, query, req.Fingerprint).Scan(&tenantID, &activatedAt, &expiresAt)
 	}
 
 	if err != nil {
@@ -2119,7 +2144,7 @@ func handleBootstrapVerify(w http.ResponseWriter, r *http.Request) {
 	// Mark as activated if not already activated (Phase 9 enhancement)
 	if !activatedAt.Valid {
 		now := time.Now()
-		_, err := dbPool.Exec(ctx,
+		_, err := getDB(ctx).Exec(ctx,
 			"UPDATE public.bootstrap_kits SET activated_at = $1 WHERE fingerprint = $2",
 			now,
 			req.Fingerprint,
@@ -2262,7 +2287,7 @@ func handleValidateIdentity(w http.ResponseWriter, r *http.Request) {
 
 	// Verify tenant exists
 	var tenantExists bool
-	err := dbPool.QueryRow(ctx,
+	err := getDB(ctx).QueryRow(ctx,
 		"SELECT EXISTS(SELECT 1 FROM public.tenants WHERE id = $1)",
 		req.TenantID,
 	).Scan(&tenantExists)
@@ -2298,7 +2323,7 @@ func handleValidateIdentity(w http.ResponseWriter, r *http.Request) {
 
 	identityConfigJSON, _ := json.Marshal(identityConfig)
 
-	_, err = dbPool.Exec(ctx,
+	_, err = getDB(ctx).Exec(ctx,
 		`UPDATE public.tenants 
 		 SET identity_provider = $1, 
 		     identity_config = $2, 

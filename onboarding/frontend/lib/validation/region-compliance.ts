@@ -79,7 +79,7 @@ export function validateRegionCompliance(
   }
 
   // HIPAA/PCI specific warnings
-  if (sensitivity === 'PHI / HIPAA' || sensitivity === 'HIPAA') {
+  if (sensitivity === 'PHI / HIPAA') {
     const hasHIPAACompliance = selectedRegionObjects.some((r) =>
       r.compliance?.includes('HIPAA')
     );

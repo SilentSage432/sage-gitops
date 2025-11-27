@@ -201,7 +201,7 @@ export default function DashboardPage() {
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm text-white/60 flex items-center gap-2">
                       <span className={`block w-2 h-2 rounded-full ${
-                        telemetry.data?.agentCount > 0 ? "bg-[#10b981]" : "bg-neutral-500"
+                        (telemetry.data?.agentCount ?? 0) > 0 ? "bg-[#10b981]" : "bg-neutral-500"
                       }`}></span>
                       Agents Online
                     </span>
@@ -452,9 +452,9 @@ export default function DashboardPage() {
                 <CardContent>
                   {(telemetry.isLoading || status.isLoading || agents.isLoading || activity.isLoading) ? (
                     <p className="text-sm text-white/60">Loading activity...</p>
-                  ) : activity.length > 0 ? (
+                  ) : activityEvents.length > 0 ? (
                     <ul className="space-y-1 font-mono text-sm text-white/80">
-                      {activity.map((line, i) => (
+                      {activityEvents.map((line, i) => (
                         <li key={i} className="animate-[fadeIn_300ms_ease]">
                           {line}
                         </li>

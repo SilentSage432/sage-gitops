@@ -46,7 +46,8 @@ type ActivityEvent struct {
 
 // RecordActivityEvent records an activity event in the database
 func RecordActivityEvent(ctx context.Context, tenantID string, eventType ActivityEventType, summary, detail string, severity ActivitySeverity, metadata map[string]interface{}) error {
-	if dbPool == nil {
+	db := getDB(ctx)
+	if db == nil {
 		log.Printf("Warning: Database pool not initialized, skipping activity log")
 		return nil
 	}
@@ -61,7 +62,7 @@ func RecordActivityEvent(ctx context.Context, tenantID string, eventType Activit
 		}
 	}
 
-	_, err := dbPool.Exec(ctx,
+	_, err := db.Exec(ctx,
 		`INSERT INTO public.activity_events 
 		 (id, tenant_id, event_type, event_summary, event_detail, severity, metadata, created_at) 
 		 VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
@@ -85,7 +86,8 @@ func RecordActivityEvent(ctx context.Context, tenantID string, eventType Activit
 
 // QueryActivityEvents retrieves activity events for a tenant
 func QueryActivityEvents(ctx context.Context, tenantID string, limit int) ([]ActivityEvent, error) {
-	if dbPool == nil {
+	db := getDB(ctx)
+	if db == nil {
 		return nil, nil
 	}
 
@@ -93,7 +95,7 @@ func QueryActivityEvents(ctx context.Context, tenantID string, limit int) ([]Act
 		limit = 50 // Default limit
 	}
 
-	rows, err := dbPool.Query(ctx,
+	rows, err := db.Query(ctx,
 		`SELECT id, tenant_id, event_type, event_summary, event_detail, severity, metadata, created_at
 		 FROM public.activity_events
 		 WHERE tenant_id = $1

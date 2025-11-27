@@ -65,19 +65,29 @@ export async function performWebAuthnRegistration(): Promise<{ success: boolean;
     const challengeResponse = await requestWebAuthnChallenge();
     
     const credential = await startRegistration({
-      rpName: challengeResponse.rp.name,
-      rpID: challengeResponse.rp.id,
-      userName: challengeResponse.user.name,
-      userDisplayName: challengeResponse.user.displayName,
-      challenge: challengeResponse.challenge,
-      pubKeyCredParams: challengeResponse.pubKeyCredParams,
-      timeout: challengeResponse.timeout,
-      attestation: challengeResponse.attestation as any,
-      excludeCredentials: [],
-      authenticatorSelection: {
-        authenticatorAttachment: 'cross-platform',
-        userVerification: 'required',
-        requireResidentKey: false,
+      optionsJSON: {
+        rp: {
+          name: challengeResponse.rp.name,
+          id: challengeResponse.rp.id,
+        },
+        user: {
+          id: challengeResponse.user.id,
+          name: challengeResponse.user.name,
+          displayName: challengeResponse.user.displayName,
+        },
+        challenge: challengeResponse.challenge,
+        pubKeyCredParams: challengeResponse.pubKeyCredParams.map(param => ({
+          type: 'public-key' as const,
+          alg: param.alg,
+        })),
+        timeout: challengeResponse.timeout,
+        attestation: challengeResponse.attestation as any,
+        excludeCredentials: [],
+        authenticatorSelection: {
+          authenticatorAttachment: 'cross-platform',
+          userVerification: 'required',
+          requireResidentKey: false,
+        },
       },
     });
 
@@ -94,9 +104,11 @@ export async function performWebAuthnAuthentication(): Promise<{ success: boolea
     const challengeResponse = await requestWebAuthnChallenge();
     
     const credential = await startAuthentication({
-      challenge: challengeResponse.challenge,
-      timeout: challengeResponse.timeout,
-      rpID: challengeResponse.rp.id,
+      optionsJSON: {
+        challenge: challengeResponse.challenge,
+        timeout: challengeResponse.timeout,
+        rpId: challengeResponse.rp.id,
+      },
     });
 
     const verifyResponse = await verifyWebAuthnCredential(credential, challengeResponse.challenge);
