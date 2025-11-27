@@ -21,7 +21,7 @@ func SetupRouter(dbPool *pgxpool.Pool) chi.Router {
 	r.Use(cors.Handler(cors.Options{
 		AllowedOrigins:   []string{"http://localhost:3000", "https://localhost:3000"},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token", "X-Tenant-ID", "X-Region"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token", "X-Tenant-ID", "X-Region", "X-Federation-Token"},
 		ExposedHeaders:   []string{"Link"},
 		AllowCredentials: true,
 		MaxAge:           300,
@@ -31,10 +31,20 @@ func SetupRouter(dbPool *pgxpool.Pool) chi.Router {
 	federationRouter := fedmw.NewFederationRouter(dbPool)
 
 	// Phase 13.1: Federation Auth Handshake API (stateless)
+	// These routes are public - no session required
 	r.Route("/api/federation/auth", func(r chi.Router) {
 		r.Post("/handshake", handleFederationHandshake)
 		r.Post("/assert", handleFederationAssert)
 		r.Post("/verify", handleFederationVerify)
+	})
+
+	// Phase 13.2: All protected federation APIs require valid session
+	r.Route("/api/federation", func(r chi.Router) {
+		r.Use(fedmw.RequireFederationSession)
+		
+		// Protected federation endpoints go here
+		// Example: r.Get("/nodes", handleListFederationNodes)
+		// Example: r.Post("/sync", handleFederationSync)
 	})
 
 	// Federation API routes (with federation middleware)

@@ -10,6 +10,8 @@ import (
 	"net/http"
 	"sync"
 	"time"
+
+	fedmw "github.com/silentsage432/sage-gitops/onboarding/backend/middleware"
 )
 
 // Phase 13.1: Stateless handshake store
@@ -175,6 +177,9 @@ func handleFederationAssert(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	federationToken := hex.EncodeToString(federationTokenBytes)
+
+	// Phase 13.2: Store session as valid
+	fedmw.RegisterFederationSession(federationToken)
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]interface{}{
