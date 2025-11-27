@@ -229,6 +229,55 @@ func handleFederationVerify(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// Phase 13.5: Export federation token (operator can retrieve token after handshake)
+func handleFederationExport(w http.ResponseWriter, r *http.Request) {
+	token := r.URL.Query().Get("federationToken")
+	if token == "" {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"error": "TOKEN_REQUIRED",
+		})
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"token": token,
+	})
+}
+
+// Phase 13.5: Import federation token from remote source (CLI, other UI)
+func handleFederationImport(w http.ResponseWriter, r *http.Request) {
+	var req struct {
+		Token string `json:"token"`
+	}
+
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"error": "Invalid request",
+		})
+		return
+	}
+
+	if req.Token == "" {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"error": "TOKEN_REQUIRED",
+		})
+		return
+	}
+
+	// We do NOT validate here — token validation happens at use time
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"ok":            true,
+		"tokenAccepted": true,
+	})
+}
+
 // Cleanup expired challenges (runs periodically)
 func cleanupExpiredChallenges() {
 	ticker := time.NewTicker(1 * time.Minute)

@@ -36,6 +36,8 @@ func SetupRouter(dbPool *pgxpool.Pool) chi.Router {
 		r.Post("/handshake", handleFederationHandshake)
 		r.Post("/assert", handleFederationAssert)
 		r.Post("/verify", handleFederationVerify)
+		r.Get("/export", handleFederationExport)
+		r.Post("/import", handleFederationImport)
 	})
 
 	// Phase 13.2: All protected federation APIs require valid session
