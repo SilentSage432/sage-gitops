@@ -2459,3 +2459,54 @@ func handleAgentStatus(w http.ResponseWriter, r *http.Request) {
 		"status":    "active",
 	})
 }
+
+// Phase 13.11: Federation Bus Handler
+// Secure messaging endpoint for the federation backplane
+// Agents and nodes can send various message types through this unified endpoint
+func handleFederationBus(w http.ResponseWriter, r *http.Request) {
+	// Get federation payload from middleware
+	fedPayload := fedmw.GetFederationPayload(r)
+	if fedPayload == nil {
+		http.Error(w, "Federation payload not found", http.StatusInternalServerError)
+		return
+	}
+
+	var req struct {
+		Type string                 `json:"type"`
+		Data map[string]interface{} `json:"data"`
+	}
+
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	// Process message based on type
+	switch req.Type {
+	case "heartbeat":
+		// TODO: event processing
+		log.Printf("Heartbeat received from node=%s tenant=%s", fedPayload.NodeID, fedPayload.TenantID)
+		break
+
+	case "telemetry":
+		// TODO: metrics, status
+		log.Printf("Telemetry received from node=%s tenant=%s", fedPayload.NodeID, fedPayload.TenantID)
+		break
+
+	case "event":
+		// TODO: event log or agent action
+		log.Printf("Event received from node=%s tenant=%s", fedPayload.NodeID, fedPayload.TenantID)
+		break
+
+	default:
+		log.Printf("Unknown message type '%s' from node=%s tenant=%s", req.Type, fedPayload.NodeID, fedPayload.TenantID)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"ok":       true,
+		"nodeId":   fedPayload.NodeID,
+		"tenantId": fedPayload.TenantID,
+		"type":     req.Type,
+	})
+}

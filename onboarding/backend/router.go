@@ -69,6 +69,13 @@ func SetupRouter(dbPool *pgxpool.Pool) chi.Router {
 		r.Get("/status", handleAgentStatus)
 	})
 
+	// Phase 13.11: Federation Bus
+	// Secure messaging endpoint for the federation backplane
+	r.Route("/federation/bus", func(r chi.Router) {
+		r.Use(fedmw.RequireAgentFederation)
+		r.Post("/", handleFederationBus)
+	})
+
 	// Federation API routes (with federation middleware)
 	r.Route("/federation/api", func(r chi.Router) {
 		r.Use(federationRouter.FederationMiddleware)
