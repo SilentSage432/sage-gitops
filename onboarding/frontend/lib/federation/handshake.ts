@@ -68,6 +68,20 @@ export function getFederationToken(): string | null {
   return federationToken;
 }
 
+export function exportFederationEnvelope() {
+  if (!federationToken) return null;
+  return {
+    token: federationToken,
+    source: "onboarding",
+    ts: Date.now(),
+  };
+}
+
+export function importFederationEnvelope(env: { token: string }) {
+  if (!env?.token) return false;
+  federationToken = env.token;
+  return true;
+}
 export function setFederationToken(token: string | null): void {
   federationToken = token;
 }
