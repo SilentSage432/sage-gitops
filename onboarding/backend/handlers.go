@@ -2464,6 +2464,7 @@ func handleAgentStatus(w http.ResponseWriter, r *http.Request) {
 // Phase 13.11: Federation Bus Handler
 // Secure messaging endpoint for the federation backplane
 // Agents and nodes can send various message types through this unified endpoint
+// Phase 14.5: All messages are recorded in the event stream
 func handleFederationBus(w http.ResponseWriter, r *http.Request) {
 	// Get federation payload from middleware
 	fedPayload := fedmw.GetFederationPayload(r)
@@ -2481,6 +2482,14 @@ func handleFederationBus(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
 		return
 	}
+
+	// Phase 14.5: Record event in stream
+	// Extract nodeId from data if present, otherwise use federation payload
+	nodeID := fedPayload.NodeID
+	if dataNodeID, ok := req.Data["nodeId"].(string); ok && dataNodeID != "" {
+		nodeID = dataNodeID
+	}
+	federation.AddEvent(req.Type, nodeID, req.Data)
 
 	// Process message based on type
 	switch req.Type {
@@ -2555,5 +2564,16 @@ func handleFederationNodesStatus(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]interface{}{
 		"ts":    time.Now().UnixMilli(),
 		"nodes": nodes,
+	})
+}
+
+// Phase 14.5: Federation Events Handler
+// Returns federation event stream for UI awareness and dashboards
+func handleFederationEvents(w http.ResponseWriter, r *http.Request) {
+	events := federation.GetEvents()
+	
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"events": events,
 	})
 }

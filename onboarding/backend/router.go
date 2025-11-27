@@ -58,6 +58,12 @@ func SetupRouter(dbPool *pgxpool.Pool) chi.Router {
 		r.Get("/status", handleFederationNodesStatus)
 	})
 
+	// Phase 14.5: Federation Events API
+	// Expose event stream for UI awareness and dashboards
+	r.Route("/federation/events", func(r chi.Router) {
+		r.Get("/", handleFederationEvents)
+	})
+
 	// Phase 13.11: Agent Federation API
 	// Agents authenticate using Ed25519 federation tokens
 	r.Route("/api/federation/agents", func(r chi.Router) {
