@@ -84,8 +84,27 @@ export interface DivergenceObservation {
   ts: number;
 }
 
+// Phase 16.7: Topology interfaces
+export interface TopologyNode {
+  id: string;
+  type?: string;
+}
+
+export interface TopologyEdge {
+  source: string;
+  target?: string;
+  channel: string;
+  ts: number;
+}
+
+export interface FederationTopology {
+  nodes: TopologyNode[];
+  edges: TopologyEdge[];
+}
+
 // Phase 15.9: Federation State Response
 // Phase 16.2: Extended with intents and divergence
+// Phase 16.7: Extended with topology
 export interface FederationStateResponse {
   events: FederationEvent[];
   commands: Command[];
@@ -97,9 +116,18 @@ export interface FederationStateResponse {
     scope?: string;
     metadata?: Record<string, unknown>;
     created?: number;
+    lifecycle?: string;
+    staleAfter?: number;
     ts: number;
   }>;
   divergence: DivergenceObservation[];
+  lifecycle: Record<string, number>;
+  stale: Array<{
+    intent: unknown;
+    stale: boolean;
+    age: number;
+  }>;
+  topology: FederationTopology;
   ts: number;
 }
 

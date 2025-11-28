@@ -15,6 +15,7 @@ import CognitionPanel from "../panels/CognitionPanel";
 import OnboardingNexusPanel from "../panels/OnboardingNexusPanel";
 import FederationPanel from "../panels/FederationPanel";
 import FederationStatePanel from "../features/federation/FederationStatePanel";
+import TopologyPanel from "../features/federation/TopologyPanel";
 
 interface BridgeFrameProps {
   selectedItem?: string;
@@ -156,6 +157,7 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
     "onboarding-nexus": <OnboardingNexusPanel />,
     "federation-backplane": <FederationPanel />,
     "federation-state": <FederationStatePanel />,
+    topology: <TopologyPanel />,
   };
 
   const activePanel = selectedItem ? panelRegistry[selectedItem] : null;

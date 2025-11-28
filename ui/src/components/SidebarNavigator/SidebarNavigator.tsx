@@ -47,6 +47,7 @@ export const SidebarNavigator: React.FC<SidebarNavigatorProps> = ({
       items: [
         { id: 'federation-backplane', label: 'Federation Backplane' },
         { id: 'federation-state', label: 'Federation State' },
+        { id: 'topology', label: 'Topology' },
         { id: 'pi-kluster', label: 'Pi Kluster' },
         { id: 'onboarding-nexus', label: 'Onboarding Nexus' },
         { id: 'nodes', label: 'Nodes' },
