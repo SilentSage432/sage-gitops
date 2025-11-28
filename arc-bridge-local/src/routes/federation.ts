@@ -20,6 +20,7 @@ router.get("/federation/nodes", (_req, res) => {
 });
 
 // Phase 14.3: Federation Nodes Status endpoint
+// Returns empty array if no nodes registered yet (UI not federated)
 router.get("/federation/nodes/status", (_req, res) => {
   try {
     const now = Date.now();
@@ -35,26 +36,35 @@ router.get("/federation/nodes/status", (_req, res) => {
       };
     });
     
+    // Return empty array if no nodes registered (UI not federated yet)
     res.json({
       ts: now,
-      nodes: nodeStatuses,
+      nodes: nodeStatuses || [],
     });
   } catch (error) {
     console.error("Error in /federation/nodes/status:", error);
-    res.status(500).json({ error: "Internal server error" });
+    // Return empty response instead of error if UI not federated
+    res.json({
+      ts: Date.now(),
+      nodes: [],
+    });
   }
 });
 
 // Phase 14.5: Federation Events endpoint
+// Returns empty array if no events recorded yet (UI not federated)
 router.get("/federation/events", (_req, res) => {
   try {
     const recentEvents = events.slice(-MAX_EVENTS);
     res.json({
-      events: recentEvents,
+      events: recentEvents || [],
     });
   } catch (error) {
     console.error("Error in /federation/events:", error);
-    res.status(500).json({ error: "Internal server error" });
+    // Return empty response instead of error if UI not federated
+    res.json({
+      events: [],
+    });
   }
 });
 
