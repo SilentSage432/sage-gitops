@@ -6,6 +6,7 @@ import health from "./routes/health.js";
 import whisperer from "./routes/whisperer.js";
 import rho2 from "./routes/rho2.js";
 import federation from "./routes/federation.js";
+import commands from "./routes/commands.js";
 import intent from "./routes/intent.js";
 import act from "./routes/act.js";
 
@@ -34,6 +35,9 @@ app.use("/api", act);
 
 // Phase 14.7: Federation routes (no /api prefix for SAGE UI compatibility)
 app.use("/", federation);
+
+// Phase 15.3: Federation Commands API
+app.use("/federation/commands", commands);
 
 // -----------------------------------------------------------------------------
 // PHASE 7 — UNIFIED TELEMETRY STREAM
