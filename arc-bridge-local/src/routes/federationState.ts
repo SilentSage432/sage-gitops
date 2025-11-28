@@ -9,6 +9,7 @@ import { listIntents, summarizeIntentLifecycle, detectStaleIntents } from "../fe
 import { detectDivergence } from "../federation/divergence.js";
 import { federationTopology } from "../federation/topology.js";
 import { deriveReasons } from "../federation/reasoning.js";
+import { getOperator } from "../federation/operator.js";
 import { getEventsForState } from "./federation.js";
 
 const router = Router();
@@ -21,6 +22,7 @@ router.get("/", (req: Request, res: Response) => {
     // Phase 16.5: Extended with stale intent detection
     // Phase 16.7: Extended with topology mapping
     // Phase 16.9: Extended with reasoning model
+    // Phase 17.2: Extended with operator identity
     res.json({
       events: getEventsForState(),
       commands: getRecentCommands(),
@@ -31,6 +33,7 @@ router.get("/", (req: Request, res: Response) => {
       stale: detectStaleIntents(),
       topology: federationTopology(),
       reasons: deriveReasons(),
+      operator: getOperator(),
       ts: Date.now(),
     });
   } catch (error) {
@@ -45,6 +48,7 @@ router.get("/", (req: Request, res: Response) => {
       stale: [],
       topology: { nodes: [], edges: [] },
       reasons: [],
+      operator: null,
       ts: Date.now(),
     });
   }
