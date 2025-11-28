@@ -1,13 +1,22 @@
 // Phase 17.2: Backend Operator Identity Model
+// Phase 17.6: Extended with credential storage
 // Passive Operator identity model
 // Does NOT perform authentication or access control yet
 // This is just the representation - the slot where operator identity will live
+
+export interface WebAuthnCredential {
+  credentialId: string;
+  publicKey: string; // Base64 encoded public key
+  attestation?: string;
+  transport?: string[];
+}
 
 export interface OperatorIdentity {
   id: string;
   source: string; // "webauthn" | "yubikey" | etc.
   registeredAt: number;
   lastSeen: number;
+  credential?: WebAuthnCredential | null; // Phase 17.6: WebAuthn/YubiKey credential storage
   metadata?: Record<string, unknown>;
 }
 
