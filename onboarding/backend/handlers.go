@@ -2547,33 +2547,72 @@ func handleFederationBus(w http.ResponseWriter, r *http.Request) {
 // Phase 14.2: List Federation Nodes Handler
 // Exposes registered nodes for UI federation presence display
 func handleListFederationNodes(w http.ResponseWriter, r *http.Request) {
+	defer func() {
+		if err := recover(); err != nil {
+			log.Printf("Panic in handleListFederationNodes: %v", err)
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
+		}
+	}()
+
 	nodes := federation.GetNodes()
+	if nodes == nil {
+		nodes = []*federation.NodeStatus{}
+	}
 	
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]interface{}{
+	if err := json.NewEncoder(w).Encode(map[string]interface{}{
 		"nodes": nodes,
-	})
+	}); err != nil {
+		log.Printf("Error encoding nodes response: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+	}
 }
 
 // Phase 14.3: Federation Nodes Status Handler
 // Returns nodes with current timestamp for UI federation presence
 func handleFederationNodesStatus(w http.ResponseWriter, r *http.Request) {
+	defer func() {
+		if err := recover(); err != nil {
+			log.Printf("Panic in handleFederationNodesStatus: %v", err)
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
+		}
+	}()
+
 	nodes := federation.GetNodes()
+	if nodes == nil {
+		nodes = []*federation.NodeStatus{}
+	}
 	
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]interface{}{
+	if err := json.NewEncoder(w).Encode(map[string]interface{}{
 		"ts":    time.Now().UnixMilli(),
 		"nodes": nodes,
-	})
+	}); err != nil {
+		log.Printf("Error encoding nodes status response: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+	}
 }
 
 // Phase 14.5: Federation Events Handler
 // Returns federation event stream for UI awareness and dashboards
 func handleFederationEvents(w http.ResponseWriter, r *http.Request) {
+	defer func() {
+		if err := recover(); err != nil {
+			log.Printf("Panic in handleFederationEvents: %v", err)
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
+		}
+	}()
+
 	events := federation.GetEvents()
+	if events == nil {
+		events = []*federation.FederationEvent{}
+	}
 	
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]interface{}{
+	if err := json.NewEncoder(w).Encode(map[string]interface{}{
 		"events": events,
-	})
+	}); err != nil {
+		log.Printf("Error encoding events response: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+	}
 }
