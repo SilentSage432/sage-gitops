@@ -61,3 +61,27 @@ export async function fetchCommands(): Promise<CommandsResponse> {
   return res.json();
 }
 
+// Phase 15.8: Subscription interface
+export interface Subscription {
+  id: string;
+  channel: string;
+  ts: number;
+}
+
+// Phase 15.9: Federation State Response
+export interface FederationStateResponse {
+  events: FederationEvent[];
+  commands: Command[];
+  subscriptions: Subscription[];
+  ts: number;
+}
+
+// Phase 15.9: Fetch complete federation state (read-only)
+export async function fetchFederationState(): Promise<FederationStateResponse> {
+  const res = await fetch(`${API_BASE_URL}/federation/state`);
+  if (!res.ok) {
+    throw new Error(`Failed to fetch federation state: ${res.statusText}`);
+  }
+  return res.json();
+}
+
