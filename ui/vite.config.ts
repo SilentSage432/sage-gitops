@@ -36,7 +36,7 @@ export default defineConfig({
         secure: false,
       },
       "/federation": {
-        target: process.env.VITE_API_BASE || "http://localhost:8080",
+        target: process.env.VITE_API_BASE || "http://localhost:7070",
         changeOrigin: true,
         secure: false,
       },
