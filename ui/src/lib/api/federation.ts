@@ -102,9 +102,19 @@ export interface FederationTopology {
   edges: TopologyEdge[];
 }
 
+// Phase 17.2: Operator Identity interface
+export interface OperatorIdentity {
+  id: string;
+  source: string;
+  registeredAt: number;
+  lastSeen: number;
+  metadata?: Record<string, unknown>;
+}
+
 // Phase 15.9: Federation State Response
 // Phase 16.2: Extended with intents and divergence
 // Phase 16.7: Extended with topology
+// Phase 17.2: Extended with operator identity
 export interface FederationStateResponse {
   events: FederationEvent[];
   commands: Command[];
@@ -128,6 +138,13 @@ export interface FederationStateResponse {
     age: number;
   }>;
   topology: FederationTopology;
+  reasons: Array<{
+    type: string;
+    detail: string;
+    severity?: string;
+    context?: Record<string, unknown>;
+  }>;
+  operator: OperatorIdentity | null;
   ts: number;
 }
 

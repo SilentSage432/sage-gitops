@@ -16,6 +16,7 @@ import OnboardingNexusPanel from "../panels/OnboardingNexusPanel";
 import FederationPanel from "../panels/FederationPanel";
 import FederationStatePanel from "../features/federation/FederationStatePanel";
 import TopologyPanel from "../features/federation/TopologyPanel";
+import OperatorIdentityLamp from "../components/OperatorIdentityLamp";
 
 interface BridgeFrameProps {
   selectedItem?: string;
@@ -238,6 +239,11 @@ export const BridgeFrame: React.FC<BridgeFrameProps> = ({
       >
         <Menu className="w-5 h-5 text-slate-300" />
       </button>
+
+      {/* Phase 17.3: Operator Identity Status Indicator */}
+      <div className="fixed top-4 right-4 z-50 p-2 rounded-md bg-[#181824] border border-slate-700 shadow-lg">
+        <OperatorIdentityLamp />
+      </div>
     </div>
   );
 };
