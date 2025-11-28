@@ -5,7 +5,7 @@
 import { Router, Request, Response } from "express";
 import { getRecentCommands } from "../federation/commandQueue.js";
 import { listSubscriptions } from "../federation/subscriptions.js";
-import { listIntents } from "../federation/intent.js";
+import { listIntents, summarizeIntentLifecycle } from "../federation/intent.js";
 import { detectDivergence } from "../federation/divergence.js";
 import { getEventsForState } from "./federation.js";
 
@@ -21,6 +21,7 @@ router.get("/", (req: Request, res: Response) => {
       subscriptions: listSubscriptions(),
       intents: listIntents(),
       divergence: detectDivergence(),
+      lifecycle: summarizeIntentLifecycle(),
       ts: Date.now(),
     });
   } catch (error) {
@@ -31,6 +32,7 @@ router.get("/", (req: Request, res: Response) => {
       subscriptions: [],
       intents: [],
       divergence: [],
+      lifecycle: {},
       ts: Date.now(),
     });
   }
