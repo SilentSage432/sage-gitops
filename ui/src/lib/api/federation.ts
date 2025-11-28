@@ -1,7 +1,7 @@
 // Phase 14.7: Federation API helper
 // Consumes existing backend endpoints for federation backplane data
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE || import.meta.env.VITE_API_URL || 'http://localhost:8080';
+// Use relative paths so Vite dev proxy can route them
+const API_BASE_URL = '';
 
 export interface FederationNode {
   nodeId: string;

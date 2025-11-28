@@ -35,6 +35,11 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
       },
+      "/federation": {
+        target: process.env.VITE_API_BASE || "http://localhost:8080",
+        changeOrigin: true,
+        secure: false,
+      },
       "/stream": {
         target: process.env.VITE_WS_BASE?.replace("ws://", "http://").replace("wss://", "https://") || "http://localhost:7070",
         ws: true,
