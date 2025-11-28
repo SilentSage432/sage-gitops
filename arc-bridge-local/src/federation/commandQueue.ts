@@ -5,6 +5,7 @@ export interface Command {
   target: string;
   cmd: string;
   data?: Record<string, unknown>;
+  channel?: string;
   ts: number;
 }
 
@@ -13,6 +14,7 @@ const commands: Command[] = [];
 export function enqueueCommand(cmd: Omit<Command, "ts">): void {
   commands.push({
     ...cmd,
+    channel: cmd.channel || "node",
     ts: Date.now(),
   });
 }

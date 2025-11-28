@@ -46,10 +46,12 @@ function routeMessage(type: string, data: Record<string, unknown>, nodeId?: stri
 
     case "command":
       // Phase 15.2: Store command, NOT execute
+      // Phase 15.5: Track routing channels (metadata & storage only)
       enqueueCommand({
         target: (data.target as string) || "",
         cmd: (data.cmd as string) || "",
         data: (data.data as Record<string, unknown>) || {},
+        channel: (data.channel as string) || "node",
       });
       return;
 
