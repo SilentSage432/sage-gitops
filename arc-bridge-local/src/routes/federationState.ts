@@ -4,6 +4,7 @@
 import { Router, Request, Response } from "express";
 import { getRecentCommands } from "../federation/commandQueue.js";
 import { listSubscriptions } from "../federation/subscriptions.js";
+import { listIntents } from "../federation/intent.js";
 import { getEventsForState } from "./federation.js";
 
 const router = Router();
@@ -15,6 +16,7 @@ router.get("/", (req: Request, res: Response) => {
       events: getEventsForState(),
       commands: getRecentCommands(),
       subscriptions: listSubscriptions(),
+      intents: listIntents(),
       ts: Date.now(),
     });
   } catch (error) {
@@ -23,6 +25,7 @@ router.get("/", (req: Request, res: Response) => {
       events: [],
       commands: [],
       subscriptions: [],
+      intents: [],
       ts: Date.now(),
     });
   }

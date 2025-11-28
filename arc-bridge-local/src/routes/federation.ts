@@ -2,6 +2,7 @@ import { Router } from "express";
 import type { FederationNode } from "../types/shared.js";
 import { enqueueCommand } from "../federation/commandQueue.js";
 import { registerSubscription } from "../federation/subscriptions.js";
+import { declareIntent } from "../federation/intent.js";
 
 const router = Router();
 
@@ -92,6 +93,18 @@ function routeMessage(type: string, data: Record<string, unknown>, nodeId?: stri
         (data.id as string) || "",
         (data.channel as string) || ""
       );
+      return;
+
+    case "intent":
+      // Phase 16: Store federation intent (passive modeling only)
+      declareIntent({
+        target: (data.target as string) || undefined,
+        desired: (data.desired as string) || undefined,
+        channel: (data.channel as string) || undefined,
+        scope: (data.scope as string) || undefined,
+        metadata: (data.metadata as Record<string, unknown>) || undefined,
+        created: typeof data.created === "number" ? data.created : Date.now(),
+      });
       return;
 
     case "event":
