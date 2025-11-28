@@ -2,6 +2,7 @@
 // SAGE Prime UI becomes the federated control plane viewer
 import { useEffect, useState } from "react";
 import { fetchNodes, fetchEvents, type FederationNode, type FederationEvent } from "@/lib/api/federation";
+import FederationCommandConsole from "@/components/FederationCommandConsole";
 
 export default function FederationPanel() {
   const [nodes, setNodes] = useState<FederationNode[]>([]);
@@ -100,6 +101,10 @@ export default function FederationPanel() {
               </pre>
             </div>
           )}
+        </div>
+
+        <div>
+          <FederationCommandConsole />
         </div>
       </div>
     </div>

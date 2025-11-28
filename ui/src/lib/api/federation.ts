@@ -42,3 +42,22 @@ export async function fetchEvents(): Promise<EventsResponse> {
   return res.json();
 }
 
+export interface Command {
+  target: string;
+  cmd: string;
+  data?: Record<string, unknown>;
+  ts: number;
+}
+
+export interface CommandsResponse {
+  commands: Command[];
+}
+
+export async function fetchCommands(): Promise<CommandsResponse> {
+  const res = await fetch(`${API_BASE_URL}/federation/commands`);
+  if (!res.ok) {
+    throw new Error(`Failed to fetch commands: ${res.statusText}`);
+  }
+  return res.json();
+}
+
