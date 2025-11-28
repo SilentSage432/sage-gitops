@@ -5,7 +5,7 @@
 import { Router, Request, Response } from "express";
 import { getRecentCommands } from "../federation/commandQueue.js";
 import { listSubscriptions } from "../federation/subscriptions.js";
-import { listIntents, summarizeIntentLifecycle } from "../federation/intent.js";
+import { listIntents, summarizeIntentLifecycle, detectStaleIntents } from "../federation/intent.js";
 import { detectDivergence } from "../federation/divergence.js";
 import { getEventsForState } from "./federation.js";
 
@@ -15,6 +15,8 @@ router.get("/", (req: Request, res: Response) => {
   try {
     // Phase 15.8: Return structured federation state
     // Phase 16.2: Extended with divergence detection
+    // Phase 16.4: Extended with lifecycle summary
+    // Phase 16.5: Extended with stale intent detection
     res.json({
       events: getEventsForState(),
       commands: getRecentCommands(),
@@ -22,6 +24,7 @@ router.get("/", (req: Request, res: Response) => {
       intents: listIntents(),
       divergence: detectDivergence(),
       lifecycle: summarizeIntentLifecycle(),
+      stale: detectStaleIntents(),
       ts: Date.now(),
     });
   } catch (error) {
@@ -33,6 +36,7 @@ router.get("/", (req: Request, res: Response) => {
       intents: [],
       divergence: [],
       lifecycle: {},
+      stale: [],
       ts: Date.now(),
     });
   }
