@@ -109,6 +109,75 @@ export default function FederationStatePanel() {
             </div>
           )}
         </section>
+
+        <section>
+          <h3 className="font-semibold mb-2 text-white">Intents ({state.intents?.length || 0})</h3>
+          {!state.intents || state.intents.length === 0 ? (
+            <p className="text-slate-400">No intents declared</p>
+          ) : (
+            <div className="rounded-lg border border-white/5 bg-black/50 p-4">
+              <pre className="text-yellow-300 text-xs font-mono overflow-x-auto max-h-64 overflow-y-auto">
+                {JSON.stringify(state.intents, null, 2)}
+              </pre>
+            </div>
+          )}
+        </section>
+
+        <section>
+          <h3 className="font-semibold mb-2 text-white">
+            Divergence ({state.divergence?.length || 0})
+            {state.divergence && state.divergence.length > 0 && (
+              <span className="ml-2 text-xs font-normal">
+                (
+                {state.divergence.filter((d) => d.status === "aligned").length} aligned,{" "}
+                {state.divergence.filter((d) => d.status === "missing").length} missing,{" "}
+                {state.divergence.filter((d) => d.status === "diverged").length} diverged
+                )
+              </span>
+            )}
+          </h3>
+          {!state.divergence || state.divergence.length === 0 ? (
+            <p className="text-slate-400">No divergence detected</p>
+          ) : (
+            <div className="rounded-lg border border-white/5 bg-black/50 p-4 space-y-2">
+              {state.divergence.map((div, idx) => (
+                <div
+                  key={idx}
+                  className={`p-2 rounded border ${
+                    div.status === "aligned"
+                      ? "border-green-500/30 bg-green-500/5"
+                      : div.status === "missing"
+                      ? "border-orange-500/30 bg-orange-500/5"
+                      : "border-red-500/30 bg-red-500/5"
+                  }`}
+                >
+                  <div className="flex items-center gap-2 mb-1">
+                    <span
+                      className={`text-xs font-semibold ${
+                        div.status === "aligned"
+                          ? "text-green-400"
+                          : div.status === "missing"
+                          ? "text-orange-400"
+                          : "text-red-400"
+                      }`}
+                    >
+                      {div.status.toUpperCase()}
+                    </span>
+                    {div.intent.channel && (
+                      <span className="text-xs text-slate-400">Channel: {div.intent.channel}</span>
+                    )}
+                    {div.intent.target && (
+                      <span className="text-xs text-slate-400">Target: {div.intent.target}</span>
+                    )}
+                  </div>
+                  <pre className="text-slate-300 text-xs font-mono overflow-x-auto">
+                    {JSON.stringify(div.intent, null, 2)}
+                  </pre>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
       </div>
     </div>
   );

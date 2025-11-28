@@ -68,11 +68,38 @@ export interface Subscription {
   ts: number;
 }
 
+// Phase 16.2: Divergence Observation interface
+export interface DivergenceObservation {
+  intent: {
+    target?: string;
+    desired?: string;
+    channel?: string;
+    scope?: string;
+    metadata?: Record<string, unknown>;
+    created?: number;
+    ts: number;
+  };
+  status: "aligned" | "missing" | "diverged";
+  match?: Subscription;
+  ts: number;
+}
+
 // Phase 15.9: Federation State Response
+// Phase 16.2: Extended with intents and divergence
 export interface FederationStateResponse {
   events: FederationEvent[];
   commands: Command[];
   subscriptions: Subscription[];
+  intents: Array<{
+    target?: string;
+    desired?: string;
+    channel?: string;
+    scope?: string;
+    metadata?: Record<string, unknown>;
+    created?: number;
+    ts: number;
+  }>;
+  divergence: DivergenceObservation[];
   ts: number;
 }
 
