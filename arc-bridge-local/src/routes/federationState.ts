@@ -7,6 +7,7 @@ import { getRecentCommands } from "../federation/commandQueue.js";
 import { listSubscriptions } from "../federation/subscriptions.js";
 import { listIntents, summarizeIntentLifecycle, detectStaleIntents } from "../federation/intent.js";
 import { detectDivergence } from "../federation/divergence.js";
+import { federationTopology } from "../federation/topology.js";
 import { getEventsForState } from "./federation.js";
 
 const router = Router();
@@ -17,6 +18,7 @@ router.get("/", (req: Request, res: Response) => {
     // Phase 16.2: Extended with divergence detection
     // Phase 16.4: Extended with lifecycle summary
     // Phase 16.5: Extended with stale intent detection
+    // Phase 16.7: Extended with topology mapping
     res.json({
       events: getEventsForState(),
       commands: getRecentCommands(),
@@ -25,6 +27,7 @@ router.get("/", (req: Request, res: Response) => {
       divergence: detectDivergence(),
       lifecycle: summarizeIntentLifecycle(),
       stale: detectStaleIntents(),
+      topology: federationTopology(),
       ts: Date.now(),
     });
   } catch (error) {
@@ -37,6 +40,7 @@ router.get("/", (req: Request, res: Response) => {
       divergence: [],
       lifecycle: {},
       stale: [],
+      topology: { nodes: [], edges: [] },
       ts: Date.now(),
     });
   }
