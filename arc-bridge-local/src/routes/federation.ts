@@ -1,6 +1,7 @@
 import { Router } from "express";
 import type { FederationNode } from "../types/shared.js";
 import { enqueueCommand } from "../federation/commandQueue.js";
+import { registerSubscription } from "../federation/subscriptions.js";
 
 const router = Router();
 
@@ -53,6 +54,14 @@ function routeMessage(type: string, data: Record<string, unknown>, nodeId?: stri
         data: (data.data as Record<string, unknown>) || {},
         channel: (data.channel as string) || "node",
       });
+      return;
+
+    case "subscribe":
+      // Passive registry only - no delivery, no execution, no remote actions
+      registerSubscription(
+        (data.id as string) || "",
+        (data.channel as string) || ""
+      );
       return;
 
     case "event":
