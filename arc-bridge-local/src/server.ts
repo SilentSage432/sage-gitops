@@ -32,6 +32,9 @@ app.use("/api", federation);
 app.use("/api", intent);
 app.use("/api", act);
 
+// Phase 14.7: Federation routes (no /api prefix for SAGE UI compatibility)
+app.use("/", federation);
+
 // -----------------------------------------------------------------------------
 // PHASE 7 — UNIFIED TELEMETRY STREAM
 // -----------------------------------------------------------------------------
