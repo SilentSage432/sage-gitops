@@ -8,6 +8,7 @@ import { listSubscriptions } from "../federation/subscriptions.js";
 import { listIntents, summarizeIntentLifecycle, detectStaleIntents } from "../federation/intent.js";
 import { detectDivergence } from "../federation/divergence.js";
 import { federationTopology } from "../federation/topology.js";
+import { deriveReasons } from "../federation/reasoning.js";
 import { getEventsForState } from "./federation.js";
 
 const router = Router();
@@ -19,6 +20,7 @@ router.get("/", (req: Request, res: Response) => {
     // Phase 16.4: Extended with lifecycle summary
     // Phase 16.5: Extended with stale intent detection
     // Phase 16.7: Extended with topology mapping
+    // Phase 16.9: Extended with reasoning model
     res.json({
       events: getEventsForState(),
       commands: getRecentCommands(),
@@ -28,6 +30,7 @@ router.get("/", (req: Request, res: Response) => {
       lifecycle: summarizeIntentLifecycle(),
       stale: detectStaleIntents(),
       topology: federationTopology(),
+      reasons: deriveReasons(),
       ts: Date.now(),
     });
   } catch (error) {
@@ -41,6 +44,7 @@ router.get("/", (req: Request, res: Response) => {
       lifecycle: {},
       stale: [],
       topology: { nodes: [], edges: [] },
+      reasons: [],
       ts: Date.now(),
     });
   }
