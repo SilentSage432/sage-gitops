@@ -35,6 +35,11 @@ function getFilteredEvents(filter?: { channel?: string; node?: string; agent?: s
   }).slice(-MAX_EVENTS);
 }
 
+// Phase 15.8: Export event stream access for federation state endpoint
+export function getEventsForState(): FederationEvent[] {
+  return getFilteredEvents();
+}
+
 // Phase 14.6: Route message through federation bus
 function routeMessage(type: string, data: Record<string, unknown>, nodeId?: string): void {
   // Always record events first

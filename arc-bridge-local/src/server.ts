@@ -7,6 +7,7 @@ import whisperer from "./routes/whisperer.js";
 import rho2 from "./routes/rho2.js";
 import federation from "./routes/federation.js";
 import commands from "./routes/commands.js";
+import federationState from "./routes/federationState.js";
 import intent from "./routes/intent.js";
 import act from "./routes/act.js";
 
@@ -38,6 +39,9 @@ app.use("/", federation);
 
 // Phase 15.3: Federation Commands API
 app.use("/federation/commands", commands);
+
+// Phase 15.8: Federation State API (read-only)
+app.use("/federation/state", federationState);
 
 // -----------------------------------------------------------------------------
 // PHASE 7 — UNIFIED TELEMETRY STREAM
