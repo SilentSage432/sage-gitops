@@ -9,17 +9,42 @@ const router = Router();
 const nodes: Map<string, { nodeId: string; ts: number; status: string; lastSeen: number }> = new Map();
 
 // In-memory event stream (Phase 14.5)
-const events: Array<{ ts: number; type: string; nodeId: string; data: Record<string, unknown> }> = [];
+// Phase 15.6: Extended with channel metadata and filtering
+interface FederationEvent {
+  ts: number;
+  type: string;
+  nodeId: string;
+  data: Record<string, unknown>;
+  channel?: string;
+}
+
+const events: FederationEvent[] = [];
 const MAX_EVENTS = 200;
+
+// Phase 15.6: Event filtering helper
+function getFilteredEvents(filter?: { channel?: string; node?: string; agent?: string }): FederationEvent[] {
+  if (!filter) {
+    return events.slice(-MAX_EVENTS);
+  }
+
+  return events.filter((evt) => {
+    if (filter.channel && evt.channel !== filter.channel) return false;
+    if (filter.node && evt.nodeId !== filter.node) return false;
+    if (filter.agent && evt.data?.agent !== filter.agent) return false;
+    return true;
+  }).slice(-MAX_EVENTS);
+}
 
 // Phase 14.6: Route message through federation bus
 function routeMessage(type: string, data: Record<string, unknown>, nodeId?: string): void {
   // Always record events first
+  // Phase 15.6: Add channel metadata to events
   events.push({
     ts: Date.now(),
     type,
     nodeId: nodeId || (data.nodeId as string) || "unknown",
     data,
+    channel: (data.channel as string) || "broadcast",
   });
 
   // Prune old events
@@ -65,7 +90,8 @@ function routeMessage(type: string, data: Record<string, unknown>, nodeId?: stri
       return;
 
     case "event":
-      // Event already recorded above
+      // Phase 15.6: Event with channel metadata (already recorded above with channel)
+      // Additional event processing can go here if needed
       return;
 
     default:
@@ -116,12 +142,22 @@ router.get("/federation/nodes/status", (_req, res) => {
 });
 
 // Phase 14.5: Federation Events endpoint
+// Phase 15.6: Extended with filtering support
 // Returns empty array if no events recorded yet (UI not federated)
-router.get("/federation/events", (_req, res) => {
+router.get("/federation/events", (req, res) => {
   try {
-    const recentEvents = events.slice(-MAX_EVENTS);
+    // Phase 15.6: Support filtering via query parameters (passive only)
+    const filter: { channel?: string; node?: string; agent?: string } = {};
+    if (req.query.channel) filter.channel = req.query.channel as string;
+    if (req.query.node) filter.node = req.query.node as string;
+    if (req.query.agent) filter.agent = req.query.agent as string;
+
+    const filteredEvents = Object.keys(filter).length > 0 
+      ? getFilteredEvents(filter)
+      : events.slice(-MAX_EVENTS);
+
     res.json({
-      events: recentEvents || [],
+      events: filteredEvents || [],
     });
   } catch (error) {
     console.error("Error in /federation/events:", error);
