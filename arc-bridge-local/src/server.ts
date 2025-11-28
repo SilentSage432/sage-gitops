@@ -8,6 +8,7 @@ import rho2 from "./routes/rho2.js";
 import federation from "./routes/federation.js";
 import commands from "./routes/commands.js";
 import federationState from "./routes/federationState.js";
+import operator from "./routes/operator.js";
 import intent from "./routes/intent.js";
 import act from "./routes/act.js";
 
@@ -42,6 +43,9 @@ app.use("/federation/commands", commands);
 
 // Phase 15.8: Federation State API (read-only)
 app.use("/federation/state", federationState);
+
+// Phase 17.4: Operator Registration API (passive, non-auth)
+app.use("/federation/operator", operator);
 
 // -----------------------------------------------------------------------------
 // PHASE 7 — UNIFIED TELEMETRY STREAM
