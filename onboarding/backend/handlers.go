@@ -2483,20 +2483,21 @@ func handleFederationBus(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Phase 14.5: Record event in stream
+	// Phase 14.6: Route message through central router
 	// Extract nodeId from data if present, otherwise use federation payload
 	nodeID := fedPayload.NodeID
 	if dataNodeID, ok := req.Data["nodeId"].(string); ok && dataNodeID != "" {
 		nodeID = dataNodeID
 	}
-	federation.AddEvent(req.Type, nodeID, req.Data)
+	
+	// Route message (includes event recording and internal routing)
+	federation.RouteMessage(req.Type, nodeID, req.Data)
 
-	// Process message based on type
+	// Phase 14.6: Response handling based on message type
+	// Routing is handled by RouteMessage, here we just return appropriate responses
 	switch req.Type {
 	case "heartbeat":
-		// Phase 14.2: Update node heartbeat in registry
-		// Phase 14.3: Heartbeat updates timestamp and status
-		federation.UpdateNodeHeartbeat(fedPayload.NodeID)
+		// Routing already handled by RouteMessage (includes UpdateNodeHeartbeat)
 		log.Printf("Heartbeat received from node=%s tenant=%s", fedPayload.NodeID, fedPayload.TenantID)
 		
 		// Return success with status confirmation
@@ -2508,8 +2509,7 @@ func handleFederationBus(w http.ResponseWriter, r *http.Request) {
 		return
 
 	case "command":
-		// Command dispatch protocol (no execution)
-		// Phase: Categorization and validation only
+		// Command routing already handled by RouteMessage (acknowledged, not executed)
 		cmd, _ := req.Data["cmd"].(string)
 		log.Printf("Command received from node=%s tenant=%s cmd=%s", fedPayload.NodeID, fedPayload.TenantID, cmd)
 		
@@ -2522,12 +2522,12 @@ func handleFederationBus(w http.ResponseWriter, r *http.Request) {
 		return
 
 	case "telemetry":
-		// TODO: metrics, status
+		// Telemetry routing already handled by RouteMessage
 		log.Printf("Telemetry received from node=%s tenant=%s", fedPayload.NodeID, fedPayload.TenantID)
 		break
 
 	case "event":
-		// TODO: event log or agent action
+		// Event routing already handled by RouteMessage
 		log.Printf("Event received from node=%s tenant=%s", fedPayload.NodeID, fedPayload.TenantID)
 		break
 
