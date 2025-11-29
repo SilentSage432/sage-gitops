@@ -61,10 +61,8 @@ export default function FederationStatePanel() {
       try {
         setLoading(true);
         // Phase 16.6: Fetch from federation state API
-        // Use relative path for Next.js API routes or full URL for direct backend
-        const res = await fetch("/api/federation/state").catch(() =>
-          fetch("http://localhost:8080/federation/state")
-        );
+        // Use Next.js rewrite proxy to avoid CORS issues
+        const res = await fetch('/api/federation/state');
         if (!res.ok) {
           throw new Error(`Failed to fetch federation state: ${res.statusText}`);
         }

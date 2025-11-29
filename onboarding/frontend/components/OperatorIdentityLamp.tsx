@@ -21,10 +21,8 @@ export default function OperatorIdentityLamp() {
     const refresh = async () => {
       try {
         // Phase 17.5: Fetch from federation state API
-        // Use relative path for Next.js API routes or direct backend URL
-        const res = await fetch("/api/federation/state").catch(() =>
-          fetch("http://localhost:8080/federation/state")
-        );
+        // Use Next.js rewrite proxy to avoid CORS issues
+        const res = await fetch('/api/federation/state');
         if (res.ok) {
           const data = await res.json();
           setOperator(data.operator || null);
