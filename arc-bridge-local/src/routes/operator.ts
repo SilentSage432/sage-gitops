@@ -1,12 +1,14 @@
 // Phase 17.4: Operator Registration Flow (Passive, Non-auth)
 // Phase 17.6: Extended with credential storage
 // Phase 17.7: Extended with WebAuthn challenge generation
+// Phase 18: Extended with passive verification
 // Passive operator registration endpoint
 // This does NOT authenticate or enforce security yet
 // Just the model - no permissions, no enforcement, no control paths
 import { Router, Request, Response } from "express";
 import { registerOperator } from "../federation/operator.js";
 import { generateChallenge, getCurrentChallenge } from "../federation/webauthn-challenge.js";
+import { verifyAssertion } from "../federation/webauthn-verify.js";
 
 const router = Router();
 
@@ -109,6 +111,26 @@ router.post("/assertion", (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error in assertion storage:", error);
     return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Phase 18: Passive Verification Endpoint
+// Verifies WebAuthn assertions but does NOT grant authentication or access
+// Only reports verification truth - no state changes, no privileges, no login
+router.post("/verify", (req: Request, res: Response) => {
+  try {
+    const { assertion } = req.body;
+
+    if (!assertion) {
+      return res.status(400).json({ ok: false, reason: "missing-assertion" });
+    }
+
+    // Phase 18: Perform verification but don't grant any access
+    const result = verifyAssertion(assertion);
+    return res.json(result);
+  } catch (error) {
+    console.error("Error in assertion verification:", error);
+    return res.status(500).json({ ok: false, reason: "internal-error" });
   }
 });
 
