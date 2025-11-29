@@ -1,7 +1,5 @@
 package consent
 
-import "time"
-
 // IntentApproval represents a pending, approved, or denied execution intent
 // Status is not enforced. No policy logic. No action dispatch. Just stored state.
 type IntentApproval struct {
