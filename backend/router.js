@@ -9,6 +9,7 @@ import { dryRunHandler } from "./api/action-dry-run.js";
 import { eligibleAgentsHandler } from "./api/action-eligible.js";
 import { evaluateHandler } from "./api/action-evaluate.js";
 import { simulateEnforcementHandler } from "./api/action-enforce-sim.js";
+import { channelInitHandler } from "./api/channel-init.js";
 
 const router = express.Router();
 
@@ -74,6 +75,12 @@ router.post("/federation/action/evaluate", (req, res) => {
 // Simulates permission/rejection logic without real enforcement
 router.post("/federation/action/enforce/simulate", (req, res) => {
   return simulateEnforcementHandler(req, res);
+});
+
+// Phase 37: Execution Channel Initiation API
+// Creates execution channel structure with enforcement + envelope (disabled)
+router.post("/federation/action/channel/init", (req, res) => {
+  return channelInitHandler(req, res);
 });
 
 export default router;
