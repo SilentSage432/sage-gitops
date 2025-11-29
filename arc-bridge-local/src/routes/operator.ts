@@ -85,5 +85,32 @@ router.get("/challenge/current", (req: Request, res: Response) => {
   }
 });
 
+// Phase 17.8: Store WebAuthn assertion (passive, non-verified)
+// Receives WebAuthn signed assertion and stores it
+// Does NOT verify or authenticate yet - just storage
+router.post("/assertion", (req: Request, res: Response) => {
+  try {
+    const { id, assertion } = req.body;
+
+    if (!id || !assertion) {
+      return res.status(400).json({ error: "Missing id or assertion" });
+    }
+
+    // Phase 17.8: Store operator with assertion and remember active challenge
+    // No verification, no validation, no authentication - just storage
+    registerOperator({
+      id,
+      source: "webauthn",
+      assertion: assertion,
+      challenge: getCurrentChallenge(),
+    });
+
+    return res.json({ ok: true });
+  } catch (error) {
+    console.error("Error in assertion storage:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 export default router;
 

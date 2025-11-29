@@ -17,6 +17,8 @@ export interface OperatorIdentity {
   registeredAt: number;
   lastSeen: number;
   credential?: WebAuthnCredential | null; // Phase 17.6: WebAuthn/YubiKey credential storage
+  assertion?: Record<string, unknown> | null; // Phase 17.8: WebAuthn signed assertion
+  challenge?: string | null; // Phase 17.8: Challenge used for assertion
   metadata?: Record<string, unknown>;
 }
 
