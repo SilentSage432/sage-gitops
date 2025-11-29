@@ -17,6 +17,16 @@ export function executor(actionEnvelope) {
     if (failureRoll < 0.1) status = "failed";
     if (failureRoll >= 0.1 && failureRoll < 0.15) status = "unreachable";
 
+    const retry = status !== "ok" ? {
+      attempted: true,
+      retryCount: status === "unreachable" ? 2 : 1,
+      fallbackUsed: status === "unreachable",
+    } : {
+      attempted: false,
+      retryCount: 0,
+      fallbackUsed: false,
+    };
+
     return {
       agent,
       action,
@@ -28,6 +38,7 @@ export function executor(actionEnvelope) {
         latencyMs: Math.floor(Math.random() * 40) + 5,
         note: "Simulated feedback only",
       },
+      retry,
     };
   });
 
@@ -43,6 +54,8 @@ export function executor(actionEnvelope) {
       ok: simulatedDispatch.filter(d => d.feedback.status === "ok").length,
       failed: simulatedDispatch.filter(d => d.feedback.status === "failed").length,
       unreachable: simulatedDispatch.filter(d => d.feedback.status === "unreachable").length,
+      retryAttempts: simulatedDispatch.filter(d => d.retry.attempted).length,
+      fallbackUsed: simulatedDispatch.filter(d => d.retry.fallbackUsed).length,
     },
   };
 }
