@@ -14,6 +14,7 @@ import { channelDryrunHandler } from "./api/channel-dryrun.js";
 import { simulateHandler } from "./api/simulate.js";
 import { simulateDiffHandler } from "./api/simulate-diff.js";
 import { router as capabilitiesRouter } from "./api/capabilities.js";
+import { router as candidatesRouter } from "./api/candidates.js";
 
 const router = express.Router();
 
@@ -108,6 +109,10 @@ router.post("/api/simulate/diff", (req, res) => {
 // Phase 56: Capability Graph API
 // Returns federation execution capability topology (read-only)
 router.use("/api", capabilitiesRouter);
+
+// Phase 57: Execution Candidate Pipeline API
+// Returns execution candidate chain for actions (read-only, no execution)
+router.use("/api", candidatesRouter);
 
 export default router;
 

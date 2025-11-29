@@ -6,12 +6,14 @@ import FederationCommandConsole from "@/components/FederationCommandConsole";
 import { ApprovalPanel } from "@/components/ApprovalPanel";
 import { fetchPendingIntents } from "@/lib/api/intent";
 import { CapabilityGraph } from "@/components/CapabilityGraph";
+import { ExecutionCandidateView } from "@/components/ExecutionCandidateView";
 
 export default function FederationPanel() {
   const [nodes, setNodes] = useState<FederationNode[]>([]);
   const [events, setEvents] = useState<FederationEvent[]>([]);
   const [pendingIntents, setPendingIntents] = useState<any[]>([]);
   const [capGraph, setCapGraph] = useState<any[] | null>(null);
+  const [candidates, setCandidates] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -27,10 +29,15 @@ export default function FederationPanel() {
         const capResponse = await fetch("/api/capabilities");
         const capData = await capResponse.json();
         
+        // Fetch execution candidates for default action
+        const candidatesResponse = await fetch("/api/execution/candidates?action=get-status");
+        const candidatesData = await candidatesResponse.json();
+        
         setNodes(nodesData.nodes || []);
         setEvents(eventsData.events || []);
         setPendingIntents(intentsData || []);
         setCapGraph(capData.graph || null);
+        setCandidates(candidatesData);
         setError(null);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to fetch federation data");
@@ -126,6 +133,10 @@ export default function FederationPanel() {
 
         <div>
           <CapabilityGraph graph={capGraph || undefined} />
+        </div>
+
+        <div>
+          <ExecutionCandidateView result={candidates} />
         </div>
       </div>
     </div>

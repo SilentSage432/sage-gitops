@@ -4,12 +4,14 @@ import { SimulationPanel } from "../components/SimulationPanel";
 import { ApprovalPanel } from "../components/ApprovalPanel";
 import { fetchPendingIntents } from "../lib/api/intent";
 import { CapabilityGraph } from "../components/CapabilityGraph";
+import { ExecutionCandidateView } from "../components/ExecutionCandidateView";
 
 const OnboardingNexusPanel: React.FC = () => {
   const [simulation, setSimulation] = useState<any>(null);
   const [params, setParams] = useState<any>({});
   const [pendingIntents, setPendingIntents] = useState<any[]>([]);
   const [capGraph, setCapGraph] = useState<any[] | null>(null);
+  const [candidates, setCandidates] = useState<any>(null);
 
   useEffect(() => {
     const loadIntents = async () => {
@@ -31,11 +33,23 @@ const OnboardingNexusPanel: React.FC = () => {
       }
     };
     
+    const loadCandidates = async () => {
+      try {
+        const response = await fetch("/api/execution/candidates?action=get-status");
+        const data = await response.json();
+        setCandidates(data);
+      } catch (error) {
+        console.error("Failed to fetch execution candidates:", error);
+      }
+    };
+    
     loadIntents();
     loadCapGraph();
+    loadCandidates();
     const interval = setInterval(() => {
       loadIntents();
       loadCapGraph();
+      loadCandidates();
     }, 5000);
     return () => clearInterval(interval);
   }, []);
@@ -124,6 +138,8 @@ const OnboardingNexusPanel: React.FC = () => {
       <ApprovalPanel intents={pendingIntents} />
       
       <CapabilityGraph graph={capGraph || undefined} />
+      
+      <ExecutionCandidateView result={candidates} />
     </div>
   );
 };
