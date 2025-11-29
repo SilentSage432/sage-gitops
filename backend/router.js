@@ -8,6 +8,7 @@ import { federationStateHandler } from "./api/federation-state.js";
 import { dryRunHandler } from "./api/action-dry-run.js";
 import { eligibleAgentsHandler } from "./api/action-eligible.js";
 import { evaluateHandler } from "./api/action-evaluate.js";
+import { simulateEnforcementHandler } from "./api/action-enforce-sim.js";
 
 const router = express.Router();
 
@@ -67,6 +68,12 @@ router.post("/federation/action/eligible", (req, res) => {
 // Unified rule evaluation across all dimensions (read-only)
 router.post("/federation/action/evaluate", (req, res) => {
   return evaluateHandler(req, res);
+});
+
+// Phase 36: Enforcement Simulation API
+// Simulates permission/rejection logic without real enforcement
+router.post("/federation/action/enforce/simulate", (req, res) => {
+  return simulateEnforcementHandler(req, res);
 });
 
 export default router;
