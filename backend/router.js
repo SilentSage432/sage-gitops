@@ -5,6 +5,7 @@ import { approveActionHandler, rejectActionHandler } from "./api/action-approval
 import { dispatchActionHandler } from "./api/action-dispatch.js";
 import { simulateDispatchHandler } from "./api/action-sim-dispatch.js";
 import { federationStateHandler } from "./api/federation-state.js";
+import { dryRunHandler } from "./api/action-dry-run.js";
 
 const router = express.Router();
 
@@ -46,6 +47,12 @@ router.post("/federation/action/dispatch/simulate", (req, res) => {
 // Exposes virtual bus log and system state
 router.get("/federation/state", (req, res) => {
   return federationStateHandler(req, res);
+});
+
+// Phase 28: Dry-Run Executor API
+// Simulates execution - no real execution or side effects
+router.post("/federation/action/dry-run", (req, res) => {
+  return dryRunHandler(req, res);
 });
 
 export default router;
