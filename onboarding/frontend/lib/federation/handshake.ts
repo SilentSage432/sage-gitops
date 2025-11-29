@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // Use relative path with Next.js rewrites to avoid CORS issues
-// Next.js will proxy /api/federation/auth/* to http://localhost:8080/api/federation/auth/*
+// Next.js will proxy /api/federation/auth/* to http://localhost:8090/api/federation/auth/*
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '';
 
 let federationToken: string | null = null;
