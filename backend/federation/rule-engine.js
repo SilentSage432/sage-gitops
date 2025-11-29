@@ -3,6 +3,7 @@ import { getSafetyLevel } from "./action-safety.js";
 import { getPrivilegeLevel } from "./action-privileges.js";
 import { getRolePrivileges } from "./role-privileges.js";
 import { getActionMode } from "./action-modes.js";
+import { evaluateModeRules } from "./mode-rules.js";
 
 // Read-only evaluation — no enforcement.
 
@@ -12,6 +13,7 @@ export function evaluateAction(action, role = "sovereign") {
   const privilege = getPrivilegeLevel(action.type);
   const allowedPrivileges = getRolePrivileges(role);
   const mode = getActionMode(action.type);
+  const modeRule = evaluateModeRules(mode);
 
   return {
     ok: true,            // still read-only
@@ -19,6 +21,7 @@ export function evaluateAction(action, role = "sovereign") {
     safety,
     privilege,
     mode,
+    modeRule,
     permitted: allowedPrivileges.includes(privilege),
     reason: {
       capabilities: eligible.length
@@ -29,6 +32,7 @@ export function evaluateAction(action, role = "sovereign") {
         : "Privilege mismatch",
       safety,
       mode,
+      modeRule,
     },
   };
 }
