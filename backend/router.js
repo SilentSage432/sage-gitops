@@ -7,6 +7,7 @@ import { simulateDispatchHandler } from "./api/action-sim-dispatch.js";
 import { federationStateHandler } from "./api/federation-state.js";
 import { dryRunHandler } from "./api/action-dry-run.js";
 import { eligibleAgentsHandler } from "./api/action-eligible.js";
+import { evaluateHandler } from "./api/action-evaluate.js";
 
 const router = express.Router();
 
@@ -60,6 +61,12 @@ router.post("/federation/action/dry-run", (req, res) => {
 // Returns agents capable of handling an action type
 router.post("/federation/action/eligible", (req, res) => {
   return eligibleAgentsHandler(req, res);
+});
+
+// Phase 35: Action Evaluation API
+// Unified rule evaluation across all dimensions (read-only)
+router.post("/federation/action/evaluate", (req, res) => {
+  return evaluateHandler(req, res);
 });
 
 export default router;
