@@ -3,6 +3,11 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   async rewrites() {
     return [
+      // Proxy federation auth endpoints to Go backend (port 8080)
+      {
+        source: '/api/federation/auth/:path*',
+        destination: 'http://localhost:8080/api/federation/auth/:path*',
+      },
       // Proxy federation state requests to Node.js backend (port 7070)
       {
         source: '/api/federation/state',
