@@ -11,6 +11,7 @@ import { evaluateHandler } from "./api/action-evaluate.js";
 import { simulateEnforcementHandler } from "./api/action-enforce-sim.js";
 import { channelInitHandler } from "./api/channel-init.js";
 import { channelDryrunHandler } from "./api/channel-dryrun.js";
+import { simulateHandler } from "./api/simulate.js";
 
 const router = express.Router();
 
@@ -88,6 +89,12 @@ router.post("/federation/action/channel/init", (req, res) => {
 // Simulates executor through full channel (execution still disabled)
 router.post("/api/channel/dryrun", (req, res) => {
   return channelDryrunHandler(req, res);
+});
+
+// Phase 48: Simulation Summary API
+// Returns orchestration simulation for UI display (read-only)
+router.post("/api/simulate", (req, res) => {
+  return simulateHandler(req, res);
 });
 
 export default router;

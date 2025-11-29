@@ -2,6 +2,8 @@ import React from "react";
 import { exportFederationEnvelope } from "../federation/token";
 
 const OnboardingNexusPanel: React.FC = () => {
+  // Simulation preview placeholder - will be populated by future fetching logic
+  const simulation: any = null;
   const handleLaunch = () => {
     const env = exportFederationEnvelope();
     if (env) {
@@ -35,6 +37,15 @@ const OnboardingNexusPanel: React.FC = () => {
       >
         Launch Onboarding System
       </button>
+
+      {simulation && (
+        <div className="simulation-preview mt-6 rounded-lg border border-white/5 bg-white/5 p-4">
+          <h3 className="text-sm font-semibold text-slate-300 mb-2">Simulation Preview</h3>
+          <pre className="text-xs text-slate-400 overflow-auto max-h-64">
+            {JSON.stringify(simulation, null, 2)}
+          </pre>
+        </div>
+      )}
     </div>
   );
 };

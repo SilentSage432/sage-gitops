@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { getTenants, Tenant } from '../../services/federationService';
+import { SimulationView } from '../../components/SimulationView';
 
 /**
  * OnboardingNexus – Tenant onboarding view shell
  */
 export const OnboardingNexus: React.FC = () => {
   const [tenants, setTenants] = useState<Tenant[]>([]);
+  const [simulationResult, setSimulationResult] = useState<any>(null);
 
   useEffect(() => {
     const loadData = async () => {
@@ -71,6 +73,8 @@ export const OnboardingNexus: React.FC = () => {
           <p className="text-slate-500 text-sm">Loading...</p>
         )}
       </div>
+
+      <SimulationView data={simulationResult} />
     </div>
   );
 };
