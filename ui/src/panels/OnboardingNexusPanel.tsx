@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { exportFederationEnvelope } from "../federation/token";
+import { SimulationPanel } from "../components/SimulationPanel";
 
 const OnboardingNexusPanel: React.FC = () => {
   const [simulation, setSimulation] = useState<any>(null);
@@ -83,14 +84,7 @@ const OnboardingNexusPanel: React.FC = () => {
           </div>
         </div>
 
-        {simulation && (
-          <div className="simulation-preview rounded-lg border border-white/5 bg-white/5 p-4">
-            <h3 className="text-sm font-semibold text-slate-300 mb-2">Simulation Preview</h3>
-            <pre className="text-xs text-slate-400 overflow-auto max-h-64">
-              {JSON.stringify(simulation, null, 2)}
-            </pre>
-          </div>
-        )}
+        <SimulationPanel simulation={simulation} />
       </div>
     </div>
   );

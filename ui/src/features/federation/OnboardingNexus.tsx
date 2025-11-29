@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { getTenants, Tenant } from '../../services/federationService';
 import { SimulationView } from '../../components/SimulationView';
+import { SimulationPanel } from '../../components/SimulationPanel';
+import { SimulationDiffView } from '../../components/SimulationDiffView';
 
 /**
  * OnboardingNexus – Tenant onboarding view shell
@@ -8,6 +10,7 @@ import { SimulationView } from '../../components/SimulationView';
 export const OnboardingNexus: React.FC = () => {
   const [tenants, setTenants] = useState<Tenant[]>([]);
   const [simulationResult, setSimulationResult] = useState<any>(null);
+  const [diffResult, setDiffResult] = useState<any>(null);
 
   useEffect(() => {
     const loadData = async () => {
@@ -75,6 +78,8 @@ export const OnboardingNexus: React.FC = () => {
       </div>
 
       <SimulationView data={simulationResult} />
+      <SimulationPanel simulation={simulationResult} />
+      <SimulationDiffView diff={diffResult} />
     </div>
   );
 };
