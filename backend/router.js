@@ -12,6 +12,7 @@ import { simulateEnforcementHandler } from "./api/action-enforce-sim.js";
 import { channelInitHandler } from "./api/channel-init.js";
 import { channelDryrunHandler } from "./api/channel-dryrun.js";
 import { simulateHandler } from "./api/simulate.js";
+import { simulateDiffHandler } from "./api/simulate-diff.js";
 
 const router = express.Router();
 
@@ -95,6 +96,12 @@ router.post("/api/channel/dryrun", (req, res) => {
 // Returns orchestration simulation for UI display (read-only)
 router.post("/api/simulate", (req, res) => {
   return simulateHandler(req, res);
+});
+
+// Phase 53: Simulation Diff API
+// Compares two simulation results and generates structured difference (read-only)
+router.post("/api/simulate/diff", (req, res) => {
+  return simulateDiffHandler(req, res);
 });
 
 export default router;
