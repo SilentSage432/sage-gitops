@@ -10,6 +10,7 @@ export function channelInitHandler(req, res) {
   return res.json({
     ok: true,
     channel: result,
+    requiresConsent: result.requiresConsent,
     note: "Execution channel initiated (disabled).",
   });
 }

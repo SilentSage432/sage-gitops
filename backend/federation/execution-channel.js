@@ -6,6 +6,10 @@ import { buildDispatchEnvelope } from "./dispatch-envelope.js";
 export function initiateExecutionChannel(action, role = "sovereign") {
   const enforcement = simulateEnforcement(action, role);
 
+  const requiresConsent =
+    enforcement.privilege === "operator" ||
+    enforcement.privilege === "sovereign";
+
   return {
     action,
     enforcement,
@@ -14,6 +18,7 @@ export function initiateExecutionChannel(action, role = "sovereign") {
       action,
       enforcement.eligibleAgents
     ),
+    requiresConsent,
     note:
       "Execution channel initialized. Execution disabled.",
   };
