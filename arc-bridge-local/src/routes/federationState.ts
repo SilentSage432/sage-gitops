@@ -12,6 +12,7 @@ import { deriveReasons } from "../federation/reasoning.js";
 import { getOperator } from "../federation/operator.js";
 import { getOperatorSession } from "../federation/operator-session.js";
 import { ACTION_TYPES } from "../federation/action-types.js";
+import { listActions } from "../federation/action-log.js";
 import { getEventsForState } from "./federation.js";
 
 const router = Router();
@@ -27,6 +28,7 @@ router.get("/", (req: Request, res: Response) => {
     // Phase 17.2: Extended with operator identity
     // Phase 19: Extended with operator session state
     // Phase 20: Extended with action type registry
+    // Phase 21: Extended with action log
     res.json({
       events: getEventsForState(),
       commands: getRecentCommands(),
@@ -40,6 +42,7 @@ router.get("/", (req: Request, res: Response) => {
       operator: getOperator(),
       operatorSession: getOperatorSession(),
       actionTypes: ACTION_TYPES,
+      actionLog: listActions(),
       ts: Date.now(),
     });
   } catch (error) {
@@ -57,6 +60,7 @@ router.get("/", (req: Request, res: Response) => {
       operator: null,
       operatorSession: { verified: false, ts: null },
       actionTypes: [],
+      actionLog: [],
       ts: Date.now(),
     });
   }

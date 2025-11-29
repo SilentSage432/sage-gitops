@@ -9,6 +9,7 @@ import federation from "./routes/federation.js";
 import commands from "./routes/commands.js";
 import federationState from "./routes/federationState.js";
 import operator from "./routes/operator.js";
+import actions from "./routes/actions.js";
 import intent from "./routes/intent.js";
 import act from "./routes/act.js";
 
@@ -46,6 +47,9 @@ app.use("/federation/state", federationState);
 
 // Phase 17.4: Operator Registration API (passive, non-auth)
 app.use("/federation/operator", operator);
+
+// Phase 21: Action Store + Audit Trail (passive, no execution)
+app.use("/federation/action", actions);
 
 // -----------------------------------------------------------------------------
 // PHASE 7 — UNIFIED TELEMETRY STREAM
