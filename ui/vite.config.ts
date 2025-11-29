@@ -21,10 +21,17 @@ export default defineConfig({
 
   server: {
     host: true,
-    port: 8080,
+    port: 5173, // Changed from 8080 to avoid conflict with onboarding backend
 
-    // Local Arc Bridge proxy (7070)
+    // Proxy configuration
     proxy: {
+      // Go onboarding backend (port 8080) for auth endpoints - must come before /api
+      "/api/federation/auth": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+        secure: false,
+      },
+      // Node.js federation backend (port 7070) for other /api routes
       "/api": {
         target: process.env.VITE_API_BASE || "http://localhost:7070",
         changeOrigin: true,
@@ -35,6 +42,7 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
       },
+      // Federation routes go to Node.js backend (7070)
       "/federation": {
         target: process.env.VITE_API_BASE || "http://localhost:7070",
         changeOrigin: true,
@@ -50,7 +58,7 @@ export default defineConfig({
 
   preview: {
     host: true,
-    port: 8080,
+    port: 5173, // Changed to match dev server
   },
 
   build: {
