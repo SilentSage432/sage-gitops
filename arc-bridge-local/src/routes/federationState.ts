@@ -11,6 +11,7 @@ import { federationTopology } from "../federation/topology.js";
 import { deriveReasons } from "../federation/reasoning.js";
 import { getOperator } from "../federation/operator.js";
 import { getOperatorSession } from "../federation/operator-session.js";
+import { ACTION_TYPES } from "../federation/action-types.js";
 import { getEventsForState } from "./federation.js";
 
 const router = Router();
@@ -25,6 +26,7 @@ router.get("/", (req: Request, res: Response) => {
     // Phase 16.9: Extended with reasoning model
     // Phase 17.2: Extended with operator identity
     // Phase 19: Extended with operator session state
+    // Phase 20: Extended with action type registry
     res.json({
       events: getEventsForState(),
       commands: getRecentCommands(),
@@ -37,6 +39,7 @@ router.get("/", (req: Request, res: Response) => {
       reasons: deriveReasons(),
       operator: getOperator(),
       operatorSession: getOperatorSession(),
+      actionTypes: ACTION_TYPES,
       ts: Date.now(),
     });
   } catch (error) {
@@ -53,6 +56,7 @@ router.get("/", (req: Request, res: Response) => {
       reasons: [],
       operator: null,
       operatorSession: { verified: false, ts: null },
+      actionTypes: [],
       ts: Date.now(),
     });
   }
