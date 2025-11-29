@@ -2,11 +2,12 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   async rewrites() {
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8081';
     return [
-      // Proxy federation auth endpoints to Go backend (port 8090)
+      // Proxy federation auth endpoints to Go backend
       {
         source: '/api/federation/auth/:path*',
-        destination: 'http://localhost:8090/api/federation/auth/:path*',
+        destination: `${backendUrl}/api/federation/auth/:path*`,
       },
       // Proxy federation state requests to Node.js backend (port 7070)
       {

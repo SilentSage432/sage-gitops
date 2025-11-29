@@ -17,6 +17,7 @@ export default defineConfig({
   define: {
     "process.env.VITE_API_BASE": JSON.stringify(process.env.VITE_API_BASE),
     "process.env.VITE_WS_BASE": JSON.stringify(process.env.VITE_WS_BASE),
+    "process.env.VITE_BACKEND_URL": JSON.stringify(process.env.VITE_BACKEND_URL),
   },
 
   server: {
@@ -25,9 +26,9 @@ export default defineConfig({
 
     // Proxy configuration
     proxy: {
-      // Go onboarding backend (port 8090) for auth endpoints - must come before /api
+      // Go onboarding backend for auth endpoints - must come before /api
       "/api/federation/auth": {
-        target: "http://localhost:8090",
+        target: process.env.VITE_BACKEND_URL || "http://localhost:8081",
         changeOrigin: true,
         secure: false,
       },
