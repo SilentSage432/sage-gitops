@@ -2,10 +2,12 @@
 
 import { getEligibleAgents } from "./capability-matcher.js";
 import { getSafetyLevel } from "./action-safety.js";
+import { getPrivilegeLevel } from "./action-privileges.js";
 
 export function routeAction(action) {
   const eligible = getEligibleAgents(action.type);
   const safety = getSafetyLevel(action.type);
+  const privilege = getPrivilegeLevel(action.type);
 
   return {
     action,
@@ -16,6 +18,7 @@ export function routeAction(action) {
       ? "Matched by capability model"
       : "No capability match found",
     safety,
+    privilege,
     notes: "Routing only. No dispatch or execution.",
   };
 }
