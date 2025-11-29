@@ -9,6 +9,7 @@ import { Router, Request, Response } from "express";
 import { registerOperator } from "../federation/operator.js";
 import { generateChallenge, getCurrentChallenge } from "../federation/webauthn-challenge.js";
 import { verifyAssertion } from "../federation/webauthn-verify.js";
+import { markOperatorVerified } from "../federation/operator-session.js";
 
 const router = Router();
 
@@ -115,8 +116,9 @@ router.post("/assertion", (req: Request, res: Response) => {
 });
 
 // Phase 18: Passive Verification Endpoint
+// Phase 19: Extended with session acknowledgement
 // Verifies WebAuthn assertions but does NOT grant authentication or access
-// Only reports verification truth - no state changes, no privileges, no login
+// Only reports verification truth and records session state - no privileges, no login
 router.post("/verify", (req: Request, res: Response) => {
   try {
     const { assertion } = req.body;
@@ -127,6 +129,13 @@ router.post("/verify", (req: Request, res: Response) => {
 
     // Phase 18: Perform verification but don't grant any access
     const result = verifyAssertion(assertion);
+
+    // Phase 19: If verification succeeded, mark session as verified
+    // Still no authority granted - just records that verification happened
+    if (result.ok && result.verified) {
+      markOperatorVerified();
+    }
+
     return res.json(result);
   } catch (error) {
     console.error("Error in assertion verification:", error);
