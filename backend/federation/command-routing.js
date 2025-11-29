@@ -1,22 +1,18 @@
 // Command routing engine — NO dispatch or execution.
 
-import { federationTopology } from "./topology.js";
+import { getEligibleAgents } from "./capability-matcher.js";
 
 export function routeAction(action) {
-  const topo = federationTopology();
-
-  // Default routing strategy:
-  // If target specified -> direct
-  // Else -> all nodes.
-
-  const targets = action.payload?.target
-    ? [action.payload.target]
-    : topo.nodes;
+  const eligible = getEligibleAgents(action.type);
 
   return {
+    action,
     actionId: action.id,
     type: action.type,
-    potentialTargets: targets,
+    potentialTargets: eligible.map(a => a.name),
+    reason: eligible.length
+      ? "Matched by capability model"
+      : "No capability match found",
     notes: "Routing only. No dispatch or execution.",
   };
 }

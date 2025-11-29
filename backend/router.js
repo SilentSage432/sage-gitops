@@ -6,6 +6,7 @@ import { dispatchActionHandler } from "./api/action-dispatch.js";
 import { simulateDispatchHandler } from "./api/action-sim-dispatch.js";
 import { federationStateHandler } from "./api/federation-state.js";
 import { dryRunHandler } from "./api/action-dry-run.js";
+import { eligibleAgentsHandler } from "./api/action-eligible.js";
 
 const router = express.Router();
 
@@ -53,6 +54,12 @@ router.get("/federation/state", (req, res) => {
 // Simulates execution - no real execution or side effects
 router.post("/federation/action/dry-run", (req, res) => {
   return dryRunHandler(req, res);
+});
+
+// Phase 31: Eligible Agents API
+// Returns agents capable of handling an action type
+router.post("/federation/action/eligible", (req, res) => {
+  return eligibleAgentsHandler(req, res);
 });
 
 export default router;
