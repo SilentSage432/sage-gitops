@@ -3,6 +3,7 @@
 
 export function defineAction(type, payload = {}) {
   return {
+    id: `action-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
     type,
     payload,
     timestamp: new Date().toISOString(),
