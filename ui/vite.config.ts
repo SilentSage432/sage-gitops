@@ -21,13 +21,13 @@ export default defineConfig({
 
   server: {
     host: true,
-    port: 5173, // Changed from 8080 to avoid conflict with onboarding backend
+    port: 8080, // SAGE Prime UI port
 
     // Proxy configuration
     proxy: {
-      // Go onboarding backend (port 8080) for auth endpoints - must come before /api
+      // Go onboarding backend (port 8090) for auth endpoints - must come before /api
       "/api/federation/auth": {
-        target: "http://localhost:8080",
+        target: "http://localhost:8090",
         changeOrigin: true,
         secure: false,
       },
@@ -58,7 +58,7 @@ export default defineConfig({
 
   preview: {
     host: true,
-    port: 5173, // Changed to match dev server
+    port: 8080, // Match dev server
   },
 
   build: {
