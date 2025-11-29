@@ -59,6 +59,7 @@ func handleFederationHandshake(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		log.Printf("Error decoding handshake request: %v", err)
 		http.Error(w, "Invalid request", http.StatusBadRequest)
 		return
 	}
@@ -75,14 +76,22 @@ func handleFederationHandshake(w http.ResponseWriter, r *http.Request) {
 	challenge, err := generateNonce()
 	if err != nil {
 		log.Printf("Failed to generate challenge: %v", err)
-		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"error": "Failed to generate challenge",
+		})
 		return
 	}
 
 	nonce, err := generateNonce()
 	if err != nil {
 		log.Printf("Failed to generate nonce: %v", err)
-		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"error": "Failed to generate nonce",
+		})
 		return
 	}
 
