@@ -1,8 +1,9 @@
 // The locked executor. Cannot execute anything yet.
 
 import { getAgent, getRoleSimulationProfile } from "./agent-registry.js";
+import { getScenario } from "./scenarios.js";
 
-export function executor(actionEnvelope) {
+export function executor(actionEnvelope, scenario = "normal") {
   const agents = actionEnvelope.targets || [];
   const payload = actionEnvelope.payload;
   const action = {
@@ -10,9 +11,42 @@ export function executor(actionEnvelope) {
     type: actionEnvelope.type,
   };
 
+  const activeScenario = getScenario(scenario);
+
   const simulatedDispatch = agents.map((agentName) => {
+    // Check if agent is force offline in scenario
+    if (activeScenario.forceOffline.includes(agentName)) {
+      return {
+        agent: agentName,
+        agentRole: (getAgent(agentName) || {}).role || "unknown",
+        action,
+        payload,
+        simulated: true,
+        feedback: {
+          received: false,
+          status: "unreachable",
+          latencyMs: 0,
+          note: "Simulated feedback only (force offline by scenario)",
+        },
+        retry: {
+          attempted: true,
+          retryCount: 2,
+          fallbackUsed: true,
+        },
+      };
+    }
+
     const agentInfo = getAgent(agentName) || { name: agentName, role: "unknown" };
-    const profile = getRoleSimulationProfile(agentInfo.role);
+    let profile = getRoleSimulationProfile(agentInfo.role);
+
+    // Apply scenario role overrides if present
+    if (activeScenario.overrideRoles && activeScenario.overrideRoles[agentInfo.role]) {
+      const override = activeScenario.overrideRoles[agentInfo.role];
+      profile = {
+        ...profile,
+        ...override,
+      };
+    }
 
     // Role-aware synthetic failure model
     const roll = Math.random();
@@ -68,6 +102,7 @@ export function executor(actionEnvelope) {
     dryRun: true,
     note: "Multi-agent dry-run simulation. Execution disabled.",
     envelope: actionEnvelope,
+    scenario,
     dispatchPlan: simulatedDispatch,
     feedbackSummary: summary,
     convergence: {
