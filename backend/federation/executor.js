@@ -42,6 +42,19 @@ export function executor(actionEnvelope) {
     };
   });
 
+  const summary = {
+    total: agents.length,
+    ok: simulatedDispatch.filter(d => d.feedback.status === "ok").length,
+    failed: simulatedDispatch.filter(d => d.feedback.status === "failed").length,
+    unreachable: simulatedDispatch.filter(d => d.feedback.status === "unreachable").length,
+    retryAttempts: simulatedDispatch.filter(d => d.retry.attempted).length,
+    fallbackUsed: simulatedDispatch.filter(d => d.retry.fallbackUsed).length,
+  };
+
+  // Convergence determination logic (simulation only)
+  const converged =
+    summary.failed === 0 && summary.unreachable === 0;
+
   return {
     ok: true,
     executed: false,
@@ -49,13 +62,12 @@ export function executor(actionEnvelope) {
     note: "Multi-agent dry-run simulation. Execution disabled.",
     envelope: actionEnvelope,
     dispatchPlan: simulatedDispatch,
-    feedbackSummary: {
-      total: agents.length,
-      ok: simulatedDispatch.filter(d => d.feedback.status === "ok").length,
-      failed: simulatedDispatch.filter(d => d.feedback.status === "failed").length,
-      unreachable: simulatedDispatch.filter(d => d.feedback.status === "unreachable").length,
-      retryAttempts: simulatedDispatch.filter(d => d.retry.attempted).length,
-      fallbackUsed: simulatedDispatch.filter(d => d.retry.fallbackUsed).length,
+    feedbackSummary: summary,
+    convergence: {
+      converged,
+      outcome: converged
+        ? "Simulated cluster reaches stable state"
+        : "Simulated cluster fails to converge",
     },
   };
 }
