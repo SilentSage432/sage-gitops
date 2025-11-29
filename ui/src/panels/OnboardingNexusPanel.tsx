@@ -1,9 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import { exportFederationEnvelope } from "../federation/token";
 
 const OnboardingNexusPanel: React.FC = () => {
-  // Simulation preview placeholder - will be populated by future fetching logic
-  const simulation: any = null;
+  const [simulation, setSimulation] = useState<any>(null);
+  const [params, setParams] = useState<any>({});
+
+  const handleSimulate = async () => {
+    try {
+      const response = await fetch("/api/simulate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "get-status",
+          payload: {},
+          role: "sovereign",
+          options: params,
+        }),
+      });
+      const data = await response.json();
+      setSimulation(data.simulation);
+    } catch (error) {
+      console.error("Simulation error:", error);
+    }
+  };
   const handleLaunch = () => {
     const env = exportFederationEnvelope();
     if (env) {
@@ -38,14 +57,41 @@ const OnboardingNexusPanel: React.FC = () => {
         Launch Onboarding System
       </button>
 
-      {simulation && (
-        <div className="simulation-preview mt-6 rounded-lg border border-white/5 bg-white/5 p-4">
-          <h3 className="text-sm font-semibold text-slate-300 mb-2">Simulation Preview</h3>
-          <pre className="text-xs text-slate-400 overflow-auto max-h-64">
-            {JSON.stringify(simulation, null, 2)}
-          </pre>
+      <div className="mt-6 space-y-4">
+        <div className="rounded-lg border border-white/5 bg-white/5 p-4">
+          <h3 className="text-sm font-semibold text-slate-300 mb-3">Simulation Parameters</h3>
+          <div className="space-y-3">
+            <textarea
+              value={JSON.stringify(params, null, 2)}
+              onChange={(e) => {
+                try {
+                  setParams(JSON.parse(e.target.value));
+                } catch {
+                  // Invalid JSON, ignore
+                }
+              }}
+              placeholder='{\n  "unreachableAgents": [],\n  "roleOverride": null\n}'
+              className="w-full rounded bg-slate-900/50 border border-slate-700 px-3 py-2 text-xs text-slate-300 font-mono"
+              rows={6}
+            />
+            <button
+              onClick={handleSimulate}
+              className="w-full rounded-md border border-blue-500/40 bg-blue-500/20 px-4 py-2 text-sm font-semibold text-blue-100 hover:bg-blue-500/30 transition"
+            >
+              Simulate With Parameters
+            </button>
+          </div>
         </div>
-      )}
+
+        {simulation && (
+          <div className="simulation-preview rounded-lg border border-white/5 bg-white/5 p-4">
+            <h3 className="text-sm font-semibold text-slate-300 mb-2">Simulation Preview</h3>
+            <pre className="text-xs text-slate-400 overflow-auto max-h-64">
+              {JSON.stringify(simulation, null, 2)}
+            </pre>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

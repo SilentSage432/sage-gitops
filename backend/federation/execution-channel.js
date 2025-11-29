@@ -4,7 +4,7 @@ import { simulateEnforcement } from "./enforcement-sim.js";
 import { buildDispatchEnvelope } from "./dispatch-envelope.js";
 import { executor } from "./executor.js";
 
-export function initiateExecutionChannel(action, role = "sovereign") {
+export function initiateExecutionChannel(action, role = "sovereign", options = {}) {
   const enforcement = simulateEnforcement(action, role);
 
   const requiresConsent =
