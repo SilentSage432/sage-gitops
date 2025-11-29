@@ -2,10 +2,19 @@
 
 export function executor(actionEnvelope) {
   return {
-    ok: false,
+    ok: true,
     executed: false,
-    note: "Executor skeleton only. Real execution is locked.",
+    dryRun: true,
+    note: "Executor dry-run only. Execution disabled.",
     envelope: actionEnvelope,
+    simulation: {
+      targetAgents: actionEnvelope.targets,
+      payload: actionEnvelope.payload,
+      action: {
+        id: actionEnvelope.actionId,
+        type: actionEnvelope.type,
+      },
+    },
   };
 }
 
