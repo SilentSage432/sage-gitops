@@ -26,12 +26,12 @@ export default defineConfig({
     // Local Arc Bridge proxy (7070)
     proxy: {
       "/api": {
-        target: process.env.VITE_API_BASE,
+        target: process.env.VITE_API_BASE || "http://localhost:7070",
         changeOrigin: true,
         secure: false,
       },
       "/v1": {
-        target: process.env.VITE_API_BASE,
+        target: process.env.VITE_API_BASE || "http://localhost:7070",
         changeOrigin: true,
         secure: false,
       },
