@@ -1,12 +1,15 @@
 // Action schema definition for federation actions.
 // Provides a structured way to define and validate actions.
 
+import { randomUUID } from "crypto";
+
 export function defineAction(type, payload = {}) {
   return {
-    id: `action-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+    id: randomUUID(),
     type,
     payload,
-    timestamp: new Date().toISOString(),
+    ts: Date.now(),
+    state: "pending",
   };
 }
 
