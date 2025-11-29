@@ -13,6 +13,12 @@ export function executor(actionEnvelope) {
     action,
     payload,
     simulated: true,
+    feedback: {
+      received: true,
+      status: "ok",
+      latencyMs: Math.floor(Math.random() * 40) + 5,
+      note: "Simulated feedback only",
+    },
   }));
 
   return {
@@ -22,6 +28,12 @@ export function executor(actionEnvelope) {
     note: "Multi-agent dry-run simulation. Execution disabled.",
     envelope: actionEnvelope,
     dispatchPlan: simulatedDispatch,
+    feedbackSummary: {
+      total: agents.length,
+      ok: agents.length,
+      failed: 0,
+      unreachable: 0,
+    },
   };
 }
 
