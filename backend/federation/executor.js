@@ -1,17 +1,14 @@
 // The locked executor. Cannot execute anything yet.
 
 import { getAgent, getRoleSimulationProfile } from "./agent-registry.js";
-import { getScenario } from "./scenarios.js";
 
-export function executor(actionEnvelope, scenario = "normal") {
+export function executor(actionEnvelope, activeScenario = { overrideRoles: {}, forceOffline: [] }) {
   const agents = actionEnvelope.targets || [];
   const payload = actionEnvelope.payload;
   const action = {
     id: actionEnvelope.actionId,
     type: actionEnvelope.type,
   };
-
-  const activeScenario = getScenario(scenario);
 
   const simulatedDispatch = agents.map((agentName) => {
     // Check if agent is force offline in scenario
@@ -102,7 +99,7 @@ export function executor(actionEnvelope, scenario = "normal") {
     dryRun: true,
     note: "Multi-agent dry-run simulation. Execution disabled.",
     envelope: actionEnvelope,
-    scenario,
+    scenario: activeScenario,
     dispatchPlan: simulatedDispatch,
     feedbackSummary: summary,
     convergence: {

@@ -2,7 +2,7 @@ import { initiateExecutionChannel } from "../federation/execution-channel.js";
 import { defineAction } from "../federation/action-schema.js";
 
 export function simulateHandler(req, res) {
-  const { type, payload, role = "sovereign", scenario = "normal", options = {} } = req.body;
+  const { type, payload, role = "sovereign", scenario = ["normal"], options = {} } = req.body;
   const action = defineAction(type, payload);
 
   const channel = initiateExecutionChannel(
