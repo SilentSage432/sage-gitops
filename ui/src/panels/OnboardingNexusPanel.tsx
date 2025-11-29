@@ -3,11 +3,13 @@ import { exportFederationEnvelope } from "../federation/token";
 import { SimulationPanel } from "../components/SimulationPanel";
 import { ApprovalPanel } from "../components/ApprovalPanel";
 import { fetchPendingIntents } from "../lib/api/intent";
+import { CapabilityGraph } from "../components/CapabilityGraph";
 
 const OnboardingNexusPanel: React.FC = () => {
   const [simulation, setSimulation] = useState<any>(null);
   const [params, setParams] = useState<any>({});
   const [pendingIntents, setPendingIntents] = useState<any[]>([]);
+  const [capGraph, setCapGraph] = useState<any[] | null>(null);
 
   useEffect(() => {
     const loadIntents = async () => {
@@ -18,8 +20,23 @@ const OnboardingNexusPanel: React.FC = () => {
         console.error("Failed to fetch pending intents:", error);
       }
     };
+    
+    const loadCapGraph = async () => {
+      try {
+        const response = await fetch("/api/capabilities");
+        const data = await response.json();
+        setCapGraph(data.graph || null);
+      } catch (error) {
+        console.error("Failed to fetch capability graph:", error);
+      }
+    };
+    
     loadIntents();
-    const interval = setInterval(loadIntents, 5000);
+    loadCapGraph();
+    const interval = setInterval(() => {
+      loadIntents();
+      loadCapGraph();
+    }, 5000);
     return () => clearInterval(interval);
   }, []);
 
@@ -105,6 +122,8 @@ const OnboardingNexusPanel: React.FC = () => {
       </div>
 
       <ApprovalPanel intents={pendingIntents} />
+      
+      <CapabilityGraph graph={capGraph || undefined} />
     </div>
   );
 };

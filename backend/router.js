@@ -13,6 +13,7 @@ import { channelInitHandler } from "./api/channel-init.js";
 import { channelDryrunHandler } from "./api/channel-dryrun.js";
 import { simulateHandler } from "./api/simulate.js";
 import { simulateDiffHandler } from "./api/simulate-diff.js";
+import { router as capabilitiesRouter } from "./api/capabilities.js";
 
 const router = express.Router();
 
@@ -103,6 +104,10 @@ router.post("/api/simulate", (req, res) => {
 router.post("/api/simulate/diff", (req, res) => {
   return simulateDiffHandler(req, res);
 });
+
+// Phase 56: Capability Graph API
+// Returns federation execution capability topology (read-only)
+router.use("/api", capabilitiesRouter);
 
 export default router;
 
