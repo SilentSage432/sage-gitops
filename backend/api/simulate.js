@@ -15,6 +15,13 @@ export function simulateHandler(req, res) {
   return res.json({
     ok: true,
     simulation: result,
+    roleSummary: {
+      byRole: result.dispatchPlan?.reduce((acc, d) => {
+        const role = d.agentRole || "unknown";
+        acc[role] = (acc[role] || 0) + 1;
+        return acc;
+      }, {}) || {},
+    },
     note: "Simulation only. No execution.",
   });
 }

@@ -1,5 +1,7 @@
 // The locked executor. Cannot execute anything yet.
 
+import { getAgent, getRoleSimulationProfile } from "./agent-registry.js";
+
 export function executor(actionEnvelope) {
   const agents = actionEnvelope.targets || [];
   const payload = actionEnvelope.payload;
@@ -8,14 +10,16 @@ export function executor(actionEnvelope) {
     type: actionEnvelope.type,
   };
 
-  const simulatedDispatch = agents.map((agent) => {
-    // Randomized synthetic failure model
-    const failureRoll = Math.random();
+  const simulatedDispatch = agents.map((agentName) => {
+    const agentInfo = getAgent(agentName) || { name: agentName, role: "unknown" };
+    const profile = getRoleSimulationProfile(agentInfo.role);
 
+    // Role-aware synthetic failure model
+    const roll = Math.random();
     let status = "ok";
 
-    if (failureRoll < 0.1) status = "failed";
-    if (failureRoll >= 0.1 && failureRoll < 0.15) status = "unreachable";
+    if (roll < profile.failureChance) status = "failed";
+    else if (roll < profile.failureChance + profile.unreachableChance) status = "unreachable";
 
     const retry = status !== "ok" ? {
       attempted: true,
@@ -28,15 +32,18 @@ export function executor(actionEnvelope) {
     };
 
     return {
-      agent,
+      agent: agentName,
+      agentRole: agentInfo.role,
       action,
       payload,
       simulated: true,
       feedback: {
         received: status !== "unreachable",
         status,
-        latencyMs: Math.floor(Math.random() * 40) + 5,
-        note: "Simulated feedback only",
+        latencyMs:
+          profile.latencyBase +
+          Math.floor(Math.random() * profile.latencyJitter),
+        note: "Simulated feedback only (role-aware)",
       },
       retry,
     };
