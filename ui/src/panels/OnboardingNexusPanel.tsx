@@ -1,10 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { exportFederationEnvelope } from "../federation/token";
 import { SimulationPanel } from "../components/SimulationPanel";
+import { ApprovalPanel } from "../components/ApprovalPanel";
+import { fetchPendingIntents } from "../lib/api/intent";
 
 const OnboardingNexusPanel: React.FC = () => {
   const [simulation, setSimulation] = useState<any>(null);
   const [params, setParams] = useState<any>({});
+  const [pendingIntents, setPendingIntents] = useState<any[]>([]);
+
+  useEffect(() => {
+    const loadIntents = async () => {
+      try {
+        const intents = await fetchPendingIntents();
+        setPendingIntents(intents);
+      } catch (error) {
+        console.error("Failed to fetch pending intents:", error);
+      }
+    };
+    loadIntents();
+    const interval = setInterval(loadIntents, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleSimulate = async () => {
     try {
@@ -86,6 +103,8 @@ const OnboardingNexusPanel: React.FC = () => {
 
         <SimulationPanel simulation={simulation} />
       </div>
+
+      <ApprovalPanel intents={pendingIntents} />
     </div>
   );
 };

@@ -3,10 +3,13 @@
 import { useEffect, useState } from "react";
 import { fetchNodes, fetchEvents, type FederationNode, type FederationEvent } from "@/lib/api/federation";
 import FederationCommandConsole from "@/components/FederationCommandConsole";
+import { ApprovalPanel } from "@/components/ApprovalPanel";
+import { fetchPendingIntents } from "@/lib/api/intent";
 
 export default function FederationPanel() {
   const [nodes, setNodes] = useState<FederationNode[]>([]);
   const [events, setEvents] = useState<FederationEvent[]>([]);
+  const [pendingIntents, setPendingIntents] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -16,8 +19,10 @@ export default function FederationPanel() {
         setLoading(true);
         const nodesData = await fetchNodes();
         const eventsData = await fetchEvents();
+        const intentsData = await fetchPendingIntents();
         setNodes(nodesData.nodes || []);
         setEvents(eventsData.events || []);
+        setPendingIntents(intentsData || []);
         setError(null);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to fetch federation data");
@@ -105,6 +110,10 @@ export default function FederationPanel() {
 
         <div>
           <FederationCommandConsole />
+        </div>
+
+        <div>
+          <ApprovalPanel intents={pendingIntents} />
         </div>
       </div>
     </div>

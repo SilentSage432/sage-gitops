@@ -166,6 +166,10 @@ func SetupRouter(dbPool *pgxpool.Pool) chi.Router {
 	r.Post("/bootstrap/kit", handleBootstrapKit)
 	r.Get("/bootstrap/meta", handleBootstrapMeta)
 
+	// Phase 55: Intent Approval API
+	// Returns pending intent approvals (read-only, no execution)
+	r.Get("/api/intent/pending", GetPendingIntent)
+
 	// Health check
 	r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
