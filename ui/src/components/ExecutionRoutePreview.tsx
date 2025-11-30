@@ -34,6 +34,7 @@ interface ExecutionRoutePreviewProps {
     };
     routed?: boolean;
     destination?: string | null;
+    hardwareAllowed?: boolean; // Phase 77: hardware routing validation
     timestamp?: number;
     note?: string;
   };
@@ -70,6 +71,15 @@ export function ExecutionRoutePreview({ result }: ExecutionRoutePreviewProps) {
           <span className="text-cyan-400 font-semibold">Hardware Key: </span>
           <span className={(result.envelope?.hardware?.verified || result.hardware?.verified) ? "text-green-400" : "text-red-400"}>
             {(result.envelope?.hardware?.verified || result.hardware?.verified) ? "Verified" : "Not verified"}
+          </span>
+        </div>
+      )}
+      
+      {result.hardwareAllowed !== undefined && (
+        <div className="mb-2 text-sm">
+          <span className="text-cyan-400 font-semibold">Hardware Routing Allowed: </span>
+          <span className={result.hardwareAllowed ? "text-green-400" : "text-red-400"}>
+            {result.hardwareAllowed ? "Yes" : "No"}
           </span>
         </div>
       )}
