@@ -46,7 +46,7 @@ func main() {
 		log.Fatalf("Failed to ping database: %v", err)
 	}
 
-	// Initialize WebAuthn with v1 API
+	// Initialize WebAuthn with v1 API (legacy - kept for backward compatibility)
 	webAuthnConfig := &webauthn.Config{
 		RPDisplayName: "SAGE Onboarding",
 		RPID:          "localhost",
@@ -57,6 +57,9 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to initialize WebAuthn: %v", err)
 	}
+
+	// Cursor Patch: Initialize WebAuthn for new registration endpoints
+	InitWebAuthn()
 
 	// Generate or load RSA private key for JWT signing
 	keyBytes := os.Getenv("JWT_PRIVATE_KEY")

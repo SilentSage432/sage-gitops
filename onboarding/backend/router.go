@@ -170,6 +170,12 @@ func SetupRouter(dbPool *pgxpool.Pool) chi.Router {
 	// Returns pending intent approvals (read-only, no execution)
 	r.Get("/api/intent/pending", GetPendingIntent)
 
+	// Cursor Patch: WebAuthn Registration Routes
+	r.Route("/api/auth", func(r chi.Router) {
+		r.Post("/register/begin", handleWebAuthnBegin)
+		r.Post("/register/finish", handleWebAuthnFinish)
+	})
+
 	// Health check
 	r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
