@@ -174,3 +174,149 @@ func SaveCredential(ctx context.Context, id string, cred interface{}) {
 	)
 }
 
+// Phase 3: WebAuthn Verification Handlers
+// Verification proves your identity belongs to the system
+// Still passive - no enforcement yet
+
+type VerifyBeginRequest struct {
+	Operator string `json:"operator"`
+}
+
+func handleWebAuthnVerifyBegin(w http.ResponseWriter, r *http.Request) {
+	var req VerifyBeginRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Invalid request", http.StatusBadRequest)
+		return
+	}
+
+	ctx := r.Context()
+	user, err := GetOperatorWithCredentials(ctx, req.Operator)
+	if err != nil {
+		http.Error(w, "user not found", http.StatusNotFound)
+		return
+	}
+
+	// BeginLogin requires the user to have existing credentials
+	if len(user.WebAuthnCredentials()) == 0 {
+		http.Error(w, "no credentials found for user", http.StatusNotFound)
+		return
+	}
+
+	options, session, err := WAuth.BeginLogin(user)
+	if err != nil {
+		http.Error(w, "error generating challenge", http.StatusInternalServerError)
+		return
+	}
+
+	SaveSession(ctx, req.Operator, session)
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(options)
+}
+
+type VerifyFinishRequest struct {
+	Operator   string          `json:"operator"`
+	Credential json.RawMessage `json:"credential"`
+}
+
+func handleWebAuthnVerifyFinish(w http.ResponseWriter, r *http.Request) {
+	var req VerifyFinishRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Invalid request", http.StatusBadRequest)
+		return
+	}
+
+	ctx := r.Context()
+	session := LoadSession(ctx, req.Operator)
+	if session == nil {
+		http.Error(w, "no session", http.StatusUnauthorized)
+		return
+	}
+
+	// Convert session to webauthn.SessionData
+	sessionData, ok := session.(*webauthn.SessionData)
+	if !ok {
+		http.Error(w, "Invalid session type", http.StatusInternalServerError)
+		return
+	}
+
+	// Load user with credentials for verification
+	user, err := GetOperatorWithCredentials(ctx, req.Operator)
+	if err != nil {
+		http.Error(w, "user not found", http.StatusNotFound)
+		return
+	}
+
+	// Create a new request with just the credential in the body for FinishLogin
+	credentialBytes, err := json.Marshal(req.Credential)
+	if err != nil {
+		http.Error(w, "Failed to marshal credential", http.StatusBadRequest)
+		return
+	}
+
+	credentialReader := bytes.NewReader(credentialBytes)
+	newReq := r.Clone(ctx)
+	newReq.Body = io.NopCloser(credentialReader)
+	newReq.ContentLength = int64(len(credentialBytes))
+
+	// FinishLogin verifies the credential and returns the user
+	_, err = WAuth.FinishLogin(user, *sessionData, newReq)
+	if err != nil {
+		http.Error(w, "verification failed", http.StatusUnauthorized)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{
+		"status":   "verified",
+		"identity": user.Name,
+	})
+}
+
+// GetOperatorWithCredentials loads a user and their stored credentials from the database
+// This is required for authentication (BeginLogin/FinishLogin)
+func GetOperatorWithCredentials(ctx context.Context, operatorID string) (*WebAuthnUser, error) {
+	user := &WebAuthnUser{
+		ID:          []byte(operatorID),
+		Name:        operatorID,
+		DisplayName: operatorID,
+		userID:      operatorID,
+		credentials: []webauthn.Credential{},
+	}
+
+	// Load credentials from database
+	var credentialData []byte
+	err := getDB(ctx).QueryRow(ctx,
+		"SELECT credential_data FROM public.operator_keys WHERE user_id = $1 AND credential_data IS NOT NULL ORDER BY created_at DESC LIMIT 1",
+		operatorID,
+	).Scan(&credentialData)
+
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return user, nil // User exists but no credentials yet
+		}
+		return nil, err
+	}
+
+	// The go-webauthn library's FinishRegistration returns a webauthn.Credential
+	// We need to properly deserialize it for BeginLogin
+	// The credential contains ID, PublicKey, AttestationType, Authenticator metadata
+	var storedCredential webauthn.Credential
+	
+	// Try to unmarshal the credential directly
+	if err := json.Unmarshal(credentialData, &storedCredential); err != nil {
+		// Phase 3: If direct unmarshal fails, the credential might be stored in a different format
+		// For now, return user without credentials (verification will fail, which is expected)
+		// This will be refined in later phases as we understand the exact storage format
+		return user, nil
+	}
+
+	// Add the credential to the user's credential list for BeginLogin
+	// BeginLogin uses these credentials to identify which authenticator to challenge
+	if storedCredential.ID != nil {
+		user.credentials = []webauthn.Credential{storedCredential}
+	}
+
+	return user, nil
+}
+

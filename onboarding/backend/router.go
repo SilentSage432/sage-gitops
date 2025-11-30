@@ -171,9 +171,12 @@ func SetupRouter(dbPool *pgxpool.Pool) chi.Router {
 	r.Get("/api/intent/pending", GetPendingIntent)
 
 	// Cursor Patch: WebAuthn Registration Routes
+	// Phase 3: Add WebAuthn Verification Routes
 	r.Route("/api/auth", func(r chi.Router) {
 		r.Post("/register/begin", handleWebAuthnBegin)
 		r.Post("/register/finish", handleWebAuthnFinish)
+		r.Post("/verify/begin", handleWebAuthnVerifyBegin)
+		r.Post("/verify/finish", handleWebAuthnVerifyFinish)
 	})
 
 	// Health check
