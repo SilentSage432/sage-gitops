@@ -52,6 +52,25 @@ export function ExecutionEnvelopePreview({ result }: ExecutionEnvelopePreviewPro
         </div>
       )}
       
+      {result.envelope?.destination && (
+        <div className="mb-2 text-sm">
+          <span className="text-purple-400 font-semibold">Destination: </span>
+          <span className="text-purple-300">{result.envelope.destination}</span>
+        </div>
+      )}
+      
+      {result.destination && (
+        <div className="mb-2 text-sm">
+          <span className="text-purple-400 font-semibold">Destination Status: </span>
+          <span className={result.destination.allowed ? "text-green-400" : "text-red-400"}>
+            {result.destination.allowed ? "Allowed" : "Not Allowed"}
+          </span>
+          {!result.destination.valid && (
+            <span className="text-red-400 ml-2">(destination not permitted)</span>
+          )}
+        </div>
+      )}
+      
       {result.reason && (
         <div className="mb-2 text-sm">
           <span className="text-purple-400 font-semibold">Reason: </span>

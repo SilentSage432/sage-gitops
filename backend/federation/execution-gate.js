@@ -8,6 +8,8 @@ import { getPolicyFor } from "./policy.js";
 import { getApproval } from "./approval.js";
 import { getExecutionMode } from "./execution-mode.js";
 import { createExecutionEnvelope } from "./execution-envelope.js";
+import { isValidDestination } from "./destinations.js";
+import { isDestinationAllowed } from "./destination-policy.js";
 
 export function checkExecutionGate(action) {
   if (!action || action === "none") {
@@ -130,19 +132,47 @@ export function checkExecutionGate(action) {
 }
 
 // Envelope-aware gate check - validates context + identity + binding + policy + mode inside an envelope
+// Phase 72: Adds destination authorization to gate evaluation
 // This separates professional sovereign platforms from normal systems
 // Gate and envelope are separated:
 // - Envelope carries the intent and context
 // - Gate carries the policy and mode evaluation
+// - Destination authorization checks if destination is allowed
 export function checkEnvelopeAgainstGate(action, context) {
   const envelope = createExecutionEnvelope(action, context);
   const gate = checkExecutionGate(action);
   
+  // Phase 72: Destination authorization
+  const operator = currentOperator();
+  const validDestination = isValidDestination(envelope.destination);
+  const destinationAllowed = validDestination && isDestinationAllowed(envelope.destination, operator);
+  
+  // Combine gate evaluation with destination authorization
+  // Destination must be valid AND allowed for the operator
+  const destinationSatisfied = validDestination && destinationAllowed;
+  
+  // Add destination validation to reasons
+  const allReasons = [...(gate.reasons || [])];
+  if (!validDestination) {
+    allReasons.push("destination not permitted");
+  } else if (!destinationAllowed) {
+    allReasons.push("destination not allowed for operator");
+  }
+  
+  // Final allowed state requires both gate approval AND destination authorization
+  const allowed = gate.allowed && destinationSatisfied;
+  
   return {
     envelope,
     gate,
-    allowed: gate.allowed,
-    reason: gate.reasons?.join(", ") || gate.clearance || "unknown",
+    allowed,
+    destination: {
+      value: envelope.destination,
+      valid: validDestination,
+      allowed: destinationAllowed,
+      satisfied: destinationSatisfied,
+    },
+    reason: allReasons.join(", ") || gate.clearance || "unknown",
     timestamp: Date.now(),
   };
 }

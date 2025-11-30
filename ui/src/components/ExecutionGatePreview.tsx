@@ -18,6 +18,10 @@ interface ExecutionGatePreviewProps {
     policy?: any;
     reasons: string[];
     requirements?: any;
+    envelope?: {
+      destination?: string;
+      [key: string]: any;
+    };
     note?: string;
     timestamp: number;
   };
@@ -33,6 +37,17 @@ export function ExecutionGatePreview({ preview }: ExecutionGatePreviewProps) {
         <div className="mb-2 text-sm">
           <span className="text-indigo-400 font-semibold">Status: </span>
           <span className="text-indigo-300">{preview.status}</span>
+        </div>
+      )}
+      {preview.envelope?.destination && (
+        <div className="mb-2 text-sm">
+          <span className="text-indigo-400 font-semibold">Destination: </span>
+          <span className="text-indigo-300">{preview.envelope.destination}</span>
+        </div>
+      )}
+      {preview.reasons && preview.reasons.includes("destination not permitted") && (
+        <div className="mb-2 text-red-400 text-sm">
+          Destination not permitted
         </div>
       )}
       <pre className="text-xs">{JSON.stringify(preview, null, 2)}</pre>

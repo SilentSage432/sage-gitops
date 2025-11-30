@@ -106,6 +106,11 @@ export function ExecutionGateView({ gate }: ExecutionGateViewProps) {
           <span className="text-teal-300">{gate.mode}</span>
         </div>
       )}
+      {gate.reasons && gate.reasons.includes("destination not permitted") && (
+        <div className="mb-2 text-red-400 text-sm">
+          Destination not permitted
+        </div>
+      )}
       {gate.policy && (
         <div className="mb-2 text-sm">
           <div className="text-cyan-400 font-semibold mb-1">Policy:</div>
