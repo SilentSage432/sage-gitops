@@ -50,20 +50,26 @@ export async function requestWebAuthnChallenge(): Promise<WebAuthnChallengeRespo
   });
   
   // The Go backend returns the options directly (protocol.CredentialCreation)
-  // It may or may not be wrapped in a publicKey property
-  const options = response.data.publicKey || response.data;
+  // The structure is: { rp: {...}, user: {...}, challenge: "...", ... }
+  const options = response.data;
   
   // The challenge and user.id come as base64 strings from Go backend
-  // We need to keep them as base64 for the @simplewebauthn library
-  // which will handle the conversion internally
+  // @simplewebauthn/browser expects base64url format (with - and _ instead of + and /)
+  const base64ToBase64Url = (b64: string) => b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+  
+  // user.id from Go backend is base64 encoded bytes, convert to base64url
+  const userIdBase64 = typeof options.user.id === 'string' 
+    ? options.user.id 
+    : Buffer.from(options.user.id).toString('base64');
+  
   return {
-    challenge: options.challenge, // Already base64 string
+    challenge: base64ToBase64Url(options.challenge), // Convert to base64url
     rp: {
       name: options.rp.name,
       id: options.rp.id,
     },
     user: {
-      id: options.user.id, // Already base64 string from Go backend
+      id: base64ToBase64Url(userIdBase64), // Convert to base64url
       name: options.user.name,
       displayName: options.user.displayName,
     },
