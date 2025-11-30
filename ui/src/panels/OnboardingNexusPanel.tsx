@@ -6,6 +6,7 @@ import { fetchPendingIntents } from "../lib/api/intent";
 import { CapabilityGraph } from "../components/CapabilityGraph";
 import { ExecutionCandidateView } from "../components/ExecutionCandidateView";
 import { RiskView } from "../components/RiskView";
+import { ForecastView } from "../components/ForecastView";
 
 const OnboardingNexusPanel: React.FC = () => {
   const [simulation, setSimulation] = useState<any>(null);
@@ -14,6 +15,7 @@ const OnboardingNexusPanel: React.FC = () => {
   const [capGraph, setCapGraph] = useState<any[] | null>(null);
   const [candidates, setCandidates] = useState<any>(null);
   const [risk, setRisk] = useState<any>(null);
+  const [forecast, setForecast] = useState<any>(null);
 
   useEffect(() => {
     const loadIntents = async () => {
@@ -55,15 +57,27 @@ const OnboardingNexusPanel: React.FC = () => {
       }
     };
     
+    const loadForecast = async () => {
+      try {
+        const response = await fetch("/api/execution/forecast?action=get-status");
+        const data = await response.json();
+        setForecast(data);
+      } catch (error) {
+        console.error("Failed to fetch outcome forecast:", error);
+      }
+    };
+    
     loadIntents();
     loadCapGraph();
     loadCandidates();
     loadRisk();
+    loadForecast();
     const interval = setInterval(() => {
       loadIntents();
       loadCapGraph();
       loadCandidates();
       loadRisk();
+      loadForecast();
     }, 5000);
     return () => clearInterval(interval);
   }, []);
@@ -156,6 +170,8 @@ const OnboardingNexusPanel: React.FC = () => {
       <ExecutionCandidateView result={candidates} />
       
       <RiskView risk={risk} />
+      
+      <ForecastView result={forecast} />
     </div>
   );
 };

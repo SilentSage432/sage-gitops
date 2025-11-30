@@ -16,6 +16,7 @@ import { simulateDiffHandler } from "./api/simulate-diff.js";
 import { router as capabilitiesRouter } from "./api/capabilities.js";
 import { router as candidatesRouter } from "./api/candidates.js";
 import { router as riskRouter } from "./api/risk.js";
+import { router as forecastRouter } from "./api/forecast.js";
 
 const router = express.Router();
 
@@ -118,6 +119,10 @@ router.use("/api", candidatesRouter);
 // Phase 58: Pre-Flight Risk Scoring API
 // Returns risk profile, system impact, and expected reliability (read-only, no execution)
 router.use("/api", riskRouter);
+
+// Phase 59: Outcome Forecast Modeling API
+// Returns predicted future state after action execution (read-only, no execution)
+router.use("/api", forecastRouter);
 
 export default router;
 
