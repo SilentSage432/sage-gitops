@@ -3,17 +3,23 @@
 // Still no execution. Just prediction and reporting.
 
 import { checkExecutionGate } from "./execution-gate.js";
+import { createExecutionEnvelope } from "./execution-envelope.js";
 
-export function previewExecutionGate(action) {
+export function previewExecutionGate(action, context = {}) {
   if (!action || action === "none") {
+    const envelope = createExecutionEnvelope(null, context);
     return {
       action: null,
       preview: true,
       status: "blocked under current state",
       gate: null,
+      envelope,
       timestamp: Date.now(),
     };
   }
+
+  // Create the execution envelope (container for the request)
+  const envelope = createExecutionEnvelope(action, context);
 
   // Check the gate (doesn't change state, just reports)
   const gate = checkExecutionGate(action);
@@ -40,7 +46,8 @@ export function previewExecutionGate(action) {
   }
 
   return {
-    ...gate,
+    envelope,
+    gate,
     preview: true,
     status,
     wouldAllow: gate.requirements?.identity?.satisfied &&
