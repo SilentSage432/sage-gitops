@@ -8,23 +8,39 @@ export default function RegisterYubiKey() {
   async function register() {
     try {
       setStatus("Requesting challenge...");
+      
+      // Try direct backend URL first to test if proxy is the issue
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8081';
+      const endpoint = `${backendUrl}/api/auth/register/begin`;
+      console.log("Sending request to:", endpoint);
 
-      const begin = await fetch("/api/auth/register/begin", {
+      const begin = await fetch(endpoint, {
         method: "POST",
         body: JSON.stringify({ operator: "prime" }),
         headers: { "Content-Type": "application/json" },
       });
+      
+      console.log("Response status:", begin.status, begin.statusText);
+      console.log("Response ok:", begin.ok);
 
       if (!begin.ok) {
         let errorMessage = `HTTP ${begin.status}`;
+        let errorData = null;
         try {
-          const errorData = await begin.json();
-          errorMessage = errorData.error || errorData.message || JSON.stringify(errorData);
+          const text = await begin.text();
+          console.error("Raw error response text:", text);
+          try {
+            errorData = JSON.parse(text);
+            errorMessage = errorData.error || errorData.message || JSON.stringify(errorData);
+          } catch (parseErr) {
+            errorMessage = text || `Failed to request challenge: ${begin.status}`;
+          }
         } catch (e) {
-          const text = await begin.text().catch(() => "");
-          errorMessage = text || `Failed to request challenge: ${begin.status}`;
+          console.error("Error reading response:", e);
+          errorMessage = `Failed to request challenge: ${begin.status}`;
         }
         console.error("Backend error response:", errorMessage);
+        console.error("Error data object:", errorData);
         throw new Error(errorMessage);
       }
 
