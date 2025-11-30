@@ -4,6 +4,7 @@ interface ExecutionGateViewProps {
   gate?: {
     action: string;
     allowed: boolean;
+    mode?: string;
     operator?: {
       id?: string;
       mfa?: boolean;
@@ -37,6 +38,11 @@ interface ExecutionGateViewProps {
         reason: string;
       };
       approval: {
+        required: boolean;
+        satisfied: boolean;
+        reason: string;
+      };
+      mode?: {
         required: boolean;
         satisfied: boolean;
         reason: string;
@@ -92,6 +98,12 @@ export function ExecutionGateView({ gate }: ExecutionGateViewProps) {
       {gate && !gate.operatorApproval && gate.operator && gate.operator.mfa && gate.requirements?.policy?.satisfied && (
         <div className="mb-2 text-blue-400 text-sm">
           Execution blocked: operator has not approved this action
+        </div>
+      )}
+      {gate && gate.mode && (
+        <div className="mb-2 text-sm">
+          <span className="text-teal-400 font-semibold">Mode: </span>
+          <span className="text-teal-300">{gate.mode}</span>
         </div>
       )}
       {gate.policy && (
