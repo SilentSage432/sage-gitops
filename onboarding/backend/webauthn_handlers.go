@@ -11,7 +11,6 @@ import (
 	"time"
 
 	"github.com/go-webauthn/webauthn/webauthn"
-	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	
 	"github.com/silentsage432/sage-gitops/onboarding/backend/handlers"
@@ -70,7 +69,11 @@ func handleWebAuthnBegin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	SaveSession(ctx, req.Operator, session)
+	if err := SaveSession(ctx, req.Operator, session); err != nil {
+		log.Printf("WebAuthn Begin: SaveSession failed for operator %s: %v", req.Operator, err)
+		// Continue anyway - session save failure shouldn't block registration begin
+		// But log it for debugging
+	}
 
 	// The go-webauthn library returns a protocol.CredentialCreation object
 	// This already contains the "publicKey" field with all the options
@@ -112,7 +115,12 @@ func handleWebAuthnFinish(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	session := LoadSession(ctx, req.Operator)
+	session, err := LoadSession(ctx, req.Operator)
+	if err != nil {
+		log.Printf("WebAuthn Finish: LoadSession failed for operator %s: %v", req.Operator, err)
+		http.Error(w, "Failed to load session", http.StatusInternalServerError)
+		return
+	}
 	if session == nil {
 		http.Error(w, "No active session found", http.StatusUnauthorized)
 		return
@@ -158,83 +166,69 @@ func handleWebAuthnFinish(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(`{"status":"registered"}`))
 }
 
-// GetOperator retrieves or creates a WebAuthnUser for the given operator ID
-func GetOperator(operatorID string) *WebAuthnUser {
-	// For now, return a simple user structure
-	// In production, this would load from database
-	user := &WebAuthnUser{
-		ID:          []byte(operatorID),
-		Name:        operatorID,
-		DisplayName: operatorID,
-		userID:      operatorID,
-		credentials: []webauthn.Credential{},
-	}
-
-	// TODO: Load existing credentials from database if available
-	// For now, we start with empty credentials
-
-	return user
-}
+// DEPRECATED: GetOperator is no longer used
+// Use handlers.GetOperatorKey() instead
+// Kept for backward compatibility only
 
 // SaveSession stores a WebAuthn session in memory/database
-func SaveSession(ctx context.Context, id string, session interface{}) {
-	// TODO: store in memory/redis/disk
-	// For now, store in database (operator_keys table)
+// Returns error if database operation fails
+func SaveSession(ctx context.Context, id string, session interface{}) error {
+	// Store in database (operator_keys table)
 	sessionJSON, err := json.Marshal(session)
 	if err != nil {
-		return
+		log.Printf("SaveSession: Failed to marshal session: %v", err)
+		return err
 	}
 
-	_, _ = getDB(ctx).Exec(ctx,
-		"INSERT INTO public.operator_keys (id, user_id, session_data, created_at) VALUES ($1, $2, $3, $4) ON CONFLICT (user_id) DO UPDATE SET session_data = $3, updated_at = $4",
-		uuid.New().String(),
+	// Use gen_random_uuid() via DEFAULT instead of passing UUID string
+	// This works with both UUID and TEXT id columns
+	_, err = getDB(ctx).Exec(ctx,
+		"INSERT INTO public.operator_keys (id, user_id, session_data, created_at) VALUES (gen_random_uuid(), $1, $2::jsonb, $3) ON CONFLICT (user_id) DO UPDATE SET session_data = $2::jsonb, updated_at = $3",
 		id,
 		sessionJSON,
 		time.Now(),
 	)
+	if err != nil {
+		log.Printf("SaveSession: Database error for user_id %s: %v", id, err)
+		return err
+	}
+
+	return nil
 }
 
 // LoadSession retrieves a WebAuthn session
-func LoadSession(ctx context.Context, id string) interface{} {
-	// TODO: retrieve session
-	// For now, retrieve from database
+// Returns (session, error) - error is nil if session not found (expected case)
+func LoadSession(ctx context.Context, id string) (interface{}, error) {
+	// Retrieve from database (operator_keys table)
+	// session_data is JSONB, so we need to cast it properly
 	var sessionData []byte
 	err := getDB(ctx).QueryRow(ctx,
-		"SELECT session_data FROM public.operator_keys WHERE user_id = $1 ORDER BY created_at DESC LIMIT 1",
+		"SELECT session_data::text FROM public.operator_keys WHERE user_id = $1 ORDER BY created_at DESC LIMIT 1",
 		id,
 	).Scan(&sessionData)
 
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
-			return nil
+			// No session found - this is expected for new registrations
+			return nil, nil
 		}
-		return nil
+		log.Printf("LoadSession: Database error for user_id %s: %v", id, err)
+		return nil, err
 	}
 
 	var session webauthn.SessionData
 	if err := json.Unmarshal(sessionData, &session); err != nil {
-		return nil
+		log.Printf("LoadSession: Failed to unmarshal session data for user_id %s: %v", id, err)
+		return nil, err
 	}
 
-	return &session
+	return &session, nil
 }
 
-// SaveCredential stores a WebAuthn credential
-func SaveCredential(ctx context.Context, id string, cred interface{}) {
-	// TODO: store credential
-	// For now, store in database
-	credentialJSON, err := json.Marshal(cred)
-	if err != nil {
-		return
-	}
-
-	_, _ = getDB(ctx).Exec(ctx,
-		"UPDATE public.operator_keys SET credential_data = $1, updated_at = $2 WHERE user_id = $3",
-		credentialJSON,
-		time.Now(),
-		id,
-	)
-}
+// DEPRECATED: SaveCredential is no longer used
+// Credentials are now stored in the operators table via handlers.SaveOperatorKey()
+// This function wrote to operator_keys.credential_data which is not used
+// Kept for reference only - should be removed in future cleanup
 
 // Phase 3: WebAuthn Verification Handlers
 // Verification proves your identity belongs to the system
@@ -270,7 +264,10 @@ func handleWebAuthnVerifyBegin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	SaveSession(ctx, req.Operator, session)
+	if err := SaveSession(ctx, req.Operator, session); err != nil {
+		log.Printf("WebAuthn Verify Begin: SaveSession failed for operator %s: %v", req.Operator, err)
+		// Continue anyway - session save failure shouldn't block verification begin
+	}
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(options)
@@ -289,7 +286,12 @@ func handleWebAuthnVerifyFinish(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ctx := r.Context()
-	session := LoadSession(ctx, req.Operator)
+	session, err := LoadSession(ctx, req.Operator)
+	if err != nil {
+		log.Printf("WebAuthn Verify Finish: LoadSession failed for operator %s: %v", req.Operator, err)
+		http.Error(w, "Failed to load session", http.StatusInternalServerError)
+		return
+	}
 	if session == nil {
 		http.Error(w, "no session", http.StatusUnauthorized)
 		return
