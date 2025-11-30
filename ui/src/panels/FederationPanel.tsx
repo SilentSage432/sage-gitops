@@ -10,6 +10,7 @@ import { ExecutionCandidateView } from "@/components/ExecutionCandidateView";
 import { RiskView } from "@/components/RiskView";
 import { ForecastView } from "@/components/ForecastView";
 import { ExecutionChainView } from "@/components/ExecutionChainView";
+import { ExecutionGateView } from "@/components/ExecutionGateView";
 
 export default function FederationPanel() {
   const [nodes, setNodes] = useState<FederationNode[]>([]);
@@ -20,6 +21,7 @@ export default function FederationPanel() {
   const [risk, setRisk] = useState<any>(null);
   const [forecast, setForecast] = useState<any>(null);
   const [chain, setChain] = useState<any>(null);
+  const [gate, setGate] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -51,6 +53,10 @@ export default function FederationPanel() {
         const chainResponse = await fetch("/api/execution/chain?action=get-status");
         const chainData = await chainResponse.json();
         
+        // Fetch execution gate status for default action
+        const gateResponse = await fetch("/api/execution/gate?action=get-status");
+        const gateData = await gateResponse.json();
+        
         setNodes(nodesData.nodes || []);
         setEvents(eventsData.events || []);
         setPendingIntents(intentsData || []);
@@ -59,6 +65,7 @@ export default function FederationPanel() {
         setRisk(riskData);
         setForecast(forecastData);
         setChain(chainData);
+        setGate(gateData);
         setError(null);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to fetch federation data");
@@ -170,6 +177,10 @@ export default function FederationPanel() {
 
         <div>
           <ExecutionChainView chain={chain} />
+        </div>
+
+        <div>
+          <ExecutionGateView gate={gate} />
         </div>
       </div>
     </div>

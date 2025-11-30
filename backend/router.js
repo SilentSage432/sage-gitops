@@ -18,6 +18,7 @@ import { router as candidatesRouter } from "./api/candidates.js";
 import { router as riskRouter } from "./api/risk.js";
 import { router as forecastRouter } from "./api/forecast.js";
 import { router as chainRouter } from "./api/chain.js";
+import { router as gateRouter } from "./api/gate.js";
 
 const router = express.Router();
 
@@ -128,6 +129,10 @@ router.use("/api", forecastRouter);
 // Phase 60: Chain of Responsibility Simulation API
 // Returns execution chain with ordering and responsibility mapping (read-only, no execution)
 router.use("/api", chainRouter);
+
+// Phase 61: Execution Gating Layer API
+// Returns execution gate status and clearance state (read-only, execution always disabled)
+router.use("/api", gateRouter);
 
 export default router;
 
