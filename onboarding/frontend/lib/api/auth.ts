@@ -44,16 +44,73 @@ export interface OCTResponse {
 }
 
 export async function requestWebAuthnChallenge(): Promise<WebAuthnChallengeResponse> {
-  const response = await axios.post(`${API_BASE_URL}/v1/init/webauthn/challenge`);
-  return response.data;
+  // Use the working Go backend endpoint via Next.js rewrite
+  const response = await axios.post('/api/auth/register/begin', {
+    operator: 'prime'
+  });
+  
+  // The Go backend returns the options directly (protocol.CredentialCreation)
+  // It may or may not be wrapped in a publicKey property
+  const options = response.data.publicKey || response.data;
+  
+  // The challenge and user.id come as base64 strings from Go backend
+  // We need to keep them as base64 for the @simplewebauthn library
+  // which will handle the conversion internally
+  return {
+    challenge: options.challenge, // Already base64 string
+    rp: {
+      name: options.rp.name,
+      id: options.rp.id,
+    },
+    user: {
+      id: options.user.id, // Already base64 string from Go backend
+      name: options.user.name,
+      displayName: options.user.displayName,
+    },
+    pubKeyCredParams: options.pubKeyCredParams || [],
+    timeout: options.timeout || 300000,
+    attestation: options.attestation || 'direct',
+  };
 }
 
 export async function verifyWebAuthnCredential(credential: any, challenge: string): Promise<{ success: boolean; deviceName?: string }> {
-  const response = await axios.post(`${API_BASE_URL}/v1/init/webauthn/verify`, {
-    credential,
-    challenge,
+  // Use the working Go backend endpoint via Next.js rewrite
+  // The credential needs to be formatted for go-webauthn library
+  const credentialResponse = credential.response as AuthenticatorAttestationResponse;
+  
+  // Helper to convert ArrayBuffer to base64url
+  const arrayBufferToBase64Url = (buffer: ArrayBuffer): string => {
+    const bytes = new Uint8Array(buffer);
+    let binary = '';
+    for (let i = 0; i < bytes.byteLength; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return btoa(binary)
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=/g, '');
+  };
+
+  const credentialJson = {
+    id: credential.id,
+    rawId: arrayBufferToBase64Url(credential.rawId),
+    type: credential.type,
+    response: {
+      clientDataJSON: arrayBufferToBase64Url(credentialResponse.clientDataJSON),
+      attestationObject: arrayBufferToBase64Url(credentialResponse.attestationObject),
+    },
+  };
+
+  const response = await axios.post('/api/auth/register/finish', {
+    operator: 'prime',
+    credential: credentialJson,
   });
-  return response.data;
+  
+  // Go backend returns { status: "registered" }
+  return {
+    success: response.data.status === 'registered',
+    deviceName: 'YubiKey',
+  };
 }
 
 export async function issueOCT(): Promise<OCTResponse> {
