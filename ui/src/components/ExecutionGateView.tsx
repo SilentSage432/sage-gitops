@@ -7,9 +7,17 @@ interface ExecutionGateViewProps {
     operator?: {
       id?: string;
       mfa?: boolean;
+      role?: string;
       timestamp?: number;
       [key: string]: any;
     } | null;
+    policy?: {
+      action: string;
+      allowedRoles: string[];
+      allowedTenants: string[];
+      forbiddenAgents: string[];
+      requirements: string[];
+    };
     reasons: string[];
     requirements?: {
       identity: {
@@ -18,6 +26,11 @@ interface ExecutionGateViewProps {
         reason: string;
       };
       mfa?: {
+        required: boolean;
+        satisfied: boolean;
+        reason: string;
+      };
+      policy?: {
         required: boolean;
         satisfied: boolean;
         reason: string;
@@ -68,6 +81,17 @@ export function ExecutionGateView({ gate }: ExecutionGateViewProps) {
       {gate.operator && gate.operator.mfa && !gate.allowed && (
         <div className="mb-2 text-yellow-400 text-sm">
           Identity + MFA active, but execution still disabled
+        </div>
+      )}
+      {gate.operator && gate.operator.mfa && gate.requirements?.policy && !gate.requirements.policy.satisfied && (
+        <div className="mb-2 text-yellow-400 text-sm">
+          Execution blocked: policy does not allow this action
+        </div>
+      )}
+      {gate.policy && (
+        <div className="mb-2 text-sm">
+          <div className="text-cyan-400 font-semibold mb-1">Policy:</div>
+          <pre className="text-xs text-cyan-300">{JSON.stringify(gate.policy, null, 2)}</pre>
         </div>
       )}
       <pre className="text-xs">{JSON.stringify(gate, null, 2)}</pre>

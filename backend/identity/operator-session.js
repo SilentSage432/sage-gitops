@@ -12,10 +12,11 @@ export function currentOperator() {
     return null;
   }
   
-  // Return operator with MFA status
+  // Return operator with MFA status and role
   return {
     id: currentOperatorSession.id || currentOperatorSession.operatorId,
     mfa: currentOperatorSession.mfaVerified || false,
+    role: currentOperatorSession.role || "unknown",
     timestamp: currentOperatorSession.timestamp || Date.now(),
   };
 }
