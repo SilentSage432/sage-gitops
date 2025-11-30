@@ -9,6 +9,7 @@ import { RiskView } from "../components/RiskView";
 import { ForecastView } from "../components/ForecastView";
 import { ExecutionChainView } from "../components/ExecutionChainView";
 import { ExecutionGateView } from "../components/ExecutionGateView";
+import { ExecutionGatePreview } from "../components/ExecutionGatePreview";
 
 const OnboardingNexusPanel: React.FC = () => {
   const [simulation, setSimulation] = useState<any>(null);
@@ -20,6 +21,7 @@ const OnboardingNexusPanel: React.FC = () => {
   const [forecast, setForecast] = useState<any>(null);
   const [chain, setChain] = useState<any>(null);
   const [gate, setGate] = useState<any>(null);
+  const [gatePreview, setGatePreview] = useState<any>(null);
 
   useEffect(() => {
     const loadIntents = async () => {
@@ -91,6 +93,16 @@ const OnboardingNexusPanel: React.FC = () => {
       }
     };
     
+    const loadGatePreview = async () => {
+      try {
+        const response = await fetch("/api/execution/gate/preview?action=get-status");
+        const data = await response.json();
+        setGatePreview(data);
+      } catch (error) {
+        console.error("Failed to fetch execution gate preview:", error);
+      }
+    };
+    
     loadIntents();
     loadCapGraph();
     loadCandidates();
@@ -98,6 +110,7 @@ const OnboardingNexusPanel: React.FC = () => {
     loadForecast();
     loadChain();
     loadGate();
+    loadGatePreview();
     const interval = setInterval(() => {
       loadIntents();
       loadCapGraph();
@@ -106,6 +119,7 @@ const OnboardingNexusPanel: React.FC = () => {
       loadForecast();
       loadChain();
       loadGate();
+      loadGatePreview();
     }, 5000);
     return () => clearInterval(interval);
   }, []);
@@ -204,6 +218,8 @@ const OnboardingNexusPanel: React.FC = () => {
       <ExecutionChainView chain={chain} />
       
       <ExecutionGateView gate={gate} />
+      
+      <ExecutionGatePreview preview={gatePreview} />
     </div>
   );
 };

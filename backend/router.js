@@ -19,6 +19,7 @@ import { router as riskRouter } from "./api/risk.js";
 import { router as forecastRouter } from "./api/forecast.js";
 import { router as chainRouter } from "./api/chain.js";
 import { router as gateRouter } from "./api/gate.js";
+import { router as executionRouter } from "./api/execution.js";
 
 const router = express.Router();
 
@@ -133,6 +134,10 @@ router.use("/api", chainRouter);
 // Phase 61: Execution Gating Layer API
 // Returns execution gate status and clearance state (read-only, execution always disabled)
 router.use("/api", gateRouter);
+
+// Phase 67: Execution Gate Preview API
+// Returns mode-aware execution gate preview (read-only, no state changes, no execution)
+router.use("/api", executionRouter);
 
 export default router;
 
