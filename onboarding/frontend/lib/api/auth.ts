@@ -49,9 +49,9 @@ export async function requestWebAuthnChallenge(): Promise<WebAuthnChallengeRespo
     operator: 'prime'
   });
   
-  // The Go backend returns the options directly (protocol.CredentialCreation)
-  // The structure is: { rp: {...}, user: {...}, challenge: "...", ... }
-  const options = response.data;
+  // The Go backend returns the options in a publicKey wrapper
+  // The structure is: { publicKey: { rp: {...}, user: {...}, challenge: "...", ... } }
+  const options = response.data.publicKey;
   
   // The challenge and user.id come as base64 strings from Go backend
   // @simplewebauthn/browser expects base64url format (with - and _ instead of + and /)
