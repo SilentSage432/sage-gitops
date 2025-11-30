@@ -15,6 +15,7 @@ import { simulateHandler } from "./api/simulate.js";
 import { simulateDiffHandler } from "./api/simulate-diff.js";
 import { router as capabilitiesRouter } from "./api/capabilities.js";
 import { router as candidatesRouter } from "./api/candidates.js";
+import { router as riskRouter } from "./api/risk.js";
 
 const router = express.Router();
 
@@ -113,6 +114,10 @@ router.use("/api", capabilitiesRouter);
 // Phase 57: Execution Candidate Pipeline API
 // Returns execution candidate chain for actions (read-only, no execution)
 router.use("/api", candidatesRouter);
+
+// Phase 58: Pre-Flight Risk Scoring API
+// Returns risk profile, system impact, and expected reliability (read-only, no execution)
+router.use("/api", riskRouter);
 
 export default router;
 

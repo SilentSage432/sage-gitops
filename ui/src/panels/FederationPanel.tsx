@@ -7,6 +7,7 @@ import { ApprovalPanel } from "@/components/ApprovalPanel";
 import { fetchPendingIntents } from "@/lib/api/intent";
 import { CapabilityGraph } from "@/components/CapabilityGraph";
 import { ExecutionCandidateView } from "@/components/ExecutionCandidateView";
+import { RiskView } from "@/components/RiskView";
 
 export default function FederationPanel() {
   const [nodes, setNodes] = useState<FederationNode[]>([]);
@@ -14,6 +15,7 @@ export default function FederationPanel() {
   const [pendingIntents, setPendingIntents] = useState<any[]>([]);
   const [capGraph, setCapGraph] = useState<any[] | null>(null);
   const [candidates, setCandidates] = useState<any>(null);
+  const [risk, setRisk] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -33,11 +35,16 @@ export default function FederationPanel() {
         const candidatesResponse = await fetch("/api/execution/candidates?action=get-status");
         const candidatesData = await candidatesResponse.json();
         
+        // Fetch risk score for default action
+        const riskResponse = await fetch("/api/execution/risk?action=get-status");
+        const riskData = await riskResponse.json();
+        
         setNodes(nodesData.nodes || []);
         setEvents(eventsData.events || []);
         setPendingIntents(intentsData || []);
         setCapGraph(capData.graph || null);
         setCandidates(candidatesData);
+        setRisk(riskData);
         setError(null);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to fetch federation data");
@@ -137,6 +144,10 @@ export default function FederationPanel() {
 
         <div>
           <ExecutionCandidateView result={candidates} />
+        </div>
+
+        <div>
+          <RiskView risk={risk} />
         </div>
       </div>
     </div>

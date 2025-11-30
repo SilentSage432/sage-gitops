@@ -5,6 +5,7 @@ import { ApprovalPanel } from "../components/ApprovalPanel";
 import { fetchPendingIntents } from "../lib/api/intent";
 import { CapabilityGraph } from "../components/CapabilityGraph";
 import { ExecutionCandidateView } from "../components/ExecutionCandidateView";
+import { RiskView } from "../components/RiskView";
 
 const OnboardingNexusPanel: React.FC = () => {
   const [simulation, setSimulation] = useState<any>(null);
@@ -12,6 +13,7 @@ const OnboardingNexusPanel: React.FC = () => {
   const [pendingIntents, setPendingIntents] = useState<any[]>([]);
   const [capGraph, setCapGraph] = useState<any[] | null>(null);
   const [candidates, setCandidates] = useState<any>(null);
+  const [risk, setRisk] = useState<any>(null);
 
   useEffect(() => {
     const loadIntents = async () => {
@@ -43,13 +45,25 @@ const OnboardingNexusPanel: React.FC = () => {
       }
     };
     
+    const loadRisk = async () => {
+      try {
+        const response = await fetch("/api/execution/risk?action=get-status");
+        const data = await response.json();
+        setRisk(data);
+      } catch (error) {
+        console.error("Failed to fetch risk score:", error);
+      }
+    };
+    
     loadIntents();
     loadCapGraph();
     loadCandidates();
+    loadRisk();
     const interval = setInterval(() => {
       loadIntents();
       loadCapGraph();
       loadCandidates();
+      loadRisk();
     }, 5000);
     return () => clearInterval(interval);
   }, []);
@@ -140,6 +154,8 @@ const OnboardingNexusPanel: React.FC = () => {
       <CapabilityGraph graph={capGraph || undefined} />
       
       <ExecutionCandidateView result={candidates} />
+      
+      <RiskView risk={risk} />
     </div>
   );
 };
