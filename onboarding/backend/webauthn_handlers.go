@@ -49,10 +49,19 @@ func handleWebAuthnBegin(w http.ResponseWriter, r *http.Request) {
 
 	SaveSession(ctx, req.Operator, session)
 
+	// The go-webauthn library returns a protocol.CredentialCreation object
+	// We need to ensure it's properly serialized for the frontend
 	w.Header().Set("Content-Type", "application/json")
 	if err := json.NewEncoder(w).Encode(options); err != nil {
 		log.Printf("WebAuthn Begin: Failed to encode response: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": "Failed to encode options",
+		})
+		return
 	}
+	
+	log.Printf("WebAuthn Begin: Successfully generated challenge for operator %s", req.Operator)
 }
 
 type RegistrationFinishRequest struct {
