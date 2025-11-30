@@ -57,10 +57,23 @@ export async function requestWebAuthnChallenge(): Promise<WebAuthnChallengeRespo
   // @simplewebauthn/browser expects base64url format (with - and _ instead of + and /)
   const base64ToBase64Url = (b64: string) => b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
   
-  // user.id from Go backend is base64 encoded bytes, convert to base64url
-  const userIdBase64 = typeof options.user.id === 'string' 
-    ? options.user.id 
-    : Buffer.from(options.user.id).toString('base64');
+  // user.id from Go backend is base64 encoded bytes (as string)
+  // If it's an array, convert to base64 string first
+  let userIdBase64: string;
+  if (typeof options.user.id === 'string') {
+    userIdBase64 = options.user.id;
+  } else if (Array.isArray(options.user.id)) {
+    // Convert array of numbers to base64 string
+    const bytes = new Uint8Array(options.user.id);
+    let binary = '';
+    for (let i = 0; i < bytes.byteLength; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    userIdBase64 = btoa(binary);
+  } else {
+    // Fallback: try to stringify
+    userIdBase64 = String(options.user.id);
+  }
   
   return {
     challenge: base64ToBase64Url(options.challenge), // Convert to base64url
