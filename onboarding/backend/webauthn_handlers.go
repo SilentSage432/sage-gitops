@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"io"
+	"log"
 	"net/http"
 	"time"
 
@@ -21,7 +22,14 @@ type RegistrationBeginRequest struct {
 func handleWebAuthnBegin(w http.ResponseWriter, r *http.Request) {
 	var req RegistrationBeginRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		log.Printf("WebAuthn Begin: Failed to decode request: %v", err)
 		http.Error(w, "Invalid request", http.StatusBadRequest)
+		return
+	}
+
+	if WAuth == nil {
+		log.Printf("WebAuthn Begin: WAuth is nil - WebAuthn not initialized")
+		http.Error(w, "WebAuthn not initialized", http.StatusInternalServerError)
 		return
 	}
 
@@ -30,14 +38,21 @@ func handleWebAuthnBegin(w http.ResponseWriter, r *http.Request) {
 
 	options, session, err := WAuth.BeginRegistration(user)
 	if err != nil {
-		http.Error(w, err.Error(), 500)
+		log.Printf("WebAuthn Begin: BeginRegistration failed for operator %s: %v", req.Operator, err)
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": err.Error(),
+		})
 		return
 	}
 
 	SaveSession(ctx, req.Operator, session)
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(options)
+	if err := json.NewEncoder(w).Encode(options); err != nil {
+		log.Printf("WebAuthn Begin: Failed to encode response: %v", err)
+	}
 }
 
 type RegistrationFinishRequest struct {

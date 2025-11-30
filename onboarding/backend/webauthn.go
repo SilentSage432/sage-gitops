@@ -13,10 +13,12 @@ func InitWebAuthn() {
 	WAuth, err = webauthn.New(&webauthn.Config{
 		RPDisplayName: "SAGE Federation",
 		RPID:          "localhost",
-		RPOrigins:     []string{"http://localhost:3000"},
+		RPOrigins:     []string{"http://localhost:3000", "https://localhost:3000"},
 	})
 	if err != nil {
 		log.Fatalf("failed to initialize WebAuthn: %v", err)
+		return
 	}
+	log.Println("WebAuthn initialized successfully for SAGE Federation")
 }
 
