@@ -171,16 +171,20 @@ export async function performWebAuthnRegistration(): Promise<{ success: boolean;
     const challengeBytes = base64UrlToUint8Array(challengeResponse.challenge);
     const userIdBytes = base64UrlToUint8Array(challengeResponse.user.id);
 
-    // Step 3: Call native WebAuthn API
+    // Create new ArrayBuffers from the Uint8Arrays (WebAuthn API requirement)
+    const challengeBuffer = challengeBytes.buffer.slice(challengeBytes.byteOffset, challengeBytes.byteOffset + challengeBytes.byteLength);
+    const userIdBuffer = userIdBytes.buffer.slice(userIdBytes.byteOffset, userIdBytes.byteOffset + userIdBytes.byteLength);
+
+    // Step 3: Call native WebAuthn API - navigator.credentials.create()
     const credential = await navigator.credentials.create({
       publicKey: {
-        challenge: challengeBytes,
+        challenge: challengeBuffer as ArrayBuffer,
         rp: {
           name: challengeResponse.rp.name,
           id: challengeResponse.rp.id,
         },
         user: {
-          id: userIdBytes,
+          id: userIdBuffer as ArrayBuffer,
           name: challengeResponse.user.name,
           displayName: challengeResponse.user.displayName,
         },
