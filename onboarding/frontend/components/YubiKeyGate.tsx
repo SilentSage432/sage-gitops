@@ -6,7 +6,7 @@ import { storeOCT } from '@/lib/api/oct';
 import { useRouter } from 'next/navigation';
 
 export function YubiKeyGate() {
-  const [status, setStatus] = useState<'idle' | 'checking' | 'registering' | 'authenticating' | 'success' | 'error'>('idle');
+  const [status, setStatus] = useState<'idle' | 'checking' | 'registering' | 'registered' | 'authenticating' | 'success' | 'error'>('idle');
   const [deviceName, setDeviceName] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -95,26 +95,9 @@ export function YubiKeyGate() {
       const result = await finishRegistration(credential);
       
       if (result.success) {
-        setDeviceName(result.deviceName || 'YubiKey');
-        setStatus('authenticating');
-        
-        // After successful registration, issue OCT
-        try {
-          const octResponse = await issueOCT();
-          storeOCT({
-            token: octResponse.token,
-            expiresAt: octResponse.expiresAt,
-            scopes: octResponse.scopes,
-          });
-          
-          setStatus('success');
-          setTimeout(() => {
-            router.push('/initiator');
-          }, 1500);
-        } catch (octError) {
-          setError('Registration successful but failed to issue access token');
-          setStatus('error');
-        }
+        console.log("YubiKey registered:", result);
+        setStatus("registered");
+        return;
       } else {
         setError('WebAuthn registration failed. Please ensure you have a YubiKey connected.');
         setStatus('error');

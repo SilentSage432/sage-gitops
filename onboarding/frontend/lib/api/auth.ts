@@ -144,8 +144,13 @@ export async function verifyWebAuthnCredential(credential: any, challenge: strin
 }
 
 export async function issueOCT(): Promise<OCTResponse> {
-  const response = await axios.post(`${API_BASE_URL}/rho2/auth/issue`);
+  const response = await axios.post('/api/auth/access/issue');
   return response.data;
+}
+
+// Alias for issueOCT - use this for access token issuance
+export async function issueAccessToken(): Promise<OCTResponse> {
+  return issueOCT();
 }
 
 export async function verifyOCT(token: string): Promise<{ valid: boolean; scopes?: string[]; expiresAt?: number }> {
