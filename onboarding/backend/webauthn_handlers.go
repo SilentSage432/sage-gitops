@@ -13,6 +13,8 @@ import (
 	"github.com/go-webauthn/webauthn/webauthn"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
+	
+	"github.com/silentsage432/sage-gitops/onboarding/backend/handlers"
 )
 
 type RegistrationBeginRequest struct {
@@ -34,10 +36,9 @@ func handleWebAuthnBegin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ctx := r.Context()
-	user := GetOperator(req.Operator)
-	
-	if user == nil {
-		log.Printf("WebAuthn Begin: GetOperator returned nil for operator %s", req.Operator)
+	user, err := handlers.GetOperatorKey(ctx, getDB(ctx), req.Operator)
+	if err != nil {
+		log.Printf("WebAuthn Begin: GetOperatorKey failed for operator %s: %v", req.Operator, err)
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(map[string]string{
@@ -46,7 +47,17 @@ func handleWebAuthnBegin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	
-	log.Printf("WebAuthn Begin: User retrieved: ID=%s, Name=%s", user.Name, user.DisplayName)
+	if user == nil {
+		log.Printf("WebAuthn Begin: GetOperatorKey returned nil for operator %s", req.Operator)
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": "failed to get operator user",
+		})
+		return
+	}
+	
+	log.Printf("WebAuthn Begin: User retrieved: ID=%s, Name=%s", user.WebAuthnName(), user.WebAuthnDisplayName())
 
 	options, session, err := WAuth.BeginRegistration(user)
 	if err != nil {
@@ -94,7 +105,12 @@ func handleWebAuthnFinish(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ctx := r.Context()
-	user := GetOperator(req.Operator)
+	user, err := handlers.GetOperatorKey(ctx, getDB(ctx), req.Operator)
+	if err != nil {
+		log.Printf("WebAuthn Finish: GetOperatorKey failed for operator %s: %v", req.Operator, err)
+		http.Error(w, "failed to get operator user", http.StatusInternalServerError)
+		return
+	}
 
 	session := LoadSession(ctx, req.Operator)
 	if session == nil {
@@ -131,7 +147,12 @@ func handleWebAuthnFinish(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	SaveCredential(ctx, req.Operator, cred)
+	// Save credential to operators table using new handler function
+	if err := handlers.SaveOperatorKey(ctx, getDB(ctx), req.Operator, cred); err != nil {
+		log.Printf("WebAuthn Finish: SaveOperatorKey failed for operator %s: %v", req.Operator, err)
+		http.Error(w, "failed to save credential", http.StatusInternalServerError)
+		return
+	}
 
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(`{"status":"registered"}`))
@@ -231,7 +252,7 @@ func handleWebAuthnVerifyBegin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ctx := r.Context()
-	user, err := GetOperatorWithCredentials(ctx, req.Operator)
+	user, err := handlers.GetOperatorKey(ctx, getDB(ctx), req.Operator)
 	if err != nil {
 		http.Error(w, "user not found", http.StatusNotFound)
 		return
@@ -282,7 +303,7 @@ func handleWebAuthnVerifyFinish(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Load user with credentials for verification
-	user, err := GetOperatorWithCredentials(ctx, req.Operator)
+	user, err := handlers.GetOperatorKey(ctx, getDB(ctx), req.Operator)
 	if err != nil {
 		http.Error(w, "user not found", http.StatusNotFound)
 		return
@@ -310,54 +331,29 @@ func handleWebAuthnVerifyFinish(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{
 		"status":   "verified",
-		"identity": user.Name,
+		"identity": user.WebAuthnName(),
 	})
 }
 
 // GetOperatorWithCredentials loads a user and their stored credentials from the database
 // This is required for authentication (BeginLogin/FinishLogin)
+// DEPRECATED: Use handlers.GetOperatorKey instead
 func GetOperatorWithCredentials(ctx context.Context, operatorID string) (*WebAuthnUser, error) {
-	user := &WebAuthnUser{
-		ID:          []byte(operatorID),
-		Name:        operatorID,
-		DisplayName: operatorID,
-		userID:      operatorID,
-		credentials: []webauthn.Credential{},
-	}
-
-	// Load credentials from database
-	var credentialData []byte
-	err := getDB(ctx).QueryRow(ctx,
-		"SELECT credential_data FROM public.operator_keys WHERE user_id = $1 AND credential_data IS NOT NULL ORDER BY created_at DESC LIMIT 1",
-		operatorID,
-	).Scan(&credentialData)
-
+	// Use the new handlers function which uses the operators table
+	handlersUser, err := handlers.GetOperatorKey(ctx, getDB(ctx), operatorID)
 	if err != nil {
-		if errors.Is(err, pgx.ErrNoRows) {
-			return user, nil // User exists but no credentials yet
-		}
 		return nil, err
 	}
-
-	// The go-webauthn library's FinishRegistration returns a webauthn.Credential
-	// We need to properly deserialize it for BeginLogin
-	// The credential contains ID, PublicKey, AttestationType, Authenticator metadata
-	var storedCredential webauthn.Credential
 	
-	// Try to unmarshal the credential directly
-	if err := json.Unmarshal(credentialData, &storedCredential); err != nil {
-		// Phase 3: If direct unmarshal fails, the credential might be stored in a different format
-		// For now, return user without credentials (verification will fail, which is expected)
-		// This will be refined in later phases as we understand the exact storage format
-		return user, nil
-	}
-
-	// Add the credential to the user's credential list for BeginLogin
-	// BeginLogin uses these credentials to identify which authenticator to challenge
-	if storedCredential.ID != nil {
-		user.credentials = []webauthn.Credential{storedCredential}
-	}
-
-	return user, nil
+	// Convert handlers.WebAuthnUser to local WebAuthnUser type for backward compatibility
+	// This is a temporary bridge until all code is migrated
+	// Use interface methods to access fields (userID is unexported)
+	return &WebAuthnUser{
+		ID:          handlersUser.WebAuthnID(),
+		Name:        handlersUser.WebAuthnName(),
+		DisplayName: handlersUser.WebAuthnDisplayName(),
+		userID:      operatorID, // Use operatorID directly since userID field is not accessible
+		credentials: handlersUser.WebAuthnCredentials(),
+	}, nil
 }
 
