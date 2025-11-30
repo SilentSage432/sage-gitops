@@ -5,6 +5,7 @@
 
 import { currentOperator } from "../identity/operator-session.js";
 import { getPolicyFor } from "./policy.js";
+import { getApproval } from "./approval.js";
 
 export function checkExecutionGate(action) {
   if (!action || action === "none") {
@@ -38,12 +39,15 @@ export function checkExecutionGate(action) {
   const operatorRole = operator?.role || "unknown";
   const meetsPolicy = identitySatisfied && policy.allowedRoles.includes(operatorRole);
   
+  // Check for explicit operator approval
+  const approved = getApproval(action);
+  
   // Deliberately lock the gate - sovereignty principle
   // We don't allow execution by accident or drift
   // All pre-execution requirements must be met explicitly
-  // Identity is the first requirement, MFA is the second, Policy is the third
-  // All three must be satisfied for execution to even be considered
-  let allowed = identitySatisfied && mfaSatisfied && meetsPolicy; // Still locked even with all, but all are prerequisites
+  // Identity is the first requirement, MFA is the second, Policy is the third, Approval is the fourth
+  // All four must be satisfied for execution to even be considered
+  let allowed = identitySatisfied && mfaSatisfied && meetsPolicy && approved; // Still locked even with all, but all are prerequisites
   
   // Build reasons based on what's satisfied
   let reasons = [];
@@ -53,14 +57,17 @@ export function checkExecutionGate(action) {
     reasons.push("MFA not verified");
   } else if (!meetsPolicy) {
     reasons.push("policy does not allow this action");
+  } else if (!approved) {
+    reasons.push("operator has not approved action");
   } else {
-    reasons.push("requirements satisfied", "operator approval not granted", "execution mode disabled", "sovereignty gate locked");
+    reasons.push("requirements satisfied", "execution mode disabled", "sovereignty gate locked");
   }
   
   const gateState = {
     action,
     allowed: false, // ALWAYS false for now (execution mode disabled)
     operator: operator || null,
+    operatorApproval: approved,
     policy,
     reasons,
     requirements: {
@@ -81,8 +88,8 @@ export function checkExecutionGate(action) {
       },
       approval: {
         required: true,
-        satisfied: false,
-        reason: "operator approval not granted",
+        satisfied: approved,
+        reason: approved ? "operator has approved action" : (identitySatisfied && mfaSatisfied && meetsPolicy ? "operator has not approved action" : "other requirements not met"),
       },
       riskBoundary: {
         required: true,

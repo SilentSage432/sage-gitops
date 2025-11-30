@@ -11,6 +11,7 @@ interface ExecutionGateViewProps {
       timestamp?: number;
       [key: string]: any;
     } | null;
+    operatorApproval?: boolean;
     policy?: {
       action: string;
       allowedRoles: string[];
@@ -86,6 +87,11 @@ export function ExecutionGateView({ gate }: ExecutionGateViewProps) {
       {gate.operator && gate.operator.mfa && gate.requirements?.policy && !gate.requirements.policy.satisfied && (
         <div className="mb-2 text-yellow-400 text-sm">
           Execution blocked: policy does not allow this action
+        </div>
+      )}
+      {gate && !gate.operatorApproval && gate.operator && gate.operator.mfa && gate.requirements?.policy?.satisfied && (
+        <div className="mb-2 text-blue-400 text-sm">
+          Execution blocked: operator has not approved this action
         </div>
       )}
       {gate.policy && (
