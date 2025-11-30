@@ -1,9 +1,11 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
+	"io"
 	"net/http"
 	"time"
 
@@ -66,8 +68,23 @@ func handleWebAuthnFinish(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// The go-webauthn library's FinishRegistration expects the credential in the request body
+	// We need to create a new request body with just the credential JSON
+	credentialBytes, err := json.Marshal(req.Credential)
+	if err != nil {
+		http.Error(w, "Failed to marshal credential", http.StatusBadRequest)
+		return
+	}
+
+	// Create a new request with just the credential in the body for FinishRegistration
+	// We'll create a minimal http.Request wrapper that contains the credential
+	credentialReader := bytes.NewReader(credentialBytes)
+	newReq := r.Clone(ctx)
+	newReq.Body = io.NopCloser(credentialReader)
+	newReq.ContentLength = int64(len(credentialBytes))
+
 	// FinishRegistration expects *http.Request to parse credential from request body
-	cred, err := WAuth.FinishRegistration(user, *sessionData, r)
+	cred, err := WAuth.FinishRegistration(user, *sessionData, newReq)
 	if err != nil {
 		http.Error(w, err.Error(), 500)
 		return

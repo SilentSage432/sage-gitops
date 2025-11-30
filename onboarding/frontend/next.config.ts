@@ -4,6 +4,11 @@ const nextConfig: NextConfig = {
   async rewrites() {
     const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8081';
     return [
+      // Proxy WebAuthn registration endpoints to Go backend
+      {
+        source: "/api/auth/:path*",
+        destination: `${backendUrl}/api/auth/:path*`,
+      },
       // Proxy federation auth endpoints to Go backend
       {
         source: '/api/federation/auth/:path*',
