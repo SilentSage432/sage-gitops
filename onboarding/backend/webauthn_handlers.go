@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/go-webauthn/webauthn/protocol"
 	"github.com/go-webauthn/webauthn/webauthn"
 	"github.com/jackc/pgx/v5"
 	
@@ -67,6 +68,18 @@ func handleWebAuthnBegin(w http.ResponseWriter, r *http.Request) {
 			"error": err.Error(),
 		})
 		return
+	}
+
+	// In BeginRegistration options
+	if options != nil && options.Response != nil {
+		options.Response.Rp = protocol.RelyingPartyEntity{
+			ID:   "localhost",
+			Name: "SAGE Federation",
+		}
+		options.Response.AuthenticatorSelection = protocol.AuthenticatorSelection{
+			UserVerification: protocol.VerificationRequired,
+		}
+		options.Response.Timeout = 300000
 	}
 
 	if err := SaveSession(ctx, req.Operator, session); err != nil {
