@@ -103,12 +103,18 @@ export interface FederationTopology {
 }
 
 // Phase 17.2: Operator Identity interface
+// Phase 73: Extended with hardware identity
 export interface OperatorIdentity {
   id: string;
   source: string;
   registeredAt: number;
   lastSeen: number;
   metadata?: Record<string, unknown>;
+  hardwareKey?: {
+    id: string;
+    publicKey: string;
+    registeredAt: number;
+  } | null;
 }
 
 // Phase 15.9: Federation State Response

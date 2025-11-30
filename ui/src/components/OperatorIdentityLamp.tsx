@@ -45,12 +45,22 @@ export default function OperatorIdentityLamp() {
   }
 
   return (
-    <div className="text-xs">
-      <span className="text-slate-400">Operator:</span>{" "}
-      <span className="text-green-500 font-mono">{operator.id}</span>
-      {operator.source && (
-        <span className="text-slate-500 ml-1">({operator.source})</span>
-      )}
+    <div className="text-xs space-y-1">
+      <div>
+        <span className="text-slate-400">Operator:</span>{" "}
+        <span className="text-green-500 font-mono">{operator.id}</span>
+        {operator.source && (
+          <span className="text-slate-500 ml-1">({operator.source})</span>
+        )}
+      </div>
+      <div className="text-green-400">
+        Hardware Identity:{" "}
+        {operator.hardwareKey?.id ? (
+          <span className="text-green-500 font-mono">{operator.hardwareKey.id}</span>
+        ) : (
+          <span className="text-orange-500">Not registered</span>
+        )}
+      </div>
     </div>
   );
 }
