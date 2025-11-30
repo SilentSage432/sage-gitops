@@ -83,9 +83,11 @@ func handleWebAuthnBegin(w http.ResponseWriter, r *http.Request) {
 			User: userEntity,
 			Challenge: challenge,
 			AuthenticatorSelection: protocol.AuthenticatorSelection{
-				UserVerification: protocol.VerificationRequired,
+				UserVerification:       protocol.VerificationRequired,
+				AuthenticatorAttachment: protocol.AuthenticatorAttachment("cross-platform"),
 			},
-			Timeout: 300000,
+			Attestation: protocol.PreferNoAttestation,
+			Timeout:     300000,
 			Parameters: []protocol.CredentialParameter{
 				{Type: protocol.PublicKeyCredentialType, Algorithm: -7},
 			},
