@@ -45,10 +45,18 @@ export default function RegisterYubiKey() {
       }
 
       const options = await begin.json();
+      console.log("Received options from backend:", options);
       
-      // The go-webauthn library returns options directly, not wrapped in publicKey
-      // Check if we need to unwrap it
+      // The backend returns {"publicKey": {...}} format
       const publicKeyOptions = options.publicKey || options;
+
+      // WebAuthn requires binary buffers, not base64 strings
+      // Convert base64 strings to Uint8Array for challenge and user.id
+      const strToBuf = (b64: string) =>
+        Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+
+      publicKeyOptions.challenge = strToBuf(publicKeyOptions.challenge);
+      publicKeyOptions.user.id = strToBuf(publicKeyOptions.user.id);
 
       setStatus("Touch the YubiKey…");
 
