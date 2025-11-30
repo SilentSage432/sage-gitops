@@ -43,7 +43,7 @@ export function initiateExecutionChannel(action, role = "sovereign", scenario = 
 // Phase 77: Hardware → Routing Validation Chain
 // Validates hardware state for destination routing
 // Still no blocking - this is architecture-level awareness
-function validateHardwareForDestination(envelope) {
+export function validateHardwareForDestination(envelope) {
   const dest = envelope.destination;
   
   // Local never requires hardware
