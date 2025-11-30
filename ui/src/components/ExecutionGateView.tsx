@@ -6,11 +6,18 @@ interface ExecutionGateViewProps {
     allowed: boolean;
     operator?: {
       id?: string;
+      mfa?: boolean;
+      timestamp?: number;
       [key: string]: any;
     } | null;
     reasons: string[];
     requirements?: {
       identity: {
+        required: boolean;
+        satisfied: boolean;
+        reason: string;
+      };
+      mfa?: {
         required: boolean;
         satisfied: boolean;
         reason: string;
@@ -53,9 +60,14 @@ export function ExecutionGateView({ gate }: ExecutionGateViewProps) {
           Execution blocked: no authenticated operator
         </div>
       )}
-      {gate.operator && !gate.allowed && (
+      {gate.operator && !gate.operator.mfa && (
         <div className="mb-2 text-yellow-400 text-sm">
-          Identity active, but execution still disabled
+          Execution blocked: MFA/YubiKey not verified
+        </div>
+      )}
+      {gate.operator && gate.operator.mfa && !gate.allowed && (
+        <div className="mb-2 text-yellow-400 text-sm">
+          Identity + MFA active, but execution still disabled
         </div>
       )}
       <pre className="text-xs">{JSON.stringify(gate, null, 2)}</pre>
