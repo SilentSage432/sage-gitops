@@ -17,6 +17,7 @@ import { router as capabilitiesRouter } from "./api/capabilities.js";
 import { router as candidatesRouter } from "./api/candidates.js";
 import { router as riskRouter } from "./api/risk.js";
 import { router as forecastRouter } from "./api/forecast.js";
+import { router as chainRouter } from "./api/chain.js";
 
 const router = express.Router();
 
@@ -123,6 +124,10 @@ router.use("/api", riskRouter);
 // Phase 59: Outcome Forecast Modeling API
 // Returns predicted future state after action execution (read-only, no execution)
 router.use("/api", forecastRouter);
+
+// Phase 60: Chain of Responsibility Simulation API
+// Returns execution chain with ordering and responsibility mapping (read-only, no execution)
+router.use("/api", chainRouter);
 
 export default router;
 

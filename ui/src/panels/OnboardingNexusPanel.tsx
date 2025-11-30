@@ -7,6 +7,7 @@ import { CapabilityGraph } from "../components/CapabilityGraph";
 import { ExecutionCandidateView } from "../components/ExecutionCandidateView";
 import { RiskView } from "../components/RiskView";
 import { ForecastView } from "../components/ForecastView";
+import { ExecutionChainView } from "../components/ExecutionChainView";
 
 const OnboardingNexusPanel: React.FC = () => {
   const [simulation, setSimulation] = useState<any>(null);
@@ -16,6 +17,7 @@ const OnboardingNexusPanel: React.FC = () => {
   const [candidates, setCandidates] = useState<any>(null);
   const [risk, setRisk] = useState<any>(null);
   const [forecast, setForecast] = useState<any>(null);
+  const [chain, setChain] = useState<any>(null);
 
   useEffect(() => {
     const loadIntents = async () => {
@@ -67,17 +69,29 @@ const OnboardingNexusPanel: React.FC = () => {
       }
     };
     
+    const loadChain = async () => {
+      try {
+        const response = await fetch("/api/execution/chain?action=get-status");
+        const data = await response.json();
+        setChain(data);
+      } catch (error) {
+        console.error("Failed to fetch execution chain:", error);
+      }
+    };
+    
     loadIntents();
     loadCapGraph();
     loadCandidates();
     loadRisk();
     loadForecast();
+    loadChain();
     const interval = setInterval(() => {
       loadIntents();
       loadCapGraph();
       loadCandidates();
       loadRisk();
       loadForecast();
+      loadChain();
     }, 5000);
     return () => clearInterval(interval);
   }, []);
@@ -172,6 +186,8 @@ const OnboardingNexusPanel: React.FC = () => {
       <RiskView risk={risk} />
       
       <ForecastView result={forecast} />
+      
+      <ExecutionChainView chain={chain} />
     </div>
   );
 };
