@@ -4,6 +4,10 @@ interface ExecutionGateViewProps {
   gate?: {
     action: string;
     allowed: boolean;
+    operator?: {
+      id?: string;
+      [key: string]: any;
+    } | null;
     reasons: string[];
     requirements?: {
       identity: {
@@ -44,6 +48,16 @@ export function ExecutionGateView({ gate }: ExecutionGateViewProps) {
   return (
     <div className="p-4 border border-teal-600 bg-black text-teal-400 rounded">
       <h3 className="font-bold mb-2">Execution Gate Status</h3>
+      {!gate.allowed && !gate.operator && (
+        <div className="mb-2 text-red-400 text-sm">
+          Execution blocked: no authenticated operator
+        </div>
+      )}
+      {gate.operator && !gate.allowed && (
+        <div className="mb-2 text-yellow-400 text-sm">
+          Identity active, but execution still disabled
+        </div>
+      )}
       <pre className="text-xs">{JSON.stringify(gate, null, 2)}</pre>
     </div>
   );

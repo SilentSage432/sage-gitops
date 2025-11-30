@@ -3,6 +3,8 @@
 // Execution is treated as a resource that must be unlocked
 // Still simulated. Still no dispatch. Still no mutations.
 
+import { currentOperator } from "../identity/operator-session.js";
+
 export function checkExecutionGate(action) {
   if (!action || action === "none") {
     return {
@@ -17,24 +19,30 @@ export function checkExecutionGate(action) {
     };
   }
 
+  // Identity comes first - execution is only even theoretically allowed
+  // when an operator identity is authenticated
+  // Even before approval. Even before action. Even before decision.
+  const operator = currentOperator();
+  const identitySatisfied = !!operator;
+  
   // Deliberately lock the gate - sovereignty principle
   // We don't allow execution by accident or drift
   // All pre-execution requirements must be met explicitly
+  // Identity is the first requirement
+  let allowed = identitySatisfied; // Still locked even with identity, but identity is prerequisite
   
   const gateState = {
     action,
-    allowed: false, // ALWAYS false for now
-    reasons: [
-      "identity not yet fully bound",
-      "operator approval not granted",
-      "execution mode disabled",
-      "sovereignty gate locked",
-    ],
+    allowed: false, // ALWAYS false for now (execution mode disabled)
+    operator: operator || null,
+    reasons: identitySatisfied
+      ? ["identity active", "operator approval not granted", "execution mode disabled", "sovereignty gate locked"]
+      : ["no authenticated operator"],
     requirements: {
       identity: {
         required: true,
-        satisfied: false,
-        reason: "identity not yet fully bound",
+        satisfied: identitySatisfied,
+        reason: identitySatisfied ? "identity active" : "no authenticated operator",
       },
       approval: {
         required: true,
