@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { performWebAuthnRegistration, performWebAuthnAuthentication, issueOCT } from '@/lib/api/auth';
+import { requestWebAuthnChallengeRaw, finishRegistration, performWebAuthnAuthentication, issueOCT } from '@/lib/api/auth';
 import { storeOCT } from '@/lib/api/oct';
 import { useRouter } from 'next/navigation';
 
@@ -39,12 +39,74 @@ export function YubiKeyGate() {
     }
   }, [router]);
 
-  const handleRegister = async () => {
+  const handleRegister = async (evt: React.MouseEvent) => {
+    evt.preventDefault();
     setStatus('registering');
     setError(null);
 
     try {
-      const result = await performWebAuthnRegistration();
+      // Get challenge - must be in click handler before navigator.credentials.create()
+      const challengeResponse = await requestWebAuthnChallengeRaw();
+      
+      // Convert challenge and user.id to ArrayBuffers if needed (must be done synchronously)
+      const publicKeyOptions = { ...challengeResponse.publicKey };
+      
+      // Convert challenge from base64/base64url to ArrayBuffer if it's a string
+      if (typeof publicKeyOptions.challenge === 'string') {
+        const base64UrlToUint8Array = (base64url: string): Uint8Array => {
+          const base64 = base64url.replace(/-/g, '+').replace(/_/g, '/');
+          const padded = base64 + '='.repeat((4 - (base64.length % 4)) % 4);
+          const binary = atob(padded);
+          const bytes = new Uint8Array(binary.length);
+          for (let i = 0; i < binary.length; i++) {
+            bytes[i] = binary.charCodeAt(i);
+          }
+          return bytes;
+        };
+        
+        const challengeBytes = base64UrlToUint8Array(publicKeyOptions.challenge);
+        publicKeyOptions.challenge = challengeBytes.buffer.slice(
+          challengeBytes.byteOffset,
+          challengeBytes.byteOffset + challengeBytes.byteLength
+        ) as ArrayBuffer;
+      }
+      
+      // Convert user.id to ArrayBuffer if it's a string
+      if (publicKeyOptions.user && typeof publicKeyOptions.user.id === 'string') {
+        const base64UrlToUint8Array = (base64url: string): Uint8Array => {
+          const base64 = base64url.replace(/-/g, '+').replace(/_/g, '/');
+          const padded = base64 + '='.repeat((4 - (base64.length % 4)) % 4);
+          const binary = atob(padded);
+          const bytes = new Uint8Array(binary.length);
+          for (let i = 0; i < binary.length; i++) {
+            bytes[i] = binary.charCodeAt(i);
+          }
+          return bytes;
+        };
+        
+        const userIdBytes = base64UrlToUint8Array(publicKeyOptions.user.id);
+        publicKeyOptions.user = {
+          ...publicKeyOptions.user,
+          id: userIdBytes.buffer.slice(
+            userIdBytes.byteOffset,
+            userIdBytes.byteOffset + userIdBytes.byteLength
+          ) as ArrayBuffer,
+        };
+      }
+      
+      // Call navigator.credentials.create() directly in click handler (required for Safari/iOS)
+      // This MUST be called synchronously within the click gesture context
+      const credential = await navigator.credentials.create({
+        publicKey: publicKeyOptions,
+      }) as PublicKeyCredential | null;
+
+      if (!credential) {
+        throw new Error('No credential returned from authenticator');
+      }
+
+      // Finish registration by sending credential to backend
+      const result = await finishRegistration(credential);
+      
       if (result.success) {
         setDeviceName(result.deviceName || 'YubiKey');
         setStatus('authenticating');

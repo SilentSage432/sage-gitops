@@ -43,6 +43,17 @@ export interface OCTResponse {
   scopes: string[];
 }
 
+// Get raw challenge response with publicKey field for direct use in navigator.credentials.create()
+export async function requestWebAuthnChallengeRaw(): Promise<{ publicKey: any }> {
+  const response = await axios.post('/api/auth/register/begin', {
+    operator: 'prime'
+  });
+  
+  // The Go backend returns the options in a publicKey wrapper
+  // Return it directly for use in navigator.credentials.create()
+  return response.data;
+}
+
 export async function requestWebAuthnChallenge(): Promise<WebAuthnChallengeResponse> {
   // Use the working Go backend endpoint via Next.js rewrite
   const response = await axios.post('/api/auth/register/begin', {
@@ -246,6 +257,53 @@ export async function performWebAuthnRegistration(): Promise<{ success: boolean;
     };
   } catch (error: any) {
     console.error('WebAuthn registration error:', error);
+    return { success: false };
+  }
+}
+
+// Finish WebAuthn registration by sending credential to backend
+// This is separated so navigator.credentials.create() can be called directly in click handler
+export async function finishRegistration(credential: PublicKeyCredential): Promise<{ success: boolean; deviceName?: string }> {
+  try {
+    // Convert credential to JSON format for backend
+    const credentialResponse = credential.response as AuthenticatorAttestationResponse;
+    
+    // Helper to convert ArrayBuffer to base64url
+    const arrayBufferToBase64Url = (buffer: ArrayBuffer): string => {
+      const bytes = new Uint8Array(buffer);
+      let binary = '';
+      for (let i = 0; i < bytes.byteLength; i++) {
+        binary += String.fromCharCode(bytes[i]);
+      }
+      return btoa(binary)
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=/g, '');
+    };
+
+    const credentialJson = {
+      id: credential.id,
+      rawId: arrayBufferToBase64Url(credential.rawId),
+      type: credential.type,
+      response: {
+        clientDataJSON: arrayBufferToBase64Url(credentialResponse.clientDataJSON),
+        attestationObject: arrayBufferToBase64Url(credentialResponse.attestationObject),
+      },
+    };
+
+    // POST to /api/auth/register/finish
+    const finishResponse = await axios.post('/api/auth/register/finish', {
+      operator: 'prime',
+      credential: credentialJson,
+    });
+
+    // Backend returns { status: "registered" }
+    return {
+      success: finishResponse.data.status === 'registered',
+      deviceName: 'YubiKey',
+    };
+  } catch (error: any) {
+    console.error('WebAuthn finish registration error:', error);
     return { success: false };
   }
 }
