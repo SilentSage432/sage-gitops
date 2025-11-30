@@ -16,15 +16,20 @@ export default function RegisterYubiKey() {
       });
 
       if (!begin.ok) {
-        throw new Error("Failed to request challenge");
+        const errorData = await begin.json().catch(() => ({ error: `HTTP ${begin.status}` }));
+        throw new Error(errorData.error || `Failed to request challenge: ${begin.status}`);
       }
 
       const options = await begin.json();
+      
+      // The go-webauthn library returns options directly, not wrapped in publicKey
+      // Check if we need to unwrap it
+      const publicKeyOptions = options.publicKey || options;
 
       setStatus("Touch the YubiKey…");
 
       const cred = await navigator.credentials.create({
-        publicKey: options.publicKey,
+        publicKey: publicKeyOptions,
       }) as PublicKeyCredential | null;
 
       if (!cred) {
