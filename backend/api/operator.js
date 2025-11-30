@@ -9,9 +9,10 @@
 // It just enables: "This operator now has a hardware identity."
 
 import express from "express";
-import { setHardwareKey, getHardwareKey } from "../federation/operator-model.js";
+import { setHardwareKey, getHardwareKey, setPendingChallenge, getPendingChallenge, clearPendingChallenge } from "../federation/operator-model.js";
 import { verifyHardwareIdentity } from "../federation/hardware-verify.js";
 import { currentOperator } from "../identity/operator-session.js";
+import { generateWebAuthnChallenge } from "../federation/hardware-challenge.js";
 
 export const router = express.Router();
 
@@ -78,6 +79,64 @@ router.post("/operator/verify-hardware", (req, res) => {
     ok: true,
     ...result,
     note: "Hardware verification only. We do not authenticate the operator. We do not enforce routing. We do not enforce approval. We only validate.",
+  });
+});
+
+router.get("/operator/hardware/challenge", (req, res) => {
+  // Phase 75: Generate WebAuthn challenge
+  const challenge = generateWebAuthnChallenge();
+  
+  // Store challenge temporarily (we do NOT bind it to auth yet)
+  setPendingChallenge(challenge);
+  
+  return res.json({
+    ok: true,
+    challenge,
+    note: "Challenge generated. Not yet bound to authentication.",
+  });
+});
+
+router.post("/operator/hardware/validate", (req, res) => {
+  // Phase 75: Validate WebAuthn challenge response
+  const { challenge, signature } = req.body;
+  
+  // Get current operator from session
+  const operatorSession = currentOperator();
+  
+  if (!operatorSession) {
+    return res.status(401).json({
+      ok: false,
+      verified: false,
+      reason: "no operator session",
+    });
+  }
+  
+  // Get hardware key
+  const hardwareKey = getHardwareKey();
+  
+  // Validate challenge matches pending challenge
+  const pendingChallenge = getPendingChallenge();
+  const valid =
+    pendingChallenge &&
+    challenge &&
+    challenge === pendingChallenge &&
+    signature &&
+    hardwareKey?.id;
+  
+  // Clear pending challenge after use
+  if (valid) {
+    clearPendingChallenge();
+  }
+  
+  // We still don't enforce cryptographic signature inspection yet - that comes shortly
+  // This is still safe
+  
+  return res.json({
+    ok: true,
+    verified: !!valid,
+    keyId: hardwareKey?.id || null,
+    reason: valid ? null : "challenge mismatch or missing signature",
+    note: "WebAuthn validation only. Still no cryptographic signature inspection. Still no enforcement.",
   });
 });
 

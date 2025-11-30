@@ -12,6 +12,7 @@ let operatorStore = {
     publicKey: null,
     registeredAt: null,
   },
+  pendingChallenge: null, // Phase 75: Store pending WebAuthn challenge temporarily
 };
 
 export function getOperatorModel() {
@@ -42,5 +43,18 @@ export function setHardwareKey(hardwareKey) {
     registeredAt: hardwareKey.registeredAt || Date.now(),
   };
   return operatorStore.hardwareKey;
+}
+
+export function setPendingChallenge(challenge) {
+  operatorStore.pendingChallenge = challenge;
+  return challenge;
+}
+
+export function getPendingChallenge() {
+  return operatorStore.pendingChallenge;
+}
+
+export function clearPendingChallenge() {
+  operatorStore.pendingChallenge = null;
 }
 
