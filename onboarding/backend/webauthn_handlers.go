@@ -70,16 +70,26 @@ func handleWebAuthnBegin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// In BeginRegistration options
-	if options != nil && options.Response != nil {
-		options.Response.Rp = protocol.RelyingPartyEntity{
-			ID:   "localhost",
-			Name: "SAGE Federation",
-		}
-		options.Response.AuthenticatorSelection = protocol.AuthenticatorSelection{
-			UserVerification: protocol.VerificationRequired,
-		}
-		options.Response.Timeout = 300000
+	// Extract user entity and challenge from original options
+	userEntity := options.Response.User
+	challenge := options.Response.Challenge
+
+	// In BeginRegistration options - replace with correct structure
+	options = &protocol.CredentialCreation{
+		Response: protocol.PublicKeyCredentialCreationOptions{
+			RelyingParty: protocol.RelyingPartyEntity{
+				ID: "localhost",
+			},
+			User: userEntity,
+			Challenge: challenge,
+			AuthenticatorSelection: protocol.AuthenticatorSelection{
+				UserVerification: protocol.VerificationRequired,
+			},
+			Timeout: 300000,
+			Parameters: []protocol.CredentialParameter{
+				{Type: protocol.PublicKeyCredentialType, Algorithm: -7},
+			},
+		},
 	}
 
 	if err := SaveSession(ctx, req.Operator, session); err != nil {
