@@ -7,6 +7,7 @@ import { currentOperator } from "../identity/operator-session.js";
 import { getPolicyFor } from "./policy.js";
 import { getApproval } from "./approval.js";
 import { getExecutionMode } from "./execution-mode.js";
+import { createExecutionEnvelope } from "./execution-envelope.js";
 
 export function checkExecutionGate(action) {
   if (!action || action === "none") {
@@ -126,5 +127,23 @@ export function checkExecutionGate(action) {
   };
 
   return gateState;
+}
+
+// Envelope-aware gate check - validates context + identity + binding + policy + mode inside an envelope
+// This separates professional sovereign platforms from normal systems
+// Gate and envelope are separated:
+// - Envelope carries the intent and context
+// - Gate carries the policy and mode evaluation
+export function checkEnvelopeAgainstGate(action, context) {
+  const envelope = createExecutionEnvelope(action, context);
+  const gate = checkExecutionGate(action);
+  
+  return {
+    envelope,
+    gate,
+    allowed: gate.allowed,
+    reason: gate.reasons?.join(", ") || gate.clearance || "unknown",
+    timestamp: Date.now(),
+  };
 }
 

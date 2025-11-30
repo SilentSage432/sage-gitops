@@ -13,6 +13,7 @@ export function createExecutionEnvelope(action, context = {}) {
     fingerprint: context.fingerprint || null,
     policy: context.policy || null,
     simulate: true, // no execution possible yet
+    destination: context.destination || "local", // Phase 71: destination awareness
   };
 }
 
