@@ -20,7 +20,15 @@ interface ExecutionGatePreviewProps {
     requirements?: any;
     envelope?: {
       destination?: string;
+      hardware?: {
+        keyId?: string | null;
+        verified?: boolean;
+      };
       [key: string]: any;
+    };
+    hardware?: {
+      keyId?: string | null;
+      verified?: boolean;
     };
     note?: string;
     timestamp: number;
@@ -43,6 +51,14 @@ export function ExecutionGatePreview({ preview }: ExecutionGatePreviewProps) {
         <div className="mb-2 text-sm">
           <span className="text-indigo-400 font-semibold">Destination: </span>
           <span className="text-indigo-300">{preview.envelope.destination}</span>
+        </div>
+      )}
+      {preview.envelope?.hardware && (
+        <div className="mb-2 text-sm">
+          <span className="text-indigo-400 font-semibold">Hardware Key: </span>
+          <span className={preview.envelope.hardware.verified ? "text-green-400" : "text-red-400"}>
+            {preview.envelope.hardware.verified ? "Verified" : "Not verified"}
+          </span>
         </div>
       )}
       {preview.reasons && preview.reasons.includes("destination not permitted") && (

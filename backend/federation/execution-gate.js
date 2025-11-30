@@ -151,6 +151,10 @@ export function checkEnvelopeAgainstGate(action, context) {
   // Destination must be valid AND allowed for the operator
   const destinationSatisfied = validDestination && destinationAllowed;
   
+  // Phase 76: Hardware identity awareness
+  // The gate now sees the hardware signature, but still does not require it
+  const hardwareValid = envelope.hardware?.verified || false;
+  
   // Add destination validation to reasons
   const allReasons = [...(gate.reasons || [])];
   if (!validDestination) {
@@ -160,18 +164,22 @@ export function checkEnvelopeAgainstGate(action, context) {
   }
   
   // Final allowed state requires both gate approval AND destination authorization
+  // Hardware is NOT enforced yet - just aware
   const allowed = gate.allowed && destinationSatisfied;
   
   return {
     envelope,
     gate,
     allowed,
+    operator,
+    mode: gate.mode,
     destination: {
       value: envelope.destination,
       valid: validDestination,
       allowed: destinationAllowed,
       satisfied: destinationSatisfied,
     },
+    hardware: envelope.hardware, // Phase 76: Hardware identity in gate result
     reason: allReasons.join(", ") || gate.clearance || "unknown",
     timestamp: Date.now(),
   };

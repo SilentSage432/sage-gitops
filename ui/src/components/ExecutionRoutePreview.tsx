@@ -11,6 +11,14 @@ interface ExecutionRoutePreviewProps {
       fingerprint?: string | null;
       policy?: any;
       simulate?: boolean;
+      hardware?: {
+        keyId?: string | null;
+        verified?: boolean;
+      };
+    };
+    hardware?: {
+      keyId?: string | null;
+      verified?: boolean;
     };
     gate?: {
       action?: string;
@@ -56,6 +64,15 @@ export function ExecutionRoutePreview({ result }: ExecutionRoutePreviewProps) {
         <span className="text-cyan-400 font-semibold">Destination: </span>
         <span className="text-cyan-300">{result.destination || "Not yet routed"}</span>
       </div>
+      
+      {(result.envelope?.hardware || result.hardware) && (
+        <div className="mb-2 text-sm">
+          <span className="text-cyan-400 font-semibold">Hardware Key: </span>
+          <span className={(result.envelope?.hardware?.verified || result.hardware?.verified) ? "text-green-400" : "text-red-400"}>
+            {(result.envelope?.hardware?.verified || result.hardware?.verified) ? "Verified" : "Not verified"}
+          </span>
+        </div>
+      )}
       
       {result.note && (
         <div className="mb-3 text-xs text-cyan-500 italic">{result.note}</div>

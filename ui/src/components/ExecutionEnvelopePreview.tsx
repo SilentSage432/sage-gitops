@@ -11,6 +11,14 @@ interface ExecutionEnvelopePreviewProps {
       fingerprint?: string | null;
       policy?: any;
       simulate?: boolean;
+      hardware?: {
+        keyId?: string | null;
+        verified?: boolean;
+      };
+    };
+    hardware?: {
+      keyId?: string | null;
+      verified?: boolean;
     };
     gate?: {
       action?: string;
@@ -67,6 +75,20 @@ export function ExecutionEnvelopePreview({ result }: ExecutionEnvelopePreviewPro
           </span>
           {!result.destination.valid && (
             <span className="text-red-400 ml-2">(destination not permitted)</span>
+          )}
+        </div>
+      )}
+      
+      {(result.hardware || result.envelope?.hardware) && (
+        <div className="mb-2 text-sm">
+          <span className="text-purple-400 font-semibold">Hardware Key: </span>
+          <span className={(result.hardware?.verified || result.envelope?.hardware?.verified) ? "text-green-400" : "text-red-400"}>
+            {(result.hardware?.verified || result.envelope?.hardware?.verified) ? "Verified" : "Not verified"}
+          </span>
+          {(result.hardware?.keyId || result.envelope?.hardware?.keyId) && (
+            <span className="text-purple-300 ml-2 font-mono text-xs">
+              ({(result.hardware?.keyId || result.envelope?.hardware?.keyId)})
+            </span>
           )}
         </div>
       )}

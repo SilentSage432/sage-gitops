@@ -9,11 +9,17 @@ export function createExecutionEnvelope(action, context = {}) {
     timestamp: Date.now(),
     operator: context.operator || null,
     approval: context.approval || null,
-    mode: context.mode || "disabled",
-    fingerprint: context.fingerprint || null,
     policy: context.policy || null,
-    simulate: true, // no execution possible yet
+    mode: context.mode || "disabled",
     destination: context.destination || "local", // Phase 71: destination awareness
+    fingerprint: context.fingerprint || null,
+    simulate: true, // no execution possible yet
+    hardware: {
+      // Phase 76: Bind Hardware Identity → Execution Identity
+      // The envelope now carries the identity of the operator AND the cryptographic anchor of execution
+      keyId: context.hardwareKeyId || null,
+      verified: context.hardwareVerified || false,
+    },
   };
 }
 
