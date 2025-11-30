@@ -16,8 +16,16 @@ export default function RegisterYubiKey() {
       });
 
       if (!begin.ok) {
-        const errorData = await begin.json().catch(() => ({ error: `HTTP ${begin.status}` }));
-        throw new Error(errorData.error || `Failed to request challenge: ${begin.status}`);
+        let errorMessage = `HTTP ${begin.status}`;
+        try {
+          const errorData = await begin.json();
+          errorMessage = errorData.error || errorData.message || JSON.stringify(errorData);
+        } catch (e) {
+          const text = await begin.text().catch(() => "");
+          errorMessage = text || `Failed to request challenge: ${begin.status}`;
+        }
+        console.error("Backend error response:", errorMessage);
+        throw new Error(errorMessage);
       }
 
       const options = await begin.json();
@@ -85,8 +93,15 @@ export default function RegisterYubiKey() {
       const data = await result.json();
       setStatus(`Success: ${data.status}`);
     } catch (error: any) {
-      setStatus(`Error: ${error.message || "Registration failed"}`);
+      const errorMessage = error?.response?.data?.error || 
+                          error?.message || 
+                          error?.toString() || 
+                          "Registration failed";
+      setStatus(`Error: ${errorMessage}`);
       console.error("YubiKey registration error:", error);
+      if (error?.response?.data) {
+        console.error("Backend error details:", error.response.data);
+      }
     }
   }
 

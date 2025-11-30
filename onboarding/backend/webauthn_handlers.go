@@ -35,6 +35,18 @@ func handleWebAuthnBegin(w http.ResponseWriter, r *http.Request) {
 
 	ctx := r.Context()
 	user := GetOperator(req.Operator)
+	
+	if user == nil {
+		log.Printf("WebAuthn Begin: GetOperator returned nil for operator %s", req.Operator)
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": "failed to get operator user",
+		})
+		return
+	}
+	
+	log.Printf("WebAuthn Begin: User retrieved: ID=%s, Name=%s", user.Name, user.DisplayName)
 
 	options, session, err := WAuth.BeginRegistration(user)
 	if err != nil {
