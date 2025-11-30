@@ -48,56 +48,43 @@ export function YubiKeyGate() {
       // Get challenge - must be in click handler before navigator.credentials.create()
       const challengeResponse = await requestWebAuthnChallengeRaw();
       
-      // Convert challenge and user.id to ArrayBuffers if needed (must be done synchronously)
-      const publicKeyOptions = { ...challengeResponse.publicKey };
-      
-      // Convert challenge from base64/base64url to ArrayBuffer if it's a string
-      if (typeof publicKeyOptions.challenge === 'string') {
-        const base64UrlToUint8Array = (base64url: string): Uint8Array => {
-          const base64 = base64url.replace(/-/g, '+').replace(/_/g, '/');
-          const padded = base64 + '='.repeat((4 - (base64.length % 4)) % 4);
-          const binary = atob(padded);
-          const bytes = new Uint8Array(binary.length);
-          for (let i = 0; i < binary.length; i++) {
-            bytes[i] = binary.charCodeAt(i);
-          }
-          return bytes;
-        };
-        
-        const challengeBytes = base64UrlToUint8Array(publicKeyOptions.challenge);
-        publicKeyOptions.challenge = challengeBytes.buffer.slice(
-          challengeBytes.byteOffset,
-          challengeBytes.byteOffset + challengeBytes.byteLength
-        ) as ArrayBuffer;
+      // Helper function to convert base64url string to ArrayBuffer
+      function base64urlToBuffer(base64url: string): ArrayBuffer {
+        // Convert base64url to standard base64
+        const base64 = base64url.replace(/-/g, '+').replace(/_/g, '/');
+        // Add padding if needed
+        const padded = base64 + '='.repeat((4 - (base64.length % 4)) % 4);
+        // Decode to binary string
+        const binary = atob(padded);
+        // Convert to Uint8Array
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i++) {
+          bytes[i] = binary.charCodeAt(i);
+        }
+        // Return ArrayBuffer
+        return bytes.buffer;
       }
       
-      // Convert user.id to ArrayBuffer if it's a string
-      if (publicKeyOptions.user && typeof publicKeyOptions.user.id === 'string') {
-        const base64UrlToUint8Array = (base64url: string): Uint8Array => {
-          const base64 = base64url.replace(/-/g, '+').replace(/_/g, '/');
-          const padded = base64 + '='.repeat((4 - (base64.length % 4)) % 4);
-          const binary = atob(padded);
-          const bytes = new Uint8Array(binary.length);
-          for (let i = 0; i < binary.length; i++) {
-            bytes[i] = binary.charCodeAt(i);
-          }
-          return bytes;
-        };
-        
-        const userIdBytes = base64UrlToUint8Array(publicKeyOptions.user.id);
-        publicKeyOptions.user = {
-          ...publicKeyOptions.user,
-          id: userIdBytes.buffer.slice(
-            userIdBytes.byteOffset,
-            userIdBytes.byteOffset + userIdBytes.byteLength
-          ) as ArrayBuffer,
+      // Prepare publicKey options - convert challenge and user.id to ArrayBuffer
+      const publicKey = { ...challengeResponse.publicKey };
+      
+      // Convert challenge to ArrayBuffer (required for Chrome)
+      if (typeof publicKey.challenge === 'string') {
+        publicKey.challenge = base64urlToBuffer(publicKey.challenge);
+      }
+      
+      // Convert user.id to ArrayBuffer (required for Chrome)
+      if (publicKey.user && typeof publicKey.user.id === 'string') {
+        publicKey.user = {
+          ...publicKey.user,
+          id: base64urlToBuffer(publicKey.user.id),
         };
       }
       
       // Call navigator.credentials.create() directly in click handler (required for Safari/iOS)
       // This MUST be called synchronously within the click gesture context
       const credential = await navigator.credentials.create({
-        publicKey: publicKeyOptions,
+        publicKey,
       }) as PublicKeyCredential | null;
 
       if (!credential) {

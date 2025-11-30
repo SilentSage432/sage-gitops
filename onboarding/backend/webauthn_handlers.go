@@ -12,6 +12,7 @@ import (
 
 	"github.com/go-webauthn/webauthn/protocol"
 	"github.com/go-webauthn/webauthn/webauthn"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/jackc/pgx/v5"
 	
 	"github.com/silentsage432/sage-gitops/onboarding/backend/handlers"
@@ -382,5 +383,37 @@ func GetOperatorWithCredentials(ctx context.Context, operatorID string) (*WebAut
 		userID:      operatorID, // Use operatorID directly since userID field is not accessible
 		credentials: handlersUser.WebAuthnCredentials(),
 	}, nil
+}
+
+// handleIssueToken issues a JWT access token for operator "prime"
+// This is a temporary solution until Federation + Rho² takeover
+func handleIssueToken(w http.ResponseWriter, r *http.Request) {
+	// Local secret for HS256 signing (temporary)
+	// In production, this should be loaded from environment variable
+	secret := []byte("onboarding-temp-secret-change-in-production")
+	
+	// Create JWT claims for operator "prime"
+	claims := jwt.MapClaims{
+		"operator": "prime",
+		"iat":      time.Now().Unix(),
+		"exp":      time.Now().Add(24 * time.Hour).Unix(), // 24 hour expiration
+	}
+	
+	// Create token with HS256
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	
+	// Sign token
+	tokenString, err := token.SignedString(secret)
+	if err != nil {
+		log.Printf("Token issuance failed: %v", err)
+		http.Error(w, "Failed to generate token", http.StatusInternalServerError)
+		return
+	}
+	
+	// Return token
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{
+		"token": tokenString,
+	})
 }
 

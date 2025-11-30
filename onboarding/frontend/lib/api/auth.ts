@@ -308,6 +308,19 @@ export async function finishRegistration(credential: PublicKeyCredential): Promi
   }
 }
 
+export async function finishWebAuthnRegistration(result: any) {
+  try {
+    // Request operator access token
+    const tokenResponse = await axios.post('/api/auth/access/issue', {
+      operator: "prime"
+    });
+    return { success: true, token: tokenResponse.data };
+  } catch (err) {
+    console.error("Failed to issue access token:", err);
+    return { success: true, token: null };
+  }
+}
+
 export async function performWebAuthnAuthentication(): Promise<{ success: boolean; deviceName?: string }> {
   try {
     const challengeResponse = await requestWebAuthnChallenge();

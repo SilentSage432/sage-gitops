@@ -177,6 +177,7 @@ func SetupRouter(dbPool *pgxpool.Pool) chi.Router {
 		r.Post("/register/finish", handleWebAuthnFinish)
 		r.Post("/verify/begin", handleWebAuthnVerifyBegin)
 		r.Post("/verify/finish", handleWebAuthnVerifyFinish)
+		r.Post("/access/issue", handleIssueToken)
 	})
 
 	// Health check
