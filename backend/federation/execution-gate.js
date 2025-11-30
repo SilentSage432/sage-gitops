@@ -10,6 +10,7 @@ import { getExecutionMode } from "./execution-mode.js";
 import { createExecutionEnvelope } from "./execution-envelope.js";
 import { isValidDestination } from "./destinations.js";
 import { isDestinationAllowed } from "./destination-policy.js";
+import { enforcement } from "./execution-config.js";
 
 export function checkExecutionGate(action) {
   if (!action || action === "none") {
@@ -155,6 +156,13 @@ export function checkEnvelopeAgainstGate(action, context) {
   // The gate now sees the hardware signature, but still does not require it
   const hardwareValid = envelope.hardware?.verified || false;
   
+  // Phase 80: Hardware enforcement path introduced (but still disabled)
+  // Add hardware-required rule (conditional only - does nothing until flag is flipped)
+  let hardwareEnforcementReason = null;
+  if (enforcement.requireHardware && !envelope.hardware?.verified) {
+    hardwareEnforcementReason = "hardware key required";
+  }
+  
   // Add destination validation to reasons
   const allReasons = [...(gate.reasons || [])];
   if (!validDestination) {
@@ -162,10 +170,13 @@ export function checkEnvelopeAgainstGate(action, context) {
   } else if (!destinationAllowed) {
     allReasons.push("destination not allowed for operator");
   }
+  if (hardwareEnforcementReason) {
+    allReasons.push(hardwareEnforcementReason);
+  }
   
   // Final allowed state requires both gate approval AND destination authorization
-  // Hardware is NOT enforced yet - just aware
-  const allowed = gate.allowed && destinationSatisfied;
+  // Phase 80: Hardware enforcement is recognized but not required (flag is false)
+  const allowed = gate.allowed && destinationSatisfied && !hardwareEnforcementReason;
   
   return {
     envelope,

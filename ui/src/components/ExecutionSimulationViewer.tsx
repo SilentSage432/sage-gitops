@@ -13,6 +13,7 @@ interface ExecutionSimulationViewerProps {
       simulate?: boolean;
       allowed?: boolean;
       reasons?: string[];
+      enforcementActive?: boolean; // Phase 80: Enforcement awareness
       checks?: {
         operator?: boolean;
         identity?: boolean;
@@ -47,6 +48,25 @@ export function ExecutionSimulationViewer({ data }: ExecutionSimulationViewerPro
           <span className={result.allowed ? "text-green-400 font-bold text-base" : "text-red-400 font-bold text-base"}>
             {result.allowed ? "Yes" : "No"}
           </span>
+        </div>
+      )}
+      
+      {result.enforcementActive !== undefined && (
+        <div className="mb-3 text-sm">
+          <span className="text-yellow-400 font-semibold">Enforcement: </span>
+          <span className={result.enforcementActive ? "text-orange-400 font-bold" : "text-slate-400"}>
+            {result.enforcementActive ? "ON" : "OFF"}
+          </span>
+          {!result.enforcementActive && (
+            <span className="text-yellow-500 text-xs ml-2 italic">
+              (Hardware not required)
+            </span>
+          )}
+          {result.enforcementActive && (
+            <span className="text-orange-500 text-xs ml-2 italic">
+              (Hardware would be required)
+            </span>
+          )}
         </div>
       )}
       

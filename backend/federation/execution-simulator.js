@@ -1,4 +1,5 @@
 // Phase 78: Passive Enforcement Simulation
+// Phase 80: Extended with enforcement awareness
 // Unifies destination rules, hardware rules, mode rules, approval, policy, identity
 // into one simulation result - a dry-run of execution legality
 // This is extremely important:
@@ -6,6 +7,8 @@
 // We do NOT block anything
 // We do NOT modify routing
 // We only return the full decision object
+
+import { enforcement } from "./execution-config.js";
 
 export function simulateExecution(envelope, gate, hardwareAllowed) {
   const reasons = [];
@@ -61,6 +64,7 @@ export function simulateExecution(envelope, gate, hardwareAllowed) {
       approval: approvalValid,
       hardware: hardwareAllowed,
     },
+    enforcementActive: enforcement.requireHardware, // Phase 80: Enforcement awareness
     timestamp: Date.now(),
   };
 }
