@@ -148,26 +148,48 @@ export async function verifyOCT(token: string): Promise<{ valid: boolean; scopes
 
 export async function performWebAuthnRegistration(): Promise<{ success: boolean; deviceName?: string }> {
   try {
+    // Step 1: Get challenge from backend
     const challengeResponse = await requestWebAuthnChallenge();
     
-    const credential = await startRegistration({
-      optionsJSON: {
+    // Step 2: Convert base64url strings to Uint8Array for navigator.credentials.create()
+    const base64UrlToUint8Array = (base64url: string): Uint8Array => {
+      // Convert base64url to standard base64
+      const base64 = base64url.replace(/-/g, '+').replace(/_/g, '/');
+      // Add padding if needed
+      const padded = base64 + '='.repeat((4 - (base64.length % 4)) % 4);
+      // Decode to binary
+      const binary = atob(padded);
+      // Convert to Uint8Array
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) {
+        bytes[i] = binary.charCodeAt(i);
+      }
+      return bytes;
+    };
+
+    // Convert challenge and user.id from base64url to Uint8Array
+    const challengeBytes = base64UrlToUint8Array(challengeResponse.challenge);
+    const userIdBytes = base64UrlToUint8Array(challengeResponse.user.id);
+
+    // Step 3: Call native WebAuthn API
+    const credential = await navigator.credentials.create({
+      publicKey: {
+        challenge: challengeBytes,
         rp: {
           name: challengeResponse.rp.name,
           id: challengeResponse.rp.id,
         },
         user: {
-          id: challengeResponse.user.id,
+          id: userIdBytes,
           name: challengeResponse.user.name,
           displayName: challengeResponse.user.displayName,
         },
-        challenge: challengeResponse.challenge,
         pubKeyCredParams: challengeResponse.pubKeyCredParams.map(param => ({
-          type: 'public-key' as const,
+          type: 'public-key',
           alg: param.alg,
         })),
         timeout: challengeResponse.timeout,
-        attestation: challengeResponse.attestation as any,
+        attestation: challengeResponse.attestation as AttestationConveyancePreference,
         excludeCredentials: [],
         authenticatorSelection: {
           authenticatorAttachment: 'cross-platform',
@@ -175,10 +197,49 @@ export async function performWebAuthnRegistration(): Promise<{ success: boolean;
           requireResidentKey: false,
         },
       },
+    }) as PublicKeyCredential | null;
+
+    if (!credential) {
+      throw new Error('No credential returned from authenticator');
+    }
+
+    // Step 4: Convert credential to JSON format for backend
+    const credentialResponse = credential.response as AuthenticatorAttestationResponse;
+    
+    // Helper to convert ArrayBuffer to base64url
+    const arrayBufferToBase64Url = (buffer: ArrayBuffer): string => {
+      const bytes = new Uint8Array(buffer);
+      let binary = '';
+      for (let i = 0; i < bytes.byteLength; i++) {
+        binary += String.fromCharCode(bytes[i]);
+      }
+      return btoa(binary)
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=/g, '');
+    };
+
+    const credentialJson = {
+      id: credential.id,
+      rawId: arrayBufferToBase64Url(credential.rawId),
+      type: credential.type,
+      response: {
+        clientDataJSON: arrayBufferToBase64Url(credentialResponse.clientDataJSON),
+        attestationObject: arrayBufferToBase64Url(credentialResponse.attestationObject),
+      },
+    };
+
+    // Step 5: POST to /api/auth/register/finish
+    const finishResponse = await axios.post('/api/auth/register/finish', {
+      operator: 'prime',
+      credential: credentialJson,
     });
 
-    const verifyResponse = await verifyWebAuthnCredential(credential, challengeResponse.challenge);
-    return verifyResponse;
+    // Backend returns { status: "registered" }
+    return {
+      success: finishResponse.data.status === 'registered',
+      deviceName: 'YubiKey',
+    };
   } catch (error: any) {
     console.error('WebAuthn registration error:', error);
     return { success: false };
