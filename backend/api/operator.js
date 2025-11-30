@@ -10,6 +10,8 @@
 
 import express from "express";
 import { setHardwareKey, getHardwareKey } from "../federation/operator-model.js";
+import { verifyHardwareIdentity } from "../federation/hardware-verify.js";
+import { currentOperator } from "../identity/operator-session.js";
 
 export const router = express.Router();
 
@@ -45,6 +47,37 @@ router.get("/operator/hardware", (req, res) => {
     ok: true,
     hardwareKey,
     registered: !!hardwareKey.id,
+  });
+});
+
+router.post("/operator/verify-hardware", (req, res) => {
+  const { signature, challenge } = req.body;
+  
+  // Get current operator from session
+  const operatorSession = currentOperator();
+  
+  if (!operatorSession) {
+    return res.status(401).json({
+      ok: false,
+      verified: false,
+      reason: "no operator session",
+    });
+  }
+  
+  // Get hardware key from operator model and merge with operator session
+  const hardwareKey = getHardwareKey();
+  const operator = {
+    ...operatorSession,
+    hardwareKey: hardwareKey.id ? hardwareKey : null,
+  };
+  
+  // Verify hardware identity (passive - no enforcement)
+  const result = verifyHardwareIdentity(signature, challenge, operator);
+  
+  return res.json({
+    ok: true,
+    ...result,
+    note: "Hardware verification only. We do not authenticate the operator. We do not enforce routing. We do not enforce approval. We only validate.",
   });
 });
 

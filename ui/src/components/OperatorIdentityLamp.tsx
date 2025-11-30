@@ -1,4 +1,5 @@
 // Phase 17.3: Operator Identity Status (Read-Only UI)
+// Phase 74: Extended with hardware verification display
 // Displays operator identity status from federation state
 // No authentication, no verification, no enforcement - just reflection
 import { useEffect, useState } from "react";
@@ -6,6 +7,7 @@ import { fetchFederationState, type FederationStateResponse } from "@/lib/api/fe
 
 export default function OperatorIdentityLamp() {
   const [operator, setOperator] = useState<FederationStateResponse["operator"]>(null);
+  const [hardwareVerified, setHardwareVerified] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -61,6 +63,18 @@ export default function OperatorIdentityLamp() {
           <span className="text-orange-500">Not registered</span>
         )}
       </div>
+      {operator.hardwareKey?.id && (
+        <div className="text-green-400">
+          Hardware Verified:{" "}
+          {hardwareVerified === null ? (
+            <span className="text-slate-500">Not checked</span>
+          ) : hardwareVerified ? (
+            <span className="text-green-500">Yes</span>
+          ) : (
+            <span className="text-red-500">No</span>
+          )}
+        </div>
+      )}
     </div>
   );
 }
