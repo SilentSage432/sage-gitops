@@ -4,6 +4,7 @@ import { createExecutionEnvelope } from "../federation/execution-envelope.js";
 import { checkEnvelopeAgainstGate, checkExecutionGate } from "../federation/execution-gate.js";
 import { routeEnvelope, validateHardwareForDestination } from "../federation/execution-channel.js";
 import { simulateExecution } from "../federation/execution-simulator.js";
+import { recordExecutionAttempt, getExecutionLedger } from "../federation/execution-ledger.js";
 
 export const router = express.Router();
 
@@ -96,6 +97,15 @@ router.post("/execution/simulate", (req, res) => {
   const hardwareAllowed = validateHardwareForDestination(envelope);
   const simulationResult = simulateExecution(envelope, gate, hardwareAllowed);
   
+  // Phase 79: Passive Execution Ledger
+  // Record execution attempt (passive - we don't change execution outcome)
+  recordExecutionAttempt({
+    envelope,
+    gate,
+    hardwareAllowed,
+    result: simulationResult,
+  });
+  
   // For the first time ever, we have a complete "would I be allowed?" chain
   // Still safe.
   
@@ -106,6 +116,26 @@ router.post("/execution/simulate", (req, res) => {
     hardwareAllowed,
     result: simulationResult,
     note: "Complete authorization simulation. Returns deterministic results. Still safe - no execution, no blocking, no state changes.",
+  });
+});
+
+router.get("/execution/ledger", (req, res) => {
+  // Phase 79: Passive Execution Ledger
+  // Returns all execution attempts recorded in the ledger
+  // This gives SAGE Prime the ability to show:
+  // - who attempted what
+  // - where
+  // - with what identity
+  // - under what mode
+  // - with what result
+  
+  const ledger = getExecutionLedger();
+  
+  return res.json({
+    ok: true,
+    ledger,
+    count: ledger.length,
+    note: "Passive execution ledger. Records all execution requests and pipeline results without executing anything.",
   });
 });
 
