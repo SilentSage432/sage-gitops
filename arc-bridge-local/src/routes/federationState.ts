@@ -29,6 +29,7 @@ router.get("/", (req: Request, res: Response) => {
     // Phase 19: Extended with operator session state
     // Phase 20: Extended with action type registry
     // Phase 21: Extended with action log
+    const operator = getOperator();
     res.json({
       events: getEventsForState(),
       commands: getRecentCommands(),
@@ -39,7 +40,8 @@ router.get("/", (req: Request, res: Response) => {
       stale: detectStaleIntents(),
       topology: federationTopology(),
       reasons: deriveReasons(),
-      operator: getOperator(),
+      operator: operator,
+      operatorStatus: operator !== null ? "registered" : "unregistered",
       operatorSession: getOperatorSession(),
       actionTypes: ACTION_TYPES,
       actionLog: listActions(),
@@ -58,6 +60,7 @@ router.get("/", (req: Request, res: Response) => {
       topology: { nodes: [], edges: [] },
       reasons: [],
       operator: null,
+      operatorStatus: "unregistered",
       operatorSession: { verified: false, ts: null },
       actionTypes: [],
       actionLog: [],

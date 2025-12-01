@@ -1,18 +1,23 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { User, Building2 } from 'lucide-react';
 
-export function OnboardingEntry() {
-  const router = useRouter();
-
+/**
+ * Pure UI component - no routing logic.
+ * Parent component should handle navigation.
+ */
+export function OnboardingEntry({ onIndividual, onOrganization }: { onIndividual?: () => void; onOrganization?: () => void }) {
   const handleIndividual = () => {
-    router.push('/onboarding/personal');
+    if (onIndividual) {
+      onIndividual();
+    }
   };
 
   const handleOrganization = () => {
-    router.push('/onboarding/organization');
+    if (onOrganization) {
+      onOrganization();
+    }
   };
 
   return (

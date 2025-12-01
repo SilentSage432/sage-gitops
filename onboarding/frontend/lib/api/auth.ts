@@ -1,17 +1,10 @@
 import axios from 'axios';
 import { startRegistration, startAuthentication } from '@simplewebauthn/browser';
-import { getFederationToken } from '../federation/handshake';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 
-// Phase 13.3: Add federation token to all requests
-axios.interceptors.request.use((config) => {
-  const token = getFederationToken();
-  if (token) {
-    config.headers['X-Federation-Token'] = token;
-  }
-  return config;
-});
+// Federation token interceptor removed - Federation will be handled in Federation UI phase
+// Onboarding UI only uses /api/auth/status and does not call Federation endpoints
 
 export interface WebAuthnChallengeResponse {
   challenge: string;

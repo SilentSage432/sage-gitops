@@ -356,6 +356,13 @@ func handleWebAuthnVerifyFinish(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// After successful WebAuthn verification, activate operator in federation service
+	// This ensures federation state shows operator as registered
+	if err := activateOperatorInFederation(req.Operator, user.WebAuthnName()); err != nil {
+		log.Printf("WebAuthn Verify Finish: Failed to activate operator in federation: %v", err)
+		// Don't fail the request - WebAuthn verification succeeded, federation activation is best-effort
+	}
+
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{
 		"status":   "verified",
@@ -383,6 +390,58 @@ func GetOperatorWithCredentials(ctx context.Context, operatorID string) (*WebAut
 		userID:      operatorID, // Use operatorID directly since userID field is not accessible
 		credentials: handlersUser.WebAuthnCredentials(),
 	}, nil
+}
+
+type StatusResponse struct {
+	Registered    bool   `json:"registered"`
+	Authenticated bool   `json:"authenticated"`
+	Operator      string `json:"operator"`
+}
+
+// handleAuthStatus returns the registration and authentication status for an operator
+// ALWAYS returns all three fields: registered, authenticated, operator (never undefined)
+// NEVER returns 500/404 - always returns 200 with valid JSON
+func handleAuthStatus(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	operator := "prime" // Default operator for now, could be extracted from request if needed
+
+	// Initialize response with safe defaults
+	registered := false
+	authenticated := false
+
+	// Check if operator is registered (has a credential)
+	// If database query fails, default to false (not registered)
+	user, err := handlers.GetOperatorKey(ctx, getDB(ctx), operator)
+	if err == nil && user != nil {
+		registered = len(user.WebAuthnCredentials()) > 0
+	} else {
+		log.Printf("handleAuthStatus: GetOperatorKey failed for operator %s: %v (defaulting to not registered)", operator, err)
+	}
+
+	// Check if operator is authenticated (has an active session)
+	// If session load fails, default to false (not authenticated)
+	session, err := LoadSession(ctx, operator)
+	if err == nil && session != nil {
+		authenticated = true
+	} else {
+		// Session not found is expected for unauthenticated users - not an error
+		if err != nil && !errors.Is(err, pgx.ErrNoRows) {
+			log.Printf("handleAuthStatus: LoadSession failed for operator %s: %v (defaulting to not authenticated)", operator, err)
+		}
+	}
+
+	// ALWAYS return 200 OK with all three fields explicitly (never omit, never undefined)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	if err := json.NewEncoder(w).Encode(StatusResponse{
+		Registered:    registered,
+		Authenticated: authenticated,
+		Operator:      operator,
+	}); err != nil {
+		log.Printf("handleAuthStatus: Failed to encode response: %v", err)
+		// Fallback: write JSON directly
+		w.Write([]byte(`{"registered":false,"authenticated":false,"operator":"prime"}`))
+	}
 }
 
 // handleIssueToken issues a JWT access token for operator "prime"
@@ -415,5 +474,50 @@ func handleIssueToken(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{
 		"token": tokenString,
 	})
+}
+
+// activateOperatorInFederation calls the federation service to activate/promote the operator identity
+// This ensures that /federation/state returns operator as registered after WebAuthn verification
+func activateOperatorInFederation(operatorID, identity string) error {
+	federationURL := "http://localhost:7070/federation/operator/register"
+	
+	payload := map[string]interface{}{
+		"id":       operatorID,
+		"source":   "webauthn",
+		"metadata": map[string]interface{}{
+			"identity": identity,
+			"verified": true,
+		},
+	}
+	
+	jsonData, err := json.Marshal(payload)
+	if err != nil {
+		return err
+	}
+	
+	client := &http.Client{
+		Timeout: 5 * time.Second,
+	}
+	
+	req, err := http.NewRequest("POST", federationURL, bytes.NewBuffer(jsonData))
+	if err != nil {
+		return err
+	}
+	
+	req.Header.Set("Content-Type", "application/json")
+	
+	resp, err := client.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	
+	if resp.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(resp.Body)
+		return errors.New("federation activation failed: " + string(body))
+	}
+	
+	log.Printf("Operator %s activated in federation service", operatorID)
+	return nil
 }
 

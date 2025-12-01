@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -19,7 +18,6 @@ interface PersonalData {
 }
 
 export default function PersonalDashboardPage() {
-  const router = useRouter();
   const [personalData, setPersonalData] = useState<PersonalData | null>(null);
   const [nodeId, setNodeId] = useState<string>('');
   const [isActivating, setIsActivating] = useState(true);
@@ -31,8 +29,8 @@ export default function PersonalDashboardPage() {
     const storedData = localStorage.getItem('personalOnboardingData');
 
     if (!isComplete || !storedData) {
-      // Redirect to onboarding if not complete
-      router.push('/onboarding/personal');
+      // No routing - just set state to indicate not ready
+      setPersonalData(null);
       return;
     }
 
@@ -40,7 +38,7 @@ export default function PersonalDashboardPage() {
       setPersonalData(JSON.parse(storedData));
     } catch (err) {
       console.error('Failed to parse personal data:', err);
-      router.push('/onboarding/personal');
+      setPersonalData(null);
     }
 
     // Generate or load nodeId
@@ -64,7 +62,7 @@ export default function PersonalDashboardPage() {
     }, 5000);
 
     return () => clearInterval(pulseInterval);
-  }, [router]);
+  }, []);
 
   if (!personalData || !nodeId) {
     return null; // Will redirect or wait for nodeId

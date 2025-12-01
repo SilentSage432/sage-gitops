@@ -1,44 +1,63 @@
 "use client";
 
-// Phase 17.5: Operator Identity Lamp for Onboarding UI
-// Displays operator identity status from federation state
-// No authentication, no verification, no enforcement - just reflection
+// Operator Identity Lamp - displays operator status from /api/auth/status
+// Shows: not registered -> registered -> authenticated
 import { useEffect, useState } from "react";
 
-interface OperatorIdentity {
-  id: string;
-  source: string;
-  registeredAt: number;
-  lastSeen: number;
-  metadata?: Record<string, unknown>;
+interface AuthStatus {
+  registered: boolean;
+  authenticated: boolean;
+  operator: string;
 }
 
 export default function OperatorIdentityLamp() {
-  const [operator, setOperator] = useState<OperatorIdentity | null>(null);
+  const [status, setStatus] = useState<AuthStatus | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let isMounted = true;
+    
+    // Fetch status from /api/auth/status (not federation state)
     const refresh = async () => {
+      if (!isMounted) return;
+      
       try {
-        // Phase 17.5: Fetch from federation state API
-        // Use Next.js rewrite proxy to avoid CORS issues
-        const res = await fetch('/api/federation/state');
+        const res = await fetch('/api/auth/status');
+        if (!isMounted) return;
+        
         if (res.ok) {
           const data = await res.json();
-          setOperator(data.operator || null);
+          if (!isMounted) return;
+          
+          setStatus({
+            registered: data.registered === true,
+            authenticated: data.authenticated === true,
+            operator: data.operator || 'prime',
+          });
         }
       } catch (err) {
-        console.error("Failed to fetch operator identity:", err);
-        setOperator(null);
+        if (!isMounted) return;
+        console.error("Failed to fetch operator status:", err);
+        setStatus(null);
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
 
     refresh();
-    const interval = setInterval(refresh, 10000); // Refresh every 10 seconds
+    // Refresh every 10 seconds to update badge (less frequent to reduce load)
+    const interval = setInterval(() => {
+      if (isMounted) {
+        refresh();
+      }
+    }, 10000);
 
-    return () => clearInterval(interval);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
   }, []);
 
   if (loading) {
@@ -49,7 +68,7 @@ export default function OperatorIdentityLamp() {
     );
   }
 
-  if (!operator) {
+  if (!status) {
     return (
       <div className="text-xs">
         <span className="text-slate-400">Operator:</span>{" "}
@@ -58,14 +77,29 @@ export default function OperatorIdentityLamp() {
     );
   }
 
+  // State machine: not registered -> registered -> authenticated
+  if (!status.registered) {
+    return (
+      <div className="text-xs">
+        <span className="text-slate-400">Operator:</span>{" "}
+        <span className="text-orange-500">not registered</span>
+      </div>
+    );
+  }
+
+  if (!status.authenticated) {
+    return (
+      <div className="text-xs">
+        <span className="text-slate-400">Operator:</span>{" "}
+        <span className="text-yellow-500">registered</span>
+      </div>
+    );
+  }
+
   return (
     <div className="text-xs">
       <span className="text-slate-400">Operator:</span>{" "}
-      <span className="text-green-500 font-mono">{operator.id}</span>
-      {operator.source && (
-        <span className="text-slate-500 ml-1">({operator.source})</span>
-      )}
+      <span className="text-green-500">authenticated</span>
     </div>
   );
 }
-

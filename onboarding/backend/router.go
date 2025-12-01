@@ -173,10 +173,12 @@ func SetupRouter(dbPool *pgxpool.Pool) chi.Router {
 	// Cursor Patch: WebAuthn Registration Routes
 	// Phase 3: Add WebAuthn Verification Routes
 	r.Route("/api/auth", func(r chi.Router) {
+		r.Get("/status", handleAuthStatus)
 		r.Post("/register/begin", handleWebAuthnBegin)
 		r.Post("/register/finish", handleWebAuthnFinish)
 		r.Post("/verify/begin", handleWebAuthnVerifyBegin)
 		r.Post("/verify/finish", handleWebAuthnVerifyFinish)
+		r.Post("/verify", handleWebAuthnVerifyFinish) // Single endpoint alias for verify/finish
 		r.Post("/access/issue", handleIssueToken)
 	})
 
