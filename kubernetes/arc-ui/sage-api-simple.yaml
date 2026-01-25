@@ -42,7 +42,12 @@ spec:
           import http.server
           import json
           import urllib.parse
+          import os
+          import sys
+          import ssl
           from datetime import datetime
+          from urllib.request import Request, urlopen, HTTPSHandler, build_opener
+          from urllib.error import URLError, HTTPError
           
           class APIHandler(http.server.BaseHTTPRequestHandler):
               def do_GET(self):
@@ -61,37 +66,397 @@ spec:
                   self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
                   self.send_header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
               
+              def get_platform_signal(self, timestamp):
+                  """Generate sage.platform signal with only truthful runtime facts."""
+                  try:
+                      # Only include facts we can truthfully measure
+                      facts = {
+                          "process_running": True,
+                          "python_version": sys.version.split()[0],
+                          "service_name": "sage-api"
+                      }
+                      
+                      # Check if we're in Kubernetes (truthful check via env vars)
+                      if os.getenv("KUBERNETES_SERVICE_HOST"):
+                          facts["in_kubernetes"] = True
+                          facts["kubernetes_service_host"] = os.getenv("KUBERNETES_SERVICE_HOST")
+                      else:
+                          facts["in_kubernetes"] = False
+                      
+                      return {
+                          "id": "sage.platform",
+                          "source": "sage",
+                          "state": "ok",
+                          "severity": "info",
+                          "timestamp": timestamp,
+                          "metadata": {
+                              "domain": "platform",
+                              "summary": "Service process running and responding",
+                              "facts": facts
+                          }
+                      }
+                  except Exception:
+                      # If we can't assess, emit unavailable
+                      return {
+                          "id": "sage.platform",
+                          "source": "sage",
+                          "state": "unavailable",
+                          "severity": "unavailable",
+                          "timestamp": timestamp,
+                          "metadata": {
+                              "domain": "platform",
+                              "summary": "Cannot assess platform state",
+                              "facts": {}
+                          }
+                      }
+              
+              def get_gitops_signal(self, timestamp):
+                  """Generate sage.gitops signal. Emits unavailable if no GitOps status source exists."""
+                  # No existing Flux API client or reconciliation status source found in codebase
+                  # Per requirements: do NOT fake it - emit unavailable
+                  return {
+                      "id": "sage.gitops",
+                      "source": "sage",
+                      "state": "unavailable",
+                      "severity": "unavailable",
+                      "timestamp": timestamp,
+                      "metadata": {
+                          "domain": "gitops",
+                          "summary": "GitOps reconciliation status not accessible - no status source available",
+                          "facts": {}
+                      }
+                  }
+              
+              def check_kubernetes_api(self):
+                  """Check if Kubernetes API is accessible. Returns (accessible: bool, gitops_accessible: bool)."""
+                  try:
+                      # Check if we're in Kubernetes
+                      if not os.getenv("KUBERNETES_SERVICE_HOST"):
+                          return (False, False)
+                      
+                      # Try to access Kubernetes API using service account token
+                      token_path = "/var/run/secrets/kubernetes.io/serviceaccount/token"
+                      ca_cert_path = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+                      api_host = os.getenv("KUBERNETES_SERVICE_HOST")
+                      api_port = os.getenv("KUBERNETES_SERVICE_PORT", "443")
+                      
+                      if not os.path.exists(token_path) or not os.path.exists(ca_cert_path):
+                          return (False, False)
+                      
+                      # Read token
+                      with open(token_path, 'r') as f:
+                          token = f.read().strip()
+                      
+                      # Try to query Flux Kustomizations to check GitOps
+                      api_url = f"https://{api_host}:{api_port}/apis/kustomize.toolkit.fluxcd.io/v1/namespaces/flux-system/kustomizations"
+                      
+                      # Create SSL context with CA cert
+                      context = ssl.create_default_context(cafile=ca_cert_path)
+                      
+                      # Make request
+                      req = Request(api_url)
+                      req.add_header("Authorization", f"Bearer {token}")
+                      
+                      opener = build_opener(HTTPSHandler(context=context))
+                      try:
+                          with opener.open(req, timeout=2) as resp:
+                              if resp.getcode() == 200:
+                                  return (True, True)
+                      except (URLError, HTTPError, OSError):
+                          # API accessible but GitOps query failed or no permissions
+                          return (True, False)
+                      
+                      return (True, False)
+                  except Exception:
+                      # Any failure - cannot determine
+                      return (False, False)
+              
+              def get_reconciliation_status(self, timestamp):
+                  """Get reconciliation status. Returns status dict or None on failure."""
+                  try:
+                      cycle_id = timestamp
+                      interval_seconds = 30
+                      
+                      # Check what we can observe
+                      k8s_accessible, gitops_accessible = self.check_kubernetes_api()
+                      
+                      observed_targets = {
+                          "gitops": gitops_accessible,
+                          "kubernetes": k8s_accessible,
+                          "external": False
+                      }
+                      
+                      # If we can't observe anything, return unknown
+                      if not k8s_accessible:
+                          return {
+                              "cycle_id": cycle_id,
+                              "status": "unknown",
+                              "last_successful_reconcile": None,
+                              "interval_seconds": interval_seconds,
+                              "observed_targets": observed_targets,
+                              "notes": "Cannot access Kubernetes API to determine reconciliation status"
+                          }
+                      
+                      # If we can access GitOps, try to get actual status
+                      if gitops_accessible:
+                          try:
+                              token_path = "/var/run/secrets/kubernetes.io/serviceaccount/token"
+                              ca_cert_path = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+                              api_host = os.getenv("KUBERNETES_SERVICE_HOST")
+                              api_port = os.getenv("KUBERNETES_SERVICE_PORT", "443")
+                              
+                              with open(token_path, 'r') as f:
+                                  token = f.read().strip()
+                              
+                              api_url = f"https://{api_host}:{api_port}/apis/kustomize.toolkit.fluxcd.io/v1/namespaces/flux-system/kustomizations"
+                              
+                              context = ssl.create_default_context(cafile=ca_cert_path)
+                              req = Request(api_url)
+                              req.add_header("Authorization", f"Bearer {token}")
+                              
+                              opener = build_opener(HTTPSHandler(context=context))
+                              with opener.open(req, timeout=2) as resp:
+                                  if resp.getcode() == 200:
+                                      data = json.loads(resp.read().decode())
+                                      
+                                      # Check Kustomization statuses
+                                      items = data.get("items", [])
+                                      if not items:
+                                          return {
+                                              "cycle_id": cycle_id,
+                                              "status": "unknown",
+                                              "last_successful_reconcile": None,
+                                              "interval_seconds": interval_seconds,
+                                              "observed_targets": observed_targets,
+                                              "notes": "No Kustomizations found"
+                                          }
+                                      
+                                      # Analyze status conditions
+                                      all_ready = True
+                                      any_stalled = False
+                                      last_success = None
+                                      
+                                      for item in items:
+                                          conditions = item.get("status", {}).get("conditions", [])
+                                          for cond in conditions:
+                                              if cond.get("type") == "Ready":
+                                                  status = cond.get("status", "").lower()
+                                                  if status != "true":
+                                                      all_ready = False
+                                                  if cond.get("reason") == "ReconciliationSuspended" or "stalled" in cond.get("message", "").lower():
+                                                      any_stalled = True
+                                                  # If Ready=True, use lastTransitionTime as last successful reconcile
+                                                  if status == "true":
+                                                      last_reconcile = cond.get("lastTransitionTime")
+                                                      if last_reconcile and (not last_success or last_reconcile > last_success):
+                                                          last_success = last_reconcile
+                                      
+                                      # Determine status
+                                      if any_stalled:
+                                          status = "stalled"
+                                      elif all_ready:
+                                          status = "aligned"
+                                      else:
+                                          status = "drifting"
+                                      
+                                      return {
+                                          "cycle_id": cycle_id,
+                                          "status": status,
+                                          "last_successful_reconcile": last_success,
+                                          "interval_seconds": interval_seconds,
+                                          "observed_targets": observed_targets,
+                                          "notes": None
+                                      }
+                          except Exception:
+                              # Failed to parse or query - return unknown
+                              pass
+                      
+                      # Fallback: we can see Kubernetes but not GitOps details
+                      return {
+                          "cycle_id": cycle_id,
+                          "status": "unknown",
+                          "last_successful_reconcile": None,
+                          "interval_seconds": interval_seconds,
+                          "observed_targets": observed_targets,
+                          "notes": "Kubernetes accessible but GitOps reconciliation status cannot be determined"
+                      }
+                  except Exception:
+                      # Any exception - return unknown
+                      return {
+                          "cycle_id": timestamp,
+                          "status": "unknown",
+                          "last_successful_reconcile": None,
+                          "interval_seconds": 30,
+                          "observed_targets": {
+                              "gitops": False,
+                              "kubernetes": False,
+                              "external": False
+                          },
+                          "notes": "Exception during reconciliation check"
+                      }
+              
+              def get_reconciliation_signal(self, timestamp):
+                  """Generate sage.reconciliation signal from reconciliation status."""
+                  try:
+                      recon_status = self.get_reconciliation_status(timestamp)
+                      status = recon_status["status"]
+                      
+                      # Map status to severity (LOCKED mapping)
+                      severity_map = {
+                          "aligned": "info",
+                          "drifting": "notice",
+                          "stalled": "warning",
+                          "unknown": "unavailable"
+                      }
+                      severity = severity_map.get(status, "unavailable")
+                      
+                      return {
+                          "id": "sage.reconciliation",
+                          "source": "sage",
+                          "state": status,
+                          "severity": severity,
+                          "timestamp": timestamp,
+                          "metadata": {
+                              "cycle_id": recon_status["cycle_id"],
+                              "observed_targets": recon_status["observed_targets"],
+                              "last_successful_reconcile": recon_status["last_successful_reconcile"],
+                              "interval_seconds": recon_status["interval_seconds"],
+                              "notes": recon_status["notes"]
+                          }
+                      }
+                  except Exception:
+                      # If signal generation fails, return unavailable
+                      return {
+                          "id": "sage.reconciliation",
+                          "source": "sage",
+                          "state": "unknown",
+                          "severity": "unavailable",
+                          "timestamp": timestamp,
+                          "metadata": {
+                              "cycle_id": timestamp,
+                              "observed_targets": {
+                                  "gitops": False,
+                                  "kubernetes": False,
+                                  "external": False
+                              },
+                              "last_successful_reconcile": None,
+                              "interval_seconds": 30,
+                              "notes": "Signal generation failed"
+                          }
+                      }
+              
               def handle_request(self):
-                  self.send_response(200)
-                  self.send_header('Content-Type', 'application/json')
-                  self.send_cors_headers()
-                  self.end_headers()
-                  
                   timestamp = datetime.utcnow().isoformat() + 'Z'
                   
-                  if self.path == '/api/status':
-                      response = {
-                          "status": "ok",
-                          "timestamp": timestamp,
-                          "service": "sage-api"
-                      }
-                  elif self.path == '/api/whisperer':
-                      response = {
-                          "message": "Whisperer endpoint ready",
-                          "timestamp": timestamp
-                      }
-                  elif self.path == '/api/auth/status':
-                      response = {
-                          "authenticated": False,
-                          "user": None,
-                          "timestamp": timestamp
-                      }
-                  else:
-                      self.send_response(404)
+                  # Always return HTTP 200, never throw
+                  try:
+                      if self.path == '/api/sage/reconciliation':
+                          # Reconciliation status endpoint
+                          recon_status = self.get_reconciliation_status(timestamp)
+                          response = recon_status
+                          self.send_response(200)
+                          self.send_header('Content-Type', 'application/json')
+                          self.send_cors_headers()
+                          self.end_headers()
+                          self.wfile.write(json.dumps(response).encode())
+                          return
+                      
+                      elif self.path == '/api/sage/signals':
+                          # SAGE Signal Emission endpoint
+                          signals = [
+                              self.get_platform_signal(timestamp),
+                              self.get_gitops_signal(timestamp),
+                              self.get_reconciliation_signal(timestamp)
+                          ]
+                          response = {"signals": signals}
+                          self.send_response(200)
+                          self.send_header('Content-Type', 'application/json')
+                          self.send_cors_headers()
+                          self.end_headers()
+                          self.wfile.write(json.dumps(response).encode())
+                          return
+                      
+                      # Existing endpoints
+                      self.send_response(200)
+                      self.send_header('Content-Type', 'application/json')
+                      self.send_cors_headers()
                       self.end_headers()
-                      response = {"error": "Not found"}
-                  
-                  self.wfile.write(json.dumps(response).encode())
+                      
+                      if self.path == '/api/status':
+                          response = {
+                              "status": "ok",
+                              "timestamp": timestamp,
+                              "service": "sage-api"
+                          }
+                      elif self.path == '/api/whisperer':
+                          response = {
+                              "message": "Whisperer endpoint ready",
+                              "timestamp": timestamp
+                          }
+                      elif self.path == '/api/auth/status':
+                          response = {
+                              "authenticated": False,
+                              "user": None,
+                              "timestamp": timestamp
+                          }
+                      else:
+                          self.send_response(404)
+                          self.end_headers()
+                          response = {"error": "Not found"}
+                      
+                      self.wfile.write(json.dumps(response).encode())
+                  except Exception:
+                      # Critical: Never throw - always return HTTP 200
+                      # If anything fails, return unknown status
+                      try:
+                          self.send_response(200)
+                          self.send_header('Content-Type', 'application/json')
+                          self.send_cors_headers()
+                          self.end_headers()
+                          
+                          if self.path == '/api/sage/reconciliation':
+                              response = {
+                                  "cycle_id": timestamp,
+                                  "status": "unknown",
+                                  "last_successful_reconcile": None,
+                                  "interval_seconds": 30,
+                                  "observed_targets": {
+                                      "gitops": False,
+                                      "kubernetes": False,
+                                      "external": False
+                                  },
+                                  "notes": "Exception during request handling"
+                              }
+                          elif self.path == '/api/sage/signals':
+                              response = {
+                                  "signals": [
+                                      {
+                                          "id": "sage.reconciliation",
+                                          "source": "sage",
+                                          "state": "unknown",
+                                          "severity": "unavailable",
+                                          "timestamp": timestamp,
+                                          "metadata": {
+                                              "cycle_id": timestamp,
+                                              "observed_targets": {
+                                                  "gitops": False,
+                                                  "kubernetes": False,
+                                                  "external": False
+                                              },
+                                              "last_successful_reconcile": None,
+                                              "interval_seconds": 30,
+                                              "notes": "Exception during signal generation"
+                                          }
+                                      }
+                                  ]
+                              }
+                          else:
+                              response = {"error": "Internal error"}
+                          
+                          self.wfile.write(json.dumps(response).encode())
+                      except Exception:
+                          # Last resort - minimal response
+                          pass
           
           server = http.server.HTTPServer(('0.0.0.0', 3000), APIHandler)
           print("SAGE API server starting on port 3000...")
