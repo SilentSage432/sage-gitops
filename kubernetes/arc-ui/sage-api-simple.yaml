@@ -349,6 +349,104 @@ spec:
                           }
                       }
               
+              def get_adrae_signal(self, timestamp):
+                  """
+                  Observe ADRAE rhythm state and normalize into SAGE signal.
+                  
+                  Architectural note: SAGE is the sole observer of ADRAE. UI/HADRA never
+                  talk to ADRAE directly by design - they observe ADRAE indirectly through
+                  SAGE signals. ADRAE remains sovereign and unaware of observers.
+                  """
+                  try:
+                      # Internal HTTP GET to ADRAE using cluster-local networking
+                      # Timeout quickly (≤2s) and catch ALL exceptions
+                      adrae_url = "http://adrae.adrae.svc.cluster.local:8000/api/adrae/rhythm"
+                      
+                      req = Request(adrae_url)
+                      opener = build_opener()
+                      
+                      try:
+                          with opener.open(req, timeout=2) as resp:
+                              if resp.getcode() != 200:
+                                  # Non-200 response - emit unavailable
+                                  return {
+                                      "id": "adrae.rhythm",
+                                      "source": "adrae",
+                                      "state": "unavailable",
+                                      "severity": "unavailable",
+                                      "timestamp": timestamp,
+                                      "metadata": {
+                                          "summary": "ADRAE returned non-200 status",
+                                          "cadence_ms": None,
+                                          "continuity": None,
+                                          "last_tick": None,
+                                          "notes": f"HTTP {resp.getcode()}"
+                                      }
+                                  }
+                              
+                              # Parse ADRAE response
+                              data = json.loads(resp.read().decode())
+                              adrae_state = data.get("state", "unavailable")
+                              
+                              # Map ADRAE state to severity
+                              severity_map = {
+                                  "focused": "info",
+                                  "active": "info",
+                                  "idle": "notice",
+                                  "degraded": "warning",
+                                  "unavailable": "unavailable"
+                              }
+                              severity = severity_map.get(adrae_state, "unavailable")
+                              
+                              # Extract metadata from ADRAE response
+                              metadata = {
+                                  "cadence_ms": data.get("cadence_ms"),
+                                  "continuity": data.get("continuity"),
+                                  "last_tick": data.get("last_tick"),
+                                  "notes": data.get("notes")
+                              }
+                              
+                              return {
+                                  "id": "adrae.rhythm",
+                                  "source": "adrae",
+                                  "state": adrae_state,
+                                  "severity": severity,
+                                  "timestamp": timestamp,
+                                  "metadata": metadata
+                              }
+                      except (URLError, HTTPError, OSError, TimeoutError) as e:
+                          # ADRAE cannot be reached or connection failed
+                          return {
+                              "id": "adrae.rhythm",
+                              "source": "adrae",
+                              "state": "unavailable",
+                              "severity": "unavailable",
+                              "timestamp": timestamp,
+                              "metadata": {
+                                  "summary": "ADRAE is not reachable",
+                                  "cadence_ms": None,
+                                  "continuity": None,
+                                  "last_tick": None,
+                                  "notes": "Connection failed or timeout"
+                              }
+                          }
+                  except Exception:
+                      # Any other exception - emit unavailable
+                      return {
+                          "id": "adrae.rhythm",
+                          "source": "adrae",
+                          "state": "unavailable",
+                          "severity": "unavailable",
+                          "timestamp": timestamp,
+                          "metadata": {
+                              "summary": "ADRAE observation failed",
+                              "cadence_ms": None,
+                              "continuity": None,
+                              "last_tick": None,
+                              "notes": "Exception during ADRAE observation"
+                          }
+                      }
+              
               def handle_request(self):
                   timestamp = datetime.utcnow().isoformat() + 'Z'
                   
@@ -367,10 +465,13 @@ spec:
                       
                       elif self.path == '/api/sage/signals':
                           # SAGE Signal Emission endpoint
+                          # Includes ADRAE observation: SAGE is the sole observer of ADRAE.
+                          # UI/HADRA observe ADRAE indirectly through SAGE signals only.
                           signals = [
                               self.get_platform_signal(timestamp),
                               self.get_gitops_signal(timestamp),
-                              self.get_reconciliation_signal(timestamp)
+                              self.get_reconciliation_signal(timestamp),
+                              self.get_adrae_signal(timestamp)
                           ]
                           response = {"signals": signals}
                           self.send_response(200)
@@ -450,6 +551,20 @@ spec:
                                               "last_successful_reconcile": None,
                                               "interval_seconds": 30,
                                               "notes": "Exception during signal generation"
+                                          }
+                                      },
+                                      {
+                                          "id": "adrae.rhythm",
+                                          "source": "adrae",
+                                          "state": "unavailable",
+                                          "severity": "unavailable",
+                                          "timestamp": timestamp,
+                                          "metadata": {
+                                              "summary": "ADRAE observation unavailable due to exception",
+                                              "cadence_ms": None,
+                                              "continuity": None,
+                                              "last_tick": None,
+                                              "notes": "Exception during request handling"
                                           }
                                       }
                                   ]
