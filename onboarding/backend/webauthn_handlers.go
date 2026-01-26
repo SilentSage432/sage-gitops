@@ -520,4 +520,3 @@ func activateOperatorInFederation(operatorID, identity string) error {
 	log.Printf("Operator %s activated in federation service", operatorID)
 	return nil
 }
-
