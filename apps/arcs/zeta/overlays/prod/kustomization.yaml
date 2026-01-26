@@ -2,7 +2,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: arc-zeta
 resources:
-  - ../../../_base/app
+  - ../../../_base
   - service.yaml
 namePrefix: zeta-
 commonLabels:
