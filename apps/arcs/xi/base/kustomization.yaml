@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: arc-xi
+resources:
+  - namespace.yaml
+  - xi-serviceaccount.yaml
+  - xi-configmap.yaml
+  - xi-deployment.yaml
+  - xi-service.yaml
+  - xi-pvc.yaml
+  - netpol.yaml
