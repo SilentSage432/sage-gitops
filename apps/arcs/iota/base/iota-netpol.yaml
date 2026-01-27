@@ -1,0 +1,42 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: iota-egress
+  namespace: arc-iota
+spec:
+  endpointSelector:
+    matchLabels:
+      app: iota-registry
+  egress:
+    # DNS to kube-dns
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s:k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP
+          rules:
+            dns:
+              - matchPattern: "*"
+    # Omicron connection (declared but unused - future path)
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: arc-omicron
+            k8s:app: omicron-api
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+    # Lambda connection (declared but unused - future path)
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: arc-lambda
+            k8s:app: lambda-cell
+      toPorts:
+        - ports:
+            - port: "8000"
+              protocol: TCP

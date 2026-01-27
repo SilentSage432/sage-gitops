@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: iota-config
+  namespace: arc-iota
+data:
+  mode: "observation"
+  note: "Identity presence only - no issuance, no memory, no authority"
