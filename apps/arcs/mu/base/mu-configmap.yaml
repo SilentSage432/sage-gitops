@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mu-config
+  namespace: arc-mu
+data:
+  mode: "observation"
+  note: "Event relay logic disabled"
