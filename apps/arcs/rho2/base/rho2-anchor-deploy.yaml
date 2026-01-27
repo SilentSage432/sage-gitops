@@ -1,0 +1,62 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: rho2-anchor
+  namespace: arc-rho2
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rho2-anchor
+  namespace: arc-rho2
+  labels:
+    app: rho2-anchor
+    rho2.identity: rho2-anchor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rho2-anchor
+  template:
+    metadata:
+      labels:
+        app: rho2-anchor
+        rho2.identity: rho2-anchor
+      annotations:
+        rho2.posture.hash: seed
+    spec:
+      serviceAccountName: rho2-anchor
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: anchor
+          image: alpine:3.20
+          command:
+            - /bin/sh
+            - -c
+            - |
+              while true; do
+                echo "$(date -Iseconds) [RHO2] Heartbeat - Observation mode active"
+                sleep 60
+              done
+          securityContext:
+            runAsNonRoot: true
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            seccompProfile:
+              type: RuntimeDefault
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi

@@ -1,26 +1,24 @@
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
-metadata: 
-  name: rho2-gate-egress-world-deny
+metadata:
+  name: rho2-anchor-egress
   namespace: arc-rho2
 spec:
-  endpointSelector: 
-    matchLabels: 
-      app: rho2-gate
+  endpointSelector:
+    matchLabels:
+      app: rho2-anchor
   egress:
-  - toEndpoints: # allow Chi only
-    - matchLabels: 
-        k8s:io.kubernetes.pod.namespace: arc-chi
-    toPorts: 
-      - ports: 
-          - port: "4222"
-            protocol: TCP
-  - toEndpoints: # allow kube-dns
-    - matchLabels: 
-        k8s:io.kubernetes.pod.namespace: kube-system
-        k8s:k8s-app: kube-dns
-    toPorts: 
-      - ports: 
-          - port: "53"
-            protocol: ANY
-  - {} # implicit deny the rest (no egress rules beyond above)
+    # DNS to kube-dns
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s:k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP
+          rules:
+            dns:
+              - matchPattern: "*"

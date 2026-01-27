@@ -1,0 +1,56 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: rotationpolicies.crypto.sage.dev
+spec:
+  group: crypto.sage.dev
+  names:
+    plural: rotationpolicies
+    singular: rotationpolicy
+    kind: RotationPolicy
+  scope: Namespaced
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              required: [targetRef, generator]
+              properties:
+                targetRef:
+                  type: object
+                  required: [backend, name, key]
+                  properties:
+                    backend: { type: string }
+                    name: { type: string }
+                    key: { type: string }
+                generator:
+                  type: object
+                  properties:
+                    type: { type: string }
+                    length: { type: integer, minimum: 16, default: 44 }
+                rollout:
+                  type: object
+                  properties:
+                    stages:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          name: { type: string }
+                          type: { type: string }
+                          jobRef: { type: string }
+                          namespace: { type: string }
+                    resources:
+                      type: array
+                      items:
+                        type: object
+                        required: [kind, name, namespace]
+                        properties:
+                          kind: { type: string }
+                          name: { type: string }
+                          namespace: { type: string }
