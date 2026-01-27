@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: observer-api
+  namespace: arc-zeta
+data:
+  mode: "observation"
+  note: "NATS subscribe logic disabled"
