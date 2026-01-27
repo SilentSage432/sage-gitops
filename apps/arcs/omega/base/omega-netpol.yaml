@@ -1,0 +1,33 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: omega-egress
+  namespace: arc-omega
+spec:
+  endpointSelector:
+    matchLabels:
+      app: omega-anchor
+  egress:
+    # DNS to kube-dns
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s:k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP
+          rules:
+            dns:
+              - matchPattern: "*"
+    # Chi connection (declared but unused)
+    - toServices:
+        - k8sService:
+            namespace: arc-chi
+            serviceName: chi-bus
+      toPorts:
+        - ports:
+            - port: "4222"
+              protocol: TCP

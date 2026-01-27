@@ -1,0 +1,58 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: omega-anchor
+  namespace: arc-omega
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: omega-anchor
+  namespace: arc-omega
+  labels:
+    app: omega-anchor
+    rho2.identity: arc-omega
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: omega-anchor
+  template:
+    metadata:
+      labels:
+        app: omega-anchor
+        rho2.identity: arc-omega
+        rho2.tier: app
+    spec:
+      serviceAccountName: omega-anchor
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: omega-anchor
+          image: alpine:3.20
+          command:
+            - /bin/sh
+            - -c
+            - |
+              while true; do
+                echo "$(date -Iseconds) omega: anchor present, interpretation disabled"
+                sleep 60
+              done
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi
