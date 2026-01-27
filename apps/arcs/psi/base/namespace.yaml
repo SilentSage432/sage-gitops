@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: arc-psi
+  labels:
+    sage.arc: "true"
+    arc.name: "psi"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: arc-sandbox
+  labels:
+    rho2.sandbox: "true"

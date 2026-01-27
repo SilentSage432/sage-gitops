@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: psi-orchestrator
+  namespace: arc-psi
+  labels:
+    app: psi-orchestrator
+    rho2.identity: psi-orchestrator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: psi-orchestrator
+  template:
+    metadata:
+      labels:
+        app: psi-orchestrator
+        rho2.identity: psi-orchestrator
+      annotations:
+        rho2.posture.hash: seed
+    spec:
+      serviceAccountName: psi-orchestrator
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: orchestrator
+          image: alpine:3.20
+          command:
+            - /bin/sh
+            - -c
+            - |
+              while true; do
+                echo "$(date -Iseconds) [PSI] Heartbeat - Observation mode active"
+                sleep 60
+              done
+          securityContext:
+            runAsNonRoot: true
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            seccompProfile:
+              type: RuntimeDefault
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi

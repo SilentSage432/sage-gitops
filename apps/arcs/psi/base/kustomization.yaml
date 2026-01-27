@@ -1,0 +1,10 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: arc-psi
+resources:
+  - namespace.yaml
+  - psi-serviceaccount.yaml
+  - psi-configmap.yaml
+  - psi-deployment.yaml
+  - psi-rbac.yaml
+  - psi-netpol.yaml

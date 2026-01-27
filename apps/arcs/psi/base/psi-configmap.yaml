@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: psi-allowlist
+  namespace: arc-psi
+data:
+  images.txt: |
+    ghcr.io/silentsage432/sandbox-runner:latest
+  policy.yaml: |
+    max_runtime_sec: 90
+    max_jobs_parallel: 2
