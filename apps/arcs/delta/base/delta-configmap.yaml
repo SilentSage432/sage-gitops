@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: delta-config
+  namespace: arc-delta
+data:
+  mode: "observation"
+  note: "Template registry shell - no templates, no enforcement, no logic"

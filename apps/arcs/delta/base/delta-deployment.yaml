@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: delta-template-keeper
+  namespace: arc-delta
+  labels:
+    app: delta-template-keeper
+    rho2.identity: arc-delta
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: delta-template-keeper
+  template:
+    metadata:
+      labels:
+        app: delta-template-keeper
+        rho2.identity: arc-delta
+      annotations:
+        rho2.posture.hash: seed
+    spec:
+      serviceAccountName: delta-template-keeper
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: template-keeper
+          image: alpine:3.20
+          command:
+            - /bin/sh
+            - -c
+            - |
+              while true; do
+                echo "$(date -Iseconds) [DELTA] Heartbeat - Observation mode active"
+                sleep 60
+              done
+          securityContext:
+            runAsNonRoot: true
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            seccompProfile:
+              type: RuntimeDefault
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi
