@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: arc-lambda
+  labels:
+    sage.arc: "true"
+    arc.name: "lambda"

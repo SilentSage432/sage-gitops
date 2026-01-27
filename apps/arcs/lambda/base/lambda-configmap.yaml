@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: lambda-config
+  namespace: arc-lambda
+data:
+  placeholder: "observation-mode"
