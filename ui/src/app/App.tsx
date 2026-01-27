@@ -12,6 +12,14 @@ import { ArcOmegaPanel } from '../features/arc/ArcOmegaPanel';
 import { ArcRho2Lodge } from '../features/arc/ArcRho2Lodge';
 import { ArcLambdaPanel } from '../features/arc/ArcLambdaPanel';
 import { ArcChiPanel } from '../features/arc/ArcChiPanel';
+import { ArcXiPanel } from '../features/arc/ArcXiPanel';
+import { ArcMuPanel } from '../features/arc/ArcMuPanel';
+import { ArcNuPanel } from '../features/arc/ArcNuPanel';
+import { ArcOmicronPanel } from '../features/arc/ArcOmicronPanel';
+import { ArcZetaPanel } from '../features/arc/ArcZetaPanel';
+import { ArcIotaPanel } from '../features/arc/ArcIotaPanel';
+import { ArcEpsilonPanel } from '../features/arc/ArcEpsilonPanel';
+import { ArcDeltaPanel } from '../features/arc/ArcDeltaPanel';
 import { PiClusterChamber } from '../features/federation/PiClusterChamber';
 import { OnboardingNexus } from '../features/federation/OnboardingNexus';
 import { NodesView } from '../features/federation/NodesView';
@@ -67,6 +75,22 @@ export const App: React.FC = () => {
         return <ArcLambdaPanel key="arc-lambda" />;
       case 'arc-chi':
         return <ArcChiPanel key="arc-chi" />;
+      case 'arc-xi':
+        return <ArcXiPanel key="arc-xi" />;
+      case 'arc-mu':
+        return <ArcMuPanel key="arc-mu" />;
+      case 'arc-nu':
+        return <ArcNuPanel key="arc-nu" />;
+      case 'arc-omicron':
+        return <ArcOmicronPanel key="arc-omicron" />;
+      case 'arc-zeta':
+        return <ArcZetaPanel key="arc-zeta" />;
+      case 'arc-iota':
+        return <ArcIotaPanel key="arc-iota" />;
+      case 'arc-epsilon':
+        return <ArcEpsilonPanel key="arc-epsilon" />;
+      case 'arc-delta':
+        return <ArcDeltaPanel key="arc-delta" />;
       
       // Federation panels
       case 'pi-kluster':
