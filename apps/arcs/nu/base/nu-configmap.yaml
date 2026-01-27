@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nu-config
+  namespace: arc-nu
+data:
+  mode: "observation"
+  note: "Normalization and routing logic disabled"
