@@ -1,0 +1,34 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: omicron-egress-ingress
+  namespace: arc-omicron
+spec:
+  endpointSelector:
+    matchLabels:
+      app: omicron-vault
+  egress:
+    # DNS to kube-dns
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s:k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP
+          rules:
+            dns:
+              - matchPattern: "*"
+  ingress:
+    # Iota connection (declared but unused - future path)
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: arc-iota
+            k8s:app: iota-registry
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP

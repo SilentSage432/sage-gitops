@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: omicron-config
+  namespace: arc-omicron
+data:
+  mode: "observation"
+  note: "Memory shell only - no storage, no recall, no authority"
