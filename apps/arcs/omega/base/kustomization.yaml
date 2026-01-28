@@ -3,5 +3,6 @@ kind: Kustomization
 namespace: arc-omega
 resources:
   - namespace.yaml
-  - omega-anchor-deploy.yaml
+  - omega-serviceaccount.yaml
+  - omega-idle-deployment.yaml
   - omega-netpol.yaml

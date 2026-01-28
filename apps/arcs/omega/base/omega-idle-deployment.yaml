@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: omega-idle
+  namespace: arc-omega
+  labels:
+    sage.arc: "true"
+    arc.name: "omega"
+    arc.role: "message-bus"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: omega-idle
+  template:
+    metadata:
+      labels:
+        app: omega-idle
+        sage.arc: "true"
+        arc.name: "omega"
+        arc.role: "message-bus"
+    spec:
+      serviceAccountName: omega-idle
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: omega-idle
+          image: alpine:3.20
+          command: ["sh", "-c", "while true; do sleep 3600; done"]
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 10001
+            runAsGroup: 10001
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 10m
+              memory: 32Mi
+      tolerations:
+        - key: node-role.kubernetes.io/control-plane
+          operator: Exists
+          effect: NoSchedule
+

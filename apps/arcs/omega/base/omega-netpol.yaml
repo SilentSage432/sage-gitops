@@ -1,12 +1,12 @@
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: omega-egress
+  name: omega-idle-egress
   namespace: arc-omega
 spec:
   endpointSelector:
     matchLabels:
-      app: omega-anchor
+      app: omega-idle
   egress:
     # DNS to kube-dns
     - toEndpoints:
