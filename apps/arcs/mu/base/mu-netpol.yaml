@@ -8,7 +8,7 @@ spec:
     matchLabels:
       app: mu-relay
   egress:
-    # DNS to kube-dns
+    # DNS to kube-dns only
     - toEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: kube-system
@@ -22,12 +22,3 @@ spec:
           rules:
             dns:
               - matchPattern: "*"
-    # Lambda connection (declared but unused - future path)
-    - toEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: arc-lambda
-            k8s:app: lambda-cell
-      toPorts:
-        - ports:
-            - port: "8000"
-              protocol: TCP
