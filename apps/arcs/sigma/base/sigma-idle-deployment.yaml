@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sigma-idle
+  namespace: arc-sigma
+  labels:
+    sage.arc: "true"
+    arc.name: "sigma"
+    arc.role: "message-bus"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sigma-idle
+  template:
+    metadata:
+      labels:
+        app: sigma-idle
+        sage.arc: "true"
+        arc.name: "sigma"
+        arc.role: "message-bus"
+    spec:
+      serviceAccountName: sigma-idle
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: sigma-idle
+          image: alpine:3.20
+          command: ["sh", "-c", "while true; do sleep 3600; done"]
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 10001
+            runAsGroup: 10001
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 10m
+              memory: 32Mi
+      tolerations:
+        - key: node-role.kubernetes.io/control-plane
+          operator: Exists
+          effect: NoSchedule
+        - key: node.kubernetes.io/not-ready
+          operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 300
+        - key: node.kubernetes.io/unreachable
+          operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 300
+

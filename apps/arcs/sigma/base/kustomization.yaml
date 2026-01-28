@@ -3,5 +3,6 @@ kind: Kustomization
 namespace: arc-sigma
 resources:
   - namespace.yaml
-  - sigma-agent-deploy.yaml
+  - sigma-serviceaccount.yaml
+  - sigma-idle-deployment.yaml
   - sigma-netpol.yaml
