@@ -3,7 +3,6 @@ kind: Kustomization
 namespace: arc-zeta
 resources:
   - namespace.yaml
-  - zeta-serviceaccount.yaml
-  - zeta-configmap.yaml
-  - zeta-deployment.yaml
+  - zeta-idle-serviceaccount.yaml
+  - zeta-idle-deployment.yaml
   - zeta-netpol.yaml

@@ -1,12 +1,12 @@
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: zeta-egress
+  name: zeta-idle-egress
   namespace: arc-zeta
 spec:
   endpointSelector:
     matchLabels:
-      app: observer-api
+      app: zeta-idle
   egress:
     # DNS to kube-dns
     - toEndpoints:
