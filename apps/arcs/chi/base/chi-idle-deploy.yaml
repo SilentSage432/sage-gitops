@@ -29,8 +29,13 @@ spec:
           image: alpine:3.20
           command: ["sh", "-c", "while true; do sleep 3600; done"]
           securityContext:
+            runAsNonRoot: true
+            runAsUser: 10001
+            runAsGroup: 10001
             readOnlyRootFilesystem: true
             allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
             capabilities:
               drop:
                 - ALL
