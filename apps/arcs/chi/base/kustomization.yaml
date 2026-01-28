@@ -3,3 +3,4 @@ kind: Kustomization
 namespace: arc-chi
 resources:
   - chi-ingress-cnp.yaml
+  - chi-idle-deploy.yaml
