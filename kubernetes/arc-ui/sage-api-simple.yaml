@@ -447,6 +447,278 @@ spec:
                           }
                       }
               
+              def get_chi_presence_signal(self, timestamp):
+                  """
+                  Observe Chi structural presence (idle-safe observation).
+                  Read-only Kubernetes API checks for namespace and deployment existence.
+                  """
+                  try:
+                      # Check if we can access Kubernetes API
+                      if not os.getenv("KUBERNETES_SERVICE_HOST"):
+                          return {
+                              "id": "chi.presence",
+                              "source": "chi",
+                              "state": "unavailable",
+                              "severity": "unavailable",
+                              "timestamp": timestamp,
+                              "metadata": {
+                                  "domain": "presence",
+                                  "summary": "Cannot assess Chi presence - not in Kubernetes",
+                                  "facts": {}
+                              }
+                          }
+                      
+                      token_path = "/var/run/secrets/kubernetes.io/serviceaccount/token"
+                      ca_cert_path = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+                      api_host = os.getenv("KUBERNETES_SERVICE_HOST")
+                      api_port = os.getenv("KUBERNETES_SERVICE_PORT", "443")
+                      
+                      if not os.path.exists(token_path) or not os.path.exists(ca_cert_path):
+                          return {
+                              "id": "chi.presence",
+                              "source": "chi",
+                              "state": "unavailable",
+                              "severity": "unavailable",
+                              "timestamp": timestamp,
+                              "metadata": {
+                                  "domain": "presence",
+                                  "summary": "Cannot assess Chi presence - no service account",
+                                  "facts": {}
+                              }
+                          }
+                      
+                      with open(token_path, 'r') as f:
+                          token = f.read().strip()
+                      
+                      context = ssl.create_default_context(cafile=ca_cert_path)
+                      
+                      # Check namespace existence
+                      namespace_url = f"https://{api_host}:{api_port}/api/v1/namespaces/arc-chi"
+                      req = Request(namespace_url)
+                      req.add_header("Authorization", f"Bearer {token}")
+                      opener = build_opener(HTTPSHandler(context=context))
+                      
+                      namespace_exists = False
+                      try:
+                          with opener.open(req, timeout=2) as resp:
+                              if resp.getcode() == 200:
+                                  namespace_exists = True
+                      except (URLError, HTTPError, OSError):
+                          pass
+                      
+                      # Check deployment existence and pod status
+                      deployment_url = f"https://{api_host}:{api_port}/apis/apps/v1/namespaces/arc-chi/deployments/chi-idle"
+                      req = Request(deployment_url)
+                      req.add_header("Authorization", f"Bearer {token}")
+                      
+                      pod_running = False
+                      try:
+                          with opener.open(req, timeout=2) as resp:
+                              if resp.getcode() == 200:
+                                  data = json.loads(resp.read().decode())
+                                  replicas = data.get("status", {}).get("replicas", 0)
+                                  ready_replicas = data.get("status", {}).get("readyReplicas", 0)
+                                  pod_running = (ready_replicas > 0 and replicas > 0)
+                      except (URLError, HTTPError, OSError):
+                          pass
+                      
+                      # Determine state
+                      if namespace_exists and pod_running:
+                          state = "idle"
+                          severity = "info"
+                      elif namespace_exists:
+                          state = "ready"
+                          severity = "notice"
+                      else:
+                          state = "unavailable"
+                          severity = "unavailable"
+                      
+                      return {
+                          "id": "chi.presence",
+                          "source": "chi",
+                          "state": state,
+                          "severity": severity,
+                          "timestamp": timestamp,
+                          "metadata": {
+                              "domain": "presence",
+                              "summary": "Chi structural presence observed",
+                              "facts": {
+                                  "namespace_exists": namespace_exists,
+                                  "pod_running": pod_running,
+                                  "mode": "idle",
+                                  "readiness": "structural_only"
+                              }
+                          }
+                      }
+                  except Exception:
+                      # Any exception - emit unavailable
+                      return {
+                          "id": "chi.presence",
+                          "source": "chi",
+                          "state": "unavailable",
+                          "severity": "unavailable",
+                          "timestamp": timestamp,
+                          "metadata": {
+                              "domain": "presence",
+                              "summary": "Chi presence observation failed",
+                              "facts": {}
+                          }
+                      }
+              
+              def get_chi_bus_readiness_signal(self, timestamp):
+                  """
+                  Observe Chi bus readiness for NATS activation (idle-safe observation).
+                  Read-only Kubernetes API checks for service, endpoints, and network policies.
+                  """
+                  try:
+                      # Check if we can access Kubernetes API
+                      if not os.getenv("KUBERNETES_SERVICE_HOST"):
+                          return {
+                              "id": "chi.bus_readiness",
+                              "source": "chi",
+                              "state": "unavailable",
+                              "severity": "unavailable",
+                              "timestamp": timestamp,
+                              "metadata": {
+                                  "domain": "readiness",
+                                  "summary": "Cannot assess Chi bus readiness - not in Kubernetes",
+                                  "facts": {}
+                              }
+                          }
+                      
+                      token_path = "/var/run/secrets/kubernetes.io/serviceaccount/token"
+                      ca_cert_path = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+                      api_host = os.getenv("KUBERNETES_SERVICE_HOST")
+                      api_port = os.getenv("KUBERNETES_SERVICE_PORT", "443")
+                      
+                      if not os.path.exists(token_path) or not os.path.exists(ca_cert_path):
+                          return {
+                              "id": "chi.bus_readiness",
+                              "source": "chi",
+                              "state": "unavailable",
+                              "severity": "unavailable",
+                              "timestamp": timestamp,
+                              "metadata": {
+                                  "domain": "readiness",
+                                  "summary": "Cannot assess Chi bus readiness - no service account",
+                                  "facts": {}
+                              }
+                          }
+                      
+                      with open(token_path, 'r') as f:
+                          token = f.read().strip()
+                      
+                      context = ssl.create_default_context(cafile=ca_cert_path)
+                      opener = build_opener(HTTPSHandler(context=context))
+                      
+                      # Check service existence
+                      service_url = f"https://{api_host}:{api_port}/api/v1/namespaces/arc-chi/services/chi-bus"
+                      req = Request(service_url)
+                      req.add_header("Authorization", f"Bearer {token}")
+                      
+                      service_exists = False
+                      ports_configured = {}
+                      try:
+                          with opener.open(req, timeout=2) as resp:
+                              if resp.getcode() == 200:
+                                  service_exists = True
+                                  data = json.loads(resp.read().decode())
+                                  ports = data.get("spec", {}).get("ports", [])
+                                  for port in ports:
+                                      port_name = port.get("name", "")
+                                      port_num = port.get("port", 0)
+                                      if port_name == "client" or port_num == 4222:
+                                          ports_configured["client"] = 4222
+                                      if port_name == "monitor" or port_num == 8222:
+                                          ports_configured["monitor"] = 8222
+                      except (URLError, HTTPError, OSError):
+                          pass
+                      
+                      # Check endpoints existence and population
+                      endpoints_url = f"https://{api_host}:{api_port}/api/v1/namespaces/arc-chi/endpoints/chi-bus"
+                      req = Request(endpoints_url)
+                      req.add_header("Authorization", f"Bearer {token}")
+                      
+                      endpoints_populated = False
+                      try:
+                          with opener.open(req, timeout=2) as resp:
+                              if resp.getcode() == 200:
+                                  data = json.loads(resp.read().decode())
+                                  subsets = data.get("subsets", [])
+                                  if subsets:
+                                      for subset in subsets:
+                                          addresses = subset.get("addresses", [])
+                                          if addresses:
+                                              endpoints_populated = True
+                                              break
+                      except (URLError, HTTPError, OSError):
+                          pass
+                      
+                      # Check network policy existence (CiliumNetworkPolicy)
+                      netpol_url = f"https://{api_host}:{api_port}/apis/cilium.io/v2/namespaces/arc-chi/ciliumnetworkpolicies/chi-ingress"
+                      req = Request(netpol_url)
+                      req.add_header("Authorization", f"Bearer {token}")
+                      
+                      network_policy_active = False
+                      try:
+                          with opener.open(req, timeout=2) as resp:
+                              if resp.getcode() == 200:
+                                  network_policy_active = True
+                      except (URLError, HTTPError, OSError):
+                          pass
+                      
+                      # Determine state
+                      if service_exists and network_policy_active:
+                          if endpoints_populated:
+                              state = "ready"
+                              severity = "info"
+                              ready_for_activation = True
+                          else:
+                              state = "ready"
+                              severity = "notice"
+                              ready_for_activation = False
+                      elif service_exists:
+                          state = "ready"
+                          severity = "notice"
+                          ready_for_activation = False
+                      else:
+                          state = "unavailable"
+                          severity = "unavailable"
+                          ready_for_activation = False
+                      
+                      return {
+                          "id": "chi.bus_readiness",
+                          "source": "chi",
+                          "state": state,
+                          "severity": severity,
+                          "timestamp": timestamp,
+                          "metadata": {
+                              "domain": "readiness",
+                              "summary": "Chi bus readiness assessment",
+                              "facts": {
+                                  "service_exists": service_exists,
+                                  "endpoints_populated": endpoints_populated,
+                                  "network_policy_active": network_policy_active,
+                                  "ports_configured": ports_configured if ports_configured else None,
+                                  "ready_for_activation": ready_for_activation
+                              }
+                          }
+                      }
+                  except Exception:
+                      # Any exception - emit unavailable
+                      return {
+                          "id": "chi.bus_readiness",
+                          "source": "chi",
+                          "state": "unavailable",
+                          "severity": "unavailable",
+                          "timestamp": timestamp,
+                          "metadata": {
+                              "domain": "readiness",
+                              "summary": "Chi bus readiness observation failed",
+                              "facts": {}
+                          }
+                      }
+              
               def handle_request(self):
                   timestamp = datetime.utcnow().isoformat() + 'Z'
                   
@@ -467,11 +739,14 @@ spec:
                           # SAGE Signal Emission endpoint
                           # Includes ADRAE observation: SAGE is the sole observer of ADRAE.
                           # UI/HADRA observe ADRAE indirectly through SAGE signals only.
+                          # Includes Chi observation: idle-safe presence and bus readiness signals.
                           signals = [
                               self.get_platform_signal(timestamp),
                               self.get_gitops_signal(timestamp),
                               self.get_reconciliation_signal(timestamp),
-                              self.get_adrae_signal(timestamp)
+                              self.get_adrae_signal(timestamp),
+                              self.get_chi_presence_signal(timestamp),
+                              self.get_chi_bus_readiness_signal(timestamp)
                           ]
                           response = {"signals": signals}
                           self.send_response(200)
@@ -565,6 +840,30 @@ spec:
                                               "continuity": None,
                                               "last_tick": None,
                                               "notes": "Exception during request handling"
+                                          }
+                                      },
+                                      {
+                                          "id": "chi.presence",
+                                          "source": "chi",
+                                          "state": "unavailable",
+                                          "severity": "unavailable",
+                                          "timestamp": timestamp,
+                                          "metadata": {
+                                              "domain": "presence",
+                                              "summary": "Chi presence observation unavailable due to exception",
+                                              "facts": {}
+                                          }
+                                      },
+                                      {
+                                          "id": "chi.bus_readiness",
+                                          "source": "chi",
+                                          "state": "unavailable",
+                                          "severity": "unavailable",
+                                          "timestamp": timestamp,
+                                          "metadata": {
+                                              "domain": "readiness",
+                                              "summary": "Chi bus readiness observation unavailable due to exception",
+                                              "facts": {}
                                           }
                                       }
                                   ]
