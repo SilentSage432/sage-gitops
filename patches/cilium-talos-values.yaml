@@ -1,0 +1,33 @@
+kubeProxyReplacement: true
+
+# --- Disable all Talos-incompatible init behavior ---
+cleanCiliumState:
+  enabled: false
+
+cgroup:
+  autoMount:
+    enabled: false
+
+bpf:
+  autoMount:
+    enabled: false
+
+sysctl:
+  enabled: false
+
+# --- Remove all container capabilities ---
+securityContext:
+  capabilities:
+    ciliumAgent: []
+    cleanCiliumState: []
+    mountCgroup: []
+    applySysctlOverwrites: []
+    mountBpfFs: []
+
+operator:
+  securityContext:
+    capabilities:
+      operator: []
+
+envoy:
+  enabled: true

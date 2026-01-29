@@ -1,0 +1,20 @@
+kubeProxyReplacement: true
+
+# Talos-safe settings
+sysctl:
+  enabled: false
+
+initContainers:
+  applySysctlOverwrites:
+    enabled: false
+
+cleanCiliumState:
+  enabled: false
+
+cgroup:
+  autoMount:
+    enabled: false
+
+bpf:
+  autoMount:
+    enabled: false
