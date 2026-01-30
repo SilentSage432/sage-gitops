@@ -6,4 +6,5 @@ resources:
   - nu-serviceaccount.yaml
   - nu-configmap.yaml
   - nu-deployment.yaml
+  - nu-idle-deployment.yaml
   - nu-netpol.yaml

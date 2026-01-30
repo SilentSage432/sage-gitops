@@ -6,4 +6,5 @@ resources:
   - mu-serviceaccount.yaml
   - mu-configmap.yaml
   - mu-deployment.yaml
+  - mu-idle-deployment.yaml
   - mu-netpol.yaml

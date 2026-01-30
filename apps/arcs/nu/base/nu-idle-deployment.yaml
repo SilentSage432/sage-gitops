@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sigma-idle
-  namespace: arc-sigma
+  name: nu-idle
+  namespace: arc-nu
   labels:
-    sage.arc: sigma
-    arc.name: sigma
+    sage.arc: nu
+    arc.name: nu
     arc.role: message-bus
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: sigma-idle
+      app: nu-idle
   template:
     metadata:
       labels:
-        app: sigma-idle
-        sage.arc: sigma
-        arc.name: sigma
+        app: nu-idle
+        sage.arc: nu
+        arc.name: nu
         arc.role: message-bus
     spec:
       securityContext:
@@ -25,9 +25,9 @@ spec:
         seccompProfile:
           type: RuntimeDefault
       containers:
-        - name: sigma-idle
+        - name: nu-idle
           image: alpine:3.20
-          command: ["sh", "-c", "while true; do echo 'sigma idle heartbeat'; sleep 60; done"]
+          command: ["sh", "-c", "while true; do echo 'nu idle heartbeat'; sleep 60; done"]
           securityContext:
             runAsNonRoot: true
             runAsUser: 10001

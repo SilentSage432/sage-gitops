@@ -4,9 +4,9 @@ metadata:
   name: zeta-idle
   namespace: arc-zeta
   labels:
-    sage.arc: "true"
-    arc.name: "zeta"
-    arc.role: "message-bus"
+    sage.arc: zeta
+    arc.name: zeta
+    arc.role: message-bus
 spec:
   replicas: 1
   selector:
@@ -16,23 +16,18 @@ spec:
     metadata:
       labels:
         app: zeta-idle
-        sage.arc: "true"
-        arc.name: "zeta"
-        arc.role: "message-bus"
+        sage.arc: zeta
+        arc.name: zeta
+        arc.role: message-bus
     spec:
-      serviceAccountName: zeta-idle
-      automountServiceAccountToken: false
       securityContext:
         runAsNonRoot: true
-        runAsUser: 10001
-        runAsGroup: 10001
-        fsGroup: 10001
         seccompProfile:
           type: RuntimeDefault
       containers:
         - name: zeta-idle
           image: alpine:3.20
-          command: ["sh", "-c", "while true; do sleep 3600; done"]
+          command: ["sh", "-c", "while true; do echo 'zeta idle heartbeat'; sleep 60; done"]
           securityContext:
             runAsNonRoot: true
             runAsUser: 10001
@@ -55,4 +50,11 @@ spec:
         - key: node-role.kubernetes.io/control-plane
           operator: Exists
           effect: NoSchedule
-
+        - key: node.kubernetes.io/not-ready
+          operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 300
+        - key: node.kubernetes.io/unreachable
+          operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 300

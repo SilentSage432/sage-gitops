@@ -6,4 +6,5 @@ resources:
   - lambda-serviceaccount.yaml
   - lambda-configmap.yaml
   - lambda-deployment.yaml
+  - lambda-idle-deployment.yaml
   - lambda-netpol.yaml

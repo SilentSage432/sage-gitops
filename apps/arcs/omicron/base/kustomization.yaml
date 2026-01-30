@@ -6,4 +6,5 @@ resources:
   - omicron-serviceaccount.yaml
   - omicron-configmap.yaml
   - omicron-deployment.yaml
+  - omicron-idle-deployment.yaml
   - omicron-netpol.yaml

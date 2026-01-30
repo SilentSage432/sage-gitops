@@ -6,6 +6,7 @@ resources:
   - xi-serviceaccount.yaml
   - xi-configmap.yaml
   - xi-deployment.yaml
+  - xi-idle-deployment.yaml
   - xi-service.yaml
   - xi-pvc.yaml
   - netpol.yaml
