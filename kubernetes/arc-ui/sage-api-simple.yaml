@@ -533,9 +533,8 @@ spec:
                           with opener.open(req, timeout=2) as resp:
                               if resp.getcode() == 200:
                                   data = json.loads(resp.read().decode())
-                                  replicas = data.get("status", {}).get("replicas", 0)
-                                  ready_replicas = data.get("status", {}).get("readyReplicas", 0)
-                                  pod_running = (ready_replicas > 0 and replicas > 0)
+                                  available_replicas = data.get("status", {}).get("availableReplicas") or 0
+                                  pod_running = (available_replicas >= 1)
                       except (URLError, HTTPError, OSError):
                           pass
                       
@@ -769,9 +768,8 @@ spec:
                           with opener.open(req, timeout=2) as resp:
                               if resp.getcode() == 200:
                                   data = json.loads(resp.read().decode())
-                                  replicas = data.get("status", {}).get("replicas", 0)
-                                  ready_replicas = data.get("status", {}).get("readyReplicas", 0)
-                                  pod_running = (ready_replicas > 0 and replicas > 0)
+                                  available_replicas = data.get("status", {}).get("availableReplicas") or 0
+                                  pod_running = (available_replicas >= 1)
                       except (URLError, HTTPError, OSError):
                           pass
                       if namespace_exists and pod_running:
