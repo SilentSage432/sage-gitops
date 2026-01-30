@@ -1,0 +1,74 @@
+# RBAC for sage-api Chi observation signals (chi.presence, chi.bus_readiness).
+# Read-only Kubernetes API access; no application logic changes.
+# Flux GitOps: applied with arc-ui Kustomization (path ./kubernetes/arc-ui).
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: sage-api
+  namespace: arc-ui
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: sage-api-chi-namespace-reader
+rules:
+  # chi.presence: GET /api/v1/namespaces/arc-chi
+  - apiGroups: [""]
+    resources: ["namespaces"]
+    resourceNames: ["arc-chi"]
+    verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: sage-api-chi-namespace-reader
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: sage-api-chi-namespace-reader
+subjects:
+  - kind: ServiceAccount
+    name: sage-api
+    namespace: arc-ui
+---
+# Namespaced read-only access in arc-chi for Chi observation
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: sage-api-chi-observation
+  namespace: arc-chi
+rules:
+  # chi.presence: GET .../namespaces/arc-chi/deployments/chi-idle
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    resourceNames: ["chi-idle"]
+    verbs: ["get"]
+  # chi.bus_readiness: GET .../services/chi-bus, .../endpoints/chi-bus
+  - apiGroups: [""]
+    resources: ["services"]
+    resourceNames: ["chi-bus"]
+    verbs: ["get"]
+  - apiGroups: [""]
+    resources: ["endpoints"]
+    resourceNames: ["chi-bus"]
+    verbs: ["get"]
+  # chi.bus_readiness: GET .../ciliumnetworkpolicies/chi-ingress
+  - apiGroups: ["cilium.io"]
+    resources: ["ciliumnetworkpolicies"]
+    resourceNames: ["chi-ingress"]
+    verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: sage-api-chi-observation
+  namespace: arc-chi
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: sage-api-chi-observation
+subjects:
+  - kind: ServiceAccount
+    name: sage-api
+    namespace: arc-ui
