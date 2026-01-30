@@ -736,6 +736,121 @@ spec:
                           }
                       }
               
+              def _get_arc_presence_signal(self, timestamp, source_id, namespace, deployment_name):
+                  """Idle-safe observation: namespace + deployment. Same shape as Chi."""
+                  try:
+                      if not os.getenv("KUBERNETES_SERVICE_HOST"):
+                          return {"id": f"{source_id}.presence", "source": source_id, "state": "unavailable", "severity": "unavailable", "timestamp": timestamp, "metadata": {"domain": "presence", "summary": f"Cannot assess {source_id} presence - not in Kubernetes", "facts": {}}}
+                      token_path = "/var/run/secrets/kubernetes.io/serviceaccount/token"
+                      ca_cert_path = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+                      api_host = os.getenv("KUBERNETES_SERVICE_HOST")
+                      api_port = os.getenv("KUBERNETES_SERVICE_PORT", "443")
+                      if not os.path.exists(token_path) or not os.path.exists(ca_cert_path):
+                          return {"id": f"{source_id}.presence", "source": source_id, "state": "unavailable", "severity": "unavailable", "timestamp": timestamp, "metadata": {"domain": "presence", "summary": f"Cannot assess {source_id} presence - no service account", "facts": {}}}
+                      with open(token_path, 'r') as f:
+                          token = f.read().strip()
+                      context = ssl.create_default_context(cafile=ca_cert_path)
+                      namespace_url = f"https://{api_host}:{api_port}/api/v1/namespaces/{namespace}"
+                      req = Request(namespace_url)
+                      req.add_header("Authorization", f"Bearer {token}")
+                      opener = build_opener(HTTPSHandler(context=context))
+                      namespace_exists = False
+                      try:
+                          with opener.open(req, timeout=2) as resp:
+                              if resp.getcode() == 200:
+                                  namespace_exists = True
+                      except (URLError, HTTPError, OSError):
+                          pass
+                      deployment_url = f"https://{api_host}:{api_port}/apis/apps/v1/namespaces/{namespace}/deployments/{deployment_name}"
+                      req = Request(deployment_url)
+                      req.add_header("Authorization", f"Bearer {token}")
+                      pod_running = False
+                      try:
+                          with opener.open(req, timeout=2) as resp:
+                              if resp.getcode() == 200:
+                                  data = json.loads(resp.read().decode())
+                                  replicas = data.get("status", {}).get("replicas", 0)
+                                  ready_replicas = data.get("status", {}).get("readyReplicas", 0)
+                                  pod_running = (ready_replicas > 0 and replicas > 0)
+                      except (URLError, HTTPError, OSError):
+                          pass
+                      if namespace_exists and pod_running:
+                          state, severity = "idle", "info"
+                      elif namespace_exists:
+                          state, severity = "ready", "notice"
+                      else:
+                          state, severity = "unavailable", "unavailable"
+                      return {"id": f"{source_id}.presence", "source": source_id, "state": state, "severity": severity, "timestamp": timestamp, "metadata": {"domain": "presence", "summary": f"{source_id} structural presence observed", "facts": {"namespace_exists": namespace_exists, "pod_running": pod_running, "mode": "idle", "readiness": "structural_only"}}}
+                  except Exception:
+                      return {"id": f"{source_id}.presence", "source": source_id, "state": "unavailable", "severity": "unavailable", "timestamp": timestamp, "metadata": {"domain": "presence", "summary": f"{source_id} presence observation failed", "facts": {}}}
+              
+              def _get_arc_bus_readiness_signal(self, timestamp, source_id, namespace, service_name, cnp_name):
+                  """Idle-safe observation: service, endpoints, CNP. Same shape as Chi."""
+                  try:
+                      if not os.getenv("KUBERNETES_SERVICE_HOST"):
+                          return {"id": f"{source_id}.bus_readiness", "source": source_id, "state": "unavailable", "severity": "unavailable", "timestamp": timestamp, "metadata": {"domain": "readiness", "summary": f"Cannot assess {source_id} bus readiness - not in Kubernetes", "facts": {}}}
+                      token_path = "/var/run/secrets/kubernetes.io/serviceaccount/token"
+                      ca_cert_path = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+                      api_host = os.getenv("KUBERNETES_SERVICE_HOST")
+                      api_port = os.getenv("KUBERNETES_SERVICE_PORT", "443")
+                      if not os.path.exists(token_path) or not os.path.exists(ca_cert_path):
+                          return {"id": f"{source_id}.bus_readiness", "source": source_id, "state": "unavailable", "severity": "unavailable", "timestamp": timestamp, "metadata": {"domain": "readiness", "summary": f"Cannot assess {source_id} bus readiness - no service account", "facts": {}}}
+                      with open(token_path, 'r') as f:
+                          token = f.read().strip()
+                      context = ssl.create_default_context(cafile=ca_cert_path)
+                      opener = build_opener(HTTPSHandler(context=context))
+                      service_url = f"https://{api_host}:{api_port}/api/v1/namespaces/{namespace}/services/{service_name}"
+                      req = Request(service_url)
+                      req.add_header("Authorization", f"Bearer {token}")
+                      service_exists = False
+                      ports_configured = {}
+                      try:
+                          with opener.open(req, timeout=2) as resp:
+                              if resp.getcode() == 200:
+                                  service_exists = True
+                                  data = json.loads(resp.read().decode())
+                                  for port in data.get("spec", {}).get("ports", []):
+                                      if port.get("name") == "client" or port.get("port") == 4222:
+                                          ports_configured["client"] = 4222
+                                      if port.get("name") == "monitor" or port.get("port") == 8222:
+                                          ports_configured["monitor"] = 8222
+                      except (URLError, HTTPError, OSError):
+                          pass
+                      endpoints_url = f"https://{api_host}:{api_port}/api/v1/namespaces/{namespace}/endpoints/{service_name}"
+                      req = Request(endpoints_url)
+                      req.add_header("Authorization", f"Bearer {token}")
+                      endpoints_populated = False
+                      try:
+                          with opener.open(req, timeout=2) as resp:
+                              if resp.getcode() == 200:
+                                  data = json.loads(resp.read().decode())
+                                  for subset in data.get("subsets", []):
+                                      if subset.get("addresses"):
+                                          endpoints_populated = True
+                                          break
+                      except (URLError, HTTPError, OSError):
+                          pass
+                      netpol_url = f"https://{api_host}:{api_port}/apis/cilium.io/v2/namespaces/{namespace}/ciliumnetworkpolicies/{cnp_name}"
+                      req = Request(netpol_url)
+                      req.add_header("Authorization", f"Bearer {token}")
+                      network_policy_active = False
+                      try:
+                          with opener.open(req, timeout=2) as resp:
+                              if resp.getcode() == 200:
+                                  network_policy_active = True
+                      except (URLError, HTTPError, OSError):
+                          pass
+                      if service_exists and network_policy_active:
+                          state, severity = "ready", "info" if endpoints_populated else "notice"
+                          ready_for_activation = endpoints_populated
+                      elif service_exists:
+                          state, severity, ready_for_activation = "ready", "notice", False
+                      else:
+                          state, severity, ready_for_activation = "unavailable", "unavailable", False
+                      return {"id": f"{source_id}.bus_readiness", "source": source_id, "state": state, "severity": severity, "timestamp": timestamp, "metadata": {"domain": "readiness", "summary": f"{source_id} bus readiness assessment", "facts": {"service_exists": service_exists, "endpoints_populated": endpoints_populated, "network_policy_active": network_policy_active, "ports_configured": ports_configured if ports_configured else None, "ready_for_activation": ready_for_activation}}}
+                  except Exception:
+                      return {"id": f"{source_id}.bus_readiness", "source": source_id, "state": "unavailable", "severity": "unavailable", "timestamp": timestamp, "metadata": {"domain": "readiness", "summary": f"{source_id} bus readiness observation failed", "facts": {}}}
+              
               def handle_request(self):
                   timestamp = datetime.utcnow().isoformat() + 'Z'
                   
@@ -756,14 +871,30 @@ spec:
                           # SAGE Signal Emission endpoint
                           # Includes ADRAE observation: SAGE is the sole observer of ADRAE.
                           # UI/HADRA observe ADRAE indirectly through SAGE signals only.
-                          # Includes Chi observation: idle-safe presence and bus readiness signals.
+                          # Includes Chi + NATS-participating arcs: idle-safe presence and bus readiness signals.
                           signals = [
                               self.get_platform_signal(timestamp),
                               self.get_gitops_signal(timestamp),
                               self.get_reconciliation_signal(timestamp),
                               self.get_adrae_signal(timestamp),
                               self.get_chi_presence_signal(timestamp),
-                              self.get_chi_bus_readiness_signal(timestamp)
+                              self.get_chi_bus_readiness_signal(timestamp),
+                              self._get_arc_presence_signal(timestamp, "sigma", "arc-sigma", "sigma-idle"),
+                              self._get_arc_bus_readiness_signal(timestamp, "sigma", "arc-sigma", "sigma-bus", "sigma-ingress"),
+                              self._get_arc_presence_signal(timestamp, "omega", "arc-omega", "omega-idle"),
+                              self._get_arc_bus_readiness_signal(timestamp, "omega", "arc-omega", "omega-bus", "omega-ingress"),
+                              self._get_arc_presence_signal(timestamp, "lambda", "arc-lambda", "lambda-idle"),
+                              self._get_arc_bus_readiness_signal(timestamp, "lambda", "arc-lambda", "lambda-bus", "lambda-ingress"),
+                              self._get_arc_presence_signal(timestamp, "mu", "arc-mu", "mu-idle"),
+                              self._get_arc_bus_readiness_signal(timestamp, "mu", "arc-mu", "mu-bus", "mu-ingress"),
+                              self._get_arc_presence_signal(timestamp, "nu", "arc-nu", "nu-idle"),
+                              self._get_arc_bus_readiness_signal(timestamp, "nu", "arc-nu", "nu-bus", "nu-ingress"),
+                              self._get_arc_presence_signal(timestamp, "zeta", "arc-zeta", "zeta-idle"),
+                              self._get_arc_bus_readiness_signal(timestamp, "zeta", "arc-zeta", "zeta-bus", "zeta-ingress"),
+                              self._get_arc_presence_signal(timestamp, "xi", "arc-xi", "xi-idle"),
+                              self._get_arc_bus_readiness_signal(timestamp, "xi", "arc-xi", "xi-bus", "xi-ingress"),
+                              self._get_arc_presence_signal(timestamp, "omicron", "arc-omicron", "omicron-idle"),
+                              self._get_arc_bus_readiness_signal(timestamp, "omicron", "arc-omicron", "omicron-bus", "omicron-ingress"),
                           ]
                           response = {"signals": signals}
                           self.send_response(200)
@@ -882,7 +1013,23 @@ spec:
                                               "summary": "Chi bus readiness observation unavailable due to exception",
                                               "facts": {}
                                           }
-                                      }
+                                      },
+                                      {"id": "sigma.presence", "source": "sigma", "state": "unavailable", "severity": "unavailable", "timestamp": timestamp, "metadata": {"domain": "presence", "summary": "Sigma presence observation unavailable due to exception", "facts": {}}},
+                                      {"id": "sigma.bus_readiness", "source": "sigma", "state": "unavailable", "severity": "unavailable", "timestamp": timestamp, "metadata": {"domain": "readiness", "summary": "Sigma bus readiness observation unavailable due to exception", "facts": {}}},
+                                      {"id": "omega.presence", "source": "omega", "state": "unavailable", "severity": "unavailable", "timestamp": timestamp, "metadata": {"domain": "presence", "summary": "Omega presence observation unavailable due to exception", "facts": {}}},
+                                      {"id": "omega.bus_readiness", "source": "omega", "state": "unavailable", "severity": "unavailable", "timestamp": timestamp, "metadata": {"domain": "readiness", "summary": "Omega bus readiness observation unavailable due to exception", "facts": {}}},
+                                      {"id": "lambda.presence", "source": "lambda", "state": "unavailable", "severity": "unavailable", "timestamp": timestamp, "metadata": {"domain": "presence", "summary": "Lambda presence observation unavailable due to exception", "facts": {}}},
+                                      {"id": "lambda.bus_readiness", "source": "lambda", "state": "unavailable", "severity": "unavailable", "timestamp": timestamp, "metadata": {"domain": "readiness", "summary": "Lambda bus readiness observation unavailable due to exception", "facts": {}}},
+                                      {"id": "mu.presence", "source": "mu", "state": "unavailable", "severity": "unavailable", "timestamp": timestamp, "metadata": {"domain": "presence", "summary": "Mu presence observation unavailable due to exception", "facts": {}}},
+                                      {"id": "mu.bus_readiness", "source": "mu", "state": "unavailable", "severity": "unavailable", "timestamp": timestamp, "metadata": {"domain": "readiness", "summary": "Mu bus readiness observation unavailable due to exception", "facts": {}}},
+                                      {"id": "nu.presence", "source": "nu", "state": "unavailable", "severity": "unavailable", "timestamp": timestamp, "metadata": {"domain": "presence", "summary": "Nu presence observation unavailable due to exception", "facts": {}}},
+                                      {"id": "nu.bus_readiness", "source": "nu", "state": "unavailable", "severity": "unavailable", "timestamp": timestamp, "metadata": {"domain": "readiness", "summary": "Nu bus readiness observation unavailable due to exception", "facts": {}}},
+                                      {"id": "zeta.presence", "source": "zeta", "state": "unavailable", "severity": "unavailable", "timestamp": timestamp, "metadata": {"domain": "presence", "summary": "Zeta presence observation unavailable due to exception", "facts": {}}},
+                                      {"id": "zeta.bus_readiness", "source": "zeta", "state": "unavailable", "severity": "unavailable", "timestamp": timestamp, "metadata": {"domain": "readiness", "summary": "Zeta bus readiness observation unavailable due to exception", "facts": {}}},
+                                      {"id": "xi.presence", "source": "xi", "state": "unavailable", "severity": "unavailable", "timestamp": timestamp, "metadata": {"domain": "presence", "summary": "Xi presence observation unavailable due to exception", "facts": {}}},
+                                      {"id": "xi.bus_readiness", "source": "xi", "state": "unavailable", "severity": "unavailable", "timestamp": timestamp, "metadata": {"domain": "readiness", "summary": "Xi bus readiness observation unavailable due to exception", "facts": {}}},
+                                      {"id": "omicron.presence", "source": "omicron", "state": "unavailable", "severity": "unavailable", "timestamp": timestamp, "metadata": {"domain": "presence", "summary": "Omicron presence observation unavailable due to exception", "facts": {}}},
+                                      {"id": "omicron.bus_readiness", "source": "omicron", "state": "unavailable", "severity": "unavailable", "timestamp": timestamp, "metadata": {"domain": "readiness", "summary": "Omicron bus readiness observation unavailable due to exception", "facts": {}}}
                                   ]
                               }
                           else:

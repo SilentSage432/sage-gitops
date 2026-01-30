@@ -4,3 +4,4 @@ kind: Kustomization
 resources:
   - sage-api-simple.yaml
   - sage-api-chi-rbac.yaml
+  - sage-api-arcs-rbac.yaml

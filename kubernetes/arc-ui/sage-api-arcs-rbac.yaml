@@ -1,0 +1,290 @@
+# RBAC for sage-api arc observation signals (sigma, omega, lambda, mu, nu, zeta, xi, omicron).
+# Read-only get on namespace + deployments/<arc>-idle, services/<arc>-bus, endpoints/<arc>-bus, ciliumnetworkpolicies/<arc>-ingress.
+# Flux GitOps: applied with arc-ui Kustomization (path ./kubernetes/arc-ui).
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: sage-api-arcs-namespace-reader
+rules:
+  - apiGroups: [""]
+    resources: ["namespaces"]
+    resourceNames: ["arc-sigma", "arc-omega", "arc-lambda", "arc-mu", "arc-nu", "arc-zeta", "arc-xi", "arc-omicron"]
+    verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: sage-api-arcs-namespace-reader
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: sage-api-arcs-namespace-reader
+subjects:
+  - kind: ServiceAccount
+    name: sage-api
+    namespace: arc-ui
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: sage-api-sigma-observation
+  namespace: arc-sigma
+rules:
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    resourceNames: ["sigma-idle"]
+    verbs: ["get"]
+  - apiGroups: [""]
+    resources: ["services", "endpoints"]
+    resourceNames: ["sigma-bus"]
+    verbs: ["get"]
+  - apiGroups: ["cilium.io"]
+    resources: ["ciliumnetworkpolicies"]
+    resourceNames: ["sigma-ingress"]
+    verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: sage-api-sigma-observation
+  namespace: arc-sigma
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: sage-api-sigma-observation
+subjects:
+  - kind: ServiceAccount
+    name: sage-api
+    namespace: arc-ui
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: sage-api-omega-observation
+  namespace: arc-omega
+rules:
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    resourceNames: ["omega-idle"]
+    verbs: ["get"]
+  - apiGroups: [""]
+    resources: ["services", "endpoints"]
+    resourceNames: ["omega-bus"]
+    verbs: ["get"]
+  - apiGroups: ["cilium.io"]
+    resources: ["ciliumnetworkpolicies"]
+    resourceNames: ["omega-ingress"]
+    verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: sage-api-omega-observation
+  namespace: arc-omega
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: sage-api-omega-observation
+subjects:
+  - kind: ServiceAccount
+    name: sage-api
+    namespace: arc-ui
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: sage-api-lambda-observation
+  namespace: arc-lambda
+rules:
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    resourceNames: ["lambda-idle"]
+    verbs: ["get"]
+  - apiGroups: [""]
+    resources: ["services", "endpoints"]
+    resourceNames: ["lambda-bus"]
+    verbs: ["get"]
+  - apiGroups: ["cilium.io"]
+    resources: ["ciliumnetworkpolicies"]
+    resourceNames: ["lambda-ingress"]
+    verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: sage-api-lambda-observation
+  namespace: arc-lambda
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: sage-api-lambda-observation
+subjects:
+  - kind: ServiceAccount
+    name: sage-api
+    namespace: arc-ui
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: sage-api-mu-observation
+  namespace: arc-mu
+rules:
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    resourceNames: ["mu-idle"]
+    verbs: ["get"]
+  - apiGroups: [""]
+    resources: ["services", "endpoints"]
+    resourceNames: ["mu-bus"]
+    verbs: ["get"]
+  - apiGroups: ["cilium.io"]
+    resources: ["ciliumnetworkpolicies"]
+    resourceNames: ["mu-ingress"]
+    verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: sage-api-mu-observation
+  namespace: arc-mu
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: sage-api-mu-observation
+subjects:
+  - kind: ServiceAccount
+    name: sage-api
+    namespace: arc-ui
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: sage-api-nu-observation
+  namespace: arc-nu
+rules:
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    resourceNames: ["nu-idle"]
+    verbs: ["get"]
+  - apiGroups: [""]
+    resources: ["services", "endpoints"]
+    resourceNames: ["nu-bus"]
+    verbs: ["get"]
+  - apiGroups: ["cilium.io"]
+    resources: ["ciliumnetworkpolicies"]
+    resourceNames: ["nu-ingress"]
+    verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: sage-api-nu-observation
+  namespace: arc-nu
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: sage-api-nu-observation
+subjects:
+  - kind: ServiceAccount
+    name: sage-api
+    namespace: arc-ui
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: sage-api-zeta-observation
+  namespace: arc-zeta
+rules:
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    resourceNames: ["zeta-idle"]
+    verbs: ["get"]
+  - apiGroups: [""]
+    resources: ["services", "endpoints"]
+    resourceNames: ["zeta-bus"]
+    verbs: ["get"]
+  - apiGroups: ["cilium.io"]
+    resources: ["ciliumnetworkpolicies"]
+    resourceNames: ["zeta-ingress"]
+    verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: sage-api-zeta-observation
+  namespace: arc-zeta
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: sage-api-zeta-observation
+subjects:
+  - kind: ServiceAccount
+    name: sage-api
+    namespace: arc-ui
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: sage-api-xi-observation
+  namespace: arc-xi
+rules:
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    resourceNames: ["xi-idle"]
+    verbs: ["get"]
+  - apiGroups: [""]
+    resources: ["services", "endpoints"]
+    resourceNames: ["xi-bus"]
+    verbs: ["get"]
+  - apiGroups: ["cilium.io"]
+    resources: ["ciliumnetworkpolicies"]
+    resourceNames: ["xi-ingress"]
+    verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: sage-api-xi-observation
+  namespace: arc-xi
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: sage-api-xi-observation
+subjects:
+  - kind: ServiceAccount
+    name: sage-api
+    namespace: arc-ui
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: sage-api-omicron-observation
+  namespace: arc-omicron
+rules:
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    resourceNames: ["omicron-idle"]
+    verbs: ["get"]
+  - apiGroups: [""]
+    resources: ["services", "endpoints"]
+    resourceNames: ["omicron-bus"]
+    verbs: ["get"]
+  - apiGroups: ["cilium.io"]
+    resources: ["ciliumnetworkpolicies"]
+    resourceNames: ["omicron-ingress"]
+    verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: sage-api-omicron-observation
+  namespace: arc-omicron
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: sage-api-omicron-observation
+subjects:
+  - kind: ServiceAccount
+    name: sage-api
+    namespace: arc-ui
