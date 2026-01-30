@@ -12,5 +12,5 @@ spec:
     name: flux-system
     namespace: flux-system
   targetNamespace: arc-ui
-  wait: true
+  wait: false
   timeout: 2m
