@@ -43,6 +43,9 @@ rules:
     resources: ["ciliumnetworkpolicies"]
     resourceNames: ["sigma-ingress"]
     verbs: ["get"]
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -76,6 +79,9 @@ rules:
     resources: ["ciliumnetworkpolicies"]
     resourceNames: ["omega-ingress"]
     verbs: ["get"]
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -109,6 +115,9 @@ rules:
     resources: ["ciliumnetworkpolicies"]
     resourceNames: ["lambda-ingress"]
     verbs: ["get"]
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -142,6 +151,9 @@ rules:
     resources: ["ciliumnetworkpolicies"]
     resourceNames: ["mu-ingress"]
     verbs: ["get"]
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -175,6 +187,9 @@ rules:
     resources: ["ciliumnetworkpolicies"]
     resourceNames: ["nu-ingress"]
     verbs: ["get"]
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -208,6 +223,9 @@ rules:
     resources: ["ciliumnetworkpolicies"]
     resourceNames: ["zeta-ingress"]
     verbs: ["get"]
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -241,6 +259,9 @@ rules:
     resources: ["ciliumnetworkpolicies"]
     resourceNames: ["xi-ingress"]
     verbs: ["get"]
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -274,6 +295,9 @@ rules:
     resources: ["ciliumnetworkpolicies"]
     resourceNames: ["omicron-ingress"]
     verbs: ["get"]
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
