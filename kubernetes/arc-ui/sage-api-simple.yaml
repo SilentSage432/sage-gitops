@@ -467,7 +467,7 @@ spec:
               def get_chi_presence_signal(self, timestamp):
                   """
                   Observe Chi structural presence (idle-safe observation).
-                  Read-only Kubernetes API checks for namespace and deployment existence.
+                  Read-only: namespace + LIST pods with labelSelector arc.name=chi; pod_running if any phase==Running.
                   """
                   try:
                       # Check if we can access Kubernetes API
@@ -523,18 +523,19 @@ spec:
                       except (URLError, HTTPError, OSError):
                           pass
                       
-                      # Check deployment existence and pod status
-                      deployment_url = f"https://{api_host}:{api_port}/apis/apps/v1/namespaces/arc-chi/deployments/chi-idle"
-                      req = Request(deployment_url)
-                      req.add_header("Authorization", f"Bearer {token}")
-                      
+                      # LIST pods with labelSelector arc.name=chi; pod_running if any phase==Running
                       pod_running = False
                       try:
+                          pods_url = f"https://{api_host}:{api_port}/api/v1/namespaces/arc-chi/pods?labelSelector=arc.name%3Dchi"
+                          req = Request(pods_url)
+                          req.add_header("Authorization", f"Bearer {token}")
                           with opener.open(req, timeout=2) as resp:
                               if resp.getcode() == 200:
                                   data = json.loads(resp.read().decode())
-                                  available_replicas = data.get("status", {}).get("availableReplicas") or 0
-                                  pod_running = (available_replicas >= 1)
+                                  for item in data.get("items", []):
+                                      if item.get("status", {}).get("phase") == "Running":
+                                          pod_running = True
+                                          break
                       except (URLError, HTTPError, OSError):
                           pass
                       
@@ -760,17 +761,18 @@ spec:
                                   namespace_exists = True
                       except (URLError, HTTPError, OSError):
                           pass
+                      # LIST pods with labelSelector arc.name=<arc>; pod_running if any phase==Running
                       pod_running = False
                       try:
-                          pods_url = f"https://{api_host}:{api_port}/api/v1/namespaces/{namespace}/pods"
+                          selector = urllib.parse.quote(f"arc.name={source_id}", safe="")
+                          pods_url = f"https://{api_host}:{api_port}/api/v1/namespaces/{namespace}/pods?labelSelector={selector}"
                           req = Request(pods_url)
                           req.add_header("Authorization", f"Bearer {token}")
                           with opener.open(req, timeout=2) as resp:
                               if resp.getcode() == 200:
                                   data = json.loads(resp.read().decode())
                                   for item in data.get("items", []):
-                                      labels = item.get("metadata", {}).get("labels") or {}
-                                      if labels.get("arc.name") == source_id and item.get("status", {}).get("phase") == "Running":
+                                      if item.get("status", {}).get("phase") == "Running":
                                           pod_running = True
                                           break
                       except (URLError, HTTPError, OSError):
