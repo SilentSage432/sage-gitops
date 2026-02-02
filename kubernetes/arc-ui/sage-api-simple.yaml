@@ -736,7 +736,7 @@ spec:
                       }
               
               def _get_arc_presence_signal(self, timestamp, source_id, namespace, deployment_name):
-                  """Idle-safe observation: namespace + deployment. Same shape as Chi."""
+                  """Idle-safe observation: namespace + LIST pods filtered by arc.name and phase. Same shape as Chi."""
                   try:
                       if not os.getenv("KUBERNETES_SERVICE_HOST"):
                           return {"id": f"{source_id}.presence", "source": source_id, "state": "unavailable", "severity": "unavailable", "timestamp": timestamp, "metadata": {"domain": "presence", "summary": f"Cannot assess {source_id} presence - not in Kubernetes", "facts": {}}}
@@ -760,16 +760,19 @@ spec:
                                   namespace_exists = True
                       except (URLError, HTTPError, OSError):
                           pass
-                      deployment_url = f"https://{api_host}:{api_port}/apis/apps/v1/namespaces/{namespace}/deployments/{deployment_name}"
-                      req = Request(deployment_url)
-                      req.add_header("Authorization", f"Bearer {token}")
                       pod_running = False
                       try:
+                          pods_url = f"https://{api_host}:{api_port}/api/v1/namespaces/{namespace}/pods"
+                          req = Request(pods_url)
+                          req.add_header("Authorization", f"Bearer {token}")
                           with opener.open(req, timeout=2) as resp:
                               if resp.getcode() == 200:
                                   data = json.loads(resp.read().decode())
-                                  available_replicas = data.get("status", {}).get("availableReplicas") or 0
-                                  pod_running = (available_replicas >= 1)
+                                  for item in data.get("items", []):
+                                      labels = item.get("metadata", {}).get("labels") or {}
+                                      if labels.get("arc.name") == source_id and item.get("status", {}).get("phase") == "Running":
+                                          pod_running = True
+                                          break
                       except (URLError, HTTPError, OSError):
                           pass
                       if namespace_exists and pod_running:
