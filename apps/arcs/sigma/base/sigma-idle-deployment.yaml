@@ -57,9 +57,9 @@ spec:
             - |
               while true; do
                 nats pub \
-                  -s nats://chi-bus.arc-chi.svc:4222 \
+                  -s nats://chi-bus.arc-chi.svc.cluster.local:4222 \
                   federation.presence.sigma \
-                  "{\"arc\":\"sigma\",\"status\":\"alive\",\"timestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}"
+                  "{\"arc\":\"sigma\",\"status\":\"alive\",\"mode\":\"idle\",\"timestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}"
                 sleep 30
               done
           securityContext:
