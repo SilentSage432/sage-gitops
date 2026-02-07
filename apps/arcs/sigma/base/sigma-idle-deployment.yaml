@@ -46,6 +46,37 @@ spec:
             limits:
               cpu: 10m
               memory: 32Mi
+        - name: sigma-presence
+          image: natsio/nats-box:latest
+          env:
+            - name: ARC_NAME
+              value: "sigma"
+          command:
+            - sh
+            - -c
+            - |
+              while true; do
+                nats pub \
+                  -s nats://chi-bus.arc-chi.svc:4222 \
+                  federation.presence.sigma \
+                  "{\"arc\":\"sigma\",\"status\":\"alive\",\"timestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}"
+                sleep 30
+              done
+          securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 50m
+              memory: 64Mi
       tolerations:
         - key: node-role.kubernetes.io/control-plane
           operator: Exists
