@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chi-bus
+  namespace: arc-chi
+  labels:
+    app: chi-bus
+    sage.arc: "true"
+    arc.name: "chi"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chi-bus
+  template:
+    metadata:
+      labels:
+        app: chi-bus
+        sage.arc: "true"
+        arc.name: "chi"
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: chi-bus
+          image: nats:2.10-alpine
+          command: ["nats-server"]
+          ports:
+            - containerPort: 4222
+              name: client
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
