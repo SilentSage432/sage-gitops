@@ -27,16 +27,13 @@ spec:
       containers:
         - name: sigma-idle
           image: natsio/nats-box:latest
-          env:
-            - name: ARC_NAME
-              value: "sigma"
           command:
             - sh
             - -c
             - |
               while true; do
                 TS=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-                nats pub -s nats://chi-bus.arc-chi.svc.cluster.local:4222 federation.presence.sigma "{\"arc\":\"sigma\",\"status\":\"alive\",\"timestamp\":\"$TS\",\"mode\":\"idle\"}"
+                nats pub federation.presence.sigma "{\"arc\":\"sigma\",\"status\":\"alive\",\"timestamp\":\"$TS\"}" -s nats://chi-bus.arc-chi.svc:4222
                 sleep 30
               done
           securityContext:
