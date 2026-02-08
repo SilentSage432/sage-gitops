@@ -26,27 +26,6 @@ spec:
           type: RuntimeDefault
       containers:
         - name: sigma-idle
-          image: alpine:3.20
-          command: ["sh", "-c", "while true; do echo 'sigma idle heartbeat'; sleep 60; done"]
-          securityContext:
-            runAsNonRoot: true
-            runAsUser: 10001
-            runAsGroup: 10001
-            readOnlyRootFilesystem: true
-            allowPrivilegeEscalation: false
-            seccompProfile:
-              type: RuntimeDefault
-            capabilities:
-              drop:
-                - ALL
-          resources:
-            requests:
-              cpu: 10m
-              memory: 32Mi
-            limits:
-              cpu: 10m
-              memory: 32Mi
-        - name: sigma-presence
           image: natsio/nats-box:latest
           env:
             - name: ARC_NAME
@@ -56,14 +35,14 @@ spec:
             - -c
             - |
               while true; do
-                nats pub \
-                  -s nats://chi-bus.arc-chi.svc.cluster.local:4222 \
-                  federation.presence.sigma \
-                  "{\"arc\":\"sigma\",\"status\":\"alive\",\"mode\":\"idle\",\"timestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}"
+                TS=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+                nats pub -s nats://chi-bus.arc-chi.svc.cluster.local:4222 federation.presence.sigma "{\"arc\":\"sigma\",\"status\":\"alive\",\"timestamp\":\"$TS\",\"mode\":\"idle\"}"
                 sleep 30
               done
           securityContext:
             runAsNonRoot: true
+            runAsUser: 10001
+            runAsGroup: 10001
             allowPrivilegeEscalation: false
             seccompProfile:
               type: RuntimeDefault
