@@ -53,6 +53,32 @@ spec:
             limits:
               cpu: 50m
               memory: 64Mi
+        - name: sigma-voice
+          image: natsio/nats-box:latest
+          command:
+            - sh
+            - -c
+            - |
+              while true; do
+                TS=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+                nats pub federation.presence.sigma "{\"arc\":\"sigma\",\"status\":\"alive\",\"mode\":\"idle\",\"timestamp\":\"$TS\"}" -s nats://chi-bus.arc-chi.svc:4222
+                sleep 30
+              done
+          securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 50m
+              memory: 64Mi
       tolerations:
         - key: node-role.kubernetes.io/control-plane
           operator: Exists
