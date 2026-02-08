@@ -20,6 +20,7 @@ spec:
         arc.name: "chi"
     spec:
       securityContext:
+        fsGroup: 1000
         runAsNonRoot: true
         seccompProfile:
           type: RuntimeDefault
@@ -39,6 +40,14 @@ spec:
         - name: chi-bus
           image: nats:2.10-alpine
           command: ["nats-server"]
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
           ports:
             - containerPort: 4222
               name: client
